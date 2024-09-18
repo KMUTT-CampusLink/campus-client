@@ -1,0 +1,1 @@
+Public folder is where you will store all static assets, such as images, svgs, and icons.
