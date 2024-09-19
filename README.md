@@ -1,4 +1,4 @@
-# Client Side (Developer Guide)
+# Client Side (Developer Guide) :open_book:
 
 ## Project Initialization
 
@@ -7,6 +7,7 @@ Open the root project folder in your favorite terminal and do the following:
 ```
 git clone https://github.com/KMUTT-CampusLink/campus-client.git
 cd campus-client
+cp .env.example .env.local
 npm install
 npm run dev
 ```
@@ -35,7 +36,7 @@ We have included `.vscode` folder in the repo, and in which is a `settings.json`
 - prisma
 - tailwind css intellisense
 
-## Tech Stack
+## Tech Stack :moyai:
 
 This tech stack is the bare minimum, so dependeing on features you will develop, you will need others as well.
 
