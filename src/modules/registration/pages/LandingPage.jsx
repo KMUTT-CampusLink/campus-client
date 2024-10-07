@@ -1,28 +1,25 @@
 import NavBar from "../components/NavBar";
 import { mainStyles } from "../styles/styles";
-import { navbarColors } from "../styles/colors";
 import SInfoCard from "../components/SInfoCard";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { logoHead, containerDivStyles } from "../styles/styles";
+
 function LandingPage() {
   const hasProfilePic = false;
 
   return (
     <>
-      <div
-        className="min-h-screen bg-gradient-to-r"
-        style={{
-          backgroundImage: `linear-gradient(to right, ${navbarColors.gradientFrom}, ${navbarColors.gradientTo})`,
-        }}
-      >
+      <div className={containerDivStyles}>
         <NavBar />
-        <main className={`${mainStyles} p-10`}>
-          <div className="p-10 rounded-xl mt-10 mx-auto text-black bg-white shadow-xl">
+        <main className={`${mainStyles}`}>
+          <h2 className={`${logoHead} p-10`}>CampusLink</h2>
+
+          <div className="rounded-xl mx-auto text-black">
             <div
               className="flex items-center justify-center mx-auto sm:w-96 h-60 rounded-2xl"
               style={{
-                backgroundImage: `linear-gradient(to right, ${navbarColors.gradientFrom}, ${navbarColors.gradientTo})`,
+                backgroundImage: `linear-gradient(to right, #c2544d, #f09107)`,
               }}
             >
               <div className="hidden sm:block ml-4">

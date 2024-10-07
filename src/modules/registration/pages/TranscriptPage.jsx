@@ -1,3 +1,4 @@
+import { useState } from "react";
 import GPAXCard from "../components/GPAXCard";
 import HeadLineCard from "../components/HeadLineCard";
 import NavBar from "../components/NavBar";
@@ -21,6 +22,9 @@ function TranscriptPage() {
     { name: "Subject", grade: "A", credit: 1 },
     { name: "Subject", grade: "B+", credit: 3 },
   ];
+  const gpax = useState(3.65);
+  const creditsPrescribed = useState(134);
+  const creditsEarned = useState(47);
 
   return (
     <>
@@ -31,7 +35,11 @@ function TranscriptPage() {
           <div className="divider"></div>
           <div className="bg-white p-6 shadow-md rounded-md">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <GPAXCard />
+              <GPAXCard
+                gpax={gpax}
+                creditsPrescribed={creditsPrescribed}
+                creditsEarned={creditsEarned}
+              />
               <div className="col-span-2 grid grid-cols-1 gap-4">
                 {semesters.map((semester, index) => (
                   <TranscriptCard

@@ -7,7 +7,6 @@ import {
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
-import { navbarColors } from "../styles/colors";
 import { Link } from "react-router-dom";
 
 const NavBar = () => {
@@ -49,11 +48,23 @@ const NavBar = () => {
       subhrefs: [],
     },
   ];
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const profileRef = useRef(null);
-  const mobileNavRef = useRef(null); // Mobile nav reference
 
-  // Close the navigation dropdown if clicked outside
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef(null); //profile reference
+
+  const mobileNavRef = useRef(null); // mobile nav reference
+  const [isOpen, setIsOpen] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState(Array(5).fill(false));
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [prevScrollPos, setPrevScrollPos] = useState(window.scrollY);
+
+  const toggleDropdown = (index) => {
+    const newOpenDropdowns = [...openDropdowns];
+    newOpenDropdowns[index] = !newOpenDropdowns[index];
+    setOpenDropdowns(newOpenDropdowns);
+  };
+
+  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -73,25 +84,37 @@ const NavBar = () => {
     };
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [openDropdowns, setOpenDropdowns] = useState(Array(5).fill(false));
+  // Close navbar when scrolled
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isOpen) {
+        const currentScrollPos = window.scrollY;
+        if (prevScrollPos > currentScrollPos || currentScrollPos < 50) {
+          setIsNavVisible(true);
+        } else {
+          setIsNavVisible(false);
+        }
+        setPrevScrollPos(currentScrollPos);
+      }
+    };
 
-  const toggleDropdown = (index) => {
-    const newOpenDropdowns = [...openDropdowns];
-    newOpenDropdowns[index] = !newOpenDropdowns[index];
-    setOpenDropdowns(newOpenDropdowns);
-  };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [prevScrollPos, isOpen]);
 
   return (
     <nav
-      className={`w-full ${
-        isOpen ? "absolute overflow-y-auto h-full z-[100]" : ""
-      }`}
+      className={`w-full fixed font-georama  transition-transform duration-300 ${
+        isNavVisible ? "transform translate-y-0" : "transform -translate-y-full"
+      } ${isOpen && " overflow-y-auto h-full z-[100]"}`}
     >
+      {/* Desktop Nav Bar */}
       <div
         className={`hidden md:block md:px-8 text-white bg-gradient-to-r`}
         style={{
-          backgroundImage: `linear-gradient(to right, ${navbarColors.gradientFrom}, ${navbarColors.gradientTo})`,
+          backgroundImage: `linear-gradient(to right, #c2544d, #f09107)`,
         }}
       >
         <div className="h-16 flex py-2 mx-auto max-w-7xl justify-between items-center">
@@ -100,30 +123,33 @@ const NavBar = () => {
           </Link>
           <div className="ml-6 flex-grow flex-wrap">
             {navigationLinks.map((link, index) => (
-              <div className="group relative inline-block" key={index}>
-                {link.sublinks.length == 0 ? (
-                  <Link to={link.href} className="hover:text-orange-300 px-3">
-                    {link.name}
-                  </Link>
-                ) : (
-                  <span className="hover:text-orange-300 px-3">
-                    {link.name}
-                    {"  "}
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </span>
-                )}
+              <div className="dropdown dropdown-hover" key={index}>
+                <div tabIndex={index} className="hover:text-orange-300 px-3">
+                  {link.sublinks.length == 0 ? (
+                    <Link to={link.href}>{link.name}</Link>
+                  ) : (
+                    <div>
+                      {link.name} <FontAwesomeIcon icon={faAngleDown} />
+                    </div>
+                  )}
+                </div>
+
                 {link.sublinks.length > 0 && (
-                  <div className="absolute hidden group-hover:block shadow-md bg-white text-black text-sm mt-1 rounded-md">
-                    {link.sublinks.map((sublink, subindex) => (
-                      <Link
-                        key={subindex}
-                        to={link.subhrefs[subindex]}
-                        className="block px-4 py-2 hover:bg-orange-300"
-                      >
-                        {sublink}
-                      </Link>
-                    ))}
-                  </div>
+                  <>
+                    <ul
+                      tabIndex={index}
+                      className="dropdown-content menu bg-[#f2f2f2] text-[#864e41] rounded-box z-[1] w-52 p-2 shadow"
+                    >
+                      {link.sublinks.map((sublink, subindex) => (
+                        <li
+                          key={subindex}
+                          className="hover:bg-[#f69800] hover:text-white hover:rounded-md"
+                        >
+                          <Link to={link.subhrefs[subindex]}>{sublink}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
                 )}
               </div>
             ))}
@@ -142,19 +168,20 @@ const NavBar = () => {
           </div>
         </div>
       </div>
+      {/* Mobile Nav Bar */}
       <div
         className={`md:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r  ${
           isOpen ? "w-3/4 h-full rounded-e-2xl" : ""
         }`}
         style={{
-          backgroundImage: `linear-gradient(to right, ${navbarColors.gradientFrom}, ${navbarColors.gradientTo})`,
+          backgroundImage: `linear-gradient(to right, #c2544d, #f09107)`,
         }}
         ref={mobileNavRef}
       >
         <div className="flex justify-between items-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`inline-flex items-center justify-center rounded-md p-2 hover:bg-[${navbarColors.hover}] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
+            className={`inline-flex items-center justify-center rounded-md p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
           >
             {isOpen ? (
               <FontAwesomeIcon icon={faTimes} className="h-6 w-6" />
@@ -261,7 +288,7 @@ const NavBar = () => {
             Settings
           </Link>
           <Link
-            to="/"
+            to="/regis/login"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             Log out

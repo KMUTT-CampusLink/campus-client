@@ -1,9 +1,12 @@
 import { useState } from "react";
 import NavBar from "../components/NavBar";
 import HeadLineCard from "../components/HeadLineCard";
-import { mainStyles, containerDivStyles } from "../styles/styles";
+import { mainStyles, containerDivStyles, button } from "../styles/styles";
+import { useNavigate } from "react-router-dom";
 
 function AddCoursePage() {
+  const navigate = useNavigate();
+
   const [courses, setCourses] = useState([
     { id: 1, courseName: "Data Structures", credit: 3, condition: "Completed" },
     { id: 2, courseName: "Algorithms", credit: 3, condition: "In Progress" },
@@ -21,7 +24,6 @@ function AddCoursePage() {
         <NavBar />
         <main className={mainStyles}>
           <HeadLineCard title="Add Courses" link="/regis/course/detail" />
-
           <div className="divider"></div>
           <div className=" bg-white p-6 shadow-md rounded-md">
             <label className="mb-6 input input-bordered flex items-center gap-2">
@@ -73,13 +75,16 @@ function AddCoursePage() {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-between">
-              <button className="w-1/2 mr-2 mt-6 bg-[#A45C40] hover:bg-[#8A4832] text-white py-3 rounded-lg font-semibold transition duration-300">
+            <div className="grid sm:grid-cols-2 gap-2 py-4">
+              <button
+                className={`${button}`}
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
                 Back
               </button>
-              <button className="w-1/2 ml-2 mt-6 bg-[#A45C40] hover:bg-[#8A4832] text-white py-3 rounded-lg font-semibold transition duration-300">
-                Add Selected Courses
-              </button>
+              <button className={`${button}`}>Add Selected Courses</button>
             </div>
           </div>
         </main>
