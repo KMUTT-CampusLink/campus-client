@@ -112,7 +112,7 @@ const NavBar = () => {
     >
       {/* Desktop Nav Bar */}
       <div
-        className={`hidden md:block md:px-8 text-white bg-gradient-to-r`}
+        className={`hidden min-[900px]:block md:px-8 text-white bg-gradient-to-r`}
         style={{
           backgroundImage: `linear-gradient(to right, #c2544d, #f09107)`,
         }}
@@ -123,10 +123,7 @@ const NavBar = () => {
           </Link>
           <div className="ml-6 flex-grow flex-wrap">
             {navigationLinks.map((link, index) => (
-              <div
-                className="dropdown dropdown-hover font-semibold"
-                key={index}
-              >
+              <div className="dropdown dropdown-hover" key={index}>
                 <div tabIndex={index} className="hover:text-amber-400 px-3">
                   {link.sublinks.length == 0 ? (
                     <NavLink
@@ -170,7 +167,7 @@ const NavBar = () => {
               </div>
             ))}
           </div>
-          <div className="relative mr-2" ref={profileRef}>
+          <div className="relative flex-shrink-0 mr-2" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen((prev) => !prev)}
               className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -186,7 +183,7 @@ const NavBar = () => {
       </div>
       {/* Mobile Nav Bar */}
       <div
-        className={`md:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r  ${
+        className={`min-[900px]:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r  ${
           isOpen ? "w-3/4 h-full rounded-e-2xl" : ""
         }`}
         style={{
@@ -230,7 +227,7 @@ const NavBar = () => {
                 className="text-black w-20 h-20 mr-4"
               />
             </div>
-            <div className="mt-4 space-y-2 font-semibold">
+            <div className="mt-4 space-y-2">
               {navigationLinks.map((link, index) => (
                 <div key={index}>
                   <div className="block">
@@ -283,7 +280,7 @@ const NavBar = () => {
             </div>
             <div className="flex-grow"></div>
             <hr className="border-t-2 border-gray-300 w-full mx-3" />
-            <div className="mb-8 font-semibold">
+            <div className="mb-8">
               <Link
                 to="/regis/login"
                 className="block px-6 py-2 text-white hover:text-amber-400"
