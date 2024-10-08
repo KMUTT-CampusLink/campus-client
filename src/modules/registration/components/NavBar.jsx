@@ -7,7 +7,7 @@ import {
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const NavBar = () => {
   const navigationLinks = [
@@ -27,13 +27,13 @@ const NavBar = () => {
       name: "Campus Services",
       href: "/clubs",
       sublinks: ["Clubs", "Transport", "Parking & Bikes", "Buildings & Safety"],
-      subhrefs: ["/clubs", "/transport", "parking", "security"],
+      subhrefs: ["/clubs", "/transport", "/parking", "/security"],
     },
     {
       name: "Help & Tools",
       href: "/attendance",
       sublinks: ["Attendance", "Help Bot", "Campus Map"],
-      subhrefs: ["/attendance", "/botastra", "map"],
+      subhrefs: ["/attendance", "/botastra", "/map"],
     },
     {
       name: "Registration",
@@ -119,14 +119,24 @@ const NavBar = () => {
       >
         <div className="h-16 flex py-2 mx-auto max-w-7xl justify-between items-center">
           <Link to="/">
-            <div className="text-lg font-bold">CampusLink</div>
+            <div className="text-xl font-bold">CampusLink</div>
           </Link>
           <div className="ml-6 flex-grow flex-wrap">
             {navigationLinks.map((link, index) => (
-              <div className="dropdown dropdown-hover" key={index}>
-                <div tabIndex={index} className="hover:text-orange-300 px-3">
+              <div
+                className="dropdown dropdown-hover font-semibold"
+                key={index}
+              >
+                <div tabIndex={index} className="hover:text-amber-400 px-3">
                   {link.sublinks.length == 0 ? (
-                    <Link to={link.href}>{link.name}</Link>
+                    <NavLink
+                      to={link.href}
+                      className={({ isActive }) =>
+                        isActive ? "text-amber-400" : ""
+                      }
+                    >
+                      {link.name}
+                    </NavLink>
                   ) : (
                     <div>
                       {link.name} <FontAwesomeIcon icon={faAngleDown} />
@@ -138,14 +148,20 @@ const NavBar = () => {
                   <>
                     <ul
                       tabIndex={index}
-                      className="dropdown-content menu bg-[#f2f2f2] text-[#864e41] rounded-box z-[1] w-52 p-2 shadow"
+                      className="dropdown-content menu bg-white text-[#864e41] rounded-box z-[1] w-52 p-2 shadow"
                     >
                       {link.sublinks.map((sublink, subindex) => (
-                        <li
-                          key={subindex}
-                          className="hover:bg-[#f69800] hover:text-white hover:rounded-md"
-                        >
-                          <Link to={link.subhrefs[subindex]}>{sublink}</Link>
+                        <li key={subindex} className="mt-1 mb-1">
+                          <NavLink
+                            to={link.subhrefs[subindex]}
+                            className={({ isActive }) =>
+                              isActive
+                                ? "bg-[#f69800] text-white rounded-md hover:bg-[#f69800] hover:text-white hover:rounded-md"
+                                : "hover:bg-[#f69800] hover:text-white hover:rounded-md"
+                            }
+                          >
+                            {sublink}
+                          </NavLink>
                         </li>
                       ))}
                     </ul>
@@ -214,23 +230,25 @@ const NavBar = () => {
                 className="text-black w-20 h-20 mr-4"
               />
             </div>
-            <div className="mt-4 space-y-2">
+            <div className="mt-4 space-y-2 font-semibold">
               {navigationLinks.map((link, index) => (
-                <>
-                  <div key={index} className="block">
+                <div key={index}>
+                  <div className="block">
                     <div
                       onClick={() => toggleDropdown(index)}
-                      className="hover:text-orange-300 cursor-pointer flex justify-between"
+                      className="hover:text-amber-400 cursor-pointer flex justify-between mt-1 mb-1"
                     >
                       {link.sublinks.length == 0 ? (
-                        <Link
+                        <NavLink
                           to={link.href}
-                          className="hover:text-orange-300 px-3"
+                          className={({ isActive }) =>
+                            isActive ? "text-amber-400 px-3" : "px-3"
+                          }
                         >
                           {link.name}
-                        </Link>
+                        </NavLink>
                       ) : (
-                        <div className="hover:text-orange-300 px-3 flex justify-between items-center w-full">
+                        <div className="hover:text-amber-400 px-3 flex justify-between items-center w-full">
                           <span className="text-left">{link.name}</span>
                           <FontAwesomeIcon
                             icon={faAngleDown}
@@ -242,13 +260,17 @@ const NavBar = () => {
                     {openDropdowns[index] && link.sublinks.length > 0 && (
                       <div className="text-white text-sm w-full mt-1 rounded-md pl-4">
                         {link.sublinks.map((sublink, subindex) => (
-                          <Link
+                          <NavLink
                             key={subindex}
                             to={link.subhrefs[subindex]}
-                            className="block px-4 py-2 hover:bg-orange-600 hover:text-white"
+                            className={({ isActive }) =>
+                              isActive
+                                ? "block px-4 py-2 bg-orange-600 text-white mt-1 mb-1"
+                                : "block px-4 py-2 hover:bg-orange-600 hover:text-white transition-colors"
+                            }
                           >
                             {sublink}
-                          </Link>
+                          </NavLink>
                         ))}
                       </div>
                     )}
@@ -256,15 +278,15 @@ const NavBar = () => {
                   {index < navigationLinks.length - 1 && (
                     <hr className="border-t-2 border-gray-300 w-full mx-3" />
                   )}
-                </>
+                </div>
               ))}
             </div>
             <div className="flex-grow"></div>
             <hr className="border-t-2 border-gray-300 w-full mx-3" />
-            <div className="mb-8">
+            <div className="mb-8 font-semibold">
               <Link
                 to="/regis/login"
-                className="block px-6 py-2 text-white hover:text-orange-300"
+                className="block px-6 py-2 text-white hover:text-amber-400"
               >
                 {" "}
                 <FontAwesomeIcon icon={faRightFromBracket} /> Log out
@@ -274,7 +296,7 @@ const NavBar = () => {
         )}
       </div>
       {isProfileOpen && (
-        <div className="absolute mt-4 mr-4 right-0 z-10 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition">
+        <div className="absolute mt-2 mr-4 right-0 z-10 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition">
           <Link
             to="/"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
