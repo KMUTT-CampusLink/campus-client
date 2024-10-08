@@ -10,8 +10,8 @@ function SInfoCard() {
     <>
       <div className="ml-6">
         <p className="text-gray-500 mt-4 text-sm">{sinfo.studentId}</p>
-        <h2 className="text-2xl font-bold">{sinfo.firstName}</h2>
-        <h2 className="text-2xl font-bold">{sinfo.lastName}</h2>
+        <h2 className="text-2xl font-geologica font-bold">{sinfo.firstName}</h2>
+        <h2 className="text-2xl font-geologica font-bold">{sinfo.lastName}</h2>
         <p>{sinfo.school}</p>
         <p>{sinfo.department}</p>
       </div>
