@@ -4,12 +4,12 @@
 
 Open the root project folder in your favorite terminal and do the following:
 
-```
-git clone https://github.com/KMUTT-CampusLink/campus-client.git
-cd campus-client
-cp .env.example .env.local
-npm install
-npm run dev
+```shell
+> git clone https://github.com/KMUTT-CampusLink/campus-client.git
+> cd campus-client
+> cp .env.example .env.local
+> npm install
+> npm run dev
 ```
 
 ## Folder Structure :file_folder:
@@ -27,18 +27,18 @@ We will use a **modular** or **feature-based** folder structure in this project.
 If you feel lost, please see the image below:<br><br>
 ![client_folder](https://github.com/user-attachments/assets/8839f838-7531-4320-938f-63e54822311e)
 
-## Bit branching & Pull request
+## Git branching & Pull request
 
 > [!IMPORTANT]
 > Please read very carefully as this part is so important.
 
-There will be two main branches that will live forever, namely `main` and `develop` branches. Then, we will have two categories of short-term branches called `feature` and `bugfix`. Finally, you are only allowed to create pull requests to merge into the `develop` branch. If you are uncertain about `branching & pull requests`, please contact me directly on `Discord`. Naming conventions are given below:
+There will be two main branches that will live forever, namely `main` and `develop` branches. Then, we will have two categories of short-term branches called `feature` and `bugfix`. You are only allowed to create pull requests to merge into the `develop` branch. If you are uncertain about `branching & pull requests`, please contact me directly on `Discord`. Naming conventions are given below:
 
 1.  For `feature` branches: `g[01-13]-feat/[student-ID-last-two-digits]/sub-feature-name`
 2.  For `bugfix` branches: `g[01-13]-bugfix/[student-ID-last-two-digits]/bug-name`
 
-    ```
-    Examples:
+    ```py
+    // Examples:
 
     g05-feat/30/question-shuffle
     g10-feat/03/qr-scanner

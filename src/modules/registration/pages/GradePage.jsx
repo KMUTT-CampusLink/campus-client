@@ -1,3 +1,4 @@
+import { useState } from "react"; // Import useState
 import NavBar from "../components/NavBar";
 import SInfoCard from "../components/SInfoCard";
 import GradeCard from "../components/GradeCard";
@@ -5,6 +6,11 @@ import HeadLineCard from "../components/HeadLineCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 
 function GradePage() {
+  const [semester, setSemester] = useState("1/2567");
+  const [semesterOptions] = useState(["1/2567", "2/2567"]);
+  const [gpa] = useState("3.50");
+  const [gpax] = useState("3.60");
+
   const courses = [
     {
       code: "CSC209",
@@ -26,6 +32,10 @@ function GradePage() {
     },
   ];
 
+  const handleSemesterChange = (event) => {
+    setSemester(event.target.value); // Update state with the selected semester
+  };
+
   return (
     <div className={containerDivStyles}>
       <NavBar />
@@ -36,20 +46,25 @@ function GradePage() {
           <div className="flex flex-col justify-start">
             <SInfoCard />
             <div className="ml-4 md:ml-6 mt-4 mb-4">
-              <select className="select select-bordered w-full max-w-xs">
-                <option disabled selected>
-                  Academic year [x/xxxx]
-                </option>
-                <option>1/2567</option>
-                <option>2/2567</option>
+              <select
+                className="select select-bordered w-full max-w-xs"
+                value={semester}
+                onChange={handleSemesterChange}
+              >
+                <option disabled>Select Academic year [x/xxxx]</option>
+                {semesterOptions.map((sem) => (
+                  <option key={sem} value={sem}>
+                    {sem}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
           <div>
             <GradeCard
-              gpa="3.50"
-              gpax="3.6"
-              semester="1/2567"
+              gpa={gpa}
+              gpax={gpax}
+              semester={semester}
               courses={courses}
             />
           </div>
