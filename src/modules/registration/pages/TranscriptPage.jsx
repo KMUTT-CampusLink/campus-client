@@ -1,7 +1,7 @@
 import { useState } from "react";
 import GPAXCard from "../components/GPAXCard";
 import HeadLineCard from "../components/HeadLineCard";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBarComponents/NavBar";
 import TranscriptCard from "../components/TranscriptCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 
