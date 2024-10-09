@@ -2,7 +2,7 @@ import HeadLineCard from "../components/HeadLineCard";
 import SInfoCard from "../components/SInfoCard";
 import CourseTable from "../components/CourseTable";
 import { Link } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 
 function CourseRegisPage() {
@@ -14,7 +14,7 @@ function CourseRegisPage() {
 
   const totalCredits = courses.reduce((acc, course) => acc + course.credit, 0);
   const totalCourses = courses.length;
-  const grandTotal = 52500; // You can calculate this based on the number of courses or other logic
+  const grandTotal = 52500; 
 
   return (
     <div className={containerDivStyles}>

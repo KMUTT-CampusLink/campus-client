@@ -1,5 +1,5 @@
 import { useState } from "react";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBarComponents/NavBar";
 import HeadLineCard from "../components/HeadLineCard";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useNavigate } from "react-router-dom";
