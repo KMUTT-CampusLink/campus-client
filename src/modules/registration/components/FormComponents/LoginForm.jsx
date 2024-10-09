@@ -4,7 +4,7 @@ import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
 
 function LoginForm() {
-  const [schoolEmail, setSchoolEmail] = useState("");
+  const [campusEmail, setCampusEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -15,7 +15,7 @@ function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log("School Email:", schoolEmail, "Password:", password);
+    console.log("Campus Email:", campusEmail, "Password:", password);
   };
 
   return (
@@ -23,13 +23,13 @@ function LoginForm() {
       <h3 className={`${formHead}`}>Log in to System</h3>
 
       <form onSubmit={handleSubmit}>
-        {/* School Email */}
+        {/* Campus Email */}
         <FormInput
-          name="School Email"
+          name="Campus Email"
           type="email"
-          placeholder="school@edu.com"
-          value={schoolEmail}
-          onChange={(e) => setSchoolEmail(e.target.value)}
+          placeholder="campus@edu.com"
+          value={campusEmail}
+          onChange={(e) => setCampusEmail(e.target.value)}
         />
 
         {/* Password */}
