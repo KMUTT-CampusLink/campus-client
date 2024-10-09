@@ -1,5 +1,5 @@
-import { useState } from "react"; // Import useState
-import NavBar from "../components/NavBar";
+import { useState } from "react";
+import NavBar from "../components/NavBarComponents/NavBar";
 import SInfoCard from "../components/SInfoCard";
 import GradeCard from "../components/GradeCard";
 import HeadLineCard from "../components/HeadLineCard";
