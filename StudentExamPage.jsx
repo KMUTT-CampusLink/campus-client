@@ -24,21 +24,18 @@ export default function StudentExamPage() {
   const [studentQuestion, setStudentQuestion] = useState(0);
   const navigate = useNavigate();
 
-  // Navigate to next question
   const handleNext = () => {
     if (studentQuestion < questionNoMock.length - 1) {
       setStudentQuestion(studentQuestion + 1);
     }
   };
 
-  // Navigate to previous question
   const handleBack = () => {
     if (studentQuestion > 0) {
       setStudentQuestion(studentQuestion - 1);
     }
   };
 
-  // Jump to specific question
   const jumpTo = (n) => {
     if (n >= 0 && n < questionNoMock.length) {
       setStudentQuestion(n);
@@ -59,9 +56,9 @@ export default function StudentExamPage() {
             className="w-[67%] h-auto"
           />
           {/* Question Navigation */}
-          <Navigation questionNo={questionNoMock} studentQuestion={studentQuestion} jumpTo={jumpTo} />
+          <Navigation questionNo={questionNoMock} jumpTo={jumpTo} />
         </div>
-        <div className='flex flex-col xl:flex-row justify-between pt-[30px] xl:pt-[40px]'>
+        <div className='flex flex-col xl:flex-row justify-between pt-[30px] xl:pt-[70px]'>
           <div className='w-full xl:w-[82%] flex justify-between pb-[20px] xl:pb-0'>
             {/* Navigate previous and next question */}
             <button disabled={studentQuestion === 0} onClick={handleBack} className='underline-offset-3 hover:underline'>
@@ -71,8 +68,8 @@ export default function StudentExamPage() {
               Next <FontAwesomeIcon icon={faChevronRight} />
             </button>
           </div>
-          {/* submit button then open Modal to confirm submit*/}
-          <button className='btn w-[100%] xl:w-[200px] bg-[#864E41] text-white rounded-xl ease-in duration-100 hover:bg-[#6e4339]' onClick={() => document.getElementById('my_modal_1').showModal()} >Submit</button>
+          {/* Button to open Modal */}
+          <button className='btn w-[100%] xl:w-[200px] bg-[#7F483C] text-white rounded-xl ease-in duration-100 hover:bg-[#C76650]' onClick={() => document.getElementById('my_modal_1').showModal()} >Submit</button>
           {/* Modal */}
           <dialog id="my_modal_1" className="p-[30px] rounded-xl">
             <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
