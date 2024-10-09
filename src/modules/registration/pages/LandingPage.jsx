@@ -1,4 +1,4 @@
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles } from "../styles/styles";
 import SInfoCard from "../components/SInfoCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
