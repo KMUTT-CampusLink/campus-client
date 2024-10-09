@@ -4,7 +4,7 @@ import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
 function ActivationForm() {
   const [email, setEmail] = useState("");
-  const [schoolEmail, setSchoolEmail] = useState("");
+  const [campusEmail, setCampusEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,8 +22,8 @@ function ActivationForm() {
     console.log(
       "Personal Email:",
       email,
-      "School Email:",
-      schoolEmail,
+      "Campus Email:",
+      campusEmail,
       "Password:",
       password
     );
@@ -34,13 +34,13 @@ function ActivationForm() {
       <h3 className={`${formHead}`}>Activate Your Account</h3>
 
       <form onSubmit={handleSubmit}>
-        {/* School Email */}
+        {/* Campus Email */}
         <FormInput
-          name="School Email"
+          name="Campus Email"
           type="email"
-          placeholder="school@edu.com"
-          value={schoolEmail}
-          onChange={(e) => setSchoolEmail(e.target.value)}
+          placeholder="campus@edu.com"
+          value={campusEmail}
+          onChange={(e) => setCampusEmail(e.target.value)}
         />
 
         {/* Personal Email */}
