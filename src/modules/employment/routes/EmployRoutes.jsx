@@ -1,12 +1,15 @@
-const Test = () => {
-  return <h1>Employment</h1>;
-};
+import EmployeeDetail from "../pages/EmployeeDetail";
+import EmployeeGrid from "../pages/EmployeeGrid"
 
 export default function EmployRoutes() {
   return [
     {
       path: "",
-      element: <Test />,
+      element: <EmployeeGrid />,
     },
+    {
+      path: "employee/:id",
+      element: <EmployeeDetail />
+    }
   ];
 }
