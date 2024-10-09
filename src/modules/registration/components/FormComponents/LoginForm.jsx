@@ -4,7 +4,7 @@ import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
 
 function LoginForm() {
-  const [campusEmail, setCampusEmail] = useState("");
+  const [campus_email, setCampusEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -15,7 +15,7 @@ function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log("Campus Email:", campusEmail, "Password:", password);
+    console.log("Campus Email:", campus_email, "Password:", password);
   };
 
   return (
@@ -28,7 +28,7 @@ function LoginForm() {
           name="Campus Email"
           type="email"
           placeholder="campus@edu.com"
-          value={campusEmail}
+          value={campus_email}
           onChange={(e) => setCampusEmail(e.target.value)}
         />
 
