@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import NavBar from '../../registration/components/NavBar';
+import NavBar from '../../registration/components/NavBarComponents/NavBar';
 import FAQs from '../components/chatPage/FAQs';
 import MessageArea from '../components/chatPage/MessageArea';
 
@@ -30,18 +30,18 @@ const ChatPage = () => {
   }
 
   return (
-    <div className = " w-full h-100vh">
+    <div className = " w-full min-h-screen">
         <NavBar />
         {/* main div for chat */}
-        <div className = {`bg-white w-full min-h-[90vh] rounded-t-xl flex flex-col  justify-between -mt-2 py-4`}>
+        <div className = {`mx-auto max-w-7xl pt-20 pb-6 w-full h-[100vh] rounded-t-xl flex flex-col justify-between`}>
             {/* messaging area  */}
-            <div className=' w-full flex flex-col justify-around gap-16'>
+            <div className=' w-full flex flex-col justify-around gap-6'>
                 {/* bot profile div  */}
                 <div className= {`${startChat ? `hidden`: `visible`} w-full h-[8rem] flex justify-center items-center `}>
                     <img src={batman} alt="batman" className="object-contain w-[6rem] h-[6rem] rounded-full"/>
                 </div>
                 {/* faqs div  */}
-                <div className={`w-full  ${startChat? `h-[6rem] `: `h-[10rem]`} flex justify-center items-center py`}>
+                <div className={`w-full  ${startChat? `h-[6rem] `: `h-[10rem]`} flex justify-center items-center`}>
                     <div className={`p-12 gap-5 flex flex-col `}>
                         <p className = {`${startChat ? `hidden` : `visible`} font-bold text-xl`}>Try asking these questions!</p>
                         <FAQs textRef={textRef} dummyFaqs = {dummyFaqs} startChat = {startChat}/>
