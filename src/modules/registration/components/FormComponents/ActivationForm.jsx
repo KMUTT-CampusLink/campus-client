@@ -3,8 +3,8 @@ import FormInput from "./FormInput";
 import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
 function ActivationForm() {
-  const [email, setEmail] = useState("");
-  const [campusEmail, setCampusEmail] = useState("");
+  const [personal_email, setEmail] = useState("");
+  const [campus_email, setCampusEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,9 +21,9 @@ function ActivationForm() {
     }
     console.log(
       "Personal Email:",
-      email,
+      personal_email,
       "Campus Email:",
-      campusEmail,
+      campus_email,
       "Password:",
       password
     );
@@ -39,16 +39,16 @@ function ActivationForm() {
           name="Campus Email"
           type="email"
           placeholder="campus@edu.com"
-          value={campusEmail}
+          value={campus_email}
           onChange={(e) => setCampusEmail(e.target.value)}
         />
 
         {/* Personal Email */}
         <FormInput
-          name="Email"
+          name="Personal Email"
           type="email"
           placeholder="personal@mail.com"
-          value={email}
+          value={personal_email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
