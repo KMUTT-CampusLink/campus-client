@@ -8,7 +8,7 @@ function HeadLineCard({ link, title }) {
 
   return (
     <>
-      <div className="flex flex-start items-center bg-white p-6 shadow-md rounded-md">
+      <div className="flex flex-start items-center bg-white p-4 shadow-md rounded-md">
         {hasProfilePic ? (
           <img
             src={profilePic}
@@ -22,8 +22,11 @@ function HeadLineCard({ link, title }) {
           />
         )}
         <div>
-          <h1 className="text-2xl font-bold">{title}</h1>
-          <Link to={link} className="text-sm font-light">
+          <h1 className="text-2xl font-geologica font-bold">{title}</h1>
+          <Link
+            to={link}
+            className="text-sm text-[#DC5A52] font-georama underline underline-offset-auto font-light"
+          >
             Detailed Information
           </Link>
         </div>
