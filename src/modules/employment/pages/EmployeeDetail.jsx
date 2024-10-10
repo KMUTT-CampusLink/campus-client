@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
+import dummydata from "./employee.json"
 
 const EmployeeDetail = () => {
   const { id } = useParams();
@@ -12,128 +15,8 @@ const EmployeeDetail = () => {
   // Dummy data fetch - replace with actual API call
   useEffect(() => {
     const fetchEmployee = async () => {
-      const data = [
-        {
-          id: "66130500811",
-          name: "Koe Koe",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500812",
-          name: "kiaer",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500813",
-          name: "bfejwi",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500814",
-          name: "csfew",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500816",
-          name: "dewfe",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500817",
-          name: "Koese",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500818",
-          name: "wfadf",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500819",
-          name: "ewfds",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500820",
-          name: "DEgsaef",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-        {
-          id: "66130500821",
-          name: "ewadfa",
-          department: "SIT",
-          jobTitle: "HR Management",
-          position: "Senior Consultant",
-          address: "No.xxx,St.Mary St, Tamwe Tsp, BKK, Thai",
-          contactNo: "09xxxxxxxxxx",
-          salary: "50000$",
-          degree: "High School Diploma",
-          startDate: "Jan 2020",
-        },
-      ];
+      const data = dummydata;
+
       const emp = data.find((emp) => emp.id == id);
       setEmployee(emp);
     };
@@ -141,6 +24,10 @@ const EmployeeDetail = () => {
   }, [id]);
 
   if (!employee) return <p>Loading...</p>;
+
+  const handleClickback = () => {
+    navigate(`/employ`);
+  };
 
   const handleClick = () => {
     navigate(`/employ/employupdate`);
@@ -151,13 +38,14 @@ const EmployeeDetail = () => {
       <NavBar />
 
       <main className="pt-20 px-4 md:px-20">
+      <FontAwesomeIcon icon={faArrowLeft} className="hover:shadow-sm md:h-7" onClick={handleClickback}/>
         <body className="lg:flex items-center justify-between xl:justify-around">
           <div className="flex justify-center">
             <EmployeeCard  employee={employee} />
           </div>
-
+          
           <article className="pt-5 text-[#7F483C] lg:px-3">
-            <h2 className=" text-[17px] text-black md:text-[20px] font-geologica mb-3">
+            <h2 className=" text-[15px] text-black md:text-[20px] font-geologica mb-3">
               Work History
             </h2>
             
@@ -165,31 +53,37 @@ const EmployeeDetail = () => {
               {/* Left Side */}
               <div className="p-5 space-y-4">
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Job Title</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    HR MANAGEMENT
+                  <p className="font-opensans text-[8px] md:text-[12px]">Employee-ID</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                    {employee.id}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Position</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    Senior Consultant
+                  <p className="font-opensans text-[8px] md:text-[12px]">Name</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                    {employee.name}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Employer name</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    Koe Koe
+                  <p className="font-opensans text-[8px] md:text-[12px]">Department</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                    {employee.department}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Department</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">SIT</p>
+                  <p className="font-opensans text-[8px] md:text-[12px]">Job-title</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">{employee.jobTitle}</p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Start Date</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    Jan 2020
+                  <p className="font-opensans text-[8px] md:text-[12px]">Position</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                    {employee.position}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-opensans text-[8px] md:text-[12px]">Salary</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                  {employee.salary}
                   </p>
                 </div>
               </div>
@@ -197,25 +91,31 @@ const EmployeeDetail = () => {
               {/* Right Side */}
               <div className="p-5 space-y-4">
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Address</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    No.xxx, St.Mary St, Tamwe Tsp, BKK, Thai
+                  <p className="font-opensans text-[8px] md:text-[12px]">Gender</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                  {employee.gender}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Contact No.</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    09xxxxxxxxxx
+                  <p className="font-opensans text-[8px] md:text-[12px]">Age</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                  {employee.age}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Salary</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">50000$</p>
+                  <p className="font-opensans text-[8px] md:text-[12px]">Identification</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">{employee.identification}</p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[10px] md:text-[12px]">Degree level</p>
-                  <p className="text-[17px] md:text-[20px] font-georama">
-                    High School Diploma
+                  <p className="font-opensans text-[8px] md:text-[12px]">Contact</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                  {employee.contactNo}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-opensans text-[8px] md:text-[12px]">Address</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">
+                  {employee.address}
                   </p>
                 </div>
               </div>
