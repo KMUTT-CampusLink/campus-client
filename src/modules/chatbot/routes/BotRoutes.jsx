@@ -1,12 +1,10 @@
-const Test = () => {
-  return <h1>Chat Bot Astra</h1>;
-};
+import ChatPage from "../pages/ChatPage";
 
 export default function BotRoutes() {
   return [
     {
       path: "",
-      element: <Test />,
+      element: <ChatPage />,
     },
   ];
 }
