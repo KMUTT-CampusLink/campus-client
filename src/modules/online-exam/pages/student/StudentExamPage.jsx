@@ -74,9 +74,6 @@ export default function StudentExamPage() {
             className="w-[67%] h-auto"
           />
           {/* Question Navigation */}
-          <Navigation questionNo={questionNoMock} jumpTo={jumpTo} />
-        </div>
-        <div className="flex flex-col xl:flex-row justify-between pt-[30px] xl:pt-[70px]">
           <Navigation
             questionNo={questionNoMock}
             studentQuestion={studentQuestion}
@@ -101,13 +98,6 @@ export default function StudentExamPage() {
               Next <FontAwesomeIcon icon={faChevronRight} />
             </button>
           </div>
-          {/* Button to open Modal */}
-          <button
-            className="btn w-[100%] xl:w-[200px] bg-[#7F483C] text-white rounded-xl ease-in duration-100 hover:bg-[#C76650]"
-            onClick={() => document.getElementById("my_modal_1").showModal()}
-          >
-            Submit
-          </button>
           {/* submit button then open Modal to confirm submit*/}
           <button
             className="btn w-[100%] xl:w-[200px] bg-[#864E41] text-white rounded-xl ease-in duration-100 hover:bg-[#6e4339]"
