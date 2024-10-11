@@ -37,7 +37,7 @@ const EmployeeDetail = () => {
     <div className="w-full min-h-screen">
       <NavBar />
 
-      <main className="pt-20 px-4 md:px-20">
+      <main className="pt-16 md:pt-20 px-4 md:px-20">
       <FontAwesomeIcon icon={faArrowLeft} className="hover:shadow-sm md:h-7" onClick={handleClickback}/>
         <body className="lg:flex items-center justify-between xl:justify-around">
           <div className="flex justify-center">
@@ -49,9 +49,9 @@ const EmployeeDetail = () => {
               Work History
             </h2>
             
-            <div className="border rounded-md grid grid-cols-1 lg:grid-cols-2 divide-x ">
+            <div className="border border-[#939393] rounded-md grid grid-cols-1 lg:grid-cols-2 divide-[#939393] divide-x ">
               {/* Left Side */}
-              <div className="p-5 space-y-4">
+              <div className="p-5 space-y-2 md:space-y-4">
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px]">Employee-ID</p>
                   <p className="text-[15px] md:text-[20px] font-georama">

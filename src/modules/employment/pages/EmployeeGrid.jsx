@@ -23,9 +23,9 @@ const EmployeeGrid = () => {
   return (
     <div className="w-full min-h-screen">
       <NavBar />
-      <main className="pt-20 px-4 md:px-20">
+      <main className="pt-16 md:pt-20 px-4 md:px-20 h-full">
 
-        <div className="border-none mb-6 flex justify-between">
+        <div className="border-none flex mb-2 md:mb-4 justify-between">
           <input
             className="bg-[#F2F2F2] outline-none transition hover:shadow-sm w-2/5 text-[12px] md:text-[16px] font-georama  md:h-10 h-7 rounded-lg pl-3 "
             type="text"
@@ -41,7 +41,7 @@ const EmployeeGrid = () => {
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-7">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-7 max-h-[83vh] overflow-y-auto">
           {employees.map((employee) => (
             <EmployeeCard key={employee.id} employee={employee} />
           ))}
