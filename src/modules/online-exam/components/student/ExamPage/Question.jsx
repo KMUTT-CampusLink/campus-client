@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function Question({ questionNo, question, choice, type }) {
+  // console.log(questionNo, question, choice, type)
   return (
     <div className='border border-[#BEBEBE] rounded-xl p-[25px] w-full'>
       {/* Question */}
