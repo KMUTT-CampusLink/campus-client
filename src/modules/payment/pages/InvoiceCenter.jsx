@@ -1,3 +1,4 @@
+// InvoiceCenter.jsx
 import React, { useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
@@ -86,15 +87,15 @@ const InvoiceCenter = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <main className="mx-auto max-w-7xl pt-20 w-4/5 ">
-        <div className="flex h-[80vh]">
-          <div className="w-1/2 flex items-center justify-center">
-            <div className="sticky top-20">
+      <main className="mx-auto max-w-full lg:max-w-7xl pt-10 lg:pt-20 w-full px-4 lg:px-0 ">
+        <div className="flex flex-col lg:flex-row h-auto lg:h-[80vh]">
+          <div className="w-full lg:w-1/2 flex items-center justify-center mb-6 lg:mb-0">
+            <div className=" top-20">
               <img
                 src={billFolder}
                 alt="Bill Folder Image"
                 className="max-w-full h-auto rounded-lg"
-                style={{ width: "500px", height: "500px" }}
+                style={{ width: "300px", height: "300px" }}
               />
             </div>
           </div>
@@ -114,6 +115,7 @@ const InvoiceCenter = () => {
                 setFilterAll={setFilterAll}
                 isAscending={isAscending}
                 setIsAscending={setIsAscending}
+                setShowAll={setShowAll} // To close All Transactions
               />
               <div
                 className="fixed inset-0 z-40 bg-black opacity-60"
