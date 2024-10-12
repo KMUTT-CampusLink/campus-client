@@ -5,7 +5,7 @@ const EmployeeCard = ({ employee }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/employ/employee/${employee.id}`);
+    navigate(`/employ/employeeDetail/${employee.id}`);
   };
 
   return (
