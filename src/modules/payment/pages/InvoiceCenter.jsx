@@ -86,7 +86,7 @@ const InvoiceCenter = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <main className="mx-auto max-w-7xl pt-20 w-4/5 relative">
+      <main className="mx-auto max-w-7xl pt-20 w-4/5 ">
         <div className="flex h-[80vh]">
           <div className="w-1/2 flex items-center justify-center">
             <div className="sticky top-20">
