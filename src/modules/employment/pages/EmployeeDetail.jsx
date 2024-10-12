@@ -6,11 +6,13 @@ import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import dummydata from "./employee.json"
+import DeletePopUp from "../components/DeletePopUp";
 
 const EmployeeDetail = () => {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   // Dummy data fetch - replace with actual API call
   useEffect(() => {
@@ -28,10 +30,16 @@ const EmployeeDetail = () => {
   const handleClickback = () => {
     navigate(`/employ`);
   };
-
   const handleClick = () => {
     navigate(`/employ/employeeUpdate/${employee.id}`);
   };
+  const handleUpdateClick = () => {
+    setShowPopup(true);
+  };
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
 
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
@@ -125,9 +133,11 @@ const EmployeeDetail = () => {
 
         <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
           <button className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm" onClick={handleClick}>Edit</button>
-          <button className="bg-[#EC5A51] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Delete</button>
+          <button type="button" onClick={handleUpdateClick} className="bg-[#EC5A51] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Delete</button>
         </div>
       </main>
+
+      {showPopup && <DeletePopUp onClose={handleClosePopup} />}
     </div>
   );
 };

@@ -1,11 +1,21 @@
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
+import AddPopUp from "../components/AddPopUp";
+import {useState} from 'react'
 
 
 const EmployeeAdd = () => {
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleClickback = () => {
     navigate(`/employ`);
+  };
+  const handleUpdateClick = () => {
+    setShowPopup(true);
+  };
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
 
@@ -179,13 +189,13 @@ const EmployeeAdd = () => {
             {/* Buttons Section */}
             <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
               <button onClick={handleClickback} className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Cancel</button>
-              <button className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Add</button>
+              <button type="button" onClick={handleUpdateClick} className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Add</button>
             </div>
           </form>
         </div>
       </main>
     
-
+      {showPopup && <AddPopUp onClose={handleClosePopup} />}
     </div>
   )
 }

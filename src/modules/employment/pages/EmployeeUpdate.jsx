@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import dummydata from "./employee.json";
 import { useParams } from "react-router-dom";
 import {useState, useEffect} from 'react'
+import UpdatePopUp from "../components/UpdatePopUp";
 
 
 const EmployeeUpdate = () => {
   const { id } = useParams();
-  const [employee, setEmployee] = useState(null);
   const navigate = useNavigate();
+  const [employee, setEmployee] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   // Dummy data fetch - replace with actual API call
   useEffect(() => {
@@ -25,6 +27,12 @@ const EmployeeUpdate = () => {
 
   const handleClickback = () => {
     navigate(`/employ/employeeDetail/${employee.id}`);
+  };
+  const handleUpdateClick = () => {
+    setShowPopup(true);
+  };
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -205,13 +213,13 @@ const EmployeeUpdate = () => {
               {/* Buttons Section */}
               <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
                 <button onClick={handleClickback} className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Cancel</button>
-                <button className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Update</button>
+                <button type="button" onClick={handleUpdateClick} className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Update</button>
               </div>
             </form>
           </div>
         </main>
       
-
+        {showPopup && <UpdatePopUp onClose={handleClosePopup} />}
       </div>
   )
 }
