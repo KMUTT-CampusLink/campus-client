@@ -1,13 +1,13 @@
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/FormComponents/LoginForm";
 import SvgBottomRight from "../components/SvgBottomRight";
 import SvgTopLeft from "../components/SvgTopLeft";
-
+import { logoHead, authContainer } from "../styles/styles";
 function LoginPage() {
   return (
-    <div className="h-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <div className={`${authContainer}`}>
       <SvgTopLeft />
       <SvgBottomRight />
-      <h2 className="text-4xl font-bold text-center mb-8 z-10">CampusLink</h2>
+      <h2 className={`${logoHead}`}>CampusLink</h2>
       <div className="z-10">
         <LoginForm />
       </div>

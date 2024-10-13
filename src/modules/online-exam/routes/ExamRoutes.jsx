@@ -28,13 +28,13 @@ export default function ExamRoutes() {
           element: <StudentExamPasswordPage />,
         },
         {
-            path: "exam/:examId",
-            element: <StudentExamPage />,
+          path: "exam/:examId",
+          element: <StudentExamPage />,
         },
         {
-            path: "review/:examId",
-            element: <StudentReviewExamPage />,
-        }
+          path: "review/:examId",
+          element: <StudentReviewExamPage />,
+        },
       ],
     },
 
@@ -55,7 +55,7 @@ export default function ExamRoutes() {
           element: <ProfessorEditExamPage />,
         },
         {
-          path: "setting/:examId",
+          path: "setting", //:examId
           element: <ProfessorExamSettingPage />,
         },
         {
@@ -63,7 +63,7 @@ export default function ExamRoutes() {
           element: <ProfessorDashboardPage />,
         },
         {
-          path: "scoring/:examId",
+          path: "scoring", ///:examId
           element: <ProfessorScoringPage />,
         },
         {

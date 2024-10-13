@@ -1,11 +1,13 @@
 function TranscriptCard({ semester, gpa, subjects }) {
   return (
     <div className="mb-6">
-      <h2 className="font-bold mb-2">
-        {semester} GPA {gpa.toFixed(2)}
-      </h2>
-      <div className="bg-gray-200 rounded-md overflow-x-auto">
-        <table className="min-w-full text-left">
+      <div className="flex items-center">
+        <h2 className="font-bold text-2xl font-geologica mb-2">{semester}</h2>
+        <h2 className="font-bold mb-2 ml-4">GPA {gpa.toFixed(2)}</h2>
+      </div>
+
+      <div className="bg-gray-200 rounded-lg overflow-x-auto">
+        <table className="min-w-full border text-left">
           <thead className="bg-[#c3554e] text-white">
             <tr>
               <th className="p-2">Subject</th>

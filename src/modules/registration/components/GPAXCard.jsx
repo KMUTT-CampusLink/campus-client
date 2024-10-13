@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
+import { button } from "../styles/styles";
 import SInfoCard from "./SInfoCard";
 
-function GPAXCard() {
+function GPAXCard({ gpax, creditsPrescribed, creditsEarned }) {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-gray-200 p-4 rounded shadow">
       <h2 className="font-bold text-2xl mb-2">Cumulative GPA</h2>
@@ -8,11 +12,18 @@ function GPAXCard() {
       <SInfoCard />
       <div className="divider"></div>
       <div className="text-sm">
-        <p>Credits Prescribed: 134</p>
-        <p>Credits Earned: 47</p>
-        <p>Grade Point Average: 3.65</p>
+        <p>
+          Credits Prescribed:{" "}
+          <span className="font-bold">{creditsPrescribed}</span>
+        </p>
+        <p>
+          Credits Earned: <span className="font-bold">{creditsEarned}</span>
+        </p>
+        <p>
+          Grade Point Average: <span className="font-bold">{gpax}</span>{" "}
+        </p>
       </div>
-      <button className="w-full mt-6 bg-[#A45C40] hover:bg-[#8A4832] text-white py-3 rounded-lg font-semibold transition duration-300">
+      <button onClick={() => navigate(-1)} className={`${button} mt-2`}>
         Back
       </button>
     </div>
