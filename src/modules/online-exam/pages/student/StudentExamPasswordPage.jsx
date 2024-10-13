@@ -1,4 +1,4 @@
-import NavBar from "../../../registration/components/NavBar";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function StudentExamPasswordPage() {
   return (
