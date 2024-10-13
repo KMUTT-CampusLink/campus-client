@@ -1,12 +1,11 @@
-const Test = () => {
-  return <h1>Online Courses</h1>;
-};
+import TrDashboard from "../Teacher/TrDashboard";
+
 
 export default function CourseRoutes() {
   return [
     {
       path: "",
-      element: <Test />,
+      element: <TrDashboard />,
     },
   ];
 }
