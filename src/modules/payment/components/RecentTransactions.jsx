@@ -1,4 +1,3 @@
-// RecentTransactions.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +21,6 @@ const RecentTransactions = ({
   );
   const recentTransactions = sortedTransactions.slice(0, 5);
 
-  // Utility function to format the timestamp to DD/MM/YYYY
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, "0");
@@ -33,7 +31,7 @@ const RecentTransactions = ({
 
   const handleArrowClick = (transaction) => {
     if (transaction.status === "Unpaid") {
-      navigate(`/payment-invoice/${transaction.id}`);
+      navigate(`/payment/payment-invoice/${transaction.id}`);
     }
   };
 
@@ -80,7 +78,7 @@ const RecentTransactions = ({
         {recentTransactions.map((transaction, index) => (
           <div
             key={index}
-            className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
+            className="bg-white p-4 rounded-lg shadow-md flex items-center"
           >
             <div>
               <h3 className="text-lg font-bold">{transaction.title}</h3>
@@ -88,7 +86,7 @@ const RecentTransactions = ({
                 Due on {formatDate(transaction.due_date)}
               </p>
             </div>
-            <div className="text-right">
+            <div className="text-right flex flex-col items-end justify-center ml-auto mr-2">
               <p
                 className={`text-lg font-semibold ${
                   transaction.status === "Paid"
@@ -115,13 +113,15 @@ const RecentTransactions = ({
 
             {/* Add Arrow for Unpaid Transactions */}
             {transaction.status === "Unpaid" && (
-              <button
-                className="btn btn-sm btn-circle bg-red-500 hover:bg-red-600 text-white ml-2"
-                onClick={() => handleArrowClick(transaction)}
-                aria-label="Pay Now"
-              >
-                ➔
-              </button>
+              <div className="ml-2">
+                <button
+                  className="btn btn-sm btn-circle bg-red-500 hover:bg-red-600 text-white ml-2"
+                  onClick={() => handleArrowClick(transaction)}
+                  aria-label="Pay Now"
+                >
+                  ➔
+                </button>
+              </div>
             )}
           </div>
         ))}

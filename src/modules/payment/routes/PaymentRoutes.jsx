@@ -9,12 +9,12 @@ export default function PaymentRoutes() {
       element: <InvoiceCenter />,
     },
     {
-      path: "invoice-center", 
+      path: "/payment/invoice-center", 
       element: <InvoiceCenter />,
     },
     {
-      path: "payment-invoice/:id", 
-      element: <PaymentInvoice />,
-    },
+        path: "/payment/payment-invoice/:id",
+        element: <PaymentInvoice />,
+      }      
   ];
 }

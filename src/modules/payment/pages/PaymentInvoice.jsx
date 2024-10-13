@@ -1,81 +1,93 @@
-// PaymentInvoice.jsx
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { transactions } from "../components/Transaction"; // Import mock data
-import { ArrowLeftIcon } from '@heroicons/react/24/solid'; 
-
-// Utility function to format the timestamp to DD/MM/YYYY
-const formatDate = (timestamp) => {
-  const date = new Date(timestamp);
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
+import React, { useEffect, useState } from "react";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
+import { useParams } from "react-router-dom";
+import { transactions } from "../components/Transaction";
 
 const PaymentInvoice = () => {
-  const { id } = useParams(); // Get the id from the route
-  const navigate = useNavigate();
+  const { id } = useParams();
+  const [invoice, setInvoice] = useState({});
 
-  // Find the transaction by id
-  const transaction = transactions.find((t) => t.id === id);
+  useEffect(() => {
+    console.log("Route ID:", id);
+    const foundInvoice = transactions.find(
+      (transaction) => transaction.id === id
+    );
+    console.log("Found Invoice:", foundInvoice);
+    if (foundInvoice) {
+      setInvoice(foundInvoice);
+    }
+  }, [id]);
 
-  if (!transaction) {
-    return <p className="text-center mt-10">Transaction not found.</p>;
-  }
-
-  // Assuming amount is the total. If you have a breakdown, adjust accordingly.
-  const subtotal = transaction.amount;
-
+  useEffect(() => {
+    const foundInvoice = transactions.find(
+      (transaction) => transaction.id === id
+    );
+    if (foundInvoice) {
+      setInvoice(foundInvoice);
+    }
+  }, [id]);
   return (
-    <div className="container mx-auto mt-10 p-6 shadow-lg rounded-lg bg-white max-w-md">
-      {/* Back Button */}
-      <button
-        className="flex items-center text-blue-500 mb-6"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeftIcon className="h-5 w-5 mr-2" />
-        Back
-      </button>
-
-      <h1 className="text-2xl font-bold mb-6 text-center">INVOICE</h1>
-
-      {/* Invoice details */}
-      <div className="grid grid-cols-1 gap-4 bg-gray-100 p-4 rounded-lg mb-6">
-        <div>
-          <p className="font-semibold">Issued Date:</p>
-          <p>{formatDate(transaction.issue_date)}</p>
+    <div className="min-h-screen bg-gray-100">
+      <NavBar />
+      <div className="w-full pt-20 px-8">
+        <h1 className="text-3xl font-bold mb-6 text-center md:text-left md:ml-32">
+          INVOICE
+        </h1>
+        <div className="bg-white shadow-md rounded-lg p-6 mb-6 w-full md:w-4/5 mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-100 p-4 rounded-lg">
+            <div className="flex flex-col px-4 md:border-r md:border-gray-300">
+              <span className="text-gray-600">Issued</span>
+              <span className="font-semibold">
+                {invoice.issue_date
+                  ? new Date(invoice.issue_date).toLocaleDateString()
+                  : "N/A"}
+              </span>
+              <span className="text-gray-600 mt-4">Due</span>
+              <span className="font-semibold">
+                {invoice.due_date
+                  ? new Date(invoice.due_date).toLocaleDateString()
+                  : "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col px-4 md:border-r md:border-gray-300">
+              <span className="text-gray-600">Billed to</span>
+              <span className="font-semibold">
+                {invoice.issued_by || "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col px-4">
+              {" "}
+              <span className="text-gray-600">Invoice ID</span>
+              <span className="font-semibold">{invoice.id || "N/A"}</span>
+            </div>
+          </div>
+          <table className="w-full text-left mt-6">
+            <thead>
+              <tr>
+                <th className="pb-4">Service</th>
+                <th className="pb-4">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="py-2">{invoice.title || "N/A"}</td>
+                <td className="py-2">
+                  {invoice.amount ? `${invoice.amount} BAHT` : "N/A"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="flex justify-between items-center mt-8">
+            <span className="font-semibold">Subtotal</span>
+            <span className="font-semibold">{invoice.amount} BAHT</span>
+          </div>
         </div>
-        <div>
-          <p className="font-semibold">Billed To:</p>
-          <p>{transaction.issued_by}</p>
-        </div>
-        <div>
-          <p className="font-semibold">Invoice ID:</p>
-          <p>{transaction.id}</p>
-        </div>
-        <div>
-          <p className="font-semibold">Due Date:</p>
-          <p>{formatDate(transaction.due_date)}</p>
+        <div className="flex justify-end w-full md:w-4/5 mx-auto">
+          <button className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600">
+            PAY
+          </button>
         </div>
       </div>
-
-      {/* Service Details */}
-      <div className="mb-6">
-        <p className="font-semibold">Service:</p>
-        <p>{transaction.title}</p>
-      </div>
-
-      {/* Amount to Pay */}
-      <div className="mb-6">
-        <p className="font-semibold">Amount to Pay:</p>
-        <p className="text-lg">{`${transaction.amount} BAHT`}</p>
-      </div>
-
-      {/* Payment Button */}
-      <button className="btn btn-primary bg-orange-600 w-full py-2">
-        PAY {`${transaction.amount} BAHT`}
-      </button>
     </div>
   );
 };

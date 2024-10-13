@@ -1,4 +1,3 @@
-// AllTransactions.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +22,6 @@ const AllTransactions = ({
       : new Date(b.issue_date) - new Date(a.issue_date);
   });
 
-  // Utility function to format the timestamp to DD/MM/YYYY
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, "0");
@@ -34,7 +32,7 @@ const AllTransactions = ({
 
   const handleArrowClick = (transaction) => {
     if (transaction.status === "Unpaid") {
-      navigate(`/payment-invoice/${transaction.id}`);
+      navigate(`/payment/payment-invoice/${transaction.id}`);
     }
   };
 

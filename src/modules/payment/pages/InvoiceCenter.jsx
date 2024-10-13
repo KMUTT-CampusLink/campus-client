@@ -1,4 +1,3 @@
-// InvoiceCenter.jsx
 import React, { useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
@@ -42,7 +41,7 @@ const InvoiceCenter = () => {
                 setFilterAll={setFilterAll}
                 isAscending={isAscending}
                 setIsAscending={setIsAscending}
-                setShowAll={setShowAll} // To close All Transactions
+                setShowAll={setShowAll} 
               />
               <div
                 className="fixed inset-0 z-40 bg-black opacity-60"
