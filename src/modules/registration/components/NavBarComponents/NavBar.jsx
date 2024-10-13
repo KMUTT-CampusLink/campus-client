@@ -10,7 +10,7 @@ const NavBar = () => {
   const navigationLinks = [
     {
       name: "Payment",
-      href: "/payment/invoice-center",
+      href: "/payment",
       sublinks: [],
       subhrefs: [],
     },
