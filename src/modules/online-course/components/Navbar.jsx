@@ -44,8 +44,12 @@ const Navbar = () => {
         </span>
         <span className="hover:cursor-pointer hover:scale-110">Grade</span>
       </div>
-      <div className="flex items-center pr-6 max-md:pr-4 hover:cursor-pointer hover:scale-110">
-        <FontAwesomeIcon icon={faUser} size="xl" />
+      <div className="flex items-center pr-6 max-md:pr-4">
+        <FontAwesomeIcon
+          icon={faUser}
+          size="xl"
+          className="hover:cursor-pointer hover:scale-110"
+        />
       </div>
       <Sidebar closeSidebar={toggleSidebar} sideOpen={sideOpen} />
     </div>
