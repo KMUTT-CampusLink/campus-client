@@ -26,15 +26,25 @@ const Navbar = () => {
         <FontAwesomeIcon icon={faBars} size="xl" onClick={toggleSidebar} />
       </div>
       <div className="max-sm:hidden flex gap-5 lg:gap-10 py-4 ml-2 lg:text-lg lg:ml-8 px-4">
-        <FontAwesomeIcon icon={faHouse} size="xl" className="mr-2" />
-        <span>Payment</span>
-        <span>Learning</span>
-        <span>Campus Services</span>
-        <span>Help & Tools</span>
-        <span>Registration</span>
-        <span>Grade</span>
+        <FontAwesomeIcon
+          icon={faHouse}
+          size="xl"
+          className="mr-2 hover:cursor-pointer hover:scale-110"
+        />
+        <span className="hover:cursor-pointer hover:scale-110 ">Payment</span>
+        <span className="hover:cursor-pointer hover:scale-110 ">Learning</span>
+        <span className="hover:cursor-pointer hover:scale-110 ">
+          Campus Services
+        </span>
+        <span className="hover:cursor-pointer hover:scale-110 ">
+          Help & Tools
+        </span>
+        <span className="hover:cursor-pointer hover:scale-110 ">
+          Registration
+        </span>
+        <span className="hover:cursor-pointer hover:scale-110">Grade</span>
       </div>
-      <div className="flex items-center pr-6 max-md:pr-4 ">
+      <div className="flex items-center pr-6 max-md:pr-4 hover:cursor-pointer hover:scale-110">
         <FontAwesomeIcon icon={faUser} size="xl" />
       </div>
       <Sidebar closeSidebar={toggleSidebar} sideOpen={sideOpen} />
