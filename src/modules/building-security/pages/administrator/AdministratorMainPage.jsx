@@ -64,7 +64,7 @@ export default function AdministratorMainPage() {
       WebkitTextStroke: "2px white", // Outline with white border
     },
     background: {
-      backgroundImage: `url('../../../../../public/ building-security/MainPageBackGround.png')`, // Placeholder image from Unsplash
+      backgroundImage: `url('/building-security/MainPageBackGround.png')`, // Placeholder image from Unsplash
       backgroundSize: "cover",
       backgroundPosition: "center",
       height: "100%",
