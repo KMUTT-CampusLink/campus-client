@@ -94,7 +94,7 @@ const AllTransactions = ({
                 Due on {formatDate(transaction.due_date)}
               </p>
             </div>
-            <div className="text-right">
+            <div className="text-right flex flex-col items-end justify-center ml-auto mr-2">
               <p
                 className={`text-lg font-semibold ${
                   transaction.status === "Paid"
@@ -121,13 +121,15 @@ const AllTransactions = ({
 
             {/* Add Arrow for Unpaid Transactions */}
             {transaction.status === "Unpaid" && (
-              <button
-                className="btn btn-sm btn-circle bg-red-500 hover:bg-red-600 text-white ml-2"
-                onClick={() => handleArrowClick(transaction)}
-                aria-label="Pay Now"
-              >
-                ➔
-              </button>
+              <div className="ml-2">
+                <button
+                  className="btn btn-sm btn-circle bg-red-500 hover:bg-red-600 text-white ml-2"
+                  onClick={() => handleArrowClick(transaction)}
+                  aria-label="Pay Now"
+                >
+                  ➔
+                </button>
+              </div>
             )}
           </div>
         ))}
