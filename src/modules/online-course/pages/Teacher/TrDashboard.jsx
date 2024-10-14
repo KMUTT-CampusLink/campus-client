@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
-import CourseCard from "../components/CourseCard";
+import Navbar from "../../components/Navbar";
+import Searchbar from "../../components/Searchbar";
+import CourseCard from "../../components/CourseCard";
 import courses from "./dummyCourse.js";
 import { useState } from "react";
 

@@ -1,10 +1,15 @@
-import TrDashboard from "../Teacher/TrDashboard";
+import StDashboard from "../pages/Students/StDashboard";
+import TrDashboard from "../pages/Teacher/TrDashboard";
 
 export default function CourseRoutes() {
   return [
     {
-      path: "",
+      path: "Tr",
       element: <TrDashboard />,
+    },
+    {
+      path: "St",
+      element: <StDashboard/>,
     },
   ];
 }
