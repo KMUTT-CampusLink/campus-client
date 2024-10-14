@@ -40,7 +40,6 @@ export default function ProfessorDashboardPage() {
           </div>
         </div>
       </div>
-    
     </>
   )
 }
