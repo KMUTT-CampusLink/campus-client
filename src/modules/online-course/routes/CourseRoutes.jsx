@@ -1,5 +1,5 @@
 import TrDashboard from '../pages/Teacher/TrDashboard'
-import StDashboard from '../pages/Students/StDashboard';
+// import StDashboard from '../pages/Students/StDashboard';
 
 export default function CourseRoutes() {
   return [
@@ -7,9 +7,9 @@ export default function CourseRoutes() {
       path: "TrDashboard",
       element: <TrDashboard/>
     },
-    {
-      path: "StDashboard",
-      element: <StDashboard />,
-    }
+    // {
+    //   path: "StDashboard",
+    //   element: <StDashboard />,
+    // }
   ];
 }
