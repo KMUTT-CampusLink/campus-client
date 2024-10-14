@@ -6,19 +6,21 @@ import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import dummydata from "./employee.json"
+import DeletePopUp from "../components/DeletePopUp";
 
 const EmployeeDetail = () => {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   // Dummy data fetch - replace with actual API call
   useEffect(() => {
     const fetchEmployee = async () => {
       const data = dummydata;
 
-      const emp = data.find((emp) => emp.id == id);
-      setEmployee(emp);
+      const temp = data.find((emp) => emp.id == id);
+      setEmployee(temp);
     };
     fetchEmployee();
   }, [id]);
@@ -28,16 +30,22 @@ const EmployeeDetail = () => {
   const handleClickback = () => {
     navigate(`/employ`);
   };
-
   const handleClick = () => {
-    navigate(`/employ/employupdate`);
+    navigate(`/employ/employeeUpdate/${employee.id}`);
+  };
+  const handleUpdateClick = () => {
+    setShowPopup(true);
+  };
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
+
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen mb-7 md:mb-10">
       <NavBar />
 
-      <main className="pt-20 px-4 md:px-20">
+      <main className="pt-16 md:pt-20 px-4 md:px-20">
       <FontAwesomeIcon icon={faArrowLeft} className="hover:shadow-sm md:h-7" onClick={handleClickback}/>
         <body className="lg:flex items-center justify-between xl:justify-around">
           <div className="flex justify-center">
@@ -49,39 +57,39 @@ const EmployeeDetail = () => {
               Work History
             </h2>
             
-            <div className="border rounded-md grid grid-cols-1 lg:grid-cols-2 divide-x ">
+            <div className="border border-[#939393] rounded-md grid grid-cols-1 lg:grid-cols-2  md:divide-x divide-[#939393] ">
               {/* Left Side */}
-              <div className="p-5 space-y-4">
+              <div className="p-5 space-y-2 md:space-y-4">
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Employee-ID</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Employee-ID</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                     {employee.id}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Name</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Name</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                     {employee.name}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Department</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Faculty</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                     {employee.department}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Job-title</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Job-title</p>
                   <p className="text-[15px] md:text-[20px] font-georama">{employee.jobTitle}</p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Position</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Position</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                     {employee.position}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Salary</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Salary</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                   {employee.salary}
                   </p>
@@ -91,29 +99,29 @@ const EmployeeDetail = () => {
               {/* Right Side */}
               <div className="p-5 space-y-4">
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Gender</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Gender</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                   {employee.gender}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Age</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Age</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                   {employee.age}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Identification</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Identification</p>
                   <p className="text-[15px] md:text-[20px] font-georama">{employee.identification}</p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Contact</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Contact</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                   {employee.contactNo}
                   </p>
                 </div>
                 <div>
-                  <p className="font-opensans text-[8px] md:text-[12px]">Address</p>
+                  <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Address</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                   {employee.address}
                   </p>
@@ -125,9 +133,11 @@ const EmployeeDetail = () => {
 
         <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
           <button className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm" onClick={handleClick}>Edit</button>
-          <button className="bg-red-500 text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Delete</button>
+          <button type="button" onClick={handleUpdateClick} className="bg-[#EC5A51] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Delete</button>
         </div>
       </main>
+
+      {showPopup && <DeletePopUp onClose={handleClosePopup} />}
     </div>
   );
 };
