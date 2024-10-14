@@ -11,15 +11,15 @@ export default function EmployRoutes() {
       element: <EmployeeGrid />,
     },
     {
-      path: "employee/:id",
+      path: "employeeDetail/:id",
       element: <EmployeeDetail />
     },
     {
-      path: "employadd",
+      path: "employeeAdd",
       element: <EmployeeAdd />
     },
     {
-      path: "employupdate",
+      path: "employeeUpdate/:id",
       element: <EmployeeUpdate />
     }
   ];
