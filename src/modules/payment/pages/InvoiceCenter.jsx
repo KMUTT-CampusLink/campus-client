@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
 import AllTransactions from "../components/AllTransactions";
-import billFolder from "../asset/billfolder2.png";
+import image from "../asset/CCard.png";
 import { transactions } from "../components/Transaction";
 const InvoiceCenter = () => {
   const [filterRecent, setFilterRecent] = useState("All");
@@ -18,10 +18,10 @@ const InvoiceCenter = () => {
           <div className="w-full lg:w-1/2 flex items-center justify-center mb-6 lg:mb-0">
             <div className=" top-20">
               <img
-                src={billFolder}
-                alt="Bill Folder Image"
+                src={image}
+                alt="Credit"
                 className="max-w-full h-auto rounded-lg"
-                style={{ width: "300px", height: "300px" }}
+                style={{ height: "300px" }}
               />
             </div>
           </div>
