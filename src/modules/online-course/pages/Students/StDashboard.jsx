@@ -1,17 +1,19 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
-import CourseCard from "../components/CourseCard";
+import Navbar from '../../components/Navbar.jsx'
+import Searchbar from "../../components/Searchbar";
+import CourseCard from "../../components/CourseCard";
 import courses from "./dummyCourse.js";
 import { useState } from "react";
 
-const TrDashboard = () => {
+const StDashboard = () => {
   const [visible, setVisible] = useState(false);
 
   return (
     <div className="bg-white">
       <Navbar />
+
       <div className="z-20 -mt-6 bg-white rounded-t-badge">
+        <div className="pt-8 pb-3 pl-32">Dashboard</div>
         <Searchbar />
         <div className="w-3/4 m-auto">
           <span className="text-4xl font-bold pb-3 ">All Courses</span>
@@ -30,8 +32,10 @@ const TrDashboard = () => {
           </div>
         </div>
       </div>
+
+      <div>Upcoming Events</div>
     </div>
   );
 };
 
-export default TrDashboard;
+export default StDashboard;
