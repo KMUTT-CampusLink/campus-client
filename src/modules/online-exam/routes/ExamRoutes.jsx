@@ -60,7 +60,7 @@ export default function ExamRoutes() {
           element: <ProfessorEditExamPage />,
         },
         {
-          path: "setting/:examId", //:examId
+          path: "setting/:examId",
           element: <ProfessorExamSettingPage />,
         },
         {
@@ -68,11 +68,11 @@ export default function ExamRoutes() {
           element: <ProfessorDashboardPage />,
         },
         {
-          path: "scoring/:examId", //:examId
+          path: "scoring/:studentExamId",
           element: <ProfessorScoringPage />,
         },
         {
-          path: "overallScoring",
+          path: "overallScoring/:examId",
           element: <ProfessorOverallScoringPage />,
         },
       ],

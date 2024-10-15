@@ -20,7 +20,7 @@ export default function ExamCard({ examName }) {
         <div className="flex flex-wrap gap-1 xl:gap-4 pt-[12px]">
           <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]">Edit</button>
           <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]" onClick={() => {navigate(`/exams/professor/setting/${1}`)}}>Setting</button>
-          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]" onClick={() => {navigate(`/exams/professor/scoring/${1}`)}}>Score</button>
+          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]" onClick={() => {navigate(`/exams/professor/overallScoring/${1}`)}}>Score</button>
           <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]">Dashboard</button>
         </div>
       </div>
