@@ -16,19 +16,19 @@ const NavBar = () => {
     },
     {
       name: "Learning",
-      href: "/library",
+      href: "",
       sublinks: ["Library", "Online Courses", "Online Exams"],
       subhrefs: ["/library", "/courses", "/exams"],
     },
     {
       name: "Campus Services",
-      href: "/clubs",
+      href: "",
       sublinks: ["Clubs", "Transport", "Parking & Bikes", "Buildings & Safety"],
       subhrefs: ["/clubs", "/transport", "/parking", "/security"],
     },
     {
       name: "Help & Tools",
-      href: "/attendance",
+      href: "",
       sublinks: ["Attendance", "Help Bot", "Campus Map"],
       subhrefs: ["/attendance", "/botastra", "/map"],
     },

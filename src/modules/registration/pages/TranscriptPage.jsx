@@ -1,30 +1,19 @@
-import { useState } from "react";
 import GPAXCard from "../components/GPAXCard";
 import HeadLineCard from "../components/HeadLineCard";
 import NavBar from "../components/NavBarComponents/NavBar";
 import TranscriptCard from "../components/TranscriptCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
+import { useTranscriptByStudentId } from "../services/query";
 
 function TranscriptPage() {
-  const semesters = [
-    { semester: "Semester 1", gpa: 3.0 },
-    { semester: "Semester 2", gpa: 3.0 },
-    { semester: "Semester 3", gpa: 3.0 },
-    { semester: "Semester 4", gpa: 3.0 },
-  ];
+  const studentId = "STU00002";
+  const {
+    data: transcripts,
+    isLoading,
+    isError,
+  } = useTranscriptByStudentId(studentId);
 
-  const subjects = [
-    { name: "Subject", grade: "A", credit: 2 },
-    { name: "Subject", grade: "B+", credit: 3 },
-    { name: "Subject", grade: "F", credit: 3 },
-    { name: "Subject", grade: "A", credit: 2 },
-    { name: "Subject", grade: "C", credit: 1 },
-    { name: "Subject", grade: "A", credit: 1 },
-    { name: "Subject", grade: "B+", credit: 3 },
-  ];
-  const gpax = useState(3.65);
-  const creditsPrescribed = useState(134);
-  const creditsEarned = useState(47);
+  if (isError) return <div>Error loading student data.</div>;
 
   return (
     <>
@@ -35,21 +24,26 @@ function TranscriptPage() {
           <div className="divider"></div>
           <div className="bg-white p-6 shadow-md rounded-md">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <GPAXCard
-                gpax={gpax}
-                creditsPrescribed={creditsPrescribed}
-                creditsEarned={creditsEarned}
-              />
-              <div className="col-span-2 grid grid-cols-1 gap-4">
-                {semesters.map((semester, index) => (
-                  <TranscriptCard
-                    key={index}
-                    semester={semester.semester}
-                    gpa={semester.gpa}
-                    subjects={subjects}
-                  />
-                ))}
-              </div>
+              <GPAXCard studentId={studentId} />
+              {isLoading ? (
+                <div className="col-span-2 grid grid-cols-1 gap-4 animate-pulse">
+                  <div className="h-64 pt-4 text-center bg-gray-200 rounded">
+                    Loading Transcript Data
+                  </div>
+                </div>
+              ) : (
+                <div className="col-span-2 grid grid-cols-1 gap-4">
+                  {transcripts.map((semester, index) => (
+                    <TranscriptCard
+                      key={index}
+                      semester={semester.semester_name}
+                      courses={semester.courses}
+                      studentId={studentId}
+                      semesterId={semester.semester_id}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </main>

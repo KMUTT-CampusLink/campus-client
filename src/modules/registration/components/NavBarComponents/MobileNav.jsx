@@ -84,7 +84,6 @@ const MobileNav = ({ navigationLinks }) => {
             to="/regis/login"
             className="block px-6 py-2 text-white hover:text-amber-400"
           >
-            {" "}
             <FontAwesomeIcon icon={faRightFromBracket} /> Log out
           </Link>
         </div>

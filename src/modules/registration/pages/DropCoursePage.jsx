@@ -1,37 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import HeadLineCard from "../components/HeadLineCard";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useNavigate } from "react-router-dom";
+import { useActiveCoursesByStudentId } from "../services/query";
+import { useDeleteEnrollmentDetail } from "../services/mutations";
+import Alert from "../components/Alert";
+import { useQueryClient } from "@tanstack/react-query";
 
 function DropCoursePage() {
   const navigate = useNavigate();
 
-  const [courses, setCourses] = useState([
-    { id: 1, courseName: "Data Structures", credit: 3, condition: "Completed" },
-    { id: 2, courseName: "Algorithms", credit: 3, condition: "In Progress" },
-    { id: 3, courseName: "Databases", credit: 3, condition: "Completed" },
-    {
-      id: 4,
-      courseName: "Integrated Project",
-      credit: 1,
-      condition: "Completed",
-    },
-  ]);
+  const studentId = "STU00001";
+  const {
+    data: courses,
+    isLoading,
+    isError,
+  } = useActiveCoursesByStudentId(studentId);
+  const mutation = useDeleteEnrollmentDetail();
+  const queryClient = useQueryClient();
 
-  const [selectedCourses, setSelectedCourses] = useState({});
+  const [selectedEnrollmentId, setSelectedEnrollmentId] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("");
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-  const handleCheckboxChange = (id) => {
-    setSelectedCourses((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  const handleDropCourses = async () => {
+    if (!selectedEnrollmentId) {
+      setAlertMessage("No course selected to drop.");
+      setAlertSeverity("error");
+      setIsAlertVisible(true);
+      return;
+    }
+
+    try {
+      await mutation.mutateAsync({ enrollmentDetailId: selectedEnrollmentId });
+      setAlertMessage("Selected course has been dropped successfully.");
+      setAlertSeverity("success");
+      setIsAlertVisible(true);
+      queryClient.invalidateQueries("courses"); // Replace query key
+    } catch (error) {
+      console.error("Error dropping course:", error);
+      setAlertMessage("Failed to drop the selected course. Please try again.");
+      setAlertSeverity("error");
+      setIsAlertVisible(true);
+    }
   };
 
-  const handleDropCourses = () => {
-    setCourses((prev) => prev.filter((course) => !selectedCourses[course.id]));
-    setSelectedCourses({});
-  };
+  useEffect(() => {
+    if (isAlertVisible) {
+      const timer = setTimeout(() => {
+        setIsAlertVisible(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAlertVisible]);
+
+  if (isError) return <div>Error Loading Student Data.</div>;
 
   return (
     <>
@@ -40,50 +65,72 @@ function DropCoursePage() {
         <main className={mainStyles}>
           <HeadLineCard title="Drop Courses" link="/regis/course/detail" />
           <div className="divider"></div>
-          <div className=" bg-white p-6 shadow-md rounded-md">
-            <div className="bg-gray-200 rounded-md overflow-x-auto">
-              <table className="min-w-full text-left border">
-                <thead>
-                  <tr className="bg-[#c3554e] text-white">
-                    <th className="py-2 px-4 border border-gray-300">Drop</th>
-                    <th className="py-2 px-4 border border-gray-300">No</th>
-                    <th className="py-2 px-4 border border-gray-300">
-                      Course Name
-                    </th>
-                    <th className="py-2 px-4 border border-gray-300">Credit</th>
-                    <th className="py-2 px-4 border border-gray-300">
-                      Condition
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {courses.map((course, index) => (
-                    <tr key={index} className="odd:bg-white even:bg-gray-100">
-                      <td className="py-2 px-4 border border-gray-300">
-                        <input
-                          type="checkbox"
-                          checked={!!selectedCourses[course.id]}
-                          onChange={() => handleCheckboxChange(course.id)}
-                        />
-                      </td>
-                      <td className="py-2 px-4 border border-gray-300">
-                        {course.id}
-                      </td>
-                      <td className="py-2 px-4 border border-gray-300">
-                        {course.courseName}
-                      </td>
-                      <td className="py-2 px-4 border border-gray-300">
-                        {course.credit}
-                      </td>
-                      <td className="py-2 px-4 border border-gray-300">
-                        {course.condition}
-                      </td>
+          <div className="bg-white p-6 shadow-md rounded-md">
+            {isAlertVisible && (
+              <Alert
+                severity={alertSeverity}
+                message={alertMessage}
+                onClose={() => setIsAlertVisible(false)}
+              />
+            )}
+            {isLoading ? (
+              <div className="bg-white p-6 shadow-md rounded-md animate-pulse">
+                <div className="h-64 text-center pt-5 bg-gray-200 rounded-md overflow-x-auto">
+                  Loading Courses
+                </div>
+                <div className="grid sm:grid-cols-2 gap-2 py-4"></div>
+              </div>
+            ) : (
+              <div className="bg-gray-200 rounded-md overflow-x-auto">
+                <table className="min-w-full text-left border">
+                  <thead>
+                    <tr className="bg-[#c3554e] text-white">
+                      <th className="py-2 px-4 border border-gray-300">Drop</th>
+                      <th className="py-2 px-4 border border-gray-300">Code</th>
+                      <th className="py-2 px-4 border border-gray-300">
+                        Section Data
+                      </th>
+                      <th className="py-2 px-4 border border-gray-300">
+                        Professors
+                      </th>
+                      <th className="py-2 px-4 border border-gray-300">
+                        Credits
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
+                  </thead>
+                  <tbody>
+                    {courses.map((course, index) => (
+                      <tr key={index} className="odd:bg-white even:bg-gray-100">
+                        <td className="py-2 px-4 border border-gray-300 text-center">
+                          <input
+                            type="radio"
+                            name="course"
+                            checked={selectedEnrollmentId === course.ed_id}
+                            onChange={() =>
+                              setSelectedEnrollmentId(course.ed_id)
+                            }
+                          />
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300">
+                          {course.course_code}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300">
+                          <div>{course.section_name}</div>
+                          <div>{course.section_day}</div>
+                          <div>{`${course.start_time} - ${course.end_time}`}</div>
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300">
+                          {course.professor_names}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300">
+                          {course.credits}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
             <div className="grid sm:grid-cols-2 gap-2 py-4">
               <button
                 className={`${button}`}
@@ -94,7 +141,7 @@ function DropCoursePage() {
                 Back
               </button>
               <button className={`${button}`} onClick={handleDropCourses}>
-                Drop Selected Courses
+                Drop Selected Course
               </button>
             </div>
           </div>
