@@ -1,0 +1,23 @@
+/* Adjusting Ant Design Table Header */
+.ant-table-wrapper .ant-table-thead > tr > th {
+    position: relative;
+    color: rgba(255, 255, 255, 0.88); /* Semi-transparent white */
+    font-weight: 600;
+    font-size: 18px;
+    text-align: start; /* Align text to the left */
+    background: #f69800; /* Header background color */
+    border-bottom: 1px solid #f0f0f0; /* Border at the bottom */
+    transition: background 0.2s ease; /* Smooth background transition */
+}
+
+/* Adjusting Ant Design Table Body */
+.ant-table-wrapper .ant-table-tbody > tr > td {
+    color: #000; /* Text color for table cells */
+    font-size: 16px; /* Font size for table cells */
+    font-family: 'Georama' /* Font family for table cells */
+}
+
+/* Optional: Hover Effect for Rows */
+.ant-table-wrapper .ant-table-tbody > tr:hover {
+    background: rgba(246, 152, 0, 0.1); /* Light hover effect */
+}

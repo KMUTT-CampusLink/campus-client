@@ -20,7 +20,7 @@ export default function ExamRoutes() {
       path: "student/",
       children: [
         {
-          path: "",
+          path: ":id",
           element: <StudentHomePage />,
         },
         {
@@ -43,7 +43,7 @@ export default function ExamRoutes() {
       path: "professor/",
       children: [
         {
-          path: "",
+          path: ":id",
           element: <ProfessorHomePage />,
         },
         {
@@ -59,7 +59,7 @@ export default function ExamRoutes() {
           element: <ProfessorExamSettingPage />,
         },
         {
-          path: "dashboard:examId",
+          path: "dashboard/:examId",
           element: <ProfessorDashboardPage />,
         },
         {
