@@ -25,7 +25,7 @@ function RegisDetailsPage() {
                 optio quidem ullam distinctio delectus ut id aliquam, earum
                 fugit reprehenderit. Unde dolorum, molestiae ex nam odio
                 architecto ratione eum rem!
-              </p>{" "}
+              </p>
               <div className="divider"></div>
             </div>
             <div>
