@@ -12,10 +12,15 @@ import ProfessorExamSettingPage from "../pages/professor/ProfessorExamSettingPag
 import ProfessorDashboardPage from "../pages/professor/ProfessorDashboardPage";
 import ProfessorScoringPage from "../pages/professor/ProfessorScoringPage";
 import ProfessorOverallScoringPage from "../pages/professor/ProfessorOverallScoringPage";
+import Redirecting from "../services/redirecting";
 
 export default function ExamRoutes() {
   return [
     //Student Routes
+    {
+      path: "",
+      element: <Redirecting/>,
+    },
     {
       path: "student/",
       children: [
@@ -47,7 +52,7 @@ export default function ExamRoutes() {
           element: <ProfessorHomePage />,
         },
         {
-          path: "create",
+          path: "create/:courseId",
           element: <ProfessorCreateExamPage />,
         },
         {
@@ -55,7 +60,7 @@ export default function ExamRoutes() {
           element: <ProfessorEditExamPage />,
         },
         {
-          path: "setting", //:examId
+          path: "setting/:examId", //:examId
           element: <ProfessorExamSettingPage />,
         },
         {
@@ -63,7 +68,7 @@ export default function ExamRoutes() {
           element: <ProfessorDashboardPage />,
         },
         {
-          path: "scoring", ///:examId
+          path: "scoring/:examId", //:examId
           element: <ProfessorScoringPage />,
         },
         {

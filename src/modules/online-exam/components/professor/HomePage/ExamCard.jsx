@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function ExamCard({ examName }) {
+  const navigate = useNavigate();
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[10px] xl:p-[20px] ">
       <div>
@@ -14,11 +17,11 @@ export default function ExamCard({ examName }) {
             />
           </button>
         </div>
-        <div className="flex flex-wrap gap-1 xl:gap-10 pt-[12px]">
-          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713]">Edit</button>
-          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713]">Setting</button>
-          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713]">Score</button>
-          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713]">Dashboard</button>
+        <div className="flex flex-wrap gap-1 xl:gap-4 pt-[12px]">
+          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]">Edit</button>
+          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]" onClick={() => {navigate(`/exams/professor/setting/${1}`)}}>Setting</button>
+          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]" onClick={() => {navigate(`/exams/professor/scoring/${1}`)}}>Score</button>
+          <button className="btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]">Dashboard</button>
         </div>
       </div>
     </div>

@@ -16,10 +16,11 @@ const dataMock = [
 
 export default function ProfessorHomePage() {
   const navigate = useNavigate();
+
   return (
-    <div className="w-full">
+    <div className="w-auto">
       <NavBar />
-      <div className="mx-[35px] xl:mx-[100px] py-[20px]">
+      <div className="mx-[35px] xl:mx-[100px] pt-20">
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
           Linear Algebra
         </h2>
@@ -28,7 +29,9 @@ export default function ProfessorHomePage() {
           <h3 className="font-bold text-[22px] xl:text-[30px]">Examination</h3>
           <button
             className="btn bg-[#7F483C] hover:bg-[#6f4036] text-white rounded-lg"
-            onClick={navigate("/exams/professor/create")}
+            onClick={() => { 
+              navigate(`/exams/professor/create/${1}`) 
+            }}
           >
             Create Exam <FontAwesomeIcon icon={faPlus} />
           </button>

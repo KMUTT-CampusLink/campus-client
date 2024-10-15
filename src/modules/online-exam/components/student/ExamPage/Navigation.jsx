@@ -19,7 +19,6 @@ export default function Navigation({ questionNo, studentQuestion, jumpTo }) {
                 {index + 1}
               </p>
             </button>
-
           ))}
         </div>
       </div>
