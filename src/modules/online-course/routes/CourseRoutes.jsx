@@ -6,8 +6,22 @@ import TrCourseDescription from "../pages/Teacher/TrCourseDescription";
 export default function CourseRoutes() {
   return [
     {
-      path: "",
-      element: <TrDashboard />,
+      path: "Tr",
+      children: [
+        {
+          path: "",
+          element: <TrDashboard />,
+      },
+        {
+          path: "course_description",
+          element: <TrCourseDescription />,
+        },
+
+      ],
+    },
+    {
+      path: "St",
+      element: <StDashboard />,
     },
   ];
 }

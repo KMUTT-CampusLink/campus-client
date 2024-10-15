@@ -1,22 +1,23 @@
 import React from "react";
-import Navbar from '../../components/Navbar.jsx'
+
 import Searchbar from "../../components/Searchbar";
 import CourseCard from "../../components/CourseCard";
 import courses from "./dummyCourse.js";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 
 const StDashboard = () => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="bg-white h-full overflow-y-auto">
-      <Navbar />
+    <div className="bg-white min-h-screen overflow-y-auto">
+      <NavBar />
 
-      <div className="z-20 -mt-6 bg-white rounded-t-badge mb-3">
+      <div className="w-full mb-3">
         <div
-          className="flex border-b-[1px] border-black text-lg gap-10 pt-5 
+          className="flex mt-16 border-b-[1px] border-black text-lg gap-10 pt-5 
         max-sm:pl-16 max-md:pl-20 max-lg:pl-36 lg:pl-56"
         >
           <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">

@@ -22,7 +22,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
 
   return (
     <div
-      className={`text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-300 ${
+      className={`text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
         sideOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -40,7 +40,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             <li
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "description"
-                  ? "text-white hover:scale-110 hover:-rotate-2 hover:cursor-pointer transition-transform duration-2000"
+                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
                   : "text-black"
               }`}
             >
@@ -49,7 +49,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             <li
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "materials"
-                  ? "text-white hover:scale-110 hover:-rotate-2 hover:cursor-pointer transition-transform duration-2000"
+                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
                   : "text-black"
               }`}
             >
@@ -58,7 +58,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             <li
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "tasks"
-                  ? "text-white hover:scale-110 hover:-rotate-2 hover:cursor-pointer transition-transform duration-2000"
+                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
                   : "text-black"
               }`}
             >
@@ -67,7 +67,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             <li
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "discussion"
-                  ? "text-white hover:scale-110 hover:-rotate-2 hover:cursor-pointer transition-transform duration-2000"
+                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
                   : "text-black"
               }`}
             >
@@ -76,7 +76,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             <li
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "online_exam"
-                  ? "text-white hover:scale-110 hover:-rotate-2 hover:cursor-pointer transition-transform duration-2000"
+                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
                   : "text-black"
               }`}
             >
@@ -85,7 +85,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             <li
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "attendance"
-                  ? "text-white hover:scale-110 hover:-rotate-2 hover:cursor-pointer transition-transform duration-2000"
+                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
                   : "text-black"
               }`}
             >

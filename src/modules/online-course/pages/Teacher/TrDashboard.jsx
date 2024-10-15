@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Navbar";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx"
 import Searchbar from "../../components/Searchbar";
 import CourseCard from "../../components/CourseCard";
 import courses from "./dummyCourse.js";
@@ -9,9 +9,10 @@ const TrDashboard = () => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="bg-white">
-      <Navbar />
-      <div className="z-20 -mt-6 bg-white rounded-t-badge">
+    <div className="min-h-screen">
+        <NavBar />
+
+      <div className="w-full">
         <Searchbar />
         <div className="w-3/4 m-auto">
           <span className="text-4xl font-bold pb-3 ">All Courses</span>

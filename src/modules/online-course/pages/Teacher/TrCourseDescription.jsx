@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavForIndvCourse from "../../components/NavForIndvCourse.jsx";
+import NavForIndvCourse from "../../components/NavForIndvCourse"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
@@ -30,13 +30,15 @@ const TrCourseDescription = ({ sideOpen }) => {
 
   return (
     <div
-      className={`bg-white transition-all duration-300 ${
-        sideOpen ? "ml-64" : ""
-      }`}
+      // className={`bg-white transition-all duration-300 ${
+      //   sideOpen ? "ml-64" : ""
+      // }`}
+      className="min-h-screen"
     >
+      {/* <NavBarForIndv/> */}
       <NavForIndvCourse page={"description"} />
 
-      <div className="z-20 -mt-6 bg-white rounded-t-badge border-b-2 border-black pb-8">
+      <div className="pt-12 border-b-2 border-black pb-8">
         <div className="w-3/4 m-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
