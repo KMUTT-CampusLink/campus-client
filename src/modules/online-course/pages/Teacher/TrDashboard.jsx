@@ -6,7 +6,6 @@ import courses from "./dummyCourse.js";
 import { useState } from "react";
 
 const TrDashboard = () => {
-  const [visible, setVisible] = useState(false);
 
   return (
     <div className="min-h-screen">

@@ -15,7 +15,6 @@ const Searchbar = () => {
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             className="flex h-6 text-gray-500 rounded-md hover:cursor-pointer"
-            onClick={{}}
           />
         </div>
       </div>
