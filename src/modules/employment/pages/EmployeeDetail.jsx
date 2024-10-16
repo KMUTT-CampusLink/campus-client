@@ -8,25 +8,47 @@ import { useNavigate } from "react-router-dom";
 import dummydata from "./employee.json"
 import DeletePopUp from "../components/DeletePopUp";
 
+
+const calculateAge = (dob) => {
+  const today = new Date(); // Get today's date
+  let age = today.getFullYear() - dob.getFullYear(); // Calculate the difference in years
+  const monthDifference = today.getMonth() - dob.getMonth(); // Get the month difference
+
+  // Adjust age if the current month is before the birth month or
+  // if it's the same month but the current date is before the birthday
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+      age--; // Subtract one year from the calculated age
+  }
+
+  return age; // Return the calculated age
+};
+
+
 const EmployeeDetail = () => {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
 
-  // Dummy data fetch - replace with actual API call
   useEffect(() => {
     const fetchEmployee = async () => {
-      const data = dummydata;
-
-      const temp = data.find((emp) => emp.id == id);
-      setEmployee(temp);
+      const result = await fetch('http://localhost:3000/api/employ/get/' + id);
+      const jsonResult = await result.json()
+      setEmployee(jsonResult);
     };
-    fetchEmployee();
+    fetchEmployee();  
   }, [id]);
+
+
 
   if (!employee) return <p>Loading...</p>;
 
+  const dobS = employee.date_of_birth;
+  const dob = new Date(dobS);
+  const age =  calculateAge(dob);
+  console.log(age);
+
+  
   const handleClickback = () => {
     navigate(`/employ`);
   };
@@ -69,18 +91,18 @@ const EmployeeDetail = () => {
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Name</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                    {employee.name}
+                    {employee.firstname} {employee.midname} {employee.lastname}
                   </p>
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Faculty</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                    {employee.department}
+                    {employee.faculty.name}
                   </p>
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Job-title</p>
-                  <p className="text-[15px] md:text-[20px] font-georama">{employee.jobTitle}</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">{employee.job_title}</p>
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Position</p>
@@ -107,17 +129,17 @@ const EmployeeDetail = () => {
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Age</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                  {employee.age}
+                  {age}
                   </p>
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Identification</p>
-                  <p className="text-[15px] md:text-[20px] font-georama">{employee.identification}</p>
+                  <p className="text-[15px] md:text-[20px] font-georama">{employee.identification_no}</p>
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">Contact</p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                  {employee.contactNo}
+                  {employee.phone}
                   </p>
                 </div>
                 <div>

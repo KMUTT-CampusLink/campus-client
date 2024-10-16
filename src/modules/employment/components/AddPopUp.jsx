@@ -1,6 +1,6 @@
 
 
-const AddPopUp = ({ onClose }) => {
+const AddPopUp = ({ onClose,onClick }) => {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
         <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -16,7 +16,7 @@ const AddPopUp = ({ onClose }) => {
               CANCEL
             </button>
             <button
-              
+              Onclick = {onClick}
               className="w-1/2 text-center py-2 text-white bg-[#D4A015] font-semibold"
             >
               Add

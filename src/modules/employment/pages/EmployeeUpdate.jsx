@@ -15,12 +15,11 @@ const EmployeeUpdate = () => {
   // Dummy data fetch - replace with actual API call
   useEffect(() => {
     const fetchEmployee = async () => {
-      const data = dummydata;
-
-      const temp = data.find((emp) => emp.id == id);
-      setEmployee(temp);
+      const result = await fetch('http://localhost:3000/api/employ/get/' + id);
+      const jsonResult = await result.json()
+      setEmployee(jsonResult);
     };
-    fetchEmployee();
+    fetchEmployee();  
   }, [id]);
 
   if (!employee) return <p>Loading...</p>;

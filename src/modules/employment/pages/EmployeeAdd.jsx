@@ -18,6 +18,11 @@ const EmployeeAdd = () => {
     setShowPopup(false);
   };
 
+  const handleSumbit =() =>
+  {
+      
+  };
+
 
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
@@ -195,9 +200,9 @@ const EmployeeAdd = () => {
         </div>
       </main>
     
-      {showPopup && <AddPopUp onClose={handleClosePopup} />}
+      {showPopup && <AddPopUp onClick= {handleSumbit} onClose={handleClosePopup} />}
     </div>
   )
 }
 
-export default EmployeeAdd
+export default EmployeeAdd;
