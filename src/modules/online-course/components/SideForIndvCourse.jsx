@@ -2,9 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef } from "react";
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
   const sidebarRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,6 +22,24 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [sideOpen, closeSidebar]);
+
+  // Function to navigate back to the dashboard dynamically
+  const backToDashboard = () => {
+    if (location.pathname.includes("/courses/St")) {
+      navigate("/courses/St");
+    } else {
+      navigate("/courses/Tr");
+    }
+  };
+
+  // Helper function to handle navigation based on role (St/Tr)
+  const handleNavigation = (subPath) => {
+    if (location.pathname.includes("/courses/St")) {
+      navigate(`/courses/St/${subPath}`);
+    } else {
+      navigate(`/courses/Tr/${subPath}`);
+    }
+  };
 
   return (
     <div
@@ -37,7 +58,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             />
           </button>
           <ul className="mr-5 mt-24 flex-grow">
+            {/* Description Link */}
             <li
+              onClick={() => handleNavigation("course_description")}
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "description"
                   ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
@@ -46,7 +69,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               Description
             </li>
+            {/* Materials Link */}
             <li
+              onClick={() => handleNavigation("course_material")}
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "materials"
                   ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
@@ -55,7 +80,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               Materials
             </li>
+            {/* Tasks Link */}
             <li
+              onClick={() => handleNavigation("tasks")}
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "tasks"
                   ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
@@ -64,7 +91,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               Tasks
             </li>
+            {/* Discussion Link */}
             <li
+              onClick={() => handleNavigation("discussion")}
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "discussion"
                   ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
@@ -73,7 +102,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               Discussion
             </li>
+            {/* Online Exam Link */}
             <li
+              // onClick={() => handleNavigation("online_exam")}
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "online_exam"
                   ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
@@ -82,7 +113,10 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               Online Exam
             </li>
+
+            {/* Attendance Link */}
             <li
+              // onClick={() => handleNavigation("attendance")}
               className={`mb-4 p-2 border-b-2 ${
                 currentPage !== "attendance"
                   ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
@@ -94,7 +128,10 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
           </ul>
         </div>
         <div className="w-full p-5 border-t-2">
-          <button className="flex items-center gap-4">
+          <button
+            className="flex items-center gap-4 hover:scale-110 "
+            onClick={backToDashboard}
+          >
             <span className="mr-2">
               <FontAwesomeIcon
                 icon={faCircleArrowLeft}
@@ -102,7 +139,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
                 size="xl"
               />
             </span>
-            <span className="text-white text-lg">Dashboard</span>
+            <span className="text-white text-lg ">Dashboard</span>
           </button>
         </div>
       </div>

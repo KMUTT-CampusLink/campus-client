@@ -7,9 +7,11 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const StDashboard = () => {
   const [visible, setVisible] = useState(false);
+
 
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
@@ -20,7 +22,9 @@ const StDashboard = () => {
           className="flex mt-16 border-b-[1px] border-black text-lg gap-10 pt-5 
         max-sm:pl-16 max-md:pl-20 max-lg:pl-36 lg:pl-56"
         >
-          <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">
+          <span className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+          onClick={{}}
+          >
             Dashboard
           </span>
           <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">
@@ -30,7 +34,7 @@ const StDashboard = () => {
         <Searchbar />
         <div className="w-3/4 m-auto">
           <div className="flex justify-between items-center gap-2 pb-3 lg:pr-10">
-            <span className="text-4xl font-bold">All Courses</span>
+            <span className="text-4xl font-bold">Recent Courses</span>
             <button className="text-[#EC5A51] text-md font-bold lg:text-base hover:underline">
               See All
             </button>

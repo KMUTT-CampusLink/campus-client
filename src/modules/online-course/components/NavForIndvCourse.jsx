@@ -21,7 +21,7 @@ const NavForIndvCourse = ({page}) => {
   return (
     <div
       className="flex justify-between w-full items-center px-4 max-md:text-sm lg:text-lg bg-gradient-to-r from-[#EC5A51] to-[#F69800]
-    py-3 pl-5 pr-5"
+    py-3 max-md:pl-1 pl-5 pr-5"
     >
       <button className="flex justify-center rounded-md items-center gap-5 lg:gap-10 py-2 ml-2 lg:text-lg lg:ml-8 px-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
         <FontAwesomeIcon
