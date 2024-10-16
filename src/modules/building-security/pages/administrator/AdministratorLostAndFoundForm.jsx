@@ -1,15 +1,15 @@
 import React from "react";
-import MyItemList from "../../components/MyItemList";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+import LostAndFoundForm from "../../components/LostAndFoundForm"
 
-export default function StudentMyItemList() {
+export default function AdministratorLostAndFoundForm() {
   return (
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
+        <h1>Lost And Found Form</h1>
         <p>Detailed information</p>
-        <MyItemList/>
+        <LostAndFoundForm />
       </div>
     </>
   );
