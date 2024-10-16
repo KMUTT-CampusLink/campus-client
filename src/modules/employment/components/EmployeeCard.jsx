@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const EmployeeCard = ({ employee }) => {
+const EmployeeCard = ({ employee}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -14,9 +14,9 @@ const EmployeeCard = ({ employee }) => {
         <img src={employee.image || 'https://images.pexels.com/photos/3792581/pexels-photo-3792581.jpeg?cs=srgb&dl=pexels-bertellifotografia-3792581.jpg&fm=jpg'} alt={employee.id} className="object-cover rounded-lg shadow-lg md:w-[230px] md:h-[140px] w-[180px] h-[130px] " />
       </div>
       <div className=" mt-3 ">
-        <h1 className="text-left font-geologica font-bold text-[17px] md:text-[20px]">{employee.name}</h1>
+        <h1 className="text-left font-geologica font-bold text-[17px] md:text-[20px]">{employee.firstname} {employee.midname} {employee.lastname}</h1>
         <p className="font-geologica text-[10px] md:text-[12px] text-left">{employee.id}</p>
-        <p className="font-geologica text-[10px] md:text-[12px] text-left">{employee.department}</p>
+        <p className="font-geologica text-[10px] md:text-[12px] text-left">{employee.faculty.name}</p>
       </div>
     </div>
   );
