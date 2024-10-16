@@ -1,10 +1,22 @@
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function StudentExamPasswordPage() {
+  const [password, setPassword] = useState("");
+  const { examId } = useParams();
+  const navigate = useNavigate();
+
+  const handlePassword = () => {
+    console.log(password);
+    navigate(`/exams/student/exam/${examId}`);
+  }
+
   return (
-    <div className="w-auto">
+    <div className="">
       <NavBar />
-      <div className="mx-[35px] xl:mx-[100px] pt-[20px]">
+      <div className="mx-[35px] xl:mx-[100px] pt-20">
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
           Linear Algebra
         </h2>
@@ -18,8 +30,9 @@ export default function StudentExamPasswordPage() {
               type="text"
               placeholder="Enter Password"
               className="w-[70%] lg:w-[50%] border-2 border-[#798184] rounded-lg p-[10px]"
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button className="btn w-[200px] mt-[20px] bg-[#7F483C] hover:bg-[#6f4036] text-white">
+            <button className="btn w-[200px] mt-[20px] bg-[#7F483C] hover:bg-[#6f4036] text-white" onClick={handlePassword}>
               Enter
             </button>
           </div>
