@@ -11,7 +11,7 @@ const MessageArea = ({messagesInd, dummyFaqs, dummyAns, profilePic}) => {
   }, [messagesInd]);
 
   return (
-    <div className='overflow-auto px-10 max-h-[20rem]'>{
+    <div className=' overflow-auto px-10 max-h-[20rem]'>{
       messagesInd.map((index, i) => {
         return <div key ={i}>
           <div className='flex flex-row-reverse'>
