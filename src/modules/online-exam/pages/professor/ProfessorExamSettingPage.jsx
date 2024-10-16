@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import NavBar from "../../../registration/components/NavBar";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import PublishButton from "../../components/professor/ExamSetting/PublishButton";
 import Submit from "../../components/professor/ExamSetting/Submit";
 import DeleteExam from "../../components/professor/ExamSetting/DeleteExamButton";
@@ -9,9 +9,9 @@ export default function ProfessorExamSettingPage() {
   const [passingMarks, setPassingMarks] = useState("");
   return (
     <>
-      {/* <NavBar /> */}
+      <NavBar />
       {/* Heading */}
-      <div className="flex justify-between px-[26px] py-[35px] lg:px-[200px]">
+      <div className="flex justify-between px-[26px] pt-20 pb-[35px] lg:px-[200px]">
         <div>
           <p className="font-bold text-[#D4A015] text-[30px]">Setting</p>
           <p className="text-[16px]">Linear Algebra Exam</p>
