@@ -13,27 +13,46 @@ function TranscriptPage() {
     isError,
   } = useTranscriptByStudentId(studentId);
 
-  if (isError) return <div>Error loading student data.</div>;
-
-  return (
-    <>
+  if (isError) {
+    return (
       <div className={containerDivStyles}>
         <NavBar />
         <main className={mainStyles}>
           <HeadLineCard title="Transcript" link="/regis/course/detail" />
           <div className="divider"></div>
           <div className="bg-white p-6 shadow-md rounded-md">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <GPAXCard studentId={studentId} />
-              {isLoading ? (
-                <div className="col-span-2 grid grid-cols-1 gap-4 animate-pulse">
-                  <div className="h-64 pt-4 text-center bg-gray-200 rounded">
-                    Loading Transcript Data
-                  </div>
+            <p className="text-red-500">
+              Error loading student data. Please try again later.
+            </p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className={containerDivStyles}>
+      <NavBar />
+      <main className={mainStyles}>
+        <HeadLineCard title="Transcript" link="/regis/course/detail" />
+        <div className="divider"></div>
+        <div className="bg-white p-6 shadow-md rounded-md">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <GPAXCard studentId={studentId} />
+            {isLoading ? (
+              <div className="col-span-2 grid grid-cols-1 gap-4 animate-pulse">
+                <div className="h-64 pt-4 text-center bg-gray-200 rounded">
+                  Loading Transcript Data
                 </div>
-              ) : (
-                <div className="col-span-2 grid grid-cols-1 gap-4">
-                  {transcripts.map((semester, index) => (
+              </div>
+            ) : (
+              <div className="col-span-2 grid grid-cols-1 gap-4">
+                {transcripts?.length === 0 ? (
+                  <div className="text-center text-gray-500">
+                    No transcript data available.
+                  </div>
+                ) : (
+                  transcripts.map((semester, index) => (
                     <TranscriptCard
                       key={index}
                       semester={semester.semester_name}
@@ -41,14 +60,14 @@ function TranscriptPage() {
                       studentId={studentId}
                       semesterId={semester.semester_id}
                     />
-                  ))}
-                </div>
-              )}
-            </div>
+                  ))
+                )}
+              </div>
+            )}
           </div>
-        </main>
-      </div>
-    </>
+        </div>
+      </main>
+    </div>
   );
 }
 

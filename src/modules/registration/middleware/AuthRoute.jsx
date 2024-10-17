@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import authConfig from "../auth/authConfig";
 
@@ -11,8 +11,9 @@ const AuthRoute = ({ children }) => {
     const checkAuth = async () => {
       try {
         const authStatus = await authConfig.isAuthenticated(); // Check if the user is authenticated
-        setIsAuthenticated(!!authStatus); // Authenticated if authStatus is truthy
+        setIsAuthenticated(!!authStatus); // Authenticated if authStatus is true
       } catch (err) {
+        console.log(err);
         setError("Failed to authenticate. Please try again.");
       } finally {
         setIsLoading(false); // Stop loading once the check is done
@@ -38,7 +39,7 @@ const AuthRoute = ({ children }) => {
   }
 
   // Render children or outlet if authenticated
-  return children ? children: <Outlet />;
+  return children ? children : <Outlet />;
 };
 
 export default AuthRoute;

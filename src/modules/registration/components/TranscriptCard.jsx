@@ -1,14 +1,33 @@
 import { useGPAXBySemesterId } from "../services/queries";
 
+function LoadingSpinner() {
+  return <div className="spinner">Loading...</div>;
+}
+
+function ErrorState({ onRetry }) {
+  return (
+    <div>
+      <p>Error Loading Transcript Data.</p>
+      <button
+        onClick={onRetry}
+        className="bg-blue-500 text-white py-1 px-3 rounded"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
 function TranscriptCard({ semester, courses, studentId, semesterId }) {
   const {
     data: semesterGrades,
-    isLoading: isLoading,
-    isError: isError,
+    isLoading,
+    isError,
+    refetch, // Refetch function to be used on retry
   } = useGPAXBySemesterId(studentId, semesterId);
 
-  if (isLoading) return <div>Loading Transcript Data...</div>;
-  if (isError) return <div>Error Loading Transcript Data.</div>;
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <ErrorState onRetry={refetch} />;
 
   return (
     <div className="mb-6">
@@ -16,7 +35,7 @@ function TranscriptCard({ semester, courses, studentId, semesterId }) {
         <h2 className="font-bold text-2xl font-geologica mb-2">
           Semester {semester}
         </h2>
-        <h2 className="font-bold mb-2 ml-4">GPA {semesterGrades.gpa}</h2>
+        <h3 className="font-bold mb-2 ml-4">GPA: {semesterGrades?.gpa}</h3>
       </div>
 
       <div className="bg-gray-200 rounded-lg overflow-x-auto">
@@ -30,14 +49,16 @@ function TranscriptCard({ semester, courses, studentId, semesterId }) {
             </tr>
           </thead>
           <tbody>
-            {courses.map((course, index) => (
-              <tr key={index} className="odd:bg-white even:bg-gray-100">
-                <td className="p-2">{course.course_code}</td>
-                <td className="p-2 hidden sm:block">{course.course_name}</td>
-                <td className="p-2">{course.grade_letter}</td>
-                <td className="p-2">{course.credits}</td>
-              </tr>
-            ))}
+            {courses.map(
+              ({ course_code, course_name, grade_letter, credits }, index) => (
+                <tr key={index} className="odd:bg-white even:bg-gray-100">
+                  <td className="p-2">{course_code}</td>
+                  <td className="p-2 hidden sm:block">{course_name}</td>
+                  <td className="p-2">{grade_letter}</td>
+                  <td className="p-2">{credits}</td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>

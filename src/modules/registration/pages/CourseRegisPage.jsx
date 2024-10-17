@@ -1,27 +1,72 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import HeadLineCard from "../components/HeadLineCard";
 import SInfoCard from "../components/SInfoCard";
 import CourseTable from "../components/CourseTable";
-import { Link } from "react-router-dom";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
-import { useActiveCoursesByStudentId } from "../services/queries";
+import {
+  useActiveCoursesByStudentId,
+  usePaymentStatus,
+  useGetEnrollmentHead,
+} from "../services/queries";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
+  const currentSemesterId = 2;
+
+  const [headId, setHeadId] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
+
+  const {
+    data: enrollmentHeadData,
+    error: enrollmentError,
+    isLoading: isEnrollmentLoading,
+  } = useGetEnrollmentHead({
+    studentId,
+    currentSemesterId,
+  });
+
   const {
     data: courses,
-    isLoading,
-    isError,
+    isLoading: isCoursesLoading,
+    isError: isCoursesError,
   } = useActiveCoursesByStudentId(studentId);
 
+  const {
+    data: payment,
+    isLoading: isPaymentLoading,
+    isError: isPaymentError,
+  } = usePaymentStatus(headId);
 
-  const totalCredits = Array.isArray(courses)?courses.reduce(
-    (acc, course) => acc + course.credits,
-    0
-  ):0;
-  const totalCourses = courses?.length;
-  const grandTotal = 52500;
-  if (isError) return <div>Error Loading Student Data.</div>;
+  useEffect(() => {
+    if (enrollmentHeadData) {
+      console.log(enrollmentHeadData);
+      setHeadId(enrollmentHeadData.head_id);
+    }
+  }, [enrollmentHeadData]);
+
+  useEffect(() => {
+    if (payment) {
+      setPaymentStatus(payment.data);
+    }
+  }, [payment]);
+
+  const totalCredits = Array.isArray(courses)
+    ? courses.reduce((acc, course) => acc + course.credits, 0)
+    : 0;
+
+  const totalCourses = courses?.length || 0;
+  const grandTotal = 55555;
+
+  if (isEnrollmentLoading || isCoursesLoading || isPaymentLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (enrollmentError || isCoursesError || isPaymentError) {
+    return <div>Error Loading Data.</div>;
+  }
 
   return (
     <div className={containerDivStyles}>
@@ -35,37 +80,34 @@ function CourseRegisPage() {
             <div>
               <SInfoCard />
               <div className="ml-6 mt-4">
-                {isLoading ? (
-                  <div className="mt-6 animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="mt-6">
+                  <div>
+                    Total Credits:{" "}
+                    <span className="font-bold">{totalCredits}</span>
                   </div>
-                ) : (
-                  <div className="mt-6">
-                    <div>
-                      Total Credits:{" "}
-                      <span className="font-bold">{totalCredits}</span>
-                    </div>
-                    <div>
-                      Total Courses:{" "}
-                      <span className="font-bold">{totalCourses}</span>
-                    </div>
-                    <div>
-                      Grand Total:{" "}
-                      <span className="font-bold text-red-600">
-                        {grandTotal.toLocaleString()} bahts
-                      </span>
-                    </div>
-                    <div>
-                      Status:{" "}
-                      <span className="text-green-500 font-bold">
-                        successful
-                      </span>
-                    </div>
+                  <div>
+                    Total Courses:{" "}
+                    <span className="font-bold">{totalCourses}</span>
                   </div>
-                )}
+                  <div>
+                    Grand Total:{" "}
+                    <span className="font-bold text-red-600">
+                      {grandTotal.toLocaleString()} bahts
+                    </span>
+                  </div>
+                  <div>
+                    Status:{" "}
+                    <span
+                      className={`font-bold ${
+                        paymentStatus === "paid"
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {paymentStatus === "paid" ? "Successful" : "Unpaid"}
+                    </span>
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 py-4">
                   <Link to="add">
@@ -80,13 +122,15 @@ function CourseRegisPage() {
                 </div>
               </div>
             </div>
+
             <div className="col-span-2 gap-4">
               <div className="bg-[#c3554e] text-center text-white rounded-md py-2 mb-4">
                 <h3 className="font-bold text-lg font-geologica">
                   Course Table
                 </h3>
               </div>
-              {isLoading ? (
+
+              {isCoursesLoading ? (
                 <div className="bg-gray-200 rounded-md overflow-x-auto animate-pulse">
                   <table className="min-w-full text-left border">
                     <thead>
@@ -105,7 +149,6 @@ function CourseRegisPage() {
                         </th>
                       </tr>
                     </thead>
-
                     <tbody>
                       <tr className="odd:bg-white even:bg-gray-100">
                         <td className="border px-4 py-2">
@@ -125,7 +168,7 @@ function CourseRegisPage() {
                   </table>
                 </div>
               ) : (
-                <CourseTable courses={Array.isArray(courses)?courses:[]} />
+                <CourseTable courses={Array.isArray(courses) ? courses : []} />
               )}
             </div>
           </div>
