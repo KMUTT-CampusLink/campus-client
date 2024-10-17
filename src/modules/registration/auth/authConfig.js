@@ -18,12 +18,14 @@ const isAuthenticated = async () => {
 // Function to log out the user and clear localStorage
 const logout = async () => {
   try {
-    await axios.post(`${import.meta.env.VITE_API_URL}/users/logout`, {}, { withCredentials: true }); // Ensure cookies are sent
+    await axios.post(
+      `${import.meta.env.VITE_API_URL}/users/logout`,
+      {},
+      { withCredentials: true }
+    ); // Ensure cookies are sent
 
-    // Clear the role from localStorage
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("studentId");
+    // Clear all items from localStorage
+    localStorage.clear();
 
     window.location.href = "/regis/login"; // Redirect to login after successful logout
   } catch (error) {

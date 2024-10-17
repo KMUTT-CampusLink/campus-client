@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Alert = ({ severity, message, onClose }) => {
   let severityClasses;
   switch (severity) {
@@ -19,7 +21,7 @@ const Alert = ({ severity, message, onClose }) => {
 
   return (
     <div
-      className={`fixed top-4 right-4 p-4 mb-4 border-l-4 text-sm ${severityClasses} border-current rounded transition-opacity duration-500 ease-in-out ${
+      className={`z-[9999] fixed bottom-4 right-4 p-4 mb-4 border-l-4 text-sm ${severityClasses} border-current rounded transition-opacity duration-500 ease-in-out ${
         message ? "opacity-100" : "opacity-0"
       }`}
       role="alert"
@@ -32,6 +34,13 @@ const Alert = ({ severity, message, onClose }) => {
       </div>
     </div>
   );
+};
+
+// Prop validation using PropTypes
+Alert.propTypes = {
+  severity: PropTypes.oneOf(["success", "error", "info", "warning"]).isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Alert;

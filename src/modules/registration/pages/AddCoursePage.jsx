@@ -1,31 +1,58 @@
 import { useEffect, useState } from "react";
-import NavBar from "../components/NavBarComponents/NavBar";
-import HeadLineCard from "../components/HeadLineCard";
-import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useNavigate } from "react-router-dom";
-import { useCourseBySearch, useSectionByCourseCode } from "../services/queries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+
+import NavBar from "../components/NavBarComponents/NavBar";
+import HeadLineCard from "../components/HeadLineCard";
 import SectionTablePopup from "../components/SectionTablePopup";
+import {
+  useCourseBySearch,
+  useGetEnrollmentHead,
+  useSectionByCourseCode,
+} from "../services/queries";
+import { mainStyles, containerDivStyles, button } from "../styles/styles";
+import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
 
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
-  const headId = 1003;
+  const currentSemesterId = 2;
   const navigate = useNavigate();
 
+  const [headId, setHeadId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedSections, setSelectedSections] = useState([]);
   const [courseCode, setCourseCode] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
 
+  const {
+    data: enrollmentHeadData,
+    isError,
+    isLoading,
+  } = useGetEnrollmentHead({
+    studentId,
+    currentSemesterId,
+  });
+
   const { data: sectionData, refetch: refetchSections } =
     useSectionByCourseCode(courseCode);
   const { data: courses, refetch } = useCourseBySearch(searchTerm);
 
+  useEffect(() => {
+    if (enrollmentHeadData) {
+      setHeadId(enrollmentHeadData.head_id);
+    }
+  }, [enrollmentHeadData]);
+
+  useEffect(() => {
+    if (sectionData) {
+      setSelectedSections(sectionData);
+    }
+  }, [sectionData]);
+
   const handleInputChange = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
+    setSearchTerm(event.target.value);
     setHasSearched(true);
     refetch();
   };
@@ -35,16 +62,12 @@ function AddCoursePage() {
     setIsPopupOpen(true);
   };
 
-  useEffect(() => {
-    if (sectionData) {
-      setSelectedSections(sectionData);
-    }
-  }, [sectionData]);
-
   const handleSectionAdded = () => {
-    // Refetch section data after a section is added
     refetchSections();
   };
+
+  if (isLoading) return <LoadingSkeleton />;
+  if (isError) return <ErrorSkeleton />;
 
   return (
     <>
@@ -63,6 +86,7 @@ function AddCoursePage() {
                 className="p-2 w-full max-w-md focus:outline-none"
               />
             </label>
+
             <div className="bg-gray-200 rounded-md p-4">
               <div className="bg-blue-100 text-center p-4 rounded-md mb-4">
                 <p>
@@ -70,6 +94,7 @@ function AddCoursePage() {
                   courses.
                 </p>
               </div>
+
               {hasSearched && courses?.length > 0 ? (
                 <div className="bg-gray-200 rounded-md p-4 grid grid-cols-1 gap-4">
                   {courses.map((course, index) => (
@@ -105,16 +130,10 @@ function AddCoursePage() {
               ) : null}
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-2 py-4">
-              <button
-                className={`${button}`}
-                onClick={() => {
-                  navigate(-1);
-                }}
-              >
+            <div className="my-4">
+              <button className={`${button}`} onClick={() => navigate(-1)}>
                 Back
               </button>
-              <button className={`${button}`}>Add Selected Courses</button>
             </div>
           </div>
         </main>
@@ -126,7 +145,7 @@ function AddCoursePage() {
         sections={selectedSections}
         studentId={studentId}
         headId={headId}
-        onSectionAdded={handleSectionAdded} // Pass the refetch callback
+        onSectionAdded={handleSectionAdded}
       />
     </>
   );

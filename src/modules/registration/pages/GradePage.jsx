@@ -1,12 +1,14 @@
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarWeek } from "@fortawesome/free-solid-svg-icons";
+
 import NavBar from "../components/NavBarComponents/NavBar";
 import SInfoCard from "../components/SInfoCard";
 import GradeCard from "../components/GradeCard";
 import HeadLineCard from "../components/HeadLineCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarWeek } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import { useSemestersByStudentId } from "../services/queries";
+import { ErrorSkeleton } from "../styles/Skeletons";
 
 function GradePage() {
   const studentId = localStorage.getItem("studentId");
@@ -37,7 +39,7 @@ function GradePage() {
     }
   };
 
-  if (isError) return <div>Error Loading Semester Data.</div>;
+  if (isError) return <ErrorSkeleton />;
 
   return (
     <div className={containerDivStyles}>
@@ -65,7 +67,7 @@ function GradePage() {
                   onChange={handleSemesterChange}
                 >
                   <option disabled>Select Academic year [x/xxxx]</option>
-                  {semesters.map((sem, index) => (
+                  {semesters?.map((sem, index) => (
                     <option key={index} value={sem.semester_name}>
                       {sem.semester_name}
                     </option>
