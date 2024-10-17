@@ -76,7 +76,7 @@ const SectionTablePopup = ({
       onSectionAdded(); // Trigger the refetch when the section is successfully added
     } else if (mutation.isError) {
       setAlertMessage(
-        "Failed to add course. You may have added this section already."
+        "Failed to add course. You may have added this section or course already."
       );
       setAlertSeverity("error");
       setIsAlertVisible(true);
