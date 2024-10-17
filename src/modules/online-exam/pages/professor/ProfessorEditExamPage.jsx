@@ -22,39 +22,38 @@ export default function ProfessorEditExamPage() {
 
   const getExamData = async () => {
     try {
-        const res = await getExamDataById(examId);
-        const examData = res.data.data.exam;
-        const examQuestion = res.data.data.questions;
-        const allChoices = res.data.data.choices;
-        const mappedQuestions = examQuestion && Array.isArray(examQuestion)
-            ? examQuestion.map(question => {
-                const questionChoices = allChoices.filter(choice => choice.question_id === question.id);
-                return {
-                    questionText: question.title || '',
-                    type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
-                    options: questionChoices.map(choice => ({
-                        choiceText: choice.choice_text || '',
-                        choiceImg: choice.choice_img || null,
-                        isCorrect: choice.correct_ans || false
-                    })),
-                    answer: questionChoices
-                        .filter(choice => choice.correct_ans)
-                        .map(choice => choice.choice_text || ''),
-                    score: question.mark || null
-                };
-            })
-            : [];
-        setExam({
-            ...exam,
-            title: examData.title || 'Untitled Exam',
-            description: examData.description || 'No description',
-            questions: mappedQuestions
-        });
+      const res = await getExamDataById(examId);
+      const examData = res.data.data.exam;
+      const examQuestion = res.data.data.questions;
+      const allChoices = res.data.data.choices;
+      const mappedQuestions = examQuestion && Array.isArray(examQuestion)
+        ? examQuestion.map(question => {
+          const questionChoices = allChoices.filter(choice => choice.question_id === question.id);
+          return {
+            questionText: question.title || '',
+            type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
+            options: questionChoices.map(choice => ({
+              choiceText: choice.choice_text || '',
+              choiceImg: choice.choice_img || null,
+              isCorrect: choice.correct_ans || false
+            })),
+            answer: questionChoices
+              .filter(choice => choice.correct_ans)
+              .map(choice => choice.choice_text || ''),
+            score: question.mark || null
+          };
+        })
+        : [];
+      setExam({
+        ...exam,
+        title: examData.title || 'Untitled Exam',
+        description: examData.description || 'No description',
+        questions: mappedQuestions
+      });
     } catch (error) {
-        console.error("Failed to fetch exam data:", error);
+      console.error("Failed to fetch exam data:", error);
     }
-};
-
+  };
 
   useEffect(() => {
     getExamData();
@@ -119,8 +118,6 @@ export default function ProfessorEditExamPage() {
       })),
     };
   };
-
-  console.log(exam)
 
   return (
     <div className='w-auto'>
@@ -193,7 +190,7 @@ export default function ProfessorEditExamPage() {
                   className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
                   onClick={() => {
                     handleSubmit();
-                    // navigate(`/exams/professor/setting/${1}`);
+                    navigate(`/exams/professor/setting/${1}`);
                   }}
                 >
                   Confirm
