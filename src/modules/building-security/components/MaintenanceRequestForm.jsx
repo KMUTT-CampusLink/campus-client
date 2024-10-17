@@ -8,21 +8,21 @@ export default function MaintenanceRequestForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic
     console.log({ building, room, floor, request });
   };
 
-  // Inline style object for exact design
+  // Inline style object for responsive design
   const formStyles = {
     container: {
       maxWidth: "900px", // Form width
-      margin: "100px 0 100px 600px", // Move form further to the right by increasing left margin
+      margin: "100px auto", // Center form vertically and horizontally
       padding: "40px", // Padding inside the form
       backgroundColor: "#ffffff",
       borderRadius: "20px", // Rounded corners
       boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)", // Shadow for depth
       textAlign: "center",
       position: "relative",
+      transform: "translateX(50px)", // Push the form further to the right
     },
     header: {
       fontSize: "36px", // Font size for title
@@ -111,6 +111,48 @@ export default function MaintenanceRequestForm() {
     icon: {
       width: "30px", // Larger icon for the list button
       height: "30px",
+    },
+    // Media queries for responsive design
+    "@media (max-width: 768px)": {
+      container: {
+        padding: "20px", // Reduce padding for smaller screens
+        margin: "50px auto", // Adjust margin for tablets
+        transform: "translateX(0px)", // Center it back on smaller screens
+      },
+      header: {
+        fontSize: "28px", // Reduce header size for smaller screens
+      },
+      formGroup: {
+        flexDirection: "column", // Stack form fields vertically
+      },
+      formItemHalfWidth: {
+        width: "100%", // Full width form fields on small screens
+      },
+      select: {
+        padding: "15px", // Adjust padding for inputs
+        fontSize: "16px", // Adjust font size for inputs
+      },
+      submitBtn: {
+        padding: "15px 40px", // Adjust button size for smaller screens
+        fontSize: "18px", // Adjust font size for button
+      },
+    },
+    "@media (max-width: 480px)": {
+      container: {
+        padding: "15px", // Reduce padding for mobile devices
+        margin: "30px auto", // Smaller vertical margin on mobile
+      },
+      header: {
+        fontSize: "24px", // Further reduce header size on mobile
+      },
+      select: {
+        padding: "12px", // Smaller padding for inputs on mobile
+        fontSize: "14px", // Smaller font size for inputs on mobile
+      },
+      submitBtn: {
+        padding: "12px 30px", // Smaller button on mobile
+        fontSize: "16px", // Smaller button text
+      },
     },
   };
 
