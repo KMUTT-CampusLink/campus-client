@@ -16,7 +16,7 @@ const EmployeeCard = ({ employee}) => {
       <div className=" mt-3 ">
         <h1 className="text-left font-geologica font-bold text-[17px] md:text-[20px]">{employee.firstname} {employee.midname} {employee.lastname}</h1>
         <p className="font-geologica text-[10px] md:text-[12px] text-left">{employee.id}</p>
-        <p className="font-geologica text-[10px] md:text-[12px] text-left">{employee.faculty.name}</p>
+        <p className="font-geologica text-[10px] md:text-[12px] text-left">{employee.faculty?.name || 'Faculty not available'}</p>
       </div>
     </div>
   );

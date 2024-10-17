@@ -5,6 +5,7 @@ import { useParams, useNavigate} from "react-router-dom";
 import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import DeletePopUp from "../components/DeletePopUp";
+import axios from "axios";
 
 
 const calculateAge = (dob) => {
@@ -27,6 +28,7 @@ const EmployeeDetail = () => {
   const [employee, setEmployee] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
 
   useEffect(() => {
@@ -65,6 +67,19 @@ const EmployeeDetail = () => {
   };
   const handleClosePopup = () => {
     setShowPopup(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/api/employ/delete/${id}`);
+      console.log("Delete successful");
+        setDeleteSuccess(true);
+        setShowPopup(false);
+        navigate(`/employ`); // Redirect to employee list or desired page
+
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    }
   };
 
 
@@ -164,7 +179,8 @@ const EmployeeDetail = () => {
         </div>
       </main>
 
-      {showPopup && <DeletePopUp onClose={handleClosePopup} />}
+      {showPopup && <DeletePopUp  a= {() => handleDelete(employee.id)} onClose={handleClosePopup} />}
+      {deleteSuccess && <p>Employee deleted successfully.</p>}
     </div>
   );
 };

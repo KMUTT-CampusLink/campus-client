@@ -21,7 +21,6 @@ const EmployeeGrid = () => {
     }
 
     fetchData();
-    //console.log(employees);
   }, []);
 
 
@@ -55,7 +54,6 @@ const EmployeeGrid = () => {
           {employees.map((employee) => (
             <EmployeeCard key={employee.id} employee={employee} />
           ))}
-          //{console.log(employees)};
         </div>
 
       </main>
