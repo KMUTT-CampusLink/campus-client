@@ -7,9 +7,12 @@ import Question from '../../components/professor/CreateExam/Question';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import { createNewExam } from '../../services/apis/professerApi';
+
 export default function ProfessorCreateExamPage() {
   const { courseId } = useParams();
   const navigate = useNavigate();
+
   //exam data all stored in here
   const [exam, setExam] = useState({
     title: '',
@@ -51,7 +54,7 @@ export default function ProfessorCreateExamPage() {
         ...exam.questions,
         {
           questionText: '',
-          type: 'multipleChoice',
+          type: 'Multiple Choice',
           options: [],
           answer: '',
           score: null,
@@ -67,7 +70,7 @@ export default function ProfessorCreateExamPage() {
   };
 
   // submit exam function
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const finalExam = {
       ...exam,
       questions: exam.questions.map((question) => ({
@@ -75,8 +78,11 @@ export default function ProfessorCreateExamPage() {
         score: question.score || defaultScore,
       })),
     };
-
-    console.log(finalExam);
+    const res = await createNewExam(finalExam);
+    const id = res.data.data;
+    if (res.status === 200) {
+      navigate(`/exams/professor/setting/${id}`);
+    }
   };
 
   return (
@@ -149,8 +155,8 @@ export default function ProfessorCreateExamPage() {
                 <button
                   className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
                   onClick={() => {
-                    handleSubmit();
-                    navigate(`/exams/professor/setting/${1}`);
+                    // handleSubmit();
+                    console.log(exam)
                   }}
                 >
                   Confirm

@@ -1,156 +1,71 @@
-import axios from 'axios';
+import axios from "axios";
 
+// Create an Axios instance
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000,
   withCredentials: true,
 });
 
-export const fetchAuth = async () => {
-  return axiosInstance.get('/authorize').then((res) => res.data);
+// Centralized error handling
+const handleApiError = (error) => {
+  const errorMessage = error.response ? error.response.data : error.message;
+  console.error("API Error:", errorMessage);
+  throw new Error(errorMessage);
 };
 
-export const activateAccount = async (activationData) => {
-    return axiosInstance.post('/users/activate', activationData).then((res) => res.data);
-  };
-
-export const logIn = async (credentials) => {
-  return axiosInstance.post('/users/login', credentials).then((res) => res.data);
-};
-
-export const fetchStudentById = async (userId) => {
+// Generic GET request
+const get = async (url) => {
   try {
-    const { data } = await axiosInstance.get(`/regis/student/${userId}`);
+    const { data } = await axiosInstance.get(url);
     return data;
   } catch (error) {
-    console.error(
-      "Error fetching student data:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
+    handleApiError(error);
   }
 };
 
+// Generic POST request
+const post = async (url, payload) => {
+  try {
+    const { data } = await axiosInstance.post(url, payload);
+    return data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+// API calls
+export const fetchAuth = () => get("/authorize");
+export const activateAccount = (activationData) =>
+  post("/users/activate", activationData);
+export const logIn = (credentials) => post("/users/login", credentials);
+
+export const fetchStudentById = (studentId) => get(`/regis/student/${studentId}`);
 export const fetchCourseBySearchTerm = async (searchTerm) => {
-  if (!searchTerm.trim()) {
-    throw new Error("Search term cannot be empty."); //Early return if the term is empty
-  }
-  try {
-    const { data } = await axiosInstance.get(
-      `/regis/course/search?query=${searchTerm}`
-    );
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching courses:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
+  if (!searchTerm.trim()) throw new Error("Search term cannot be empty.");
+  return get(`/regis/course/search?query=${searchTerm}`);
 };
+export const fetchSectionByCourseCode = (courseCode) =>
+  get(`/regis/course/${courseCode}/section`);
+export const fetchSemestersByStudentId = (studentId) =>
+  get(`/regis/enroll/semesters/${studentId}`);
+export const fetchTranscriptBySemesterId = (studentId, semesterId) =>
+  get(`/regis/transcript/${studentId}/${semesterId}`);
+export const fetchTranscriptByStudentId = (studentId) =>
+  get(`/regis/transcript/${studentId}`);
+export const fetchGPAXBySemesterId = (studentId, semesterId) =>
+  get(`/regis/gpax/${studentId}/${semesterId}`);
+export const fetchGPAXByStudentId = (studentId) =>
+  get(`/regis/gpax/${studentId}`);
+export const fetchActiveCoursesByStudentId = (studentId) =>
+  get(`/regis/course/${studentId}/active`);
 
-export const fetchSectionByCourseCode = async (courseCode) => {
-  try {
-    const { data } = await axiosInstance.get(
-      `/regis/course/${courseCode}/section`
-    );
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching sections:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-
-export const fetchSemestersByStudentId = async (studentId) => {
-  try {
-    const { data } = await axiosInstance.get(
-      `/regis/enroll/semesters/${studentId}`
-    );
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching semesters:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-export const fetchTranscriptBySemesterId = async (studentId, semesterId) => {
-  try {
-    const { data } = await axiosInstance.get(
-      `${
-        import.meta.env.VITE_API_URL
-      }/regis/transcript/${studentId}/${semesterId}`
-    );
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching transcripts:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-export const fetchTranscriptByStudentId = async (studentId) => {
-  try {
-    const { data } = await axiosInstance.get(`/regis/transcript/${studentId}`);
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching transcripts:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-
-export const fetchGPAXBySemesterId = async (studentId, semesterId) => {
-  try {
-    const { data } = await axiosInstance.get(
-      `regis/gpax/${studentId}/${semesterId}`
-    );
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching GPAX:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-export const fetchGPAXByStudentId = async (studentId) => {
-  try {
-    const { data } = await axiosInstance.get(`/regis/gpax/${studentId}`);
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching GPAX:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-export const fetchActiveCoursesByStudentId = async (studentId) => {
-  try {
-    const { data } = await axiosInstance.get(
-      `/regis/course/${studentId}/active`
-    );
-    return data;
-  } catch (error) {
-    console.error(
-      "Error fetching Courses:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-export const addEnrollmentDetail = async (newEnrollment) => {
-  return axiosInstance.post("/regis/enroll", newEnrollment);
-};
-
-export const deleteEnrollmentDetail = async (enrollment) => {
+export const fetchEnrollmentHead = (enrollment) =>
+  post("/regis/enroll/head", enrollment);
+export const addEnrollmentDetail = (newEnrollment) =>
+  post("/regis/enroll", newEnrollment);
+export const deleteEnrollmentDetail = (enrollment) => {
   return axiosInstance.delete(`/regis/enroll/${enrollment.enrollmentDetailId}`);
 };
+export const fetchPaymentStatus = (headId) =>
+  get(`/regis/enroll/payment/${headId}`);

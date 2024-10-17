@@ -3,14 +3,21 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
+import { verifyExamPassword } from "../../services/apis/studentApi";
+
 export default function StudentExamPasswordPage() {
   const [password, setPassword] = useState("");
   const { examId } = useParams();
   const navigate = useNavigate();
 
-  const handlePassword = () => {
-    console.log(password);
-    navigate(`/exams/student/exam/${examId}`);
+  const handlePassword = async () => {
+    const res = await verifyExamPassword(examId, password);
+    console.log(res)
+    if (res.status === 200){
+      navigate(`/exams/student/exam/${examId}`);
+    }else{
+      alert("Password is incorrect");
+    }
   }
 
   return (
@@ -23,7 +30,7 @@ export default function StudentExamPasswordPage() {
         <hr className="mt-[20px] bg-[#798184] h-[1.5px] flex justify-center" />
         <div className="pt-[20px]">
           <h3 className="font-bold text-[22px] xl:text-[30px]">
-            Enter Exam1 Password
+            Enter Password
           </h3>
           <div className="flex flex-col items-center pt-[50px]">
             <input

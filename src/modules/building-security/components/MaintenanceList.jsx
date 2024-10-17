@@ -35,63 +35,115 @@ export default function MaintenanceList() {
     }
   };
 
-  // Styles for the page (matching size with the form)
+  // Responsive styles with media queries
   const pageStyles = {
     container: {
-        maxWidth: "1000px", // Keep the width at 1000px
-        margin: "50px 0 50px 600px", // Increase left margin to move container more to the right
-        padding: "40px",
-        backgroundColor: "#ffffff",
-        borderRadius: "20px",
-        boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
-        textAlign: "center",
-        position: "relative",
+      maxWidth: "1000px",
+      margin: "50px auto", // Center container horizontally
+      padding: "40px",
+      backgroundColor: "#ffffff",
+      borderRadius: "20px",
+      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
+      textAlign: "center",
+      position: "relative",
+    },
+    header: {
+      fontSize: "32px",
+      fontWeight: "bold",
+      marginBottom: "30px",
+    },
+    tableHeader: {
+      display: "grid",
+      gridTemplateColumns: "1fr 3fr 1fr",
+      fontWeight: "bold",
+      textAlign: "left",
+      padding: "10px",
+      borderBottom: "1px solid #ccc",
+      marginBottom: "20px",
+    },
+    requestCard: {
+      display: "grid",
+      gridTemplateColumns: "1fr 3fr 1fr",
+      alignItems: "center",
+      padding: "20px",
+      marginBottom: "15px",
+      borderRadius: "12px",
+      backgroundColor: "#f9f9f9",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      textAlign: "left",
+    },
+    statusText: {
+      fontWeight: "bold",
+    },
+    floatingButton: {
+      position: "absolute",
+      top: "20px",
+      right: "20px",
+      width: "60px",
+      height: "60px",
+      borderRadius: "50%",
+      backgroundColor: "#8b5b34",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      color: "#fff",
+      fontSize: "36px",
+      boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
+    },
+    // Responsive adjustments with media queries
+    "@media (max-width: 1024px)": {
+      container: {
+        maxWidth: "90%", // Adjust width for tablet sizes
+        padding: "30px",
       },
       header: {
-        fontSize: "32px",
-        fontWeight: "bold",
-        marginBottom: "30px",
-      },
-      tableHeader: {
-        display: "grid",
-        gridTemplateColumns: "1fr 3fr 1fr",
-        fontWeight: "bold",
-        textAlign: "left",
-        padding: "10px",
-        borderBottom: "1px solid #ccc",
-        marginBottom: "20px",
+        fontSize: "28px",
       },
       requestCard: {
-        display: "grid",
-        gridTemplateColumns: "1fr 3fr 1fr",
-        alignItems: "center",
-        padding: "20px",
-        marginBottom: "15px",
-        borderRadius: "12px",
-        backgroundColor: "#f9f9f9",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        textAlign: "left",
+        padding: "15px",
+        gridTemplateColumns: "1fr 2fr 1fr",
       },
-      statusText: {
-        fontWeight: "bold",
+    },
+    "@media (max-width: 768px)": {
+      container: {
+        maxWidth: "95%", // Narrower width for mobile devices
+        padding: "20px",
+      },
+      header: {
+        fontSize: "24px",
+      },
+      tableHeader: {
+        display: "none", // Hide table headers on smaller screens
+      },
+      requestCard: {
+        gridTemplateColumns: "1fr", // Stack items vertically
+        padding: "15px",
+        textAlign: "center", // Center text for smaller devices
       },
       floatingButton: {
-        position: "absolute",
-        top: "20px",
-        right: "20px",
-        width: "60px",
-        height: "60px",
-        borderRadius: "50%",
-        backgroundColor: "#8b5b34",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        color: "#fff",
-        fontSize: "36px",
-        boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
+        width: "50px", // Smaller button on mobile
+        height: "50px",
+        fontSize: "24px",
       },
-    };
+    },
+    "@media (max-width: 480px)": {
+      container: {
+        padding: "15px",
+      },
+      header: {
+        fontSize: "20px",
+      },
+      requestCard: {
+        padding: "10px",
+      },
+      floatingButton: {
+        width: "40px", // Further reduce size for very small screens
+        height: "40px",
+        fontSize: "20px",
+      },
+    },
+  };
 
   return (
     <div style={pageStyles.container}>

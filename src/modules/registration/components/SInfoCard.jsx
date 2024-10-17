@@ -1,34 +1,30 @@
 import { useStudentData } from "../services/queries";
+import { CardErrorSkeleton, SInfoLoadingSkeleton } from "../styles/Skeletons";
 
-function SInfoCard() {
-  const userId = localStorage.getItem("userId");
-  const { data: student, isLoading, isError } = useStudentData(userId);
+function SInfoCard({ onStudentData }) {
+  const studentId = localStorage.getItem("studentId");
+  const { data: student, isLoading, isError } = useStudentData(studentId);
 
-  if (isLoading)
-    return (
-      <div className="ml-6 animate-pulse">
-        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-        <p className="text-gray-500 mt-4 text-sm h-10 text-center bg-gray-200 rounded w-full">
-          Loading Student Data
-        </p>
-      </div>
-    );
-  if (isError) return <div>Error Loading Student Data.</div>;
+  // Once student data is available, pass it to the parent using onStudentData
+  if (student) {
+    if (onStudentData) {
+      onStudentData(student); // Call the function only if it's provided
+    }
+  }
+
+  if (isLoading) return <SInfoLoadingSkeleton />;
+  if (isError) return <CardErrorSkeleton data="student" />;
 
   return (
-    <>
-      <div className="ml-6">
-        <p className="text-gray-500 mt-4 text-sm">{student?.studentid}</p>
-        <h2 className="text-2xl font-geologica font-bold">
-          {student?.firstname}
-        </h2>
-        <h2 className="text-2xl font-geologica font-bold">
-          {student?.lastname}
-        </h2>
-        <p> {student?.facultyname}</p>
-        <p> {student?.programname}</p>
-      </div>
-    </>
+    <div className="ml-6">
+      <p className="text-gray-500 mt-4 text-sm">{student?.studentid}</p>
+      <h1 className="text-2xl font-geologica font-bold">
+        <p>{student?.firstname}</p>
+        <p>{student?.lastname}</p>
+      </h1>
+      <p>{student?.facultyname}</p>
+      <p>{student?.programname}</p>
+    </div>
   );
 }
 
