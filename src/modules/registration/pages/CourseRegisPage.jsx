@@ -11,6 +11,7 @@ import {
   usePaymentStatus,
   useGetEnrollmentHead,
 } from "../services/queries";
+import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
@@ -53,19 +54,28 @@ function CourseRegisPage() {
     }
   }, [payment]);
 
+  const [studentData, setStudentData] = useState(null);
+
+  // Function to handle the student data coming from SInfoCard
+  const handleStudentData = (data) => {
+    setStudentData(data);
+  };
+
   const totalCredits = Array.isArray(courses)
     ? courses.reduce((acc, course) => acc + course.credits, 0)
     : 0;
 
   const totalCourses = courses?.length || 0;
-  const grandTotal = 55555;
+
+  // Use studentData to get programPrice instead of localStorage
+  const grandTotal = studentData?.programprice || "N/A";
 
   if (isEnrollmentLoading || isCoursesLoading || isPaymentLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSkeleton />;
   }
 
   if (enrollmentError || isCoursesError || isPaymentError) {
-    return <div>Error Loading Data.</div>;
+    return <ErrorSkeleton />;
   }
 
   return (
@@ -78,7 +88,8 @@ function CourseRegisPage() {
         <div className="bg-white p-6 shadow-md rounded-md">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <SInfoCard />
+              {/* Pass handleStudentData to SInfoCard */}
+              <SInfoCard onStudentData={handleStudentData} />
               <div className="ml-6 mt-4">
                 <div className="mt-6">
                   <div>
@@ -92,7 +103,7 @@ function CourseRegisPage() {
                   <div>
                     Grand Total:{" "}
                     <span className="font-bold text-red-600">
-                      {grandTotal.toLocaleString()} bahts
+                      {grandTotal} bahts
                     </span>
                   </div>
                   <div>
@@ -111,10 +122,10 @@ function CourseRegisPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 py-4">
                   <Link to="add">
-                    <button className={`${button}`}>Add Course</button>
+                    <button className={`${button} h-full`}>Add Course</button>
                   </Link>
                   <Link to="drop">
-                    <button className={`${button}`}>Drop Course</button>
+                    <button className={`${button} h-full`}>Drop Course</button>
                   </Link>
                   <Link to="/payment" className="sm:col-span-2">
                     <button className={`${button}`}>Payment</button>

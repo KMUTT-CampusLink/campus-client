@@ -8,6 +8,7 @@ import Alert from "../components/Alert";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useActiveCoursesByStudentId } from "../services/queries";
 import { useDeleteEnrollmentDetail } from "../services/mutations";
+import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
 
 function DropCoursePage() {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ function DropCoursePage() {
     data: courses,
     isLoading,
     isError,
-    error,
   } = useActiveCoursesByStudentId(studentId);
   const mutation = useDeleteEnrollmentDetail();
 
@@ -58,28 +58,8 @@ function DropCoursePage() {
     }
   }, [isAlertVisible]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // Handle and display error message from the backend
-  if (isError) {
-    return (
-      <div className={containerDivStyles}>
-        <NavBar />
-        <main className={mainStyles}>
-          <HeadLineCard title="Drop Courses" link="/regis/course/detail" />
-          <div className="divider"></div>
-          <div className="bg-white p-6 shadow-md rounded-md">
-            <Alert
-              severity="error"
-              message={error?.response?.data?.error || "Failed to load data"}
-            />
-          </div>
-        </main>
-      </div>
-    );
-  }
+  if (isLoading) return <LoadingSkeleton />;
+  if (isError) return <ErrorSkeleton />;
 
   return (
     <div className={containerDivStyles}>

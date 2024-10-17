@@ -42,11 +42,11 @@ export const useActivation = () => {
 };
 
 // Custom hook for fetching student data
-export const useStudentData = (userId) => {
+export const useStudentData = (studentId) => {
   return useQuery({
-    queryKey: ["student", userId],
-    queryFn: () => fetchStudentById(userId),
-    enabled: !!userId,
+    queryKey: ["student", studentId],
+    queryFn: () => fetchStudentById(studentId),
+    enabled: !!studentId,
     onError: (error) => {
       console.error("Error fetching student data:", error);
     },

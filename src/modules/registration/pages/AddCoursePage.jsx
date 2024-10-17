@@ -12,6 +12,7 @@ import {
   useSectionByCourseCode,
 } from "../services/queries";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
+import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
 
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
@@ -27,7 +28,7 @@ function AddCoursePage() {
 
   const {
     data: enrollmentHeadData,
-    error,
+    isError,
     isLoading,
   } = useGetEnrollmentHead({
     studentId,
@@ -65,8 +66,8 @@ function AddCoursePage() {
     refetchSections();
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <LoadingSkeleton />;
+  if (isError) return <ErrorSkeleton />;
 
   return (
     <>

@@ -40,7 +40,7 @@ export const activateAccount = (activationData) =>
   post("/users/activate", activationData);
 export const logIn = (credentials) => post("/users/login", credentials);
 
-export const fetchStudentById = (userId) => get(`/regis/student/${userId}`);
+export const fetchStudentById = (studentId) => get(`/regis/student/${studentId}`);
 export const fetchCourseBySearchTerm = async (searchTerm) => {
   if (!searchTerm.trim()) throw new Error("Search term cannot be empty.");
   return get(`/regis/course/search?query=${searchTerm}`);

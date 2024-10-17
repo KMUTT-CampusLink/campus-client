@@ -4,6 +4,7 @@ import NavBar from "../components/NavBarComponents/NavBar";
 import TranscriptCard from "../components/TranscriptCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import { useTranscriptByStudentId } from "../services/queries";
+import { ErrorSkeleton } from "../styles/Skeletons";
 
 function TranscriptPage() {
   const studentId = localStorage.getItem("studentId");
@@ -13,22 +14,7 @@ function TranscriptPage() {
     isError,
   } = useTranscriptByStudentId(studentId);
 
-  if (isError) {
-    return (
-      <div className={containerDivStyles}>
-        <NavBar />
-        <main className={mainStyles}>
-          <HeadLineCard title="Transcript" link="/regis/course/detail" />
-          <div className="divider"></div>
-          <div className="bg-white p-6 shadow-md rounded-md">
-            <p className="text-red-500">
-              Error loading student data. Please try again later.
-            </p>
-          </div>
-        </main>
-      </div>
-    );
-  }
+  if (isError) return <ErrorSkeleton />;
 
   return (
     <div className={containerDivStyles}>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { button } from "../styles/styles";
 import { useEffect, useState } from "react";
 import { useGPAXByStudentId } from "../services/queries";
+import { CardErrorSkeleton } from "../styles/Skeletons";
 
 function GPAXCard({ studentId }) {
   const {
@@ -30,12 +31,7 @@ function GPAXCard({ studentId }) {
   const creditsPrescribed = 134;
   const navigate = useNavigate();
 
-  if (isError)
-    return (
-      <div className="text-red-500" aria-live="assertive">
-        Error Loading GPAX Data.
-      </div>
-    );
+  if (isError) return <CardErrorSkeleton data="gpax" />;
 
   return (
     <div className="bg-gray-200 p-4 rounded shadow">

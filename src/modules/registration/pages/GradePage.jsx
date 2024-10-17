@@ -8,6 +8,7 @@ import GradeCard from "../components/GradeCard";
 import HeadLineCard from "../components/HeadLineCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import { useSemestersByStudentId } from "../services/queries";
+import { ErrorSkeleton } from "../styles/Skeletons";
 
 function GradePage() {
   const studentId = localStorage.getItem("studentId");
@@ -38,9 +39,7 @@ function GradePage() {
     }
   };
 
-  if (isError) {
-    return <div>Error Loading Semester Data.</div>;
-  }
+  if (isError) return <ErrorSkeleton />;
 
   return (
     <div className={containerDivStyles}>
