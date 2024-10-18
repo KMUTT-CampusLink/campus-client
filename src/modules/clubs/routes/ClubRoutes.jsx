@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"; // Import Outlet for nested routes
 import Header from "../components/Header";
-import NavBar from "../../registration/components/NavBar";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import ProfileForm from "../pages/MemberProfilePage";
 import CreatePost from "../pages/CreatePostPage";
 import ViewRequest from "../pages/ViewRequestPage";
