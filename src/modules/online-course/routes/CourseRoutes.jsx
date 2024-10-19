@@ -9,6 +9,7 @@ import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
+import StAllCourses from "../pages/Students/StAllCourses";
 
 export default function CourseRoutes() {
   return [
@@ -29,11 +30,11 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
-          element: <TrTasks />, 
+          element: <TrTasks />,
         },
         {
           path: "discussion",
-          element: <TrDiscussion />, 
+          element: <TrDiscussion />,
         },
         // {
         //   path: "online_exam",
@@ -62,11 +63,15 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
-          element: <StTasks />, 
+          element: <StTasks />,
         },
         {
           path: "discussion",
           element: <StDiscussion />,
+        },
+        {
+          path: "all_courses",
+          element: <StAllCourses />,
         },
         // {
         //   path: "online_exam",
@@ -74,10 +79,9 @@ export default function CourseRoutes() {
         // },
         // {
         //   path: "attendance",
-        //   element: <StAttendance />, 
+        //   element: <StAttendance />,
         // },
       ],
     },
   ];
 }
-
