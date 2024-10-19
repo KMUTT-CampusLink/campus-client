@@ -2,7 +2,8 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
 import { useState } from 'react'
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance.js";
+import EmployeeCard from "../components/EmployeeCard";
 
 // Map faculty names to numbers
 const facultyMapping = {
@@ -26,7 +27,7 @@ const EmployeeAdd = () => {
     firstname: '',
     midname: '',
     lastname: '',
-    faculty: '',
+    faculty_id: '',
     job_title: '',
     position: '',
     salary: '',
@@ -49,7 +50,8 @@ const EmployeeAdd = () => {
   const handleClickback = () => {
     navigate(`/employ`);
   };
-  const handleUpdateClick = () => {
+  const handleUpdateClick = (e) => {
+    e.preventDefault();
     setShowPopup(true);
   };
   const handleClosePopup = () => {
@@ -60,16 +62,18 @@ const EmployeeAdd = () => {
 
     e.preventDefault();
 
-    console.log("Submit button clicked"); // Debugging: Check if this logs
+    console.log("Submit button clicked");
+    // Debugging: Check if this logs
     setShowPopup(false);
 
-    const facultyNumber = facultyMapping[formData.faculty];
+    const facultyNumber = facultyMapping[formData.faculty_id];
+    console.log(facultyNumber) 
 
     const employeeData = {
       firstname: formData.firstname,
       midname: formData.midname,
       lastname: formData.lastname,
-      faculty: facultyNumber,
+      faculty_id: facultyNumber,
       job_title: formData.job_title,
       position: formData.position,
       salary: formData.salary,
@@ -81,10 +85,11 @@ const EmployeeAdd = () => {
     };
 
     try {
-      const response = await axiosInstance.post("/create", employeeData);
+      const response = await axiosInstance.post("/post", employeeData);
 
       if (response.status === 200) {
         console.log('Employee added successfully');
+        setShowPopup(false);
         navigate("/employ");
       } else {
         console.error('Error adding employee:', response.data);
@@ -161,37 +166,37 @@ const EmployeeAdd = () => {
                     <div className="flex flex-col 2xl:flex-row">
                       <div>
                         <label htmlFor="Engineering">Engineering</label>
-                        <input type="radio" value="Engineering" name="faculty" onChange={handleChange} checked={formData.faculty === 'Engineering'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Engineering" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Engineering'} className=" ml-1 mr-5"></input>
                       </div>
                       <div>
                         <label htmlFor="Information_Technology" >Information_Technology</label>
-                        <input type="radio" value="Information_Technology" name="faculty" onChange={handleChange} checked={formData.faculty === 'Information_Technology'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Information_Technology" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Information_Technology'} className=" ml-1 mr-5"></input>
                       </div>
                       <div>
                         <label htmlFor="Science" >Science</label>
-                        <input type="radio" value="Science" name="faculty" onChange={handleChange} checked={formData.faculty === 'Science'} className="ml-1 mr-5"></input>
+                        <input type="radio" value="Science" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Science'} className="ml-1 mr-5"></input>
                       </div>
                       <div>
                         <label htmlFor="Architecture">Architecture</label>
-                        <input type="radio" value="Architecture" name="faculty" onChange={handleChange} checked={formData.faculty === 'Architecture'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Architecture" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Architecture'} className=" ml-1 mr-5"></input>
                       </div>
                     </div>
                     <div className="flex flex-col 2xl:flex-row">
                       <div>
                         <label htmlFor="Liberal Art" >Liberal Art</label>
-                        <input type="radio" value="Liberal Art" name="faculty" onChange={handleChange} checked={formData.faculty === 'Liberal Art'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Liberal Art" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Liberal Art'} className=" ml-1 mr-5"></input>
                       </div>
                       <div>
                         <label htmlFor="Management" >Management</label>
-                        <input type="radio" value="Management" name="faculty" onChange={handleChange} checked={formData.faculty === 'Management'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Management" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Management'} className=" ml-1 mr-5"></input>
                       </div>
                       <div>
                         <label htmlFor="Enviromental" >Enviromental</label>
-                        <input type="radio" value="Enviromental" name="faculty" onChange={handleChange} checked={formData.faculty === 'Enviromental'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Enviromental" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Enviromental'} className=" ml-1 mr-5"></input>
                       </div>
                       <div>
                         <label htmlFor="Education" >Education</label>
-                        <input type="radio" value="Education" name="faculty" onChange={handleChange} checked={formData.faculty === 'Dducation'} className=" ml-1 mr-5"></input>
+                        <input type="radio" value="Education" name="faculty_id" onChange={handleChange} checked={formData.faculty_id === 'Dducation'} className=" ml-1 mr-5"></input>
                       </div>
                     </div>
                   </div>
@@ -233,7 +238,7 @@ const EmployeeAdd = () => {
                   <div className="flex items-center">
                     <input
                       name="salary"
-                      type="text"
+                      type="number"
                       value={formData.salary}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -309,13 +314,13 @@ const EmployeeAdd = () => {
             {/* Buttons Section */}
             <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
               <button onClick={handleClickback} className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Cancel</button>
-              <button type="submit" onClick={handleUpdateClick} className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Add</button>
+              <button type="button" onClick={handleUpdateClick} className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Add</button>
             </div>
           </form>
         </div>
       </main>
 
-      {showPopup && <AddPopUp onClick={handleSumbit} onClose={handleClosePopup} />}
+      {showPopup && <AddPopUp a={handleSumbit} onClose={handleClosePopup} />}
     </div>
   )
 }
