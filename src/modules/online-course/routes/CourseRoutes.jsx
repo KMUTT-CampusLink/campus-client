@@ -37,8 +37,8 @@ export default function CourseRoutes() {
             },
             {
               path: "submission",
-              element: <TrTaskSubmission/>,
-            }
+              element: <TrTaskSubmission />,
+            },
           ],
         },
         {
@@ -90,4 +90,3 @@ export default function CourseRoutes() {
     },
   ];
 }
-
