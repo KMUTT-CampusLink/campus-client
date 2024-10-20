@@ -7,25 +7,39 @@ import {
   faPenToSquare,
   faTrash,
   faPlus,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import UploadPopup from "../../components/Upload_Popup";
 import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
+import CommentPopup from "../../components/CommentPopup";
 
 const StDiscussion = () => {
-  const [materials, setMaterials] = useState([
+  const [discussions, setDiscussions] = useState([
     {
-      title: "Exercise 1.1",
-      date: "12/4/2024",
-      attachments: ["HW1-Individual-Complement"],
+      person: "AKARI KYAW THEIN(66130500801)",
+      title: "#Ch2 1st Complement",
+      timestamp: "30 minutes ago",
+      description:
+        " How does the 1's complement represe- ntation of negative numbers work in binary, and what are its advantages.......",
     },
     {
-      title: "Exercise 1.2(Individual)",
-      date: "12/5/2024",
-      attachments: ["HW2-Individual-2nd Complement"],
+      person: "AKARI KYAW THEIN(66130500801)",
+      title: "#Ch2 1st Complement",
+      timestamp: "30 minutes ago",
+      description:
+        " How does the 1's complement represe- ntation of negative numbers work in binary, and what are its advantages.......",
+    },
+    {
+      person: "AKARI KYAW THEIN(66130500801)",
+      title: "#Ch2 1st Complement",
+      timestamp: "30 minutes ago",
+      description:
+        " How does the 1's complement represe- ntation of negative numbers work in binary, and what are its advantages.......",
     },
   ]);
-
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+
   const [currentMaterial, setCurrentMaterial] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [materialToDelete, setMaterialToDelete] = useState(null);
@@ -53,62 +67,114 @@ const StDiscussion = () => {
           </div>
         </div>
       </div>
-      <div className="py-8 w-full">
-        <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-4">
-          <div className="text-2xl font-bold text-[#ecb45e]">Upload bar</div>
-        </div>
-
-        <div className="flex justify-center items-center w-screen">
-          <div className="border border-black rounded-md w-[379px] h-[249px] max-w-full max-h-full sm:w-[261px] sm:h-[171px] md:w-[379px] md:h-[249px]">
-            <div className="flex flex-col justify-between h-full">
-              <div className="flex flex-col justify-center items-center">
-                <img src={gallery} alt="Image" width={67} height={67} />
-                <div className="border border-black rounded-lg p-4 w-[356px] h-[99px] max-w-full max-h-full sm:w-[241px] sm:h-[67px] md:w-[356px] md:h-[99px] mt-2">
-                  <h2 className="text-lg font-bold"># Title</h2>
-                  <h2
-                    className="text-lg font-bold"
-                    style={{ color: "rgba(0, 0, 0, 0.5)" }}
-                  >
-                    Upload here!
-                  </h2>
-                </div>
-              </div>
-
-              <button className="mt-2 w-full h-8 bg-[#ecb45e] hover:bg-[#d9a24b] rounded-b-lg text-white transition duration-200">
-                <FontAwesomeIcon icon={faPlus} className="mr-2" size="xl" />
-                Upload
+      {!isPopupOpen && (
+        <div className="py-8 w-full">
+          <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-4">
+            <div className="text-2xl font-bold text-[#ecb45e]">Upload bar</div>
+            <div className="flex relative">
+              <button
+                className="relative bg-[#FFFFFF] rounded-lg shadow-lg px-4 py-2"
+                onClick={() => setDropDownOpen(!dropDownOpen)}
+              >
+                <span>Sort by time</span>
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  color="#D4A015"
+                  className="ml-2"
+                />
               </button>
+              {dropDownOpen && (
+                <div className="flex flex-col border-[1px] border-[#BEBEBE] shadow-lg bg-[#FFFFF] absolute top-10 w-full">
+                  <p className="border-b-[1px] border-[#BEBEBE] flex items-center justify-center py-2">
+                    Sort by time
+                  </p>
+                  <p className="border-b-[1px] border-[#BEBEBE] flex items-center justify-center py-2">
+                    Sort by time
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-        </div>
 
-        <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-6 mt-8">
-          <div className="text-2xl font-bold text-[#ecb45e]">
-            Discussion Area
-          </div>
-        </div>
+          <div className="flex justify-center items-center w-screen">
+            <div className="border border-black rounded-md w-[379px] h-[249px] max-w-full max-h-full sm:w-[261px] sm:h-[171px] md:w-[379px] md:h-[249px]">
+              <div className="flex flex-col justify-between h-full">
+                <div className="flex flex-col justify-center items-center">
+                  <img src={gallery} alt="Image" width={67} height={67} />
+                  <div className="border border-black rounded-lg p-4 w-[356px] h-[99px] max-w-full max-h-full sm:w-[241px] sm:h-[67px] md:w-[356px] md:h-[99px] mt-2">
+                    <h2 className="text-lg font-bold"># Title</h2>
+                    <h2
+                      className="text-lg font-bold"
+                      style={{ color: "rgba(0, 0, 0, 0.5)" }}
+                    >
+                      Upload here!
+                    </h2>
+                  </div>
+                </div>
 
-        <div className="flex flex-wrap space-x-8">
-          <div className="border border-black rounded-md w-[334px] h-[213px] max-w-full max-h-full sm:w-[261px] sm:h-[171px] md:w-[334px] md:h-[213px] mb-8">
-            <div className="flex flex-col justify-between h-full">
-              <div className="flex flex-col justify-left items-left m-2">
-                <div>
-                  <img src={profile} alt="Image" width={38} height={38} />
-                </div>
-                <h2 className="text-lg font-bold">#Ch2 1st Complement</h2>
-                <div className="text-gray-800">
-                  How does the 1's complement represe- ntation of negative
-                  numbers work in binary, and what are its advantages.......
-                </div>
+                <button className="mt-2 w-full h-8 bg-[#ecb45e] hover:bg-[#d9a24b] rounded-b-lg text-white transition duration-200">
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" size="xl" />
+                  Upload
+                </button>
               </div>
-
-              <button className="mt-2 w-full h-8 bg-[#ecb45e] hover:bg-[#d9a24b] rounded-b-lg text-white transition duration-200">
-                Comment
-              </button>
             </div>
           </div>
+
+          <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-6 mt-8">
+            <div className="text-2xl font-bold text-[#ecb45e]">
+              Discussion Area
+            </div>
+          </div>
+
+          <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-6 mt-8 flex-wrap">
+            {discussions.map((discussion, index) => {
+              return (
+                <div
+                  key={index}
+                  className="border border-black rounded-md mb-8 w-[100%] sm:w-[30%]"
+                >
+                  <div className="flex flex-col justify-between h-full">
+                    <div className="flex flex-col justify-left items-left m-2">
+                      <div className="flex items-center gap-2">
+                        <div>
+                          <img
+                            src={profile}
+                            alt="Image"
+                            width={38}
+                            height={38}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <h2>{discussion.person}</h2>
+                          <span className="text-[14px] text-[#BEBEBE]">
+                            {discussion.timestamp}
+                          </span>
+                        </div>
+                      </div>
+                      <h2 className="text-lg font-bold my-2">
+                        {discussion.title}
+                      </h2>
+                      <div className="text-gray-800">
+                        {discussion.description}
+                      </div>
+                    </div>
+
+                    <button
+                      className="mt-2 w-full h-8 bg-[#ecb45e] hover:bg-[#d9a24b] rounded-b-lg text-white transition duration-200"
+                      onClick={() => setIsPopupOpen(!isPopupOpen)}
+                    >
+                      Comment
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
+      {isPopupOpen && (
+        <CommentPopup onClose={() => setIsPopupOpen(!isPopupOpen)} />
+      )}
     </div>
   );
 };
