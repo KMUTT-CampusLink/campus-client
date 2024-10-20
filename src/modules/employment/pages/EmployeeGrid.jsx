@@ -5,7 +5,6 @@ import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 
-import dummydata from './employee.json';//dummy data
 
 const EmployeeGrid = () => {
   const [employees, setEmployees] = useState([]);
@@ -13,8 +12,18 @@ const EmployeeGrid = () => {
 
   // Dummy data,replace with API call
   useEffect(() => {
-    setEmployees(dummydata);
+    const fetchData = async () =>
+    {
+      const result = await fetch('http://localhost:3000/api/employ/get');
+      const jsonResult = await result.json()
+      //const array = Object.values(jsonResult)
+      setEmployees(jsonResult);
+    }
+
+    fetchData();
   }, []);
+
+
 
   const handleClick = () => {
     navigate(`/employ/employeeAdd`);

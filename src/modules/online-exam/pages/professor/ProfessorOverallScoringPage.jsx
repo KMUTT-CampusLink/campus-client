@@ -1,13 +1,13 @@
 import React from "react";
-// import NavBar from "../../../registration/components/NavBar";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Participant from "../../components/professor/overrallScoring.jsx/Participant";
 import PublishScoreButton from "../../components/professor/overrallScoring.jsx/PublishScoreButton";
 export default function ProfessorOverallScoringPage() {
   return (
     <>
-      {/* <NavBar /> */}
+      <NavBar />
       {/* Heading */}
-      <div className="flex justify-between items-center px-[26px] py-[35px] lg:px-[200px]">
+      <div className="flex justify-between items-center px-[26px] pt-20 pb-[35px] lg:px-[200px]">
         <div>
           <p className="font-bold text-[#D4A015] text-[30px]">Scoring</p>
           <p className="text-[16px]">Linear Algebra Exam</p>
