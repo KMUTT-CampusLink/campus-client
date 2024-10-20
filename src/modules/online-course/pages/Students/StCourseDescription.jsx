@@ -49,7 +49,7 @@ const StCourseDescription = ({ sideOpen }) => {
           <p>{description}</p>
         </div>
       </div>
-
+      
       <div className="py-8 bg-white max-md:text-xs px-2">
         <div className="max-md:w-full w-3/4 mx-auto text-2xl font-bold text-[#ecb45e] mb-4">
           Learning Outcomes
