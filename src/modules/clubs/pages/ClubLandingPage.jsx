@@ -1,115 +1,36 @@
-import React, { useState } from "react";
-import ClubCard from "../components/ClubCard";
-
-// Mock club data
-const clubData = [
-  {
-    name: "Football Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Basketball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Baseball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Hockey Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Tennis Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Volleyball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Football Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Basketball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Baseball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Hockey Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Tennis Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Volleyball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Football Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Basketball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Baseball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Hockey Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Tennis Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-  {
-    name: "Volleyball Club",
-    image:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  },
-];
+import { useState, useEffect } from "react";
+import axios from "axios";
+import ClubCard from "../components/ClubCard"; // Assuming you have a ClubCard component
 
 function ClubLandingPage() {
-  // State to hold the search input
+  // State to hold the search input and clubs data
   const [searchTerm, setSearchTerm] = useState("");
+  const [clubs, setClubs] = useState([]); // Initialize clubs as an empty array
+
+  // Fetch clubs data from backend
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/clubs/");
+        // Ensure you're getting the correct part of the response
+        setClubs(response.data?.data || []); // Fallback to an empty array if response.data.data is undefined
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
+        setClubs([]); // In case of error, set clubs to an empty array to prevent undefined issues
+      }
+    };
+    fetchClubs();
+  }, []);
 
   // Filter clubs based on the search term
-  const filteredClubs = clubData.filter((club) =>
-    club.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredClubs = Array.isArray(clubs)
+    ? clubs.filter((club) =>
+        club.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : []; // Ensure filteredClubs is an array even if clubs is not
 
   return (
     <>
-      {/* <div className={containerDivStyles}> */}
-      {/* <Navbar /> */}
-      {/* </div> */}
-
       <div className="mx-auto w-full pt-10 pb-6 bg-white flex flex-col items-center justify-center">
         {/* Search Bar */}
         <div className="flex items-center justify-center w-[65%]">
@@ -134,20 +55,21 @@ function ClubLandingPage() {
           <input
             type="text"
             placeholder="Search"
-            className="input input-bordered w-full pl-10" // w-full for small screens
-            value={searchTerm} // Bind input value to searchTerm
-            onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm on input change
+            className="input input-bordered w-full pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
         {/* Displaying filtered clubs */}
         <div className="bg-white mt-12 flex flex-wrap justify-center items-center p-4 relative">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-8 gap-8">
-            {filteredClubs.map((club, index) => (
+            {filteredClubs.map((club) => (
               <ClubCard
-                key={index}
+                key={club.id} // Use a unique key (id)
                 clubName={club.name}
-                imageSrc={club.image}
+                imageSrc={club.club_img}
+                clubId={club.id} // Pass the club id for dynamic URL generation
               />
             ))}
           </div>

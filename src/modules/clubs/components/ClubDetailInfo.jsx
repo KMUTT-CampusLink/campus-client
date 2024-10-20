@@ -1,28 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 
 function ClubDetailInfo() {
+  const {clubId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [title, setTitle] = useState(`What our football club can offer and the benefits`);
-  const [description, setDescription] = useState(`
-    Friendly Matches and Scrimmages: 
-    Regular informal matches between club members or against other university clubs for fun and practice.
-    
-    Skill Development Workshops:
-    Specialized sessions focusing on techniques like dribbling, passing, shooting, and goalkeeping, led by experienced coaches 
-    or guest trainers.
-    
-    Fitness and Conditioning Classes:
-    Group fitness sessions focusing on strength, conditioning, and endurance to help players stay in top physical shape.
-    
-    Inter-Club Tournaments:
-    Organize internal tournaments or friendly leagues between members, with mixed teams competing for fun prizes or bragging rights.
-  `);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-  const [newTitle, setNewTitle] = useState(title);
-  const [newDescription, setNewDescription] = useState(description);
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
 
+  useEffect(() => {
+    const fetchClubDetails = async () => {
+    try{
+      const response = await axios.get(`http://localhost:3000/api/clubs/${clubId}`);
+      setTitle(response.data.data.name);
+      setDescription(response.data.data.description);
+    }catch(err){
+      console.error("Error fetching club details:", err);
+    }
+  };
+    fetchClubDetails();
+  }, [clubId]);
   // Function to handle modal open/close
   const openModal = () => {
     setIsModalOpen(true);
