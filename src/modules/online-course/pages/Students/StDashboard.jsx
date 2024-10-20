@@ -10,7 +10,7 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx
 import { useNavigate, useLocation } from "react-router-dom";
 
 const StDashboard = () => {
-
+  const navigate = useNavigate();
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />
@@ -20,10 +20,16 @@ const StDashboard = () => {
           className="flex mt-16 border-b-[1px] border-black text-lg gap-10 pt-5 
         max-sm:pl-16 max-md:pl-20 max-lg:pl-36 lg:pl-56"
         >
-          <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">
+          <span
+            className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+            onClick={() => navigate("/courses/St")}
+          >
             Dashboard
           </span>
-          <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">
+          <span
+            className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+            onClick={() => navigate("/courses/St/all_courses")}
+          >
             Courses
           </span>
         </div>
@@ -33,6 +39,7 @@ const StDashboard = () => {
             <span className="text-4xl font-bold ">Recent Courses</span>
             <button
               className="text-[#EC5A51] text-md font-bold lg:text-base hover:underline"
+              onClick={() => navigate("/courses/St/all_courses")}
             >
               See All
             </button>
@@ -51,6 +58,7 @@ const StDashboard = () => {
                 imageURL={course.imageUrl}
                 title={course.title}
                 description={course.description}
+                route={"course_description"}
               />
             ))}
           </div>

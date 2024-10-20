@@ -10,6 +10,7 @@ import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
+import StAllCourses from "../pages/Students/StAllCourses";
 
 export default function CourseRoutes() {
   return [
@@ -40,6 +41,7 @@ export default function CourseRoutes() {
               element: <TrTaskSubmission/>,
             }
           ],
+          element: <TrTasks />,
         },
         {
           path: "discussion",
@@ -78,6 +80,10 @@ export default function CourseRoutes() {
           path: "discussion",
           element: <StDiscussion />,
         },
+        {
+          path: "all_courses",
+          element: <StAllCourses />,
+        },
         // {
         //   path: "online_exam",
         //   element: <StOnlineExam />,
@@ -90,4 +96,3 @@ export default function CourseRoutes() {
     },
   ];
 }
-
