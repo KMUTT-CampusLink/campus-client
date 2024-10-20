@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useParams } from "react-router-dom";
 import { transactions } from "../components/Transaction";
+import { dotenv } from 'dotenv';
 
 const PaymentInvoice = () => {
   const { id } = useParams();
@@ -18,14 +19,28 @@ const PaymentInvoice = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    const foundInvoice = transactions.find(
-      (transaction) => transaction.id === id
-    );
-    if (foundInvoice) {
-      setInvoice(foundInvoice);
-    }
-  }, [id]);
+  // ฟังก์ชันสำหรับเรียก API ไปที่ backend เพื่อสร้าง Checkout Session กับ Stripe
+  const handlePayment = () => {
+    fetch(`${import.meta.env.VITE_API_URL}/payment/pay`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ inv: invoice.id }) // ส่ง invoiceId ไปที่ backend
+    })
+    .then(response => response.json())
+    .then(data => {
+      // เปลี่ยนเส้นทางผู้ใช้ไปยัง Stripe Checkout
+      console.log(data);
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <NavBar />
@@ -76,7 +91,10 @@ const PaymentInvoice = () => {
           </table>
         </div>
         <div className="flex justify-end w-full md:w-4/5 mx-auto">
-          <button className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600">
+          <button 
+            className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600"
+            onClick={handlePayment} // เมื่อกดปุ่มจะเรียกฟังก์ชัน handlePayment
+          >
             PAY
           </button>
         </div>
