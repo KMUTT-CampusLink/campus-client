@@ -36,7 +36,7 @@ const StDashboard = () => {
         <Searchbar />
         <div className="w-3/4 m-auto">
           <div className="flex justify-between items-center gap-2 pb-3 lg:pr-10">
-            <span className="text-4xl font-bold">Recent Courses</span>
+            <span className="text-4xl font-bold ">Recent Courses</span>
             <button
               className="text-[#EC5A51] text-md font-bold lg:text-base hover:underline"
               onClick={() => navigate("/courses/St/all_courses")}
@@ -44,9 +44,13 @@ const StDashboard = () => {
               See All
             </button>
           </div>
-          <div
+          
+        </div>
+      </div>
+      <div>
+        <div
             className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
-            justify-items-center mx-auto max-w-7xl"
+            justify-items-center mx-auto w-3/4"
           >
             {courses.map((course) => (
               <CourseCard
@@ -58,11 +62,11 @@ const StDashboard = () => {
               />
             ))}
           </div>
-        </div>
       </div>
 
       <div>
-        <span className="font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+        <span
+          className="font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
           Important Announcement
           <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
         </span>
@@ -86,7 +90,7 @@ const StDashboard = () => {
         </div>
       </div>
 
-      <span className="max-md:text-smfont-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+      <span className="max-md:text-sm font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
         Upcoming events
         <FontAwesomeIcon icon={faFile} className="ml-2" size="lg" />
       </span>

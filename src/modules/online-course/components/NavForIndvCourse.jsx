@@ -32,7 +32,7 @@ const NavForIndvCourse = ({page}) => {
           color="white"
         />
       </button>
-      <div className="flex items-center pr-6 max-md:pr-4">
+      <div className="flex items-center pr-6 max-sm:pr-0 max-md:pr-4">
         <ProfileButton />
       </div>
       <SideForIndvCourse

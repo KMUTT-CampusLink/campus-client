@@ -9,6 +9,7 @@ import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
+import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import StAllCourses from "../pages/Students/StAllCourses";
 
 export default function CourseRoutes() {
@@ -30,6 +31,16 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
+          children: [
+            {
+              path: "",
+              element: <TrTasks />,
+            },
+            {
+              path: "submission",
+              element: <TrTaskSubmission/>,
+            }
+          ],
           element: <TrTasks />,
         },
         {
