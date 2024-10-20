@@ -5,6 +5,7 @@ import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
 import TrTasks from "../pages/Teacher/TrTasks";
 import TrDiscussion from "../pages/Teacher/TrDiscussion";
 import StDashboard from "../pages/Students/StDashboard";
+import StAllCourses from "../pages/Students/StAllCourses"
 import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
@@ -60,7 +61,16 @@ export default function CourseRoutes() {
       children: [
         {
           path: "",
-          element: <StDashboard />,
+          children: [
+            {
+              path: "",
+              element: <StDashboard />,
+            },
+            {
+              path: "all_courses",
+              element: <StAllCourses/>
+            }
+          ],
         },
         {
           path: "course_description",
