@@ -22,13 +22,13 @@ const StAllCourses = () => {
         >
           <span
             className="hover:border-b-4 hover:border-black hover:cursor-pointer"
-            onClick={() => navigate("/courses/st")}
+            onClick={() => navigate("/courses/St")}
           >
             Dashboard
           </span>
           <span
             className="hover:border-b-4 hover:border-black hover:cursor-pointer"
-            onClick={() => navigate("/courses/st/all_courses")}
+            onClick={() => navigate("/courses/St/all_courses")}
           >
             Courses
           </span>
