@@ -8,8 +8,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import UploadPopup from "../../components/Upload_Popup";
 import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 const TrTasks = () => {
+
+  const navigate = useNavigate();
+
+  const toSubmissionTr = (task) => navigate("/courses/Tr/tasks/submission", {state: {task}})
+
+
+
   const [materials, setMaterials] = useState([
     {
       title: "Exercise 1.1",
@@ -100,10 +109,10 @@ const TrTasks = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-gray-100">
+    <div className="w-full min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"tasks"} />
 
-      <div className="max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
+      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
         <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
@@ -135,7 +144,7 @@ const TrTasks = () => {
         </div>
       </div>
 
-      <div className="w-full border-b-2 border-gray-300">
+      <div className="max-md:text-xs w-full border-b-2 border-gray-300">
         <div className="max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-3 gap-4 font-bold py-2 px-2">
           <div>Title</div>
           <div>Attachments</div>
@@ -143,10 +152,10 @@ const TrTasks = () => {
         </div>
       </div>
 
-      <div className="max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
+      <div className="max-md:text-xs max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
         {sortedMaterials.map((material, index) => (
           <div key={index} className="grid grid-cols-3 gap-4 py-4">
-            <div>{material.title}</div>
+            <div onClick={() => toSubmissionTr(material)}>{material.title}</div>
             <div className="flex items-start gap-2 flex-col">
               <div>{material.attachments.join(", ")}</div>
               <div className="flex gap-2">
