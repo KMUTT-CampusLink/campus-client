@@ -113,10 +113,10 @@ const TrCourseMaterials = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-gray-100">
+    <div className="max-md:text-xs w-full min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"materials"} />
 
-      <div className="max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
+      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
         <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
@@ -149,7 +149,7 @@ const TrCourseMaterials = () => {
       </div>
 
       <div className="w-full border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-4 gap-4 font-bold py-2 px-2">
+        <div className="max-sm:text-sm max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-4 gap-4 font-bold py-2 px-2">
           <div>Title</div>
           <div>Date</div>
           <div>Attachments</div>
