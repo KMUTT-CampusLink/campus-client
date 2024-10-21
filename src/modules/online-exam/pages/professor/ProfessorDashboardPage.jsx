@@ -32,7 +32,7 @@ export default function ProfessorDashboardPage() {
                   key={index}
                   questionNo={item[0]}
                   question={item[2]}
-                  choice={item[3]}      // Assuming the choices are at index [3]
+                  choice={item[3]}
                   type={item[1]}
                   className="w-[67%] h-auto"
                 />
