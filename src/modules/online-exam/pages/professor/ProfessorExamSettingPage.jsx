@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import NavBar from "../../../registration/components/NavBar";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import PublishButton from "../../components/professor/ExamSetting/PublishButton";
 import Submit from "../../components/professor/ExamSetting/Submit";
 import DeleteExam from "../../components/professor/ExamSetting/DeleteExamButton";
@@ -9,10 +9,9 @@ export default function ProfessorExamSettingPage() {
   const [passingMarks, setPassingMarks] = useState("");
   return (
     <>
-      {/* <NavBar /> */}
+      <NavBar />
       {/* Heading */}
       <div className=" px-[26px]  lg:px-[200px]">
-
         <div className="flex justify-between py-[35px] ">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Setting</p>

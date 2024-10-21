@@ -1,39 +1,25 @@
-import { React, useState } from "react";
-// import Navbar from "../../../registration/components/NavBar";
+import { useState } from "react";
+
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import PassedChip from "../../components/professor/Scoring/PassedChip";
 import FailedChip from "../../components/professor/Scoring/FailedChip";
 import ProcessingChip from "../../components/professor/Scoring/ProcessingChip";
-import Question from "../../components/student/ExamPage/Question";
+import Question from "../../components/professor/Scoring/Question";
+
 //Mock Data
-// const questionNoMock = [1, 2, 3, 4, 5];
 const questionMock = [
   [1, "multipleChoice", "1Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis odit commodi doloribus repellat. Incidunt unde, deserunt sapiente id earum officia velit ad aliquid libero, reprehenderit eos et officiis expedita voluptate!", [1, 2, 3, 4]],
   [2, "checkList", "2Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis odit commodi doloribus repellat. Incidunt unde, deserunt sapiente id earum officia velit ad aliquid libero, reprehenderit eos et officiis expedita voluptate!", [1, 2, 3, 4]],
   [3, "essay", "3Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis odit commodi doloribus repellat. Incidunt unde, deserunt sapiente id earum officia velit ad aliquid libero, reprehenderit eos et officiis expedita voluptate!", []],
   [4, "multipleChoice", "4Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis odit commodi doloribus repellat. Incidunt unde, deserunt sapiente id earum officia velit ad aliquid libero, reprehenderit eos et officiis expedita voluptate!", [1, 2, 3, 4]],
 ];
-// const questionChoiceMock = [
-//   [1, 2, 3, 4],
-//   [1, 2, 3, 4],
-//   [],
-//   [1, 2, 3, 4],
-//   [1, 2, 3, 4],
-// ];
-// const questtionTypeMock = [
-//   "multipleChoice",
-//   "checkList",
-//   "essay",
-//   "multipleChoice",
-//   "checkList",
-// ];
 
 export default function ProfessorScoringPage() {
   const [activeButton, setActiveButton] = useState("multipleChoice");
   const [studentQuestion, setStudentQuestion] = useState(0);
-  // console.log(questionMock[0][0]);
   return (
     <>
-      {/* <Navbar /> */}
+      <NavBar />
       {/* Heading */}
       <div className="px-[26px] py-[35px] lg:px-[200px]">
         <div className="flex justify-between items-center ">

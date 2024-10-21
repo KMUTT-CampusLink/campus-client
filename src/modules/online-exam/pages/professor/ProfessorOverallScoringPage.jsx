@@ -1,11 +1,11 @@
 import React from "react";
-// import NavBar from "../../../registration/components/NavBar";
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Participant from "../../components/professor/overrallScoring.jsx/Participant";
 import PublishScoreButton from "../../components/professor/overrallScoring.jsx/PublishScoreButton";
 export default function ProfessorOverallScoringPage() {
   return (
     <>
-      {/* <NavBar /> */}
+      <NavBar />
       {/* Heading */}
       <div className="px-[26px]  lg:px-[200px]">
         <div className="flex justify-between items-center py-[35px]">

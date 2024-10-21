@@ -12,6 +12,7 @@ import AdministratorMaintenanceList from "../pages/administrator/AdministratorMa
 import AdministratorMaintenanceRequest from "../pages/administrator/AdministratorMaintenanceRequest";
 import AdministratorMyBookingList from "../pages/administrator/AdministratorMyBookingList";
 import AdministratorMyBookingSubmit from "../pages/administrator/AdministratorMyBookingSubmit";
+import AdministratorLostAndFoundForm from "../pages/administrator/AdministratorLostAndFoundForm";
 
 export default function SecureRoutes() {
   return [
@@ -70,6 +71,10 @@ export default function SecureRoutes() {
           path: "mybookinglist",
           element: <AdministratorMyBookingList />,
         },
+        {
+          path: "lostandfoundform",
+          element: <AdministratorLostAndFoundForm/>,
+        }
       ],
     },
   ];

@@ -2,15 +2,17 @@ import LoginForm from "../components/FormComponents/LoginForm";
 import SvgBottomRight from "../components/SvgBottomRight";
 import SvgTopLeft from "../components/SvgTopLeft";
 import { logoHead, authContainer } from "../styles/styles";
+
 function LoginPage() {
   return (
-    <div className={`${authContainer}`}>
-      <SvgTopLeft />
-      <SvgBottomRight />
-      <h2 className={`${logoHead}`}>CampusLink</h2>
-      <div className="z-10">
+    <div className={authContainer}>
+      <SvgTopLeft aria-hidden="true" />
+      <SvgBottomRight aria-hidden="true" />
+
+      <main className="z-10">
+        <h2 className={logoHead}>CampusLink</h2>
         <LoginForm />
-      </div>
+      </main>
     </div>
   );
 }
