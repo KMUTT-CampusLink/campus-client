@@ -1,215 +1,202 @@
-import { Flex, DatePicker, Row, Col, Button, Table } from "antd";
 import { useState } from "react";
-import moment from "moment";
-import { SearchOutlined, FormOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const useAttendance = () => {
-  const [h1] = useState("Attendance Page");
   const [selectedDate, setSelectedDate] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statuses, setStatuses] = useState([
+    {
+      date: "2024-10-12",
+      studentName: "John Brown",
+      studentId: "S12345",
+      status: "Present",
+    },
+    {
+      date: "2024-10-12",
+      studentName: "Jim Green",
+      studentId: "S12346",
+      status: "Absent",
+    },
+  ]);
   const navigate = useNavigate();
 
   const items = [
-    {
-      label: (
-        <span
-          style={{
-            fontFamily: "Georama, sans-serif",
-            fontWeight: "600",
-            fontSize: "16px",
-          }}
-        >
-          Attendance
-        </span>
-      ),
-      key: "Attendance",
-    },
-    {
-      label: (
-        <span
-          style={{
-            fontFamily: "Georama, sans-serif",
-            fontWeight: "600",
-            fontSize: "16px",
-          }}
-        >
-          QR CODE
-        </span>
-      ),
-      key: "QR CODE",
-    },
+    { label: "Attendance", key: "Attendance" },
+    { label: "QR CODE", key: "QR CODE" },
   ];
 
-  const handleMenuClick = (e) => {
-    console.log("Menu item clicked:", e.key);
-    if (e.key === "Attendance") {
+  const handleMenuClick = (key) => {
+    if (key === "Attendance") {
       navigate("/attendance");
-    } else if (e.key === "qQR CODE") {
-      navigate("/qr");
+    } else if (key === "QR CODE") {
+      navigate("/attendance/qr");
     }
   };
 
+  const handleSearch = () => {
+    console.log(`Searching for: ${searchQuery}`);
+    // Add the actual search logic here
+  };
+
   const AttendanceDetail = () => (
-    <Flex vertical>
-      <span
-        style={{
-          fontFamily: "Geologica",
-          fontWeight: "bold",
-          fontSize: "30px",
-          color: "#F69800",
-        }}
-      >
-        About classroom
+    <div className="flex flex-col">
+      <span className="text-2xl font-bold text-orange-500">
+        About Classroom
       </span>
-      <Flex
-        vertical
-        style={{
-          fontFamily: "Open Sans",
-          fontWeight: "600",
-          fontSize: "18px",
-          color: "#000000",
-        }}
-      >
-        <span>CSC-230 Computer Architecture & Design</span>
-        <span>Lecturer - Arjan xxxxxxxxx</span>
-        <span>Time - 1:30 to 4:30 PM (Thursday)</span>
-      </Flex>
-    </Flex>
+      <div className="text-lg font-semibold">
+        <div>CSC-230 Computer Architecture & Design</div>
+        <div>Lecturer - Arjan xxxxxxxx</div>
+        <div>Time - 1:30 to 4:30 PM (Thursday)</div>
+      </div>
+    </div>
   );
 
   const chooseDate = () => {
-    const handleDateChange = (date, dateString) => {
+    const handleDateChange = (date) => {
       setSelectedDate(date);
-      console.log("Selected Date:", dateString);
-    };
-
-    const commonStyle = {
-      fontFamily: "Georama, sans-serif",
-      fontWeight: 400,
-      fontSize: "16px",
-      borderRadius: "10px",
-      height: "5vh",
     };
 
     return (
-      <Flex vertical>
-        <span
-          style={{
-            fontFamily: "Geologica",
-            fontWeight: "bold",
-            fontSize: "30px",
-            color: "#F69800",
-          }}
-        >
-          Choose Date
-        </span>
-        <Row align="middle" gutter={16} style={{ marginTop: "20px" }}>
-          <Col span={12}>
-            <DatePicker
-              onChange={handleDateChange}
-              format="YYYY-MM-DD"
-              value={selectedDate ? moment(selectedDate) : null}
-              style={{ ...commonStyle, width: "80%" }}
-              placeholder="Select Date"
+      <div className="flex flex-col">
+        <span className="text-2xl font-bold text-orange-500">Choose Date</span>
+        <div className="flex items-center gap-4 mt-4">
+          <input
+            type="date"
+            className="border border-gray-300 rounded-md p-2 w-1/2"
+            onChange={(e) => handleDateChange(e.target.value)}
+            value={
+              selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : ""
+            }
+          />
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search"
+              className="outline-none rounded-md border border-gray-300 p-2 pl-4 pr-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </Col>
-          <Col span={12}>
-            <Button
-              type="primary"
-              style={{
-                ...commonStyle,
-                width: "20%",
-                color: "white",
-                backgroundColor: "#F69800",
-              }}
-            >
-              Search
-              <SearchOutlined style={{ marginLeft: "8px", color: "white" }} />
-            </Button>
-          </Col>
-        </Row>
-      </Flex>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+              onClick={handleSearch}
+            />
+          </div>
+        </div>
+      </div>
     );
   };
 
   const table = () => {
-    const columns = [
-      { title: "Date", dataIndex: "date", key: "date" },
-      { title: "Student Name", dataIndex: "studentName", key: "studentName" },
-      { title: "Student ID", dataIndex: "studentId", key: "studentId" },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-        render: (text) => (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span style={{ marginRight: "8px" }}>{text}</span>
-            <FormOutlined style={{ color: "#864E41" }} />
-          </div>
-        ),
-      },
-    ];
+    // const data = [
+    //   {
+    //     date: "2024-10-12",
+    //     studentName: "John Brown",
+    //     studentId: "S12345",
+    //     status: "Present",
+    //   },
+    //   {
+    //     date: "2024-10-12",
+    //     studentName: "Jim Green",
+    //     studentId: "S12346",
+    //     status: "Absent",
+    //   },
+    // ];
 
-    const data = [
-      {
-        key: "1",
-        date: "2024-10-12",
-        studentName: "John Brown",
-        studentId: "S12345",
-        status: "Present",
-      },
-      {
-        key: "2",
-        date: "2024-10-12",
-        studentName: "Jim Green",
-        studentId: "S12346",
-        status: "Absent",
-      },
-      {
-        key: "3",
-        date: "2024-10-12",
-        studentName: "Joe Black",
-        studentId: "S12347",
-        status: "Late",
-      },
-    ];
+    // const [statuses, setStatuses] = useState(data);
+
+    const handleStatusChange = (index, newStatus) => {
+      const updatedStatuses = [...statuses];
+      updatedStatuses[index].status = newStatus;
+      setStatuses(updatedStatuses);
+    };
 
     return (
-      <Flex vertical>
-        <span
-          style={{
-            fontFamily: "Geologica",
-            fontWeight: "bold",
-            fontSize: "30px",
-            color: "#F69800",
-          }}
-        >
+      <div className="flex flex-col mt-4">
+        <span className="text-2xl font-bold text-orange-500">
           Attendance Check
         </span>
-        <Table
-          columns={columns}
-          dataSource={data}
-          style={{ marginTop: "20px", width: "100%", maxWidth: "75vw" }}
-          pagination={false}
-        />
-      </Flex>
+        <table className="table w-9/10 mt-4 rounded-lg overflow-hidden">
+          <thead className="bg-[#F69800]">
+            <tr>
+              <th className="text-white">Date</th>
+              <th className="text-white">Student Name</th>
+              <th className="text-white">Student ID</th>
+              <th className="text-white">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {statuses.map((row, index) => (
+              <tr key={index}>
+                <td>{row.date}</td>
+                <td>{row.studentName}</td>
+                <td>{row.studentId}</td>
+                <td className="flex justify-between">
+                  {/* Show Status in corresponding color */}
+                  <span
+                    className={`${
+                      row.status === "Present"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {row.status}
+                  </span>
+
+                  {/* Custom SVG Icon to trigger dropdown */}
+                  <div className="relative dropdown dropdown-left">
+                    <label tabIndex={0} className="cursor-pointer">
+                      <svg
+                        width="30"
+                        height="26"
+                        viewBox="0 0 30 26"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17.88 5.24806L21.445 8.33772M8.75 7.58372H5C4.66848 7.58372 4.35054 7.69786 4.11612 7.90103C3.8817 8.10419 3.75 8.37974 3.75 8.66706V19.5004C3.75 19.7877 3.8817 20.0633 4.11612 20.2664C4.35054 20.4696 4.66848 20.5837 5 20.5837H18.75C19.0815 20.5837 19.3995 20.4696 19.6339 20.2664C19.8683 20.0633 20 19.7877 20 19.5004V14.6254M23.0113 3.88956C23.2455 4.09247 23.4313 4.33339 23.558 4.59855C23.6848 4.86371 23.75 5.14791 23.75 5.43493C23.75 5.72195 23.6848 6.00616 23.558 6.27132C23.4313 6.53648 23.2455 6.77739 23.0113 6.98031L14.4562 14.3946L10 15.1671L10.8913 11.305L19.4463 3.89064C19.6802 3.68756 19.958 3.52644 20.2639 3.41651C20.5698 3.30658 20.8976 3.25 21.2287 3.25C21.5599 3.25 21.8877 3.30658 22.1936 3.41651C22.4995 3.52644 22.7773 3.68756 23.0113 3.89064V3.88956Z"
+                          stroke="#864E41"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </label>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32"
+                    >
+                      <li>
+                        <a
+                          className="text-green-500"
+                          onClick={() => handleStatusChange(index, "Present")}
+                        >
+                          Present
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="text-red-500"
+                          onClick={() => handleStatusChange(index, "Absent")}
+                        >
+                          Absent
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
   };
 
-  return {
-    h1,
-    items,
-    handleMenuClick,
-    AttendanceDetail,
-    chooseDate,
-    table,
-  };
+  return { items, handleMenuClick, AttendanceDetail, chooseDate, table };
 };
 
 export default useAttendance;
