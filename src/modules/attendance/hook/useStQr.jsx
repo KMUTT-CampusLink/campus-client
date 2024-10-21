@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const useQr = () => {
-  const [h1] = useState("QR Page");
+const useStQr = () => {
+  const [h1] = useState("STQR Page");
   const navigate = useNavigate();
 
   const items = [
@@ -19,7 +19,7 @@ const useQr = () => {
   };
 
  
-  function detail() {
+  function stDetail() {
     return (
       <div className="flex flex-col">
       <span className="text-2xl font-bold text-orange-500">
@@ -35,13 +35,13 @@ const useQr = () => {
   }
 
   
-  function qrButton() {
+  function stQrButton() {
     return (
       <button
         className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-1/6"
-        onClick={() => console.log("Generating QR Code...")} // Will replace with actual QR code generation logic
+        onClick={() => console.log("Scan QR Code...")} // Will replace with actual QR code generation logic
       >
-        Generate QR CODE
+        Scan QR CODE
         <svg
           width="22"
           height="22"
@@ -63,9 +63,9 @@ const useQr = () => {
     h1,
     items,
     handleMenuClick,
-    detail,
-    qrButton,
+    stDetail,
+    stQrButton,
   };
 };
 
-export default useQr;
+export default useStQr;
