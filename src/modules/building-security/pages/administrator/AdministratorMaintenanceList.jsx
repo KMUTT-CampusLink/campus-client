@@ -1,3 +1,5 @@
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+
 
 
 export default function AdministratorMaintenanceList() {
