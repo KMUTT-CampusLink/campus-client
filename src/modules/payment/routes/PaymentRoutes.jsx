@@ -4,7 +4,6 @@ import PaymentInvoice from "../pages/PaymentInvoice";
 import CheckoutSuccess from "../pages/CheckoutSuccess";
 import CheckoutCancel from "../pages/CheckoutCancel";
 
-
 export default function PaymentRoutes() {
   return [
     {
@@ -20,7 +19,7 @@ export default function PaymentRoutes() {
       element: <PaymentInvoice />,
     },
     {
-      path: "/payment/checkout-success/:session_id", // เพิ่มการรับ session_id จาก URL
+      path: "/payment/checkout-success", // เปลี่ยนเส้นทางให้รับ query parameter แทน dynamic segment
       element: <CheckoutSuccess />,
     },
     {
@@ -29,4 +28,3 @@ export default function PaymentRoutes() {
     },
   ];
 }
-

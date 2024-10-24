@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { dotenv } from 'dotenv';
-//dotenv.config();
 
 const CheckoutSuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
