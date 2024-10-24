@@ -21,7 +21,7 @@ export default function ProfessorScoringPage() {
     <>
       <NavBar />
       {/* Heading */}
-      <div className="px-[26px] py-[35px] lg:px-[200px]">
+      <div className="px-[26px] py-[35px] lg:px-[200px] pt-20">
         <div className="flex justify-between items-center ">
           <div>
             <p className="font-bold text-[#D4A015] text-[22px] lg:text-[30px]">
