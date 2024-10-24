@@ -1,24 +1,21 @@
 import React from "react";
 
-export default function LostAndFoundList() {
+export default function MyItemList() {
   const requests = [
     {
       author: "Chawisa",
-      item: "Backpack",
       room: "CB305",
       detail: "It's pink backpack with my name",
       status: "Found",
     },
     {
       author: "Chawisa",
-      item: "Slipper",
       room: "CB306",
       detail: "It's pink backpack with my name",
       status: "Received",
     },
     {
       author: "Chawisa",
-      item: "Phone",
       room: "CB306",
       detail: "It's pink backpack with my name",
       status: "Searching...",
@@ -39,9 +36,17 @@ export default function LostAndFoundList() {
   };
 
   const pageStyles = {
+    outerContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginLeft: "200px",
+      height: "100vh", // Full viewport height for vertical centering
+      // backgroundColor: "#f0f0f0", // Background color for the page
+    },
     container: {
       maxWidth: "1300px",
-      margin: "50px auto",
+      margin: "0 auto",
       padding: "40px",
       backgroundColor: "#ffffff",
       borderRadius: "12px",
@@ -56,7 +61,7 @@ export default function LostAndFoundList() {
     },
     tableHeader: {
       display: "grid",
-      gridTemplateColumns: "2fr 2fr 1fr 4fr 1fr",
+      gridTemplateColumns: "2fr 1fr 4fr 1fr",
       fontWeight: "bold",
       textAlign: "left",
       padding: "10px",
@@ -66,7 +71,7 @@ export default function LostAndFoundList() {
     },
     requestRow: {
       display: "grid",
-      gridTemplateColumns: "2fr 2fr 1fr 4fr 1fr",
+      gridTemplateColumns: "2fr 1fr 4fr 1fr",
       alignItems: "center",
       padding: "15px",
       marginBottom: "10px",
@@ -88,34 +93,74 @@ export default function LostAndFoundList() {
     },
   };
 
+  // Responsive media query styles
+  const mediaQueryStyles = `
+    @media (max-width: 1200px) {
+      .requestRow {
+        grid-template-columns: 2fr 1fr 3fr 1fr;
+      }
+    }
+    @media (max-width: 992px) {
+      .requestRow {
+        grid-template-columns: 1fr 1fr 3fr;
+      }
+      .status {
+        justify-content: center;
+      }
+    }
+    @media (max-width: 768px) {
+      .tableHeader, .requestRow {
+        grid-template-columns: 1fr;
+      }
+      .requestRow {
+        padding: 10px;
+        grid-row-gap: 10px;
+      }
+      .status {
+        text-align: center;
+      }
+    }
+    @media (max-width: 576px) {
+      .header {
+        font-size: 20px;
+      }
+      .requestRow {
+        font-size: 14px;
+        padding: 8px;
+      }
+    }
+  `;
+
   return (
-    <div style={pageStyles.container}>
-      <h1 style={pageStyles.header}>Lost And Found List</h1>
+    <div style={pageStyles.outerContainer}>
+      <div style={pageStyles.container}>
+        <h1 style={pageStyles.header} className="header">Lost And Found List</h1>
 
-      {/* Table Header */}
-      <div style={pageStyles.tableHeader}>
-        <div>Author</div>
-        <div>Items</div>
-        <div>Room</div>
-        <div>Detail</div>
-        <div>Status</div>
-      </div>
+        <style>{mediaQueryStyles}</style>
 
-      {/* Request Rows */}
-      {requests.map((request, index) => (
-        <div key={index} style={pageStyles.requestRow}>
-          <div>{request.author}</div>
-          <div>{request.item}</div>
-          <div>{request.room}</div>
-          <div>{request.detail}</div>
-          <div style={getStatusStyle(request.status)}>
-            <span style={pageStyles.statusText}>{request.status}</span>
-            <span style={pageStyles.icon} onClick={() => console.log("Edit")}>
-              ✏️
-            </span>
-          </div>
+        {/* Table Header */}
+        <div style={pageStyles.tableHeader} className="tableHeader">
+          <div>Author</div>
+          <div>Room</div>
+          <div>Detail</div>
+          <div>Status</div>
         </div>
-      ))}
+
+        {/* Request Rows */}
+        {requests.map((request, index) => (
+          <div key={index} style={pageStyles.requestRow} className="requestRow">
+            <div>{request.author}</div>
+            <div>{request.room}</div>
+            <div>{request.detail}</div>
+            <div style={getStatusStyle(request.status)} className="status">
+              <span style={pageStyles.statusText}>{request.status}</span>
+              <span style={pageStyles.icon} onClick={() => console.log("Edit")}>
+                ✏️
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
