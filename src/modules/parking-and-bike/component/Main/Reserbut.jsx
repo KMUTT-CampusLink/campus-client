@@ -1,6 +1,7 @@
 import  { useState, useRef } from 'react';
 import Reserpop from '../Reservation/Reserpop';
-
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function Reserbut() {
     const [isComponentVisible, setIsComponentVisible] = useState(false);
     const reserveRef = useRef(null);
@@ -18,23 +19,10 @@ function Reserbut() {
     return (
         <>
             <button
-                className="flex bg-red-500 text-white w-10 h-10 mr-2 rounded-full justify-center"
+                className="flex bg-red-500 text-white w-10 h-10 mr-2 rounded-full justify-center items-center"
                 onClick={toggleComponent}
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="w-6 h-6 mt-2"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 5l7 7-7 7"
-                    />
-                </svg>
+                <FontAwesomeIcon className="w-6 h-6" icon={faChevronRight} />
             </button>
 
             {isComponentVisible && (
@@ -45,7 +33,7 @@ function Reserbut() {
                     <div ref={reserveRef} className="relative z-50">
                         <Reserpop />
                     </div>
-                </div>
+                 </div>
             )}
         </>
     );

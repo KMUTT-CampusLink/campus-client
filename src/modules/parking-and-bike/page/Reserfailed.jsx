@@ -1,7 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import NavBar from '../../registration/components/NavBarComponents/NavBar'
 function Reserfailed() {
   return (
     <>
+     <NavBar/>
     <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col justify-between items-center gap-9 border-2 px-24 py-20 rounded-2xl">
             <div>
