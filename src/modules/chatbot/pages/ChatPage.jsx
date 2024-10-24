@@ -75,7 +75,7 @@ const ChatPage = () => {
     <div className = " min-w-screen min-h-screen">
         <NavBar />
         {/* main div for chat */}
-        <div className = {` mx-auto max-w-7xl pt-16 sm:pt-10 md:pt-8 pb-6 sm:pb-4 md:pb-0 w-full sm:w-[90%] h-screen rounded-t-xl flex flex-col items-center justify-between`}>
+        <div className = {` mx-auto max-w-7xl pt-16 sm:pt-10 md:pt-6 pb-6 sm:pb-4 md:pb-0 w-full sm:w-[90%] h-screen rounded-t-xl flex flex-col items-center justify-between`}>
             {/* messaging area  */}
             <div className= { ` w-full sm:w-5/6 flex flex-col h-[80%] ${startChat? `justify-between py-0 sm:py-2 md:py-4`: `justify-around py-8 sm:py-12 md:py-16`} `}>
                 {/* bot profile div  */}
@@ -86,7 +86,7 @@ const ChatPage = () => {
                 {loading ? <div>
                     <p className="text-center font-bold text-2xl sm:text-4xl md:text-5xl">Loading FAQs...</p>
                 </div> : <div className={` w-full ${startChat? `min-h-[10%] p-0`: `h-[60%] sm:h-[65%] md:h-[70%] p-10`} flex justify-center items-center`}>
-                    <div className={`gap-5 flex flex-col p-8 sm:p-10 md:p-12`}>
+                    <div className={`gap-5 flex flex-col p-8 sm:p-10`}>
                         <p className = {`${startChat ? `hidden` : `visible`} font-bold text-xl`}>Try asking these questions!</p>
                         <FAQs textRef={textRef} dummyFaqs = {dummyFaqs} startChat = {startChat} setButtonAble = {setButtonAble}/>
                     </div>
@@ -104,7 +104,7 @@ const ChatPage = () => {
                     <div className='flex w-full h-fit'>
                         <textarea
                         placeholder="How may I help you..."
-                        className="w-full px-4 py-3 rounded-xl min-h-[1rem] sm:min-h-[1.5rem] md:min-h-[2rem] max-h-[3.75rem] sm:max-h-[4rem] border-none outline-none font-semibold text-black
+                        className="w-full px-4 py-3 rounded-xl min-h-[1rem] sm:min-h-[1.5rem] max-h-[3.75rem] sm:max-h-[4rem] border-none outline-none font-semibold text-black
                         text-md sm:text-lg placeholder-black placeholder-opacity-65
                         resize-none overflow-hidden bg-[#D9D9D9]"
                         onChange={autoResize}
