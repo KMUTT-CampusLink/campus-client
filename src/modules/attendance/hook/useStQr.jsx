@@ -15,7 +15,7 @@ const useStQr = () => {
       navigate("/attendance");
     } else if (key === "QR CODE") {
       navigate("/attendance/qr");
-    }
+    } 
   };
 
  
@@ -34,7 +34,7 @@ const useStQr = () => {
     );
   }
 
-  
+
   function stQrButton() {
     return (
       <button
