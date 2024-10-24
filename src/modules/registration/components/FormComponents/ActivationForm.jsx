@@ -1,37 +1,65 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useActivation } from "../../services/queries";
 import FormInput from "./FormInput";
 import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
+
 function ActivationForm() {
-  const [email, setEmail] = useState("");
-  const [campusEmail, setCampusEmail] = useState("");
+  const [personal_email, setEmail] = useState("");
+  const [campus_email, setCampusEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const activationMutation = useActivation();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
-    console.log(
-      "Personal Email:",
-      email,
-      "Campus Email:",
-      campusEmail,
-      "Password:",
-      password
-    );
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    setIsLoading(true); // Activate loading state
+    try {
+      await activationMutation.mutateAsync({
+        personal_email,
+        campus_email,
+        password,
+      });
+
+      console.log("Account activated successfully");
+      navigate("/regis/login");
+    } catch (error) {
+      console.error("Activation error:", error);
+      setError(
+        error.response?.data?.message ||
+          "An error occurred during activation. Please try again."
+      );
+    } finally {
+      setIsLoading(false); // Deactivate loading state
+    }
   };
 
   return (
     <div className={`${formBg}`}>
       <h3 className={`${formHead}`}>Activate Your Account</h3>
+
+      {/* Display error message if it exists */}
+      {error && <div className="text-red-500">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         {/* Campus Email */}
@@ -39,16 +67,16 @@ function ActivationForm() {
           name="Campus Email"
           type="email"
           placeholder="campus@edu.com"
-          value={campusEmail}
+          value={campus_email}
           onChange={(e) => setCampusEmail(e.target.value)}
         />
 
         {/* Personal Email */}
         <FormInput
-          name="Email"
+          name="Personal Email"
           type="email"
           placeholder="personal@mail.com"
-          value={email}
+          value={personal_email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
@@ -75,8 +103,12 @@ function ActivationForm() {
         />
 
         {/* Submit Button */}
-        <button type="submit" className={`${button}`}>
-          Activate
+        <button
+          type="submit"
+          className={`${button}`}
+          disabled={isLoading} // Disable button when loading
+        >
+          {isLoading ? "Activating..." : "Activate"}
         </button>
 
         <SmallNavText to="/regis/login" name="Log in to Your Account?" />

@@ -1,12 +1,20 @@
-const Test = () => {
-  return <h1>Attendance</h1>;
-};
+import AttendancePage from "../page/AttendancePage";
+import QrPage from "../page/QrPage";
+import StQrPage from "../page/StQrPage";
 
 export default function AttendRoutes() {
   return [
     {
       path: "",
-      element: <Test />,
+      element: <AttendancePage />,
+    },
+    {
+      path: "qr",
+      element: <QrPage />,
+    },
+    {
+      path: "stqr",
+      element: <StQrPage />,
     },
   ];
 }
