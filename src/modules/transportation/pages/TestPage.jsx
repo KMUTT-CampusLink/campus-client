@@ -1,4 +1,7 @@
-import React from "react";
+import { React, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { axiosInstance } from "../services/axiosInstance";
 
 const routes = [
   { id: 1, name: "Route 1", description: "" },
@@ -9,6 +12,22 @@ const routes = [
 ];
 
 const TestPage = () => {
+  const location = useLocation(); //locattion object contains information about the current URL, location.state is used to pass data between routes
+  const state = location.state;
+  console.log(state);
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await axiosInstance
+        .post("transport/user/routesConnectingStops", {
+          start_stop_id: state.start_stop_id,
+          end_stio_id: state.end_stio_id,
+        })
+        .then((res) => res.data);
+      console.log(data);
+    };
+    fetch();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-10 flex justify-center items-center">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -5,22 +5,27 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../services/axiosInstance";
 
 function HomePage() {
-  const [fromRoute, setFromRoute] = useState("");
-  const [toRoute, setToRoute] = useState("");
-  const [transportMode, setTransportMode] = useState("");
+  const [fromStop, setFromStop] = useState(2);
+  const [toStop, setToStop] = useState(3);
 
+  const [transportMode, setTransportMode] = useState("");
   const handleSelectMode = (mode) => {
     setTransportMode(mode);
     console.log(`Selected Mode: ${mode}`);
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      const data = await axiosInstance.get('transport/user/routesAtStop').then(res => res.data);
-      console.log(data);
-    }
-    fetch();
-  }, [])
+  // useEffect(() => {
+  // const fetch = async () => {
+  //   const data = await axiosInstance
+  //     .post("transport/user/routesConnectingStops", {
+  //       start_stop_id: fromStop,
+  //       end_stio_id: toStop,
+  //     })
+  //     .then((res) => res.data);
+  //   console.log(data);
+  // };
+  //   fetch();
+  // }, []);
 
   return (
     <div className="min-h-screen">
@@ -39,8 +44,8 @@ function HomePage() {
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
                 <input
                   type="text"
-                  value={fromRoute}
-                  onChange={(e) => setFromRoute(e.target.value)}
+                  value={fromStop}
+                  onChange={(e) => setFromStop(e.target.value)}
                   placeholder="From Route"
                   className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
                 />
@@ -51,8 +56,8 @@ function HomePage() {
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
                 <input
                   type="text"
-                  value={toRoute}
-                  onChange={(e) => setToRoute(e.target.value)}
+                  value={toStop}
+                  onChange={(e) => setToStop(e.target.value)}
                   placeholder="To Route"
                   className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
                 />
@@ -65,7 +70,9 @@ function HomePage() {
             {/* Bus Icon */}
             <div
               className={`cursor-pointer p-4 rounded-full shadow-lg ${
-                transportMode === "bus" ? "bg-orange-600 text-white" : "bg-gray-100"
+                transportMode === "bus"
+                  ? "bg-orange-600 text-white"
+                  : "bg-gray-100"
               }`}
               onClick={() => handleSelectMode("bus")}
             >
@@ -75,7 +82,9 @@ function HomePage() {
             {/* Mini Van Icon */}
             <div
               className={`cursor-pointer p-4 rounded-full shadow-lg ${
-                transportMode === "van" ? "bg-orange-600 text-white" : "bg-gray-100"
+                transportMode === "van"
+                  ? "bg-orange-600 text-white"
+                  : "bg-gray-100"
               }`}
               onClick={() => handleSelectMode("van")}
             >
@@ -85,7 +94,9 @@ function HomePage() {
             {/* Bicycle Icon */}
             <div
               className={`cursor-pointer p-4 rounded-full shadow-lg ${
-                transportMode === "bicycle" ? "bg-orange-600 text-white" : "bg-gray-100"
+                transportMode === "bicycle"
+                  ? "bg-orange-600 text-white"
+                  : "bg-gray-100"
               }`}
               onClick={() => handleSelectMode("bicycle")}
             >
@@ -103,9 +114,14 @@ function HomePage() {
           </div>
 
           {/* Booking Schedule Button */}
-          <Link to="/transport/booking">
+          <Link
+            to={{
+              pathname: "/transport/test",
+            }}
+            state={{ start_stop_id: fromStop, end_stop_id: toStop }}
+          >
             <button className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300">
-              CONFIRM ROUTE
+              Search routes
             </button>
           </Link>
         </div>
