@@ -7,7 +7,7 @@ export default function ProfessorOverallScoringPage() {
     <>
       <NavBar />
       {/* Heading */}
-      <div className="px-[26px]  lg:px-[200px]">
+      <div className="px-[26px] lg:px-[200px] pt-20">
         <div className="flex justify-between items-center py-[35px]">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Scoring</p>
