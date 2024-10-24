@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+/* import axios from "axios"; */
 
 const useStAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -22,6 +23,22 @@ const useStAttendance = () => {
     },
   ]);
   const navigate = useNavigate();
+
+  /* // Fetch announcements from API
+useEffect(() => {
+  const getAnnouncements = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/library/announce" // API endpoint
+      );
+      setAnnouncements(response.data); // Set fetched data to state
+      setFilteredAnnouncements(response.data); // Initialize filtered announcements
+    } catch (error) {
+      console.error("Error fetching announcements:", error); // Handle error
+    }
+  };
+  getAnnouncements(); // Call the function to fetch data
+}, []); */
 
   const items = [
     { label: "Attendance", key: "Attendance" },
