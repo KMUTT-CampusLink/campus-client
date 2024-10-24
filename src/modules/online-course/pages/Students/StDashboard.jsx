@@ -44,35 +44,33 @@ const StDashboard = () => {
               See All
             </button>
           </div>
-          
         </div>
       </div>
       <div>
         <div
-            className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
+          className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
             justify-items-center mx-auto w-3/4"
-          >
-            {courses.map((course) => (
-              <CourseCard
-                key={course.id}
-                imageURL={course.imageUrl}
-                title={course.title}
-                description={course.description}
-                route={"course_description"}
-              />
-            ))}
-          </div>
+        >
+          {courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              imageURL={course.imageUrl}
+              title={course.title}
+              description={course.description}
+              route={"course_description"}
+            />
+          ))}
+        </div>
       </div>
 
       <div>
-        <span
-          className="font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+        <span className="font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
           Important Announcement
           <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
         </span>
       </div>
       <div className="border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className=" flex justify-between max-md:mx-20 max-lg:mx-28 lg:mx-48">
+        <div className=" flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
           <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
             TITLE
           </span>
@@ -95,7 +93,7 @@ const StDashboard = () => {
         <FontAwesomeIcon icon={faFile} className="ml-2" size="lg" />
       </span>
       <div className=" border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className="flex justify-between max-md:mx-20 max-lg:mx-28 lg:mx-48">
+        <div className="flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
           <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
             TIME
           </span>
@@ -113,12 +111,12 @@ const StDashboard = () => {
         </div>
       </div>
 
-      <span className="font-bold max-sm:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+      <span className="max-md:text-sm font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
         Today Class Schedule
         <FontAwesomeIcon icon={faStar} className="ml-2" size="lg" />
       </span>
       <div className="border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className="flex justify-between max-md:mx-20 max-lg:mx-28 lg:mx-48">
+        <div className="flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
           <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
             TIME
           </span>
