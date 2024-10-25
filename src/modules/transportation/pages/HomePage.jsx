@@ -34,7 +34,9 @@ function HomePage() {
       <main className="mx-auto max-w-7xl pt-20 pb-6 w-4/5">
         <div className="flex flex-col justify-center items-center space-y-6">
           {/* Heading and Route Selection Input Fields */}
-          <h1 className="text-2xl font-bold text-gray-800 text-center">Search Routes</h1>
+          <h1 className="text-2xl font-bold text-gray-800 text-center">
+            Search Routes
+          </h1>
 
           {/* Route Selection Dropdowns */}
           <div className="flex mt-4 w-full max-w-3xl">
@@ -44,13 +46,16 @@ function HomePage() {
                 {/* Start Stop input */}
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
                 <select
-                  value={startStop.id}
+                  value={startStop.id || ""}
                   onChange={(e) =>
                     setStartStop({ ...startStop, id: e.target.value })
                   }
                   className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
-                  style={{ borderRadius: '0.25rem', width: '100%' }} // Full width
+                  style={{ borderRadius: "0.25rem", width: "100%" }} // Full width
                 >
+                  <option value="" disabled>
+                    From
+                  </option>
                   {stops.map((stop) => (
                     <option key={stop.id} value={stop.id}>
                       {stop.name}
@@ -64,13 +69,16 @@ function HomePage() {
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
 
                 <select
-                  value={endStop.id}
+                  value={endStop.id || ""}
                   onChange={(e) =>
                     setEndstop({ ...endStop, id: e.target.value })
                   }
                   className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
-                  style={{ borderRadius: '0.25rem', width: '100%' }} // Full width
+                  style={{ borderRadius: "0.25rem", width: "100%" }} // Full width
                 >
+                  <option value="" disabled>
+                    To
+                  </option>
                   {stops.map((stop) => (
                     <option key={stop.id} value={stop.id}>
                       {stop.name}
@@ -83,14 +91,18 @@ function HomePage() {
 
           {/* Box for Transport Mode Icons */}
           <div className="bg-white p-2 rounded-lg shadow-lg w-full max-w-sm">
-            <h2 className="text-lg font-bold text-gray-800 text-center mb-2">Transport Mode</h2>
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-2">
+              Transport Mode
+            </h2>
 
             {/* Transport Mode Icons */}
             <div className="flex space-x-4 mt-2 justify-center">
               {/* Bus Icon */}
               <div
                 className={`cursor-pointer p-2 rounded-full shadow-lg ${
-                  transportMode === "bus" ? "bg-orange-600 text-white" : "bg-gray-100"
+                  transportMode === "bus"
+                    ? "bg-orange-600 text-white"
+                    : "bg-gray-100"
                 }`}
                 onClick={() => handleSelectMode("bus")}
               >
@@ -100,7 +112,9 @@ function HomePage() {
               {/* Mini Van Icon */}
               <div
                 className={`cursor-pointer p-2 rounded-full shadow-lg ${
-                  transportMode === "van" ? "bg-orange-600 text-white" : "bg-gray-100"
+                  transportMode === "van"
+                    ? "bg-orange-600 text-white"
+                    : "bg-gray-100"
                 }`}
                 onClick={() => handleSelectMode("van")}
               >
@@ -110,7 +124,9 @@ function HomePage() {
               {/* Bicycle Icon */}
               <div
                 className={`cursor-pointer p-2 rounded-full shadow-lg ${
-                  transportMode === "bicycle" ? "bg-orange-600 text-white" : "bg-gray-100"
+                  transportMode === "bicycle"
+                    ? "bg-orange-600 text-white"
+                    : "bg-gray-100"
                 }`}
                 onClick={() => handleSelectMode("bicycle")}
               >
@@ -135,7 +151,10 @@ function HomePage() {
             }}
             state={{ start_stop_id: startStop.id, end_stop_id: endStop.id }}
           >
-            <button className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300">
+            <button
+              className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+              disabled={!startStop.id || !endStop.id}
+            >
               Search
             </button>
           </Link>

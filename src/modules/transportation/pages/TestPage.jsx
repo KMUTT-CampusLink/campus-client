@@ -21,8 +21,8 @@ const TestPage = () => {
     const fetch = async () => {
       const data = await axiosInstance
         .post("transport/user/routesConnectingStops", {
-          start_stop_id: state.start_stop_id,
-          end_stop_id: state.end_stop_id,
+          start_stop_id: parseInt(state.start_stop_id),
+          end_stop_id: parseInt(state.end_stop_id),
         })
         .then((res) => res.data);
       console.log(data);
@@ -41,12 +41,12 @@ const TestPage = () => {
           >
             <h3 className="text-2xl font-bold mb-2">{route.name}</h3>
             <p className="text-gray-600 mb-4">{route.description}</p>
-            
-            <Link to='/transport/booking'><button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
-              Choose
-            </button>
+
+            <Link to="/transport/booking">
+              <button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
+                Choose
+              </button>
             </Link>
-            
           </div>
         ))}
       </div>
