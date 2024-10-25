@@ -4,24 +4,64 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
-// Mock Data
-const questionMock = [
-  [1, "multipleChoice", "What is 1 + 1?", ["2", "3", "4", "5"]],
-  [2, "checkList", "Which numbers are even?", ["1", "2", "3", "4"]],
-  [3, "essay", "Describe your favorite programming language.", []],
-  [4, "multipleChoice", "What is 2 + 2?", ["3", "4", "5", "6"]],
-];
+import { getExamDataById } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
+  const { examId } = useParams();
   const [studentQuestion, setStudentQuestion] = useState(0);
   const [studentAnswers, setStudentAnswers] = useState({});
   const navigate = useNavigate();
+
+  const [exam, setExam] = useState({
+    title: '',
+    description: '',
+    questions: [],
+  });
+
+  const getExamData = async () => {
+    try {
+      const res = await getExamDataById(examId);
+      const examData = res.data.data.exam;
+      const examQuestion = res.data.data.questions;
+      const allChoices = res.data.data.choices;
+      const mappedQuestions = examQuestion && Array.isArray(examQuestion)
+        ? examQuestion.map(question => {
+          const questionChoices = allChoices.filter(choice => choice.question_id === question.id);
+          return {
+            questionText: question.title || '',
+            type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
+            options: questionChoices.map(choice => ({
+              choiceText: choice.choice_text || '',
+              choiceImg: choice.choice_img || null,
+              isCorrect: choice.correct_ans || false
+            })),
+            answer: questionChoices
+              .filter(choice => choice.correct_ans)
+              .map(choice => choice.choice_text || ''),
+            score: question.mark || null
+          };
+        })
+        : [];
+      setExam({
+        ...exam,
+        title: examData.title || 'Untitled Exam',
+        description: examData.description || 'No description',
+        questions: mappedQuestions
+      });
+    } catch (error) {
+      console.error("Failed to fetch exam data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getExamData();
+  }, []);
 
   // Handle answer for each question
   const handleAnswer = (questionNo, answer) => {
@@ -33,7 +73,7 @@ export default function StudentExamPage() {
 
   // Navigate to next question
   const handleNext = () => {
-    if (studentQuestion < questionMock.length - 1) {
+    if (studentQuestion < exam.questions.length - 1) {
       setStudentQuestion(studentQuestion + 1);
     }
   };
@@ -47,7 +87,7 @@ export default function StudentExamPage() {
 
   // Jump to specific question
   const jumpTo = (n) => {
-    if (n >= 0 && n < questionMock.length) {
+    if (n >= 0 && n < exam.questions.length) {
       setStudentQuestion(n);
     }
   };
@@ -63,25 +103,27 @@ export default function StudentExamPage() {
       <div className="mx-[35px] xl:mx-[100px] pt-20">
         <div className="flex flex-col xl:flex-row justify-between pt-[35px] xl:pt-[50px] gap-[20px]">
           {/* Question */}
-          {questionMock
-            .filter((question, index) => index === studentQuestion)
+          {exam && exam.questions
+            .filter((_, index) => index === studentQuestion) // filter by current question
             .map((question, index) => (
               <Question
                 key={index}
-                questionNo={question[0]}
-                question={question[2]}
-                choice={question[3]}
-                type={question[1]}
+                questionNo={studentQuestion}
+                question={question.questionText} // Correctly access questionText
+                choice={question.options} // Correctly pass options
+                type={question.type}
                 handleAnswer={handleAnswer}
-                studentAnswer={studentAnswers[question[0]] || []}
+                studentAnswer={studentAnswers[studentQuestion] || []} // Correct student answer access
               />
             ))}
           {/* Question Navigation */}
-          <Navigation
-            questionNo={questionMock}
-            studentQuestion={studentQuestion}
-            jumpTo={jumpTo}
-          />
+          {exam.questions.length > 0 && (
+            <Navigation
+              questionNo={exam.questions.length}
+              studentQuestion={studentQuestion}
+              jumpTo={jumpTo}
+            />
+          )}
         </div>
         <div className="flex flex-col xl:flex-row justify-between pt-[30px] xl:pt-[40px]">
           <div className="w-full xl:w-[82%] flex justify-between pb-[20px] xl:pb-0">
@@ -94,9 +136,9 @@ export default function StudentExamPage() {
               <FontAwesomeIcon icon={faChevronLeft} /> Back
             </button>
             <button
-              disabled={studentQuestion === questionMock.length - 1}
+              disabled={studentQuestion === exam.questions.length - 1}
               onClick={handleNext}
-              className={`${studentQuestion !== questionMock.length - 1 ? "underline-offset-3 hover:underline" : " text-gray-400"}`}
+              className={`${studentQuestion !== exam.questions.length - 1 ? "underline-offset-3 hover:underline" : " text-gray-400"}`}
             >
               Next <FontAwesomeIcon icon={faChevronRight} />
             </button>
@@ -119,7 +161,7 @@ export default function StudentExamPage() {
                 </button>
                 <button
                   className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
-                  onClick={handleSubmit()}
+                  onClick={handleSubmit}
                 >
                   Confirm
                 </button>

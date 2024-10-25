@@ -24,3 +24,16 @@ export const verifyExamPassword = async (examId, password) => {
     return error.response.data;
   }
 };
+
+export const getExamDataById = async (examId) => {
+  try {
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_API_URL
+      }/exams/student/getExamDataById?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
