@@ -1,15 +1,15 @@
 
-import QrComponent from "../components/QrComponent";
+import StQrComponent from "../components/StQrComponent";
 
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import useStQr from "../hook/useStQr";
 
 const StQrPage = () => {
-  const stqr = useStQr();
+  const stQr = useStQr();
   return (
     <>
       <NavBar />
-      <QrComponent {...stqr} />
+      <StQrComponent {...stQr} />
     </>
   );
 };
