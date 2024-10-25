@@ -1,28 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Typography,
-  TextField,
-  Divider,
-  IconButton,
-} from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MoreVertIcon from "@mui/icons-material/MoreVert"; // Example icon
 import buildingData from "../administrator/building_data.json";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import CenteredBox from "../../components/CenteredBox";
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "'Roboto', 'Arial', sans-serif",
-  },
-});
 
 export default function AdministratorMyBookingSubmit() {
   const [building, setBuilding] = useState("");
@@ -34,13 +14,13 @@ export default function AdministratorMyBookingSubmit() {
 
   const handleBuildingChange = (event) => {
     setBuilding(event.target.value);
-    setFloor("");
+    setFloor(""); // Reset floor and room when building changes
     setRoom("");
   };
 
   const handleFloorChange = (event) => {
     setFloor(event.target.value);
-    setRoom("");
+    setRoom(""); // Reset room when floor changes
   };
 
   const handleRoomChange = (event) => setRoom(event.target.value);
@@ -48,6 +28,7 @@ export default function AdministratorMyBookingSubmit() {
   const handleStartTimeChange = (event) => setStartTime(event.target.value);
   const handleEndTimeChange = (event) => setEndTime(event.target.value);
 
+  // Find selected building and floor to fetch the appropriate data
   const selectedBuilding = buildingData.buildings.find(
     (bldg) => bldg.id === building
   );
@@ -58,173 +39,157 @@ export default function AdministratorMyBookingSubmit() {
   const navigate = useNavigate();
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <NavBar />
       <CenteredBox>
-        {/* Box containing the icon in the top-right corner */}
-        <Box
-          sx={{
-            position: "relative", // Parent box set to relative
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            padding: "24px",
-            textAlign: "left",
-          }}
-        >
-          {/* IconButton for the top-right corner */}
-          <IconButton
-            sx={{
-              position: "absolute",
-              top: 16, // Distance from the top of the box
-              right: 16, // Distance from the right edge
-              color: "#864E41",
-            }}
+        <div className="relative flex flex-col items-center justify-center w-full h-full p-6">
+          <button
+            className="absolute top-4 right-4 text-primary bg-white p-2 rounded-full hover:bg-gray-100"
             onClick={() => navigate("/security/administrator/mybookinglist")}
           >
-            <MoreVertIcon />
-          </IconButton>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 text-[#864E41]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 6h12M6 12h12m-6 6h6"
+              />
+            </svg>
+          </button>
 
-          {/* Main content of the form */}
-          <Typography sx={{ fontWeight: "bold" }} variant="h4" gutterBottom>
-            My Booking Form
-          </Typography>
-          <Typography sx={{ mt: "-12px" }} variant="subtitle1">
-            Detailed Information
-          </Typography>
+          <h1 className="absolute top-5 text-2xl font-bold">My Booking Form</h1>
+          <p className="absolute top-12 text-sm">Detailed Information</p>
+          <hr className="w-full mt-12 my-3" />
 
-          <Divider sx={{ width: "100%", mt: 2, mb: 3 }} />
-
-          <Box
-            component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              width: "100%",
-              maxWidth: 500,
-            }}
-          >
-            {/* Form Fields */}
-            <FormControl fullWidth>
-              <InputLabel id="building-label">Building</InputLabel>
-              <Select
-                labelId="building-label"
+          <form className="flex flex-col gap-4 w-full max-w-md">
+            <div className="form-control w-full">
+              <label className="label" htmlFor="building">
+                <span className="label-text">Building</span>
+              </label>
+              <select
                 id="building"
                 value={building}
-                label="Building"
                 onChange={handleBuildingChange}
+                className="select select-bordered w-full"
               >
+                <option value="" disabled>
+                  Select Building
+                </option>
                 {buildingData.buildings.map((bldg) => (
-                  <MenuItem key={bldg.id} value={bldg.id}>
+                  <option key={bldg.id} value={bldg.id}>
                     {bldg.name}
-                  </MenuItem>
+                  </option>
                 ))}
-              </Select>
-            </FormControl>
+              </select>
+            </div>
 
-            {/* Floor Dropdown */}
-            <FormControl fullWidth disabled={!building}>
-              <InputLabel id="floor-label">Floor</InputLabel>
-              <Select
-                labelId="floor-label"
+            <div className="form-control w-full">
+              <label className="label" htmlFor="floor">
+                <span className="label-text">Floor</span>
+              </label>
+              <select
                 id="floor"
                 value={floor}
-                label="Floor"
                 onChange={handleFloorChange}
+                className="select select-bordered w-full"
+                disabled={!building} // Enabled only if a building is selected
               >
+                <option value="" disabled>
+                  Select Floor
+                </option>
                 {selectedBuilding?.floors.map((flr) => (
-                  <MenuItem key={flr.id} value={flr.id}>
+                  <option key={flr.id} value={flr.id}>
                     {flr.name}
-                  </MenuItem>
+                  </option>
                 ))}
-              </Select>
-            </FormControl>
+              </select>
+            </div>
 
-            {/* Room No. Dropdown */}
-            <FormControl fullWidth disabled={!floor}>
-              <InputLabel id="room-label">Room No.</InputLabel>
-              <Select
-                labelId="room-label"
+            <div className="form-control w-full">
+              <label className="label" htmlFor="room">
+                <span className="label-text">Room No.</span>
+              </label>
+              <select
                 id="room"
                 value={room}
-                label="Room No."
                 onChange={handleRoomChange}
+                className="select select-bordered w-full"
+                disabled={!floor} // Enabled only if a floor is selected
               >
+                <option value="" disabled>
+                  Select Room
+                </option>
                 {selectedFloor?.rooms.map((rm) => (
-                  <MenuItem key={rm.id} value={rm.id}>
+                  <option key={rm.id} value={rm.id}>
                     {rm.name}
-                  </MenuItem>
+                  </option>
                 ))}
-              </Select>
-            </FormControl>
+              </select>
+            </div>
 
-            {/* Date Picker */}
-            <TextField
-              fullWidth
-              id="date"
-              label="Date"
-              type="date"
-              value={date}
-              onChange={handleDateChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            <div className="form-control w-full">
+              <label className="label" htmlFor="date">
+                <span className="label-text">Date</span>
+              </label>
+              <input
+                type="date"
+                id="date"
+                value={date}
+                onChange={handleDateChange}
+                className="input input-bordered w-full"
+              />
+            </div>
 
-            {/* Time Range */}
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <FormControl sx={{ width: "48%" }}>
-                <InputLabel id="start-time-label">Start Time</InputLabel>
-                <Select
-                  labelId="start-time-label"
+            <div className="flex justify-between gap-4">
+              <div className="form-control w-1/2">
+                <label className="label" htmlFor="start-time">
+                  <span className="label-text">Start Time</span>
+                </label>
+                <select
                   id="start-time"
                   value={startTime}
-                  label="Start Time"
                   onChange={handleStartTimeChange}
+                  className="select select-bordered w-full"
                 >
-                  <MenuItem value="08:00 a.m.">08:00 a.m.</MenuItem>
-                  <MenuItem value="09:00 a.m.">09:00 a.m.</MenuItem>
-                  <MenuItem value="10:00 a.m.">10:00 a.m.</MenuItem>
-                </Select>
-              </FormControl>
+                  <option value="08:00 a.m.">08:00 a.m.</option>
+                  <option value="09:00 a.m.">09:00 a.m.</option>
+                  <option value="10:00 a.m.">10:00 a.m.</option>
+                </select>
+              </div>
 
-              <FormControl sx={{ width: "48%" }}>
-                <InputLabel id="end-time-label">End Time</InputLabel>
-                <Select
-                  labelId="end-time-label"
+              <div className="form-control w-1/2">
+                <label className="label" htmlFor="end-time">
+                  <span className="label-text">End Time</span>
+                </label>
+                <select
                   id="end-time"
                   value={endTime}
-                  label="End Time"
                   onChange={handleEndTimeChange}
+                  className="select select-bordered w-full"
                 >
-                  <MenuItem value="11:00 a.m.">11:00 a.m.</MenuItem>
-                  <MenuItem value="11:30 a.m.">11:30 a.m.</MenuItem>
-                  <MenuItem value="12:00 p.m.">12:00 p.m.</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+                  <option value="11:00 a.m.">11:00 a.m.</option>
+                  <option value="11:30 a.m.">11:30 a.m.</option>
+                  <option value="12:00 p.m.">12:00 p.m.</option>
+                </select>
+              </div>
+            </div>
 
-            {/* Submit Button */}
-            <Button
+            <button
               type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#864E41",
-                "&:hover": {
-                  backgroundColor: "#6e3f35", // Optional: Darker shade for hover
-                },
-                color: "#fff", // Ensure the text is readable (white in this case)
-              }}
+              className="btn btn-primary bg-[#864E41] hover:bg-[#6e3f35] w-full"
               onClick={() => navigate("/security/administrator/mybookinglist")}
             >
               Submit
-            </Button>
-          </Box>
-        </Box>
+            </button>
+          </form>
+        </div>
       </CenteredBox>
-    </ThemeProvider>
+    </>
   );
 }

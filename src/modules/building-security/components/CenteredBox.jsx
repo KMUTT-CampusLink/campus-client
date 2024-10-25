@@ -1,35 +1,15 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React from "react";
 
 const CenteredBox = ({ children }) => {
   return (
-    <>
-      <Box
-        sx={{
-          backgroundColor: '#F2F2F2',  
-          width: '100%',
-          height: '100vh',             
-          display: 'flex',             
-          justifyContent: 'center',    
-          alignItems: 'center'         
-        }}
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+      <div
+        className="bg-white w-1/2 shadow-lg rounded-2xl mt-12 p-6 overflow-auto"
+        style={{ height: "700px" }} // Adjust height as needed
       >
-        <Box
-          sx={{
-            backgroundColor: '#FFFFFF',  
-            width: '50%',               
-            height: '80%',              
-            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
-            borderRadius: '20px',       
-            marginTop: '50px',          
-            padding: '24px',            
-            overflow: 'auto',           
-          }}
-        >
-          {children} {}
-        </Box>
-      </Box>
-    </>
+        {children}
+      </div>
+    </div>
   );
 };
 

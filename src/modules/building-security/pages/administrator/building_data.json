@@ -1,41 +1,41 @@
 {
     "buildings": [
         {
-            "id": 1,
+            "id": "1",
             "name": "Building 1",
             "floors": [
                 {
-                    "id": 1,
+                    "id": "1-1",
                     "name": "Floor 1",
                     "rooms": [
                         {
-                            "id": 101,
+                            "id": "101",
                             "name": "Room 101"
                         },
                         {
-                            "id": 102,
+                            "id": "102",
                             "name": "Room 102"
                         },
                         {
-                            "id": 103,
+                            "id": "103",
                             "name": "Room 103"
                         }
                     ]
                 },
                 {
-                    "id": 2,
+                    "id": "1-2",
                     "name": "Floor 2",
                     "rooms": [
                         {
-                            "id": 201,
+                            "id": "201",
                             "name": "Room 201"
                         },
                         {
-                            "id": 202,
+                            "id": "202",
                             "name": "Room 202"
                         },
                         {
-                            "id": 203,
+                            "id": "203",
                             "name": "Room 203"
                         }
                     ]
@@ -43,41 +43,41 @@
             ]
         },
         {
-            "id": 2,
+            "id": "2",
             "name": "Building 2",
             "floors": [
                 {
-                    "id": 1,
+                    "id": "2-1",
                     "name": "Floor 1",
                     "rooms": [
                         {
-                            "id": 104,
+                            "id": "104",
                             "name": "Room 104"
                         },
                         {
-                            "id": 105,
+                            "id": "105",
                             "name": "Room 105"
                         },
                         {
-                            "id": 106,
+                            "id": "106",
                             "name": "Room 106"
                         }
                     ]
                 },
                 {
-                    "id": 2,
+                    "id": "2-2",
                     "name": "Floor 2",
                     "rooms": [
                         {
-                            "id": 204,
+                            "id": "204",
                             "name": "Room 204"
                         },
                         {
-                            "id": 205,
+                            "id": "205",
                             "name": "Room 205"
                         },
                         {
-                            "id": 206,
+                            "id": "206",
                             "name": "Room 206"
                         }
                     ]
