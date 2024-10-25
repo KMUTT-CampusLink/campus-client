@@ -1,10 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api/botastra/',
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: `${import.meta.env.VITE_API_URL}/botastra`,
+  withCredentials: true,
 });
 
-export default axiosInstance; 
+export default axiosInstance;
