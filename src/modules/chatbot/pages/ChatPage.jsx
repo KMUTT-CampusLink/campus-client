@@ -17,8 +17,7 @@ const ChatPage = () => {
   const [startChat, setStartChat] = useState(false);
   const textRef = useRef(null);
 
-  const batman = "https://pbs.twimg.com/profile_images/1816958428771749888/f49y3HRM_400x400.png";
-
+  const botImage = "./public/chatbot/botImage.jpg";
   useEffect(() => {
     const fetchFaqs = async () => {
         try{
@@ -80,7 +79,7 @@ const ChatPage = () => {
             <div className= { ` w-full sm:w-5/6 flex flex-col h-[80%] ${startChat? `justify-between py-0 sm:py-2 md:py-4`: `justify-around py-8 sm:py-12 md:py-16`} `}>
                 {/* bot profile div  */}
                 <div className= {`${startChat ? `hidden`: `visible`} w-full h-fit flex justify-center items-center `}>
-                    <img src={batman} alt="batman" className="object-contain w-[6rem] sm:w-[10rem] h-auto rounded-full"/>
+                    <img src={botImage} alt="batman" className="object-contain w-[6rem] sm:w-[10rem] h-auto rounded-full"/>
                 </div>
                 {/* faqs div  */}
                 {loading ? <div>
@@ -95,7 +94,7 @@ const ChatPage = () => {
 
                 {/* messaging area */}
                 {startChat ? 
-                    <MessageArea questions = {questions} dummyAns = {dummyAns} profilePic = {batman}/> : <></>
+                    <MessageArea questions = {questions} dummyAns = {dummyAns} profilePic = {botImage}/> : <></>
                 }
             </div>
             {/* chat input area  */}
