@@ -2,30 +2,30 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { FaMapMarkerAlt, FaBus, FaShuttleVan, FaBicycle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-//import { axiosInstance } from "../services/axiosInstance";
+import { axiosInstance } from "../services/axiosInstance";
+import { list } from "postcss";
 
 function HomePage() {
-  const [fromStop, setFromStop] = useState(2);
-  const [toStop, setToStop] = useState(3);
+  const [startStop, setStartStop] = useState({ id: null, name: "" });
+  const [endStop, setEndstop] = useState({ id: null, name: "" });
+  const [stops, setStops] = useState([]);
+  useEffect(() => {
+    const fetch = async () => {
+      const response = await axiosInstance.get("/transport/user/queryAllStops");
+      return response.data;
+    };
+
+    fetch().then((data) => {
+      setStops(data.stops);
+    });
+  }, []);
+
   const [transportMode, setTransportMode] = useState("");
 
   const handleSelectMode = (mode) => {
     setTransportMode(mode);
     console.log(`Selected Mode: ${mode}`);
   };
-
-  // useEffect(() => {
-  // const fetch = async () => {
-  //   const data = await axiosInstance
-  //     .post("transport/user/routesConnectingStops", {
-  //       start_stop_id: fromStop,
-  //       end_stio_id: toStop,
-  //     })
-  //     .then((res) => res.data);
-  //   console.log(data);
-  // };
-  //   fetch();
-  // }, []);
 
   return (
     <div className="min-h-screen">
@@ -34,42 +34,48 @@ function HomePage() {
       <main className="mx-auto max-w-7xl pt-20 pb-6 w-4/5">
         <div className="flex flex-col justify-center items-center space-y-6">
           {/* Heading and Route Selection Input Fields */}
-          <h1 className="text-2xl font-bold text-gray-800 text-center">Get Routes</h1>
+          <h1 className="text-2xl font-bold text-gray-800 text-center">Search Routes</h1>
 
           {/* Route Selection Dropdowns */}
           <div className="flex mt-4 w-full max-w-3xl">
             <div className="flex-1">
               {/* From Route Dropdown */}
               <div className="relative mb-4">
+                {/* Start Stop input */}
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
                 <select
-                  value={fromStop}
-                  onChange={(e) => setFromStop(e.target.value)}
-                  className="w-full py-2 pl-10 pr-4 border focus:outline-none focus:border-orange-400"
+                  value={startStop.id}
+                  onChange={(e) =>
+                    setStartStop({ ...startStop, id: e.target.value })
+                  }
+                  className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
                   style={{ borderRadius: '0.25rem', width: '100%' }} // Full width
                 >
-                  <option value={2}>Stop 2</option>
-                  <option value={3}>Stop 3</option>
-                  <option value={4}>Stop 4</option>
-                  {/* Add more options as needed */}
+                  {stops.map((stop) => (
+                    <option key={stop.id} value={stop.id}>
+                      {stop.name}
+                    </option>
+                  ))}
                 </select>
               </div>
-            </div>
 
-            <div className="flex-1 ml-1">
-              {/* To Route Dropdown */}
-              <div className="relative mb-4">
+              {/* End Stop Input */}
+              <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
+
                 <select
-                  value={toStop}
-                  onChange={(e) => setToStop(e.target.value)}
-                  className="w-full py-2 pl-10 pr-4 border focus:outline-none focus:border-orange-400"
+                  value={endStop.id}
+                  onChange={(e) =>
+                    setEndstop({ ...endStop, id: e.target.value })
+                  }
+                  className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
                   style={{ borderRadius: '0.25rem', width: '100%' }} // Full width
                 >
-                  <option value={3}>Stop 3</option>
-                  <option value={4}>Stop 4</option>
-                  <option value={5}>Stop 5</option>
-                  {/* Add more options as needed */}
+                  {stops.map((stop) => (
+                    <option key={stop.id} value={stop.id}>
+                      {stop.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -127,10 +133,10 @@ function HomePage() {
             to={{
               pathname: "/transport/test",
             }}
-            state={{ start_stop_id: fromStop, end_stop_id: toStop }}
+            state={{ start_stop_id: startStop.id, end_stop_id: endStop.id }}
           >
             <button className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300">
-              Search routes
+              Search
             </button>
           </Link>
         </div>
