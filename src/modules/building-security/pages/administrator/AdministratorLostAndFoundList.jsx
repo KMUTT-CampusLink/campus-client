@@ -1,6 +1,6 @@
 import React from "react";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
-import LostAndFoundList from "../../components/LostAndFoundList"
+import LostAndFoundList from "../../components/LostAndFoundList";
 
 export default function AdministratorLostAndFoundList() {
   return (
