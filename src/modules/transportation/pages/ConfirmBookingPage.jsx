@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faUserCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 const ConfirmBookingPage = () => {
@@ -20,17 +20,14 @@ const ConfirmBookingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header Section */}
-      <header className="bg-gradient-to-r from-orange-400 to-orange-600 flex justify-between items-center h-16 w-full shadow-lg mb-6">
-        <div className="flex items-center text-white ml-4">
-          <FontAwesomeIcon icon={faArrowLeft} className="mr-2 text-2xl" /> {/* Back Icon */}
-          <h1 className="text-2xl font-bold">Confirmation</h1>
-        </div>
-        <FontAwesomeIcon icon={faUserCircle} className="text-white text-2xl mr-4" />
+      {/* Header Section without icons */}
+      <header className="hidden min-[900px]:block text-white bg-gradient-to-r from-[#c2544d] to-[#f09107] h-16 w-full shadow-lg mb-10">
+        {/* Empty header for spacing */}
       </header>
 
       <div className="flex container mx-auto px-4 justify-center">
-        <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg text-center">
+        {/* Booking Confirmation Box */}
+        <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg text-center mb-10">
           {/* Confirmation Icon */}
           <FontAwesomeIcon
             icon={faCheckCircle}

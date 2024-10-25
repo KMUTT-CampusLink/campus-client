@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { FaMapMarkerAlt, FaBus, FaShuttleVan, FaBicycle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../services/axiosInstance";
+//import { axiosInstance } from "../services/axiosInstance";
 
 function HomePage() {
   const [fromStop, setFromStop] = useState(2);
   const [toStop, setToStop] = useState(3);
-
   const [transportMode, setTransportMode] = useState("");
+
   const handleSelectMode = (mode) => {
     setTransportMode(mode);
     console.log(`Selected Mode: ${mode}`);
@@ -33,74 +33,83 @@ function HomePage() {
 
       <main className="mx-auto max-w-7xl pt-20 pb-6 w-4/5">
         <div className="flex flex-col justify-center items-center space-y-6">
-          {/* Heading */}
-          <h1 className="text-2xl font-bold text-gray-800">Get Routes</h1>
+          {/* Heading and Route Selection Input Fields */}
+          <h1 className="text-2xl font-bold text-gray-800 text-center">Get Routes</h1>
 
-          {/* Route Selection Input Fields */}
-          <div className="w-full max-w-4xl flex flex-col items-center space-y-4">
-            <div className="w-full max-w-sm">
-              {/* From Route Input */}
+          {/* Route Selection Dropdowns */}
+          <div className="flex mt-4 w-full max-w-3xl">
+            <div className="flex-1">
+              {/* From Route Dropdown */}
               <div className="relative mb-4">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
-                <input
-                  type="text"
+                <select
                   value={fromStop}
                   onChange={(e) => setFromStop(e.target.value)}
-                  placeholder="From Route"
-                  className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
-                />
+                  className="w-full py-2 pl-10 pr-4 border focus:outline-none focus:border-orange-400"
+                  style={{ borderRadius: '0.25rem', width: '100%' }} // Full width
+                >
+                  <option value={2}>Stop 2</option>
+                  <option value={3}>Stop 3</option>
+                  <option value={4}>Stop 4</option>
+                  {/* Add more options as needed */}
+                </select>
               </div>
+            </div>
 
-              {/* To Route Input */}
-              <div className="relative">
+            <div className="flex-1 ml-1">
+              {/* To Route Dropdown */}
+              <div className="relative mb-4">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
-                <input
-                  type="text"
+                <select
                   value={toStop}
                   onChange={(e) => setToStop(e.target.value)}
-                  placeholder="To Route"
-                  className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
-                />
+                  className="w-full py-2 pl-10 pr-4 border focus:outline-none focus:border-orange-400"
+                  style={{ borderRadius: '0.25rem', width: '100%' }} // Full width
+                >
+                  <option value={3}>Stop 3</option>
+                  <option value={4}>Stop 4</option>
+                  <option value={5}>Stop 5</option>
+                  {/* Add more options as needed */}
+                </select>
               </div>
             </div>
           </div>
 
-          {/* Transport Mode Icons */}
-          <div className="flex space-x-6 mt-4">
-            {/* Bus Icon */}
-            <div
-              className={`cursor-pointer p-4 rounded-full shadow-lg ${
-                transportMode === "bus"
-                  ? "bg-orange-600 text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => handleSelectMode("bus")}
-            >
-              <FaBus className="text-3xl" />
-            </div>
+          {/* Box for Transport Mode Icons */}
+          <div className="bg-white p-2 rounded-lg shadow-lg w-full max-w-sm">
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-2">Transport Mode</h2>
 
-            {/* Mini Van Icon */}
-            <div
-              className={`cursor-pointer p-4 rounded-full shadow-lg ${
-                transportMode === "van"
-                  ? "bg-orange-600 text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => handleSelectMode("van")}
-            >
-              <FaShuttleVan className="text-3xl" />
-            </div>
+            {/* Transport Mode Icons */}
+            <div className="flex space-x-4 mt-2 justify-center">
+              {/* Bus Icon */}
+              <div
+                className={`cursor-pointer p-2 rounded-full shadow-lg ${
+                  transportMode === "bus" ? "bg-orange-600 text-white" : "bg-gray-100"
+                }`}
+                onClick={() => handleSelectMode("bus")}
+              >
+                <FaBus className="text-2xl" />
+              </div>
 
-            {/* Bicycle Icon */}
-            <div
-              className={`cursor-pointer p-4 rounded-full shadow-lg ${
-                transportMode === "bicycle"
-                  ? "bg-orange-600 text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => handleSelectMode("bicycle")}
-            >
-              <FaBicycle className="text-3xl" />
+              {/* Mini Van Icon */}
+              <div
+                className={`cursor-pointer p-2 rounded-full shadow-lg ${
+                  transportMode === "van" ? "bg-orange-600 text-white" : "bg-gray-100"
+                }`}
+                onClick={() => handleSelectMode("van")}
+              >
+                <FaShuttleVan className="text-2xl" />
+              </div>
+
+              {/* Bicycle Icon */}
+              <div
+                className={`cursor-pointer p-2 rounded-full shadow-lg ${
+                  transportMode === "bicycle" ? "bg-orange-600 text-white" : "bg-gray-100"
+                }`}
+                onClick={() => handleSelectMode("bicycle")}
+              >
+                <FaBicycle className="text-2xl" />
+              </div>
             </div>
           </div>
 

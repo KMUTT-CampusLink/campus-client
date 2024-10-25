@@ -7,12 +7,9 @@ const BookingPage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header Section */}
-      <header className="bg-gradient-to-r from-orange-400 to-orange-600 flex justify-between items-center h-16 w-full shadow-lg mb-6">
+      <header className="hidden min-[900px]:block text-white bg-gradient-to-r from-[#c2544d] to-[#f09107] h-16 w-full shadow-lg mb-10">
         <div className="flex items-center text-white ml-4">
-          <FontAwesomeIcon icon={faArrowLeft} className="mr-2 text-2xl" /> {/* Back Icon */}
-          <h1 className="text-2xl font-bold">See Schedule and Confirm Booking</h1>
         </div>
-        <FontAwesomeIcon icon={faUserCircle} className="text-white text-2xl mr-4" />
       </header>
 
       <div className="flex container mx-auto px-4">

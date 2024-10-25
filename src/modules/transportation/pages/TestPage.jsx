@@ -1,7 +1,7 @@
 import { React, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../services/axiosInstance";
+//import { axiosInstance } from "../transport/services/axiosInstance";
 
 const routes = [
   { id: 1, name: "Route 1", description: "" },
@@ -38,9 +38,12 @@ const TestPage = () => {
           >
             <h3 className="text-2xl font-bold mb-2">{route.name}</h3>
             <p className="text-gray-600 mb-4">{route.description}</p>
-            <button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
-              View Details
+            
+            <Link to='/transport/booking'><button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
+              Choose
             </button>
+            </Link>
+            
           </div>
         ))}
       </div>
