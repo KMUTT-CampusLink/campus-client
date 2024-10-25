@@ -39,6 +39,7 @@ function HomePage() {
           <div className="w-full max-w-4xl flex flex-col items-center space-y-4">
             <div className="w-full max-w-sm">
               <div className="relative mb-4">
+                {/* Start Stop input */}
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
                 <select
                   value={startStop.id}
@@ -55,7 +56,7 @@ function HomePage() {
                 </select>
               </div>
 
-              {/* To Route Input */}
+              {/* End Stop Input */}
               <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
 
