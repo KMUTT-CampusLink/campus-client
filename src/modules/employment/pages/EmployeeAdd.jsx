@@ -67,7 +67,7 @@ const EmployeeAdd = () => {
     setShowPopup(false);
 
     const facultyNumber = facultyMapping[formData.faculty_id];
-    console.log(facultyNumber) 
+    
 
     const employeeData = {
       firstname: formData.firstname,
@@ -83,7 +83,7 @@ const EmployeeAdd = () => {
       phone: formData.phone,
       address: formData.address
     };
-
+    
     try {
       const response = await axiosInstance.post("/post", employeeData);
 
@@ -98,7 +98,7 @@ const EmployeeAdd = () => {
     catch (error) {
       console.error("Cannot create user:", error);
     }
-
+    console.log(employeeData) 
   };
 
 
