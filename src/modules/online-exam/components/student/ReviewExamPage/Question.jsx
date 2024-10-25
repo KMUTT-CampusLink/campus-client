@@ -1,41 +1,18 @@
+import { faChessKing } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 
-export default function Question({ questionNo, question, choice, type, handleAnswer, studentAnswer }) {
-  const [localAnswer, setLocalAnswer] = useState(studentAnswer || []);
-  
-  useEffect(() => {
-    setLocalAnswer(studentAnswer);
-  }, [studentAnswer]);
+export default function Question({ questionNo, question, choice, type, studentAnswer }) {
+//   const isSelected = (value) => {
+//     return localAnswer.includes(value) ? "checked" : "";
+//   };
 
-  const handleInputChange = (value) => {
-    if (type === 'Multiple Choice') {
-      setLocalAnswer([value]); // Only one answer for multiple choice
-    } else if (type === 'Checklist') {
-      setLocalAnswer((prevAnswers) => {
-        if (prevAnswers.includes(value)) {
-          return prevAnswers.filter((answer) => answer !== value); // Uncheck if already selected
-        } else {
-          return [...prevAnswers, value]; // Add to answers
-        }
-      });
-    } else if (type === 'Essay') {
-      setLocalAnswer([value]); // essay answer
-    }
-  };
-
-  useEffect(() => {
-    handleAnswer(questionNo, localAnswer);
-  }, [localAnswer]);
-
-  const isSelected = (value) => {
-    return localAnswer.includes(value) ? "checked" : "";
-  };
+  console.log(choice);
 
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
       <h1>{questionNo + 1}. {question}</h1>
       <div className="flex flex-col gap-[10px] pt-[20px]">
-        {choice.map((choiceObj, index) => (
+        {choice && choice.map((choiceObj, index) => (
           <div key={index} className="flex items-center gap-[10px]">
             {/* Multiple Choice */}
             {type === 'Multiple Choice' && (
@@ -44,10 +21,10 @@ export default function Question({ questionNo, question, choice, type, handleAns
                   type="radio"
                   name={`radio-${questionNo}`}
                   className={`radio checked:bg-[#C76650]`}
-                  checked={isSelected(choiceObj.choiceText)}
+                //   checked={isSelected(choiceObj.choiceText)}
                   onChange={() => handleInputChange(choiceObj.choiceText)}
                 />
-                {choiceObj.choiceText}
+                {choiceObj}
               </>
             )}
             {/* Checklist */}
@@ -56,10 +33,10 @@ export default function Question({ questionNo, question, choice, type, handleAns
                 <input
                   type="checkbox"
                   className={`checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]`}
-                  checked={isSelected(choiceObj.choiceText)}
+                //   checked={isSelected(choiceObj.choiceText)}
                   onChange={() => handleInputChange(choiceObj.choiceText)}
                 />
-                {choiceObj.choiceText}
+                {choiceObj}
               </>
             )}
           </div>
@@ -69,7 +46,7 @@ export default function Question({ questionNo, question, choice, type, handleAns
           <textarea
             className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
             placeholder="Type your Answer Here"
-            value={localAnswer[0] || ''}
+            // value={localAnswer[0] || ''}
             onChange={(e) => handleInputChange(e.target.value)}
           ></textarea>
         )}
