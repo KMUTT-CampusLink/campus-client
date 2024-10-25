@@ -15,7 +15,7 @@ function AnnouncementPage() {
     const getAnnouncements = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/library/announce"
+          "${import.meta.env.VITE_APR_URL}library/announce"
         );
         setAnnouncements(response.data);
         setFilteredAnnouncements(response.data); // Initialize with fetched data

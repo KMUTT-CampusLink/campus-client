@@ -19,7 +19,7 @@ function HomePage() {
     const fetchAnnouncements = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/library/announce"
+          `${import.meta.env.VITE_API_URL}/library/announce`
         );
         setLibraryAnnouncement(response.data);
       } catch (error) {
@@ -35,7 +35,7 @@ function HomePage() {
     const fetchAnnouncements = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/library/event"
+          `${import.meta.env.VITE_API_URL}/library/event`
         );
         setlibraryEvents(response.data);
       } catch (error) {

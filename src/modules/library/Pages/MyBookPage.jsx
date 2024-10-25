@@ -12,7 +12,7 @@ function MyBookPage() {
     const fetchReservedBook = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/library/allDupe"
+          `${import.meta.env.VITE_API_URL}/library/allDupe`
         );
         setReservedBook(response.data);
       } catch (error) {
@@ -33,7 +33,7 @@ function MyBookPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/library/returnBook",
+        `${import.meta.env.VITE_API_URL}/library/returnBook`,
         returnedBookData
       );
       console.log("Book returned successfully!", response.data);

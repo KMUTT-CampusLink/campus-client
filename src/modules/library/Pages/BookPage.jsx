@@ -11,7 +11,7 @@ function BookPage() {
   const getDuplicate = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/library/bookDupe"
+        `${import.meta.env.VITE_API_URL}/library/bookDupe`
       );
       setBookDuplicate(response.data);
     } catch (error) {

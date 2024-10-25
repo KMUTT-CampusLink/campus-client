@@ -17,7 +17,7 @@ function BookListPage() {
     const getCategory = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/library/category"
+          `${import.meta.env.VITE_API_URL}/library/category`
         );
         setCategories(response.data.map((category) => category.title));
       } catch (error) {
@@ -30,7 +30,7 @@ function BookListPage() {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/library/book"
+        `${import.meta.env.VITE_API_URL}/library/book`
       );
       setData(response.data);
     } catch (error) {

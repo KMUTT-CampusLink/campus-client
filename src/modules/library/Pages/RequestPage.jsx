@@ -29,7 +29,7 @@ function RequestPage() {
   const getDuplicate = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/library/bookDupe"
+        `${import.meta.env.VITE_API_URL}/library/bookDupe`
       );
       setBookDuplicate(response.data);
 
@@ -79,7 +79,7 @@ function RequestPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/library/reservations",
+        `${import.meta.env.VITE_API_URL}/library/reservations`,
         reservationData
       );
       console.log("Reservation successful:", response.data);
