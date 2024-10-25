@@ -13,8 +13,9 @@ export default function AttendRoutes() {
       element: <QrPage />,
     },
     {
-      path: "stqr",
+      path: "stQr",
       element: <StQrPage />,
     },
+
   ];
 }

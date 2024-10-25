@@ -1,11 +1,13 @@
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
-import useStQr from "../hook/useStQr";
+import useStAttendance from "../hook/useStAttendance";
 
-const StQrComponent = () => {
-  const { items, handleMenuClick, stDetail, StQrButton } = useStQr();
+
+const StAttendanceComponent = () => {
+  const { items, handleMenuClick, AttendanceDetail, chooseDate, table } =
+    useStAttendance();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-red-600 to-yellow-400">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-red-500 to-yellow-500">
       <NavBar />
 
       <div className="mt-16 flex-1 bg-white rounded-t-3xl relative">
@@ -26,11 +28,16 @@ const StQrComponent = () => {
 
         <div className="px-0">
           <hr className="border-black w-full m-0" />
-          <div className="p-8 pl-24 pr-24">{stDetail && stDetail()}</div>
+          <div className="p-8 pl-24 pr-24">
+            {AttendanceDetail && AttendanceDetail()}
+          </div>
 
           <hr className="border-gray-300 w-full m-0" />
           <div className="p-8 pl-24 pr-24">
-            <div className="mt-2">{StQrButton && StQrButton()}</div>
+            {chooseDate && chooseDate()}
+            <div className="mt-8">
+              {table && table()}
+            </div>
           </div>
         </div>
       </div>
@@ -38,4 +45,4 @@ const StQrComponent = () => {
   );
 };
 
-export default StQrComponent;
+export default StAttendanceComponent;
