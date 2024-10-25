@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { generateNewQr } from "../services/api";
 
 const useQr = () => {
   const [h1] = useState("QR Page");
   const navigate = useNavigate();
+  const [qrData,setQrData] =useState(null);
 
   const items = [
     { label: "Attendance", key: "Attendance" },
@@ -16,9 +18,15 @@ const useQr = () => {
     } else if (key === "QR CODE") {
       navigate("/attendance/qr");
     }
+    console.log("HI");
+    
   };
-
- 
+  const handleGenerateQrButton = async(sectionId) => {
+    const data = await generateNewQr(sectionId)
+     console.log("Generating QR Code...")
+     console.log(data)
+     setQrData(data.data.qrCode)
+  }
   function detail() {
     return (
       <div className="flex flex-col">
@@ -33,13 +41,14 @@ const useQr = () => {
     </div>
     );
   }
-
   
   function qrButton() {
+    // let sectionId = 1001
     return (
+      <div>
       <button
         className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-1/6"
-        onClick={() => console.log("Generating QR Code...")} // Will replace with actual QR code generation logic
+        onClick={() => handleGenerateQrButton(1001)}
       >
         Generate QR CODE
         <svg
@@ -56,8 +65,19 @@ const useQr = () => {
           />
         </svg>
       </button>
-    );
-  }
+
+      {/* Conditionally render the QR code image */}
+      {qrData && (
+        <img style={{width:"14vw"}}
+          src={qrData}
+          alt="QR Code"
+          className="mt-4" // Add some margin-top for spacing, if needed
+        />
+      )}
+    </div>
+  );
+}
+ 
 
   return {
     h1,
