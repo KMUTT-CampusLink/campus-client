@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Navbar from '../../../registration/components/NavBarComponents/NavBar';
-import Question from '../../components/professor/CreateExam/Question';
+import Question from '../../components/professor/EditedExam/Question';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -118,6 +118,8 @@ export default function ProfessorEditExamPage() {
       })),
     };
   };
+
+  // console.log(exam)
 
   return (
     <div className='w-auto'>

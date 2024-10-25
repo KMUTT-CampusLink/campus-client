@@ -122,7 +122,7 @@ export default function ProfessorCreateExamPage() {
             />
           </div>
           {/* Map question */}
-          {exam.questions.map((question, index) => (
+          {exam && exam.questions.map((question, index) => (
             <>
               <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
               <Question
@@ -155,8 +155,7 @@ export default function ProfessorCreateExamPage() {
                 <button
                   className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
                   onClick={() => {
-                    // handleSubmit();
-                    console.log(exam)
+                    handleSubmit();
                   }}
                 >
                   Confirm
