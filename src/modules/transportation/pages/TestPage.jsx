@@ -22,8 +22,8 @@ const TestPage = () => {
     const fetch = async () => {
       const data = await axiosInstance
         .post("transport/user/routesConnectingStops", {
-          start_stop_id: parseInt(state?.start_stop_id || startStop),
-          end_stop_id: parseInt(state?.end_stop_id || endStop),
+          start_stop_id: parseInt(state.start_stop_id),
+          end_stop_id: parseInt(state.end_stop_id),
         })
         .then((res) => res.data);
       console.log(data);
