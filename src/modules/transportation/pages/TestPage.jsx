@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../services/axiosInstance";
+import { fetchRoutesConnectingStops } from "../services/api";
 
 // const routes = [
 //   { id: 1, name: "Route 1", description: "" },
@@ -20,14 +20,10 @@ const TestPage = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await axiosInstance
-        .post("transport/user/routesConnectingStops", {
-          start_stop_id: parseInt(startStop.id),
-          end_stop_id: parseInt(endStop.id),
-        })
-        .then((res) => res.data);
-      console.log(data);
-      setRoutes(data.routes);
+      fetchRoutesConnectingStops(startStop.id, endStop.id).then((data) => {
+        setRoutes(data.routes);
+        console.log(data.routes);
+      });
     };
     if (state?.startStop.id && state?.endStop.id) {
       fetch();

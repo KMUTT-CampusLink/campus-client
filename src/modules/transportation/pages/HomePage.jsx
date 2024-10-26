@@ -2,20 +2,14 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { FaMapMarkerAlt, FaBus, FaShuttleVan, FaBicycle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../services/axiosInstance";
-import { list } from "postcss";
+import { fetchAllStops } from "../services/api";
 
 function HomePage() {
   const [startStop, setStartStop] = useState({ id: null, name: "" });
   const [endStop, setEndstop] = useState({ id: null, name: "" });
   const [stops, setStops] = useState([]);
   useEffect(() => {
-    const fetch = async () => {
-      const response = await axiosInstance.get("/transport/user/queryAllStops");
-      return response.data;
-    };
-
-    fetch().then((data) => {
+    fetchAllStops().then((data) => {
       setStops(data.stops);
     });
   }, []);
@@ -164,15 +158,14 @@ function HomePage() {
             state={{ startStop: startStop, endStop: endStop }}
           >
             <button
-              //className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-              className={`${
-                !startStop.id || !endStop.id
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-orange-600 hover:bg-orange-500"
-              } text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300`}
-              disabled={!startStop.id || !endStop.id}
+              className={
+                startStop.id && endStop.id
+                  ? "bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+                  : "bg-gray-400 cursor-not-allowed text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+              }
+              disabled={!(startStop.id && endStop.id)}
               title={
-                !startStop.id || !endStop.id ? "Please select both stops" : ""
+                !(startStop.id && endStop.id) ? "Please select stops first" : ""
               }
             >
               Search
