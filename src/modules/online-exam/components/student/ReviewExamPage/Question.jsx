@@ -1,13 +1,4 @@
-import { faChessKing } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
-
-export default function Question({ questionNo, question, choice, type, studentAnswer }) {
-//   const isSelected = (value) => {
-//     return localAnswer.includes(value) ? "checked" : "";
-//   };
-
-  console.log(choice);
-
+export default function Question({ questionNo, question, choice, type, studentAnswer, isCorrect }) {
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
       <h1>{questionNo + 1}. {question}</h1>
@@ -21,8 +12,8 @@ export default function Question({ questionNo, question, choice, type, studentAn
                   type="radio"
                   name={`radio-${questionNo}`}
                   className={`radio checked:bg-[#C76650]`}
-                //   checked={isSelected(choiceObj.choiceText)}
-                  onChange={() => handleInputChange(choiceObj.choiceText)}
+                  checked={choiceObj == studentAnswer}
+                  disabled
                 />
                 {choiceObj}
               </>
@@ -33,8 +24,8 @@ export default function Question({ questionNo, question, choice, type, studentAn
                 <input
                   type="checkbox"
                   className={`checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]`}
-                //   checked={isSelected(choiceObj.choiceText)}
-                  onChange={() => handleInputChange(choiceObj.choiceText)}
+                  checked={studentAnswer.includes(choiceObj)}
+                  disabled
                 />
                 {choiceObj}
               </>
@@ -46,8 +37,8 @@ export default function Question({ questionNo, question, choice, type, studentAn
           <textarea
             className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
             placeholder="Type your Answer Here"
-            // value={localAnswer[0] || ''}
-            onChange={(e) => handleInputChange(e.target.value)}
+            disabled
+            value={studentAnswer}
           ></textarea>
         )}
       </div>
