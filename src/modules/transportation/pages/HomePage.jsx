@@ -47,17 +47,23 @@ function HomePage() {
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
                 <select
                   value={startStop.id || ""}
-                  onChange={(e) =>
-                    setStartStop({ ...startStop, id: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const selectedOption =
+                      e.target.options[e.target.selectedIndex];
+                    setStartStop({
+                      ...startStop,
+                      id: selectedOption.value,
+                      name: selectedOption.text,
+                    });
+                  }}
                   className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
                   style={{ borderRadius: "0.25rem", width: "100%" }} // Full width
                 >
                   <option value="" disabled>
                     From
                   </option>
-                  {stops.map((stop) => (
-                    <option key={stop.id} value={stop.id}>
+                  {stops.map((stop, index) => (
+                    <option key={index} value={stop.id}>
                       {stop.name}
                     </option>
                   ))}
@@ -70,17 +76,23 @@ function HomePage() {
 
                 <select
                   value={endStop.id || ""}
-                  onChange={(e) =>
-                    setEndstop({ ...endStop, id: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const selectedOption =
+                      e.target.options[e.target.selectedIndex];
+                    setEndstop({
+                      ...endStop,
+                      id: selectedOption.value,
+                      name: selectedOption.text,
+                    });
+                  }}
                   className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
                   style={{ borderRadius: "0.25rem", width: "100%" }} // Full width
                 >
                   <option value="" disabled>
                     To
                   </option>
-                  {stops.map((stop) => (
-                    <option key={stop.id} value={stop.id}>
+                  {stops.map((stop, index) => (
+                    <option key={index} value={stop.id}>
                       {stop.name}
                     </option>
                   ))}
@@ -149,11 +161,19 @@ function HomePage() {
             to={{
               pathname: "/transport/test",
             }}
-            state={{ start_stop_id: startStop.id, end_stop_id: endStop.id }}
+            state={{ startStop: startStop, endStop: endStop }}
           >
             <button
-              className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+              //className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+              className={`${
+                !startStop.id || !endStop.id
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-orange-600 hover:bg-orange-500"
+              } text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300`}
               disabled={!startStop.id || !endStop.id}
+              title={
+                !startStop.id || !endStop.id ? "Please select both stops" : ""
+              }
             >
               Search
             </button>
