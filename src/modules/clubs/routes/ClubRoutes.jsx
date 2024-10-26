@@ -34,7 +34,7 @@ export default function ClubRoutes() {
           element: <ClubLandingPage />,
         },
         {
-          path: "club-detail", // Club detail page at "/clubs/club-detail"
+          path: ":clubId", // Club detail page at "/clubs/club-detail"
           element: <ClubDetailPage />,
         },
         {

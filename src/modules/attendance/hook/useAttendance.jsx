@@ -119,7 +119,7 @@ const useAttendance = () => {
         <span className="text-2xl font-bold text-orange-500">
           Attendance Check
         </span>
-        <table className="table w-9/10 mt-4 rounded-lg overflow-hidden">
+        <table className="table w-full mt-4 rounded-lg ">
           <thead className="bg-[#F69800]">
             <tr>
               <th className="text-white">Date</th>
@@ -167,7 +167,7 @@ const useAttendance = () => {
                     </label>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32"
+                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 overflow-hidden"
                     >
                       <li>
                         <a
