@@ -11,7 +11,7 @@ export default function ProfessorExamSettingPage() {
     <>
       <NavBar />
       {/* Heading */}
-      <div className=" px-[26px]  lg:px-[200px]">
+      <div className=" px-[26px] pt-20 lg:px-[200px]">
         <div className="flex justify-between py-[35px] ">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Setting</p>

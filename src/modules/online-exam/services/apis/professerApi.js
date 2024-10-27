@@ -32,7 +32,7 @@ export const getExamById = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const deleteExamById = async (examId) => {
   try {
@@ -43,7 +43,7 @@ export const deleteExamById = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const getExamDataById = async (examId) => {
   try {
@@ -54,4 +54,16 @@ export const getExamDataById = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
+
+export const updateExam = async (exam) => {
+  try {
+    const response = await axios.put(
+      "http://localhost:3000/api/exams/professor/updateExam",
+      exam
+    );
+    return response;
+  } catch (error) {
+    return error.response?.data || { message: "An error occurred" };
+  }
+};

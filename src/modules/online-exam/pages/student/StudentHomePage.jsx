@@ -1,24 +1,28 @@
 import { useEffect,useState } from "react";
+
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import ExamCard from "../../components/student/HomePage/ExamCard";
 import HistoryCard from "../../components/student/HomePage/HistoryCard";
 
-import { getStudentExams } from "../../services/apis/studentApi";
-
-const dataMock = [["Exam1", 1], ["Exam2", 2], ["Exam3", 3], ["Exam4", 4], ["Exam5", 5]];
-const dataHistoryMock = [["Exam1", 1], ["Exam2", 2], ["Exam3", 3]];
+import { getStudentExamsById, getHistoryStudentExams } from "../../services/apis/studentApi";
 
 export default function StudentHomePage() {
   const [exams, setExams] = useState([]);
   const [historyExams, setHistoryExams] = useState([]);
 
   const getExams = async () => {
-    const res = await getStudentExams();
+    const res = await getStudentExamsById(123456);
     setExams(res.data.data);
+  }
+
+  const getHistoryExams = async () => {
+    const res = await getHistoryStudentExams(123456);
+    setHistoryExams(res.data.data);
   }
 
   useEffect(() => {
     getExams();
+    getHistoryExams();
   },[]);
 
   return (
@@ -34,14 +38,14 @@ export default function StudentHomePage() {
         </div>
         <div className="grid gap-4 py-[20px]">
           {exams.map((examName) => (
-            <ExamCard examName={examName.title} Id={examName.id}></ExamCard>
+            <ExamCard examName={examName.title} Id={examName.id}/>
           ))}
         </div>
         <hr className='my-[20px] border-[1px] bg-[#BEBEBE]' />
         <h3 className="font-bold text-[22px] xl:text-[30px]">History</h3>
         <div className="grid gap-4 py-[20px]">
-          {dataHistoryMock.map((examName) => (
-            <HistoryCard examName={examName[0]} Id={examName[1]}></HistoryCard>
+          {historyExams.map((examName) => (
+            <HistoryCard examName={examName.title} Id={examName.id}/>
           ))}
         </div>
       </div>
