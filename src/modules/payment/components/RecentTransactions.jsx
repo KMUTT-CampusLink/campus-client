@@ -36,12 +36,12 @@ const RecentTransactions = ({
   };
 
   return (
-    <div className="w-full lg:w-1/2 mt-10 lg:mt-32 mb-auto lg:h-[80vh] overflow-scroll">
+    <div className="w-full lg:w-1/2 mb-auto">
       <h2 className="text-xl lg:text-2xl h-max py-4 lg:py-8 font-semibold">
         Recent Transactions
       </h2>
 
-      <div className="flex flex-col lg:flex-row p-0 h-min justify-between mb-4">
+      <div className="flex flex-row p-0 h-min justify-between mb-4 items-center space-x-2">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-outline">
             Filter By: {filterRecent}
@@ -67,14 +67,14 @@ const RecentTransactions = ({
 
         {/* See All Button */}
         <button
-          className="btn btn-primary bg-orange-600 mt-4 lg:mt-0"
+          className="btn bg-orange-600 text-white btn-outline w-fit"
           onClick={() => setShowAll(true)}
         >
           See All
         </button>
       </div>
 
-      <div className={`space-y-4 h-min overflow-scroll`}>
+      <div className="space-y-4 h-min">
         {recentTransactions.map((transaction, index) => (
           <div
             key={index}

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
-import { dotenv } from 'dotenv';
 
 const CheckoutSuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [countdown, setCountdown] = useState(8);
+  const navigate = useNavigate();
   const sessionId = new URLSearchParams(window.location.search).get('session_id');
 
   useEffect(() => {
     if (sessionId) {
-      // ดึง session_id จาก URL และตรวจสอบการชำระเงิน
+      // Fetch session_id from URL and verify payment
       fetch(`${import.meta.env.VITE_API_URL}/payment/verify-session?session_id=${sessionId}`)
         .then(response => response.json())
         .then(data => {
@@ -25,6 +27,20 @@ const CheckoutSuccess = () => {
     }
   }, [sessionId]);
 
+  useEffect(() => {
+    if (paymentStatus) {
+      if (countdown === 0) {
+        navigate("/payment");
+      }
+  
+      const timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }
+  }, [countdown, paymentStatus, navigate]);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <NavBar />
@@ -34,7 +50,12 @@ const CheckoutSuccess = () => {
         </h1>
         <div className="bg-white shadow-md rounded-lg p-8 w-full md:w-4/5 mx-auto">
           {paymentStatus ? (
-            <p className="text-lg font-semibold">{paymentStatus}</p>
+            <>
+              <p className="text-lg font-semibold">{paymentStatus}</p>
+              <p className="text-lg mt-4">
+                You will be redirected back in {countdown} seconds.
+              </p>
+            </>
           ) : (
             <p className="text-lg">Verifying payment...</p>
           )}

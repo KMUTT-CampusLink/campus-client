@@ -38,7 +38,7 @@ const AllTransactions = ({
 
   return (
     <div className="fixed right-0 top-0 z-50 bg-white h-screen w-full max-w-full p-4 lg:max-w-md lg:p-8 overflow-y-auto transition-transform duration-500 ease-in-out">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 pt-14">
         <h2 className="text-xl lg:text-2xl font-semibold">All Transactions</h2>
         {/* X button to close the modal */}
         <button
@@ -82,7 +82,7 @@ const AllTransactions = ({
         </button>
       </div>
 
-      <div className="space-y-4 overflow-scroll">
+      <div className="space-y-4 ">
         {sortedTransactions.map((transaction, index) => (
           <div
             key={index}

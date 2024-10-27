@@ -6,8 +6,8 @@ export const transactions = [
     issue_date: "2023-08-01T00:00:00Z", // timestamp
     due_date: "2023-08-15T00:00:00Z", // timestamp
     paid_date: null, // timestamp (can be null if unpaid)
-    amount: 400.0, // decimal(10,2)
-    title: "Laptop", // varchar(100)
+    amount: 50000.0, // decimal(10,2)
+    title: "Lost Book reprimand", // varchar(100)
     status: "Unpaid", // payment_status_enum (can be 'Paid', 'Unpaid', 'Canceled')
     created_at: "2023-07-25T00:00:00Z", // timestamp
     updated_at: "2023-07-30T00:00:00Z", // timestamp
@@ -20,7 +20,7 @@ export const transactions = [
     due_date: "2023-05-15T00:00:00Z",
     paid_date: "2023-05-10T00:00:00Z",
     amount: 230.0,
-    title: "Tuition fees",
+    title: "Parking Fee",
     status: "Paid",
     created_at: "2023-04-15T00:00:00Z",
     updated_at: "2023-05-10T00:00:00Z",
@@ -63,5 +63,31 @@ export const transactions = [
     status: "Unpaid",
     created_at: "2024-01-15T00:00:00Z",
     updated_at: "2024-01-25T00:00:00Z",
+  },
+  {
+    id: "6",
+    user_id: 1003,
+    issued_by: "Finance Office",
+    issue_date: "2023-05-01T00:00:00Z",
+    due_date: "2023-05-12T00:00:00Z",
+    paid_date: "2023-05-10T00:00:00Z",
+    amount: 230.0,
+    title: "Bobux",
+    status: "Paid",
+    created_at: "2023-04-15T00:00:00Z",
+    updated_at: "2023-05-10T00:00:00Z",
+  },
+  {
+    id: "7",
+    user_id: 1004,
+    issued_by: "Finance Office",
+    issue_date: "2023-05-01T00:00:00Z",
+    due_date: "2023-05-19T00:00:00Z",
+    paid_date: "2023-05-10T00:00:00Z",
+    amount: 230.0,
+    title: "Bing Chilling",
+    status: "Unpaid",
+    created_at: "2023-04-15T00:00:00Z",
+    updated_at: "2023-05-10T00:00:00Z",
   },
 ];
