@@ -51,7 +51,7 @@ function HomePage() {
           </h1>
 
           {/* Route Selection Dropdowns */}
-          <div className="w-full p-2 shadow-md border rounded">
+          <div className="w-full max-w-4xl p-2 shadow-md border rounded">
             <div className="grid grid-cols-2 gap-4 w-full">
               <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
@@ -76,7 +76,8 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="w-full max-w-4xl mt-6 h-72 overflow-y-auto shadow-md p-4 border rounded">
+          {/* Route List */}
+          <div className="w-full max-w-4xl mt-6 max-h-72 overflow-y-auto shadow-md p-4 border rounded">
             <RouteList
               routes={routes}
               selectedRoute={selectedRoute}
@@ -84,6 +85,23 @@ function HomePage() {
             />
           </div>
 
+          {/* Booking Schedule Button */}
+          <div>
+            <button
+              onClick={handleRouteSearch}
+              className={
+                startStop.id && endStop.id
+                  ? "bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+                  : "bg-gray-400 cursor-not-allowed text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+              }
+              disabled={!(startStop.id && endStop.id)}
+              title={
+                !(startStop.id && endStop.id) ? "Please select stops first" : ""
+              }
+            >
+              Search
+            </button>
+          </div>
           {/* Google Map iframe (Map Box) */}
           <div className="w-full max-w-4xl mt-6">
             <iframe
@@ -92,22 +110,6 @@ function HomePage() {
               allowFullScreen
             />
           </div>
-
-          {/* Booking Schedule Button */}
-          <button
-            onClick={handleRouteSearch}
-            className={
-              startStop.id && endStop.id
-                ? "bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-                : "bg-gray-400 cursor-not-allowed text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-            }
-            disabled={!(startStop.id && endStop.id)}
-            title={
-              !(startStop.id && endStop.id) ? "Please select stops first" : ""
-            }
-          >
-            Search
-          </button>
         </div>
       </main>
     </div>
