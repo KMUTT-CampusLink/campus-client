@@ -1,13 +1,31 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
-import { FaMapMarkerAlt, FaBus, FaShuttleVan, FaBicycle } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { fetchAllStops } from "../services/api";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { fetchAllStops, fetchRoutesConnectingStops } from "../services/api";
+import StopSelector from "../components/stopSelector";
+import RouteList from "../components/RouteList";
 
 function HomePage() {
   const [startStop, setStartStop] = useState({ id: null, name: "" });
-  const [endStop, setEndstop] = useState({ id: null, name: "" });
+  const [endStop, setEndStop] = useState({ id: null, name: "" });
   const [stops, setStops] = useState([]);
+  const [routes, setRoutes] = useState([]);
+  const [selectedRoute, setSelectedRoute] = useState({});
+
+  // const routes = [
+  //   { id: 1, name: "Route 1", description: "" },
+  //   { id: 2, name: "Route 2", description: "" },
+  //   { id: 3, name: "Route 3", description: "" },
+  //   { id: 4, name: "Route 4", description: "" },
+  //   { id: 5, name: "Route 5", description: "" },
+  // ];
+
+  const handleRouteSearch = () => {
+    fetchRoutesConnectingStops(startStop.id, endStop.id).then((data) => {
+      setRoutes(data.routes);
+    });
+  };
+
   useEffect(() => {
     fetchAllStops().then((data) => {
       setStops(data.stops);
@@ -33,112 +51,37 @@ function HomePage() {
           </h1>
 
           {/* Route Selection Dropdowns */}
-          <div className="flex mt-4 w-full max-w-3xl">
-            <div className="flex-1">
-              {/* From Route Dropdown */}
-              <div className="relative mb-4">
-                {/* Start Stop input */}
+          <div className="w-full p-2 shadow-md border rounded">
+            <div className="grid grid-cols-2 gap-4 w-full">
+              <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
-                <select
-                  value={startStop.id || ""}
-                  onChange={(e) => {
-                    const selectedOption =
-                      e.target.options[e.target.selectedIndex];
-                    setStartStop({
-                      ...startStop,
-                      id: selectedOption.value,
-                      name: selectedOption.text,
-                    });
-                  }}
-                  className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
-                  style={{ borderRadius: "0.25rem", width: "100%" }} // Full width
-                >
-                  <option value="" disabled>
-                    From
-                  </option>
-                  {stops.map((stop, index) => (
-                    <option key={index} value={stop.id}>
-                      {stop.name}
-                    </option>
-                  ))}
-                </select>
+                <StopSelector
+                  stops={stops}
+                  stop={startStop}
+                  setStop={setStartStop}
+                  placeholder="From:"
+                />
               </div>
 
               {/* End Stop Input */}
               <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
-
-                <select
-                  value={endStop.id || ""}
-                  onChange={(e) => {
-                    const selectedOption =
-                      e.target.options[e.target.selectedIndex];
-                    setEndstop({
-                      ...endStop,
-                      id: selectedOption.value,
-                      name: selectedOption.text,
-                    });
-                  }}
-                  className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:outline-none focus:border-orange-400"
-                  style={{ borderRadius: "0.25rem", width: "100%" }} // Full width
-                >
-                  <option value="" disabled>
-                    To
-                  </option>
-                  {stops.map((stop, index) => (
-                    <option key={index} value={stop.id}>
-                      {stop.name}
-                    </option>
-                  ))}
-                </select>
+                <StopSelector
+                  stops={stops}
+                  stop={endStop}
+                  setStop={setEndStop}
+                  placeholder="To:"
+                />
               </div>
             </div>
           </div>
 
-          {/* Box for Transport Mode Icons */}
-          <div className="bg-white p-2 rounded-lg shadow-lg w-full max-w-sm">
-            <h2 className="text-lg font-bold text-gray-800 text-center mb-2">
-              Transport Mode
-            </h2>
-
-            {/* Transport Mode Icons */}
-            <div className="flex space-x-4 mt-2 justify-center">
-              {/* Bus Icon */}
-              <div
-                className={`cursor-pointer p-2 rounded-full shadow-lg ${
-                  transportMode === "bus"
-                    ? "bg-orange-600 text-white"
-                    : "bg-gray-100"
-                }`}
-                onClick={() => handleSelectMode("bus")}
-              >
-                <FaBus className="text-2xl" />
-              </div>
-
-              {/* Mini Van Icon */}
-              <div
-                className={`cursor-pointer p-2 rounded-full shadow-lg ${
-                  transportMode === "van"
-                    ? "bg-orange-600 text-white"
-                    : "bg-gray-100"
-                }`}
-                onClick={() => handleSelectMode("van")}
-              >
-                <FaShuttleVan className="text-2xl" />
-              </div>
-
-              {/* Bicycle Icon */}
-              <div
-                className={`cursor-pointer p-2 rounded-full shadow-lg ${
-                  transportMode === "bicycle"
-                    ? "bg-orange-600 text-white"
-                    : "bg-gray-100"
-                }`}
-                onClick={() => handleSelectMode("bicycle")}
-              >
-                <FaBicycle className="text-2xl" />
-              </div>
-            </div>
+          <div className="w-full max-w-4xl mt-6 h-72 overflow-y-auto shadow-md p-4 border rounded">
+            <RouteList
+              routes={routes}
+              selectedRoute={selectedRoute}
+              setSelectedRoute={setSelectedRoute}
+            />
           </div>
 
           {/* Google Map iframe (Map Box) */}
@@ -151,26 +94,20 @@ function HomePage() {
           </div>
 
           {/* Booking Schedule Button */}
-          <Link
-            to={{
-              pathname: "/transport/test",
-            }}
-            state={{ startStop: startStop, endStop: endStop }}
+          <button
+            onClick={handleRouteSearch}
+            className={
+              startStop.id && endStop.id
+                ? "bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+                : "bg-gray-400 cursor-not-allowed text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
+            }
+            disabled={!(startStop.id && endStop.id)}
+            title={
+              !(startStop.id && endStop.id) ? "Please select stops first" : ""
+            }
           >
-            <button
-              className={
-                startStop.id && endStop.id
-                  ? "bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-                  : "bg-gray-400 cursor-not-allowed text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-              }
-              disabled={!(startStop.id && endStop.id)}
-              title={
-                !(startStop.id && endStop.id) ? "Please select stops first" : ""
-              }
-            >
-              Search
-            </button>
-          </Link>
+            Search
+          </button>
         </div>
       </main>
     </div>
