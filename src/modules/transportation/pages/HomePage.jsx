@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { fetchAllStops, fetchRoutesConnectingStops } from "../services/api";
+import {
+  fetchAllStops,
+  fetchRoutesConnectingStops,
+  fetchTripsByRouteID,
+} from "../services/api";
 import StopSelector from "../components/stopSelector";
 import RouteList from "../components/RouteList";
 
@@ -11,33 +15,36 @@ function HomePage() {
   const [stops, setStops] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState({});
-
-  // const routes = [
-  //   { id: 1, name: "Route 1", description: "" },
-  //   { id: 2, name: "Route 2", description: "" },
-  //   { id: 3, name: "Route 3", description: "" },
-  //   { id: 4, name: "Route 4", description: "" },
-  //   { id: 5, name: "Route 5", description: "" },
-  // ];
-
+  const [schedule, setSchedule] = useState([]);
+  //fetch routes connecting the selected stops
   const handleRouteSearch = () => {
     fetchRoutesConnectingStops(startStop.id, endStop.id).then((data) => {
+      console.log(data.routes);
       setRoutes(data.routes);
     });
   };
-
+  //fetch stops for dropdown menus
   useEffect(() => {
     fetchAllStops().then((data) => {
       setStops(data.stops);
     });
   }, []);
 
-  const [transportMode, setTransportMode] = useState("");
+  //fetch routes when start and end stops are selected
+  useEffect(() => {
+    if (startStop.id && endStop.id) {
+      handleRouteSearch();
+    }
+  }, [startStop, endStop]);
 
-  const handleSelectMode = (mode) => {
-    setTransportMode(mode);
-    console.log(`Selected Mode: ${mode}`);
-  };
+  //fetch schedule/trips for selected route
+  useEffect(() => {
+    console.log(selectedRoute);
+    fetchTripsByRouteID(selectedRoute.id).then((data) => {
+      setSchedule(data.trips);
+      console.log(data.trips);
+    });
+  }, [selectedRoute]);
 
   return (
     <div className="min-h-screen">
@@ -86,7 +93,7 @@ function HomePage() {
           </div>
 
           {/* Booking Schedule Button */}
-          <div>
+          {/* <div>
             <button
               onClick={handleRouteSearch}
               className={
@@ -99,9 +106,10 @@ function HomePage() {
                 !(startStop.id && endStop.id) ? "Please select stops first" : ""
               }
             >
-              Search
+              Book
             </button>
-          </div>
+          </div> */}
+
           {/* Google Map iframe (Map Box) */}
           <div className="w-full max-w-4xl mt-6">
             <iframe
