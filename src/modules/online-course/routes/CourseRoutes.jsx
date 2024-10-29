@@ -5,12 +5,12 @@ import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
 import TrTasks from "../pages/Teacher/TrTasks";
 import TrDiscussion from "../pages/Teacher/TrDiscussion";
 import StDashboard from "../pages/Students/StDashboard";
+import StAllCourses from "../pages/Students/StAllCourses"
 import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
-import StAllCourses from "../pages/Students/StAllCourses";
 
 export default function CourseRoutes() {
   return [
@@ -38,10 +38,9 @@ export default function CourseRoutes() {
             },
             {
               path: "submission",
-              element: <TrTaskSubmission/>,
-            }
+              element: <TrTaskSubmission />,
+            },
           ],
-          element: <TrTasks />,
         },
         {
           path: "discussion",
@@ -62,7 +61,16 @@ export default function CourseRoutes() {
       children: [
         {
           path: "",
-          element: <StDashboard />,
+          children: [
+            {
+              path: "",
+              element: <StDashboard />,
+            },
+            {
+              path: "all_courses",
+              element: <StAllCourses/>
+            }
+          ],
         },
         {
           path: "course_description",
@@ -79,10 +87,6 @@ export default function CourseRoutes() {
         {
           path: "discussion",
           element: <StDiscussion />,
-        },
-        {
-          path: "all_courses",
-          element: <StAllCourses />,
         },
         // {
         //   path: "online_exam",

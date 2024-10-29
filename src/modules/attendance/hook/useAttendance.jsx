@@ -3,10 +3,29 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+/* import axios from "axios"; */
+
 
 const useAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+/* // Fetch announcements from API
+useEffect(() => {
+  const getAnnouncements = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/library/announce" // API endpoint
+      );
+      setAnnouncements(response.data); // Set fetched data to state
+      setFilteredAnnouncements(response.data); // Initialize filtered announcements
+    } catch (error) {
+      console.error("Error fetching announcements:", error); // Handle error
+    }
+  };
+  getAnnouncements(); // Call the function to fetch data
+}, []); */
+
   const [statuses, setStatuses] = useState([
     {
       date: "2024-10-12",
@@ -119,7 +138,7 @@ const useAttendance = () => {
         <span className="text-2xl font-bold text-orange-500">
           Attendance Check
         </span>
-        <table className="table w-9/10 mt-4 rounded-lg overflow-hidden">
+        <table className="table w-full mt-4 rounded-lg ">
           <thead className="bg-[#F69800]">
             <tr>
               <th className="text-white">Date</th>
@@ -167,7 +186,7 @@ const useAttendance = () => {
                     </label>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32"
+                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 overflow-hidden"
                     >
                       <li>
                         <a
@@ -198,5 +217,6 @@ const useAttendance = () => {
 
   return { items, handleMenuClick, AttendanceDetail, chooseDate, table };
 };
+
 
 export default useAttendance;

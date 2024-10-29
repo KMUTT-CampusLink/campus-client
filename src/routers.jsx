@@ -15,11 +15,20 @@ import PaymentRoutes from "./modules/payment/routes/PaymentRoutes";
 import RegisRoutes from "./modules/registration/routes/RegisRoutes";
 import TransRoutes from "./modules/transportation/routes/TransRoutes";
 
+// dev lead pages
+import HomePage from "./pages/HomePage";
+import NotFound from "./pages/NotFound";
+import UnAuthorized from "./pages/UnAuthorized";
+
 const main_router = [
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "",
+        element: <HomePage />,
+      },
       {
         path: "attendance",
         children: AttendRoutes(),
@@ -73,6 +82,14 @@ const main_router = [
         children: TransRoutes(),
       },
     ],
+  },
+  {
+    path: "/unauthorized",
+    element: <UnAuthorized />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];
 

@@ -64,6 +64,30 @@ export const updateExam = async (exam) => {
     );
     return response;
   } catch (error) {
-    return error.response?.data || { message: "An error occurred" };
+    return error.response?.data;
+  }
+};
+
+export const getFullMark = async (examId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/exams/professor/getFullMark?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const updateExamSettings = async (examId, exam) => {
+  console.log(examId, exam);
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/exams/professor/updateExamSettings`,
+      { examId: examId, exam: exam }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
   }
 };
