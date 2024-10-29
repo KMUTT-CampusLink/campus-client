@@ -10,7 +10,7 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
-import { getExamDataById } from "../../services/apis/studentApi";
+import { getExamDataById, toggleExamStatus, submitExam } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
   const { examId } = useParams();
@@ -37,14 +37,16 @@ export default function StudentExamPage() {
             questionText: question.title || '',
             type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
             options: questionChoices.map(choice => ({
+              question_id: choice.question_id,
+              choiceId: choice.id,
               choiceText: choice.choice_text || '',
-              choiceImg: choice.choice_img || null,
-              isCorrect: choice.correct_ans || false
+              choiceImg: choice.choice_img || ''
             })),
             answer: questionChoices
               .filter(choice => choice.correct_ans)
               .map(choice => choice.choice_text || ''),
-            score: question.mark || null
+            score: question.mark || null,
+            question_id: question.id || null
           };
         })
         : [];
@@ -64,10 +66,10 @@ export default function StudentExamPage() {
   }, []);
 
   // Handle answer for each question
-  const handleAnswer = (questionNo, answer) => {
+  const handleAnswer = (questionId, answer) => {
     setStudentAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [questionNo]: answer,
+      [questionId]: answer,
     }));
   };
 
@@ -93,8 +95,14 @@ export default function StudentExamPage() {
   };
 
   // Submit answers to backend
-  const handleSubmit = () => {
-    console.log(studentAnswers);
+  const handleSubmit = async () => {
+    const res = await submitExam(examId, studentAnswers);
+    if (res.status === 200) {
+      const status = await toggleExamStatus(examId, "123456");
+      if (status.status === 200){
+        navigate("/exams/student/exam");
+      }
+    }
   };
 
   return (
@@ -108,12 +116,13 @@ export default function StudentExamPage() {
             .map((question, index) => (
               <Question
                 key={index}
+                questionid={question.question_id}
                 questionNo={studentQuestion}
-                question={question.questionText} // Correctly access questionText
-                choice={question.options} // Correctly pass options
+                question={question.questionText}
+                choice={question.options}
                 type={question.type}
                 handleAnswer={handleAnswer}
-                studentAnswer={studentAnswers[studentQuestion] || []} // Correct student answer access
+                studentAnswer={studentAnswers[studentQuestion] || []}
               />
             ))}
           {/* Question Navigation */}

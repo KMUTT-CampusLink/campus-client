@@ -56,6 +56,18 @@ export const getExamDataById = async (examId) => {
   }
 };
 
+export const updateExam = async (exam) => {
+  try {
+    const response = await axios.put(
+      "http://localhost:3000/api/exams/professor/updateExam",
+      exam
+    );
+    return response;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
 export const getFullMark = async (examId) => {
   try {
     const response = await axios.get(

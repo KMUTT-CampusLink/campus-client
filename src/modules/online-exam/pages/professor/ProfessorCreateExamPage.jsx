@@ -35,8 +35,11 @@ export default function ProfessorCreateExamPage() {
 
   // set default score for all questions function
   const handleDefaultScoreChange = (e) => {
-    const score = parseInt(e.target.value) || 0;
-    if (score < 0) return;
+    const score = parseInt(e.target.value);
+    if (score <= 0) {
+      setDefaultScore(1);
+      return;
+    };
     setDefaultScore(score);
     const updatedQuestions = exam.questions.map((question) => ({
       ...question,
