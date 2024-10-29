@@ -19,7 +19,6 @@ export default function ProfessorEditExamPage() {
     description: '',
     questions: [],
   });
-
   const getExamData = async () => {
     try {
       const res = await getExamDataById(examId);
