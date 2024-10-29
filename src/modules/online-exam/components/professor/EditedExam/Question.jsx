@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faMinus } from '@fortawesome/free-solid-svg-icons';
 
-import QuestionImageUploader from './QuestionImageUploader';
-import ChoiceImageUploader from './ChoiceImageUploader';
-import Choice from './Choice';
+import QuestionImageUploader from '../CreateExam/QuestionImageUploader';
+import ChoiceImageUploader from '../CreateExam/ChoiceImageUploader';
+import Choice from '../CreateExam/Choice';
 
 export default function Question({
   question,
@@ -144,7 +144,7 @@ export default function Question({
                     checked={question.answer == option.choiceText}
                     onChange={() => handleAnswerChange(option.choiceText)}
                   />
-                  {option}
+                  {option.choiceText}
                 </div>
                 <div className="flex items-center">
                   <ChoiceImageUploader
@@ -180,7 +180,7 @@ export default function Question({
                     checked={question.answer.includes(option.choiceText)} // Use choiceText
                     onChange={() => handleChecklistAnswerChange(option.choiceText)} // Pass choiceText
                   />
-                  {option}
+                  {option.choiceText}
                 </div>
                 <div className="flex items-center">
                   <ChoiceImageUploader
