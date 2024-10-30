@@ -43,7 +43,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
 
   return (
     <div
-      className={`text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
+      className={`max-sm:w-40 text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
         sideOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -57,7 +57,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
               className="hover:scale-125"
             />
           </button>
-          <ul className="mr-5 mt-24 flex-grow">
+          <ul className="max-sm:text-sm mr-5 mt-24 flex-grow">
             {/* Description Link */}
             <li
               onClick={() => handleNavigation("course_description")}
@@ -139,7 +139,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
                 size="xl"
               />
             </span>
-            <span className="text-white text-lg ">Dashboard</span>
+            <span className="max-sm:text-sm text-white text-lg ">
+              Dashboard
+            </span>
           </button>
         </div>
       </div>

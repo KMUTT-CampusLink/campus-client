@@ -140,11 +140,11 @@ export default function Question({
                     className="radio checked:bg-[#C76650]"
                     type="radio"
                     name={`question-${index}`}
-                    value={option.choiceText} // Ensure we're using choiceText
-                    checked={(question.answer).toString() === (option.choiceText).toString()} // Compare with choiceText
-                    onChange={() => handleAnswerChange(option.choiceText)} // Pass choiceText
+                    value={option.choiceText}
+                    checked={question.answer == option.choiceText}
+                    onChange={() => handleAnswerChange(option.choiceText)}
                   />
-                  {option.choiceText} {/* Display the choice text */}
+                  {option}
                 </div>
                 <div className="flex items-center">
                   <ChoiceImageUploader
@@ -180,7 +180,7 @@ export default function Question({
                     checked={question.answer.includes(option.choiceText)} // Use choiceText
                     onChange={() => handleChecklistAnswerChange(option.choiceText)} // Pass choiceText
                   />
-                  {option.choiceText} {/* Display the choice text */}
+                  {option}
                 </div>
                 <div className="flex items-center">
                   <ChoiceImageUploader

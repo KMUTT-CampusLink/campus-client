@@ -21,3 +21,12 @@ export const verifyExamPassword = async (examId, password) => {
         return error.response.data;
     }
 }
+
+export const getExamDataById = async (examId) => {
+    try {
+        const response = await axios.get(`http://localhost:3000/api/exams/student/getExamDataById?examId=${examId}`);
+        return response;
+    } catch (error) {
+        return error.response.data;
+    }
+}

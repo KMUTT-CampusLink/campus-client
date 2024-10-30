@@ -1,7 +1,7 @@
 import AttendancePage from "../page/AttendancePage";
-import DashboardPage from "../page/DashboardPage";
 import QrPage from "../page/QrPage";
-
+import StAttendancePage from "../page/StAttendancePage";
+import StQrPage from "../page/StQrPage";
 
 export default function AttendRoutes() {
   return [
@@ -10,16 +10,17 @@ export default function AttendRoutes() {
       element: <AttendancePage />,
     },
     {
-      path: "dashboard",
-      element: <DashboardPage />,
-    },
-    {
       path: "qr",
       element: <QrPage />,
     },
     {
-      path: "attendance",
-      element: <AttendancePage />,
+      path: "stQr",
+      element: <StQrPage />,
     },
+    {
+      path: "statt",
+      element: <StAttendancePage/>
+    }
+
   ];
 }
