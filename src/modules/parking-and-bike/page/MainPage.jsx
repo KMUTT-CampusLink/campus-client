@@ -1,78 +1,71 @@
 import Building from '../component/Main/Building';
-import Helpbut from '../component/Main/Helpbut';
-import Parkingbut from '../component/Main/Parkingbut';
-import Receiptbut from '../component/Main/Receiptbut';
-import Search from '../component/Main/Search';
-import Seeallbut from '../component/Main/Seeallbut';
-import Uniimage from '../component/Main/Uniimage';
-import bd from '../img/lx.png';
-
-const parkingData = [
-    {
-        id: 1,
-        bdimage: bd,
-        bdname: 'LX building',
-        avaslot: '3'
-    },
-    {
-        id: 2,
-        bdimage: bd,
-        bdname: 'President building',
-        avaslot: '4'
-    },
-    {
-        id: 3,
-        bdimage: bd,
-        bdname: 'LX building',
-        avaslot: '1'
-    },
-    {
-        id: 4,
-        bdimage: bd,
-        bdname: 'LX building',
-        avaslot: '6'
-    }
-];
-
-console.log(parkingData);
+import ReceiptButton from '../component/Main/Menu/ReceiptButton';
+import ParkingButton from '../component/Main/Menu/ParkingButton';
+import HelpButton from '../component/Main/Menu/HelpButton';
+import uniImg from '../img/parking.png';
+import { useState, useEffect } from 'react';
+import Axios from "axios";
+import Search from "../component/Search/Search"
+import searchResult from "../component/Search/Searchresult"
+import searchResultList from "../component/Search/Searchresultlist"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 function MainPage() {
+    const [building, setBuilding] = useState([]);
+
+    const getBuilding = async () => {
+        const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
+        setBuilding(res.data);
+    }
+
+    useEffect(() => {
+        getBuilding()
+    }, []);
+
+    const [results, setResults] = useState([]);
+
     return (
         <>
             <div className="flex flex-row justify-center">
-               <Uniimage/>
+                <img className="w-2/6 h-1/12 min-w-96 min-h-70" src={uniImg} alt="" />
             </div>
             <br />
             <br />
             <div className="flex flex-row justify-center">
-                <Search />
+                <div className="flex flex-row justify-center">
+                    <Search setResults={setResults} />
+                </div>
+                <searchResult results={results} />
             </div>
-
             <br />
             <br />
             <div className="flex flex-row gap-20 justify-center">
-                <Receiptbut />
-                <Parkingbut />
-                <Helpbut />
+                <ReceiptButton />
+                <ParkingButton />
+                <HelpButton />
 
             </div>
             <br />
             <br />
             <div className="max-w-2xl mx-auto">
                 <div className="flex flex-row justify-between">
-                <h1 className="text-2xl font-bold">Available Parking Slot</h1>
-                <div className="flex justify-end">
-                    <Seeallbut classname="w-6 h-6" />
+                    <h1 className="text-2xl font-bold">Available Parking Slot</h1>
+                    <div className="flex justify-end">
+                        <button className="flex flex-row w-6 h-6">
+                            <p className="underline underline-offset-1">See All</p>
+                            <FontAwesomeIcon icon={faCaretDown} />
+                        </button>
+                    </div>
                 </div>
-                </div>
-                
 
-                {parkingData.map((item) => (
+
+                {building.map((key) => (
                     <Building
-                        key={item.id}
-                        bdimage={item.bdimage}
-                        bdname={item.bdname}
-                        avaslot={item.avaslot}
+                        id={key.id}
+                        bdimg={key.building_img}
+                        bdname={key.name}
+                        avaslot={key.capacity}
                     />
                 ))}
             </div>
