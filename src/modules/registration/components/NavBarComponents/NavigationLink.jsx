@@ -23,7 +23,7 @@ const NavigationLink = ({ link, index }) => {
       {link.sublinks.length > 0 && (
         <ul
           tabIndex={index}
-          className="dropdown-content menu bg-white text-[#864e41] rounded-box z-[1] w-52 p-2 shadow"
+          className="dropdown-content menu bg-white text-[#864e41] rounded-box w-52 p-2 shadow"
         >
           {link.sublinks.map((sublink, subindex) => (
             <li key={subindex} className="mt-1 mb-1">

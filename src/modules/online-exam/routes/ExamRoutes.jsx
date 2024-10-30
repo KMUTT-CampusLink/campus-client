@@ -12,15 +12,20 @@ import ProfessorExamSettingPage from "../pages/professor/ProfessorExamSettingPag
 import ProfessorDashboardPage from "../pages/professor/ProfessorDashboardPage";
 import ProfessorScoringPage from "../pages/professor/ProfessorScoringPage";
 import ProfessorOverallScoringPage from "../pages/professor/ProfessorOverallScoringPage";
+import Redirecting from "../services/redirecting";
 
 export default function ExamRoutes() {
   return [
     //Student Routes
     {
+      path: "",
+      element: <Redirecting/>,
+    },
+    {
       path: "student/",
       children: [
         {
-          path: "",
+          path: ":id",
           element: <StudentHomePage />,
         },
         {
@@ -28,13 +33,13 @@ export default function ExamRoutes() {
           element: <StudentExamPasswordPage />,
         },
         {
-            path: "exam/:examId",
-            element: <StudentExamPage />,
+          path: "exam/:examId",
+          element: <StudentExamPage />,
         },
         {
-            path: "review/:examId",
-            element: <StudentReviewExamPage />,
-        }
+          path: "review/:examId",
+          element: <StudentReviewExamPage />,
+        },
       ],
     },
 
@@ -43,11 +48,11 @@ export default function ExamRoutes() {
       path: "professor/",
       children: [
         {
-          path: "",
+          path: ":id",
           element: <ProfessorHomePage />,
         },
         {
-          path: "create",
+          path: "create/:courseId",
           element: <ProfessorCreateExamPage />,
         },
         {
@@ -59,15 +64,15 @@ export default function ExamRoutes() {
           element: <ProfessorExamSettingPage />,
         },
         {
-          path: "dashboard:examId",
+          path: "dashboard/:examId",
           element: <ProfessorDashboardPage />,
         },
         {
-          path: "scoring/:examId",
+          path: "scoring/:studentExamId",
           element: <ProfessorScoringPage />,
         },
         {
-          path: "overallScoring",
+          path: "overallScoring/:examId",
           element: <ProfessorOverallScoringPage />,
         },
       ],

@@ -7,6 +7,7 @@ import AddCoursePage from "../pages/AddCoursePage";
 import DropCoursePage from "../pages/DropCoursePage";
 import LandingPage from "../pages/LandingPage";
 import RegisDetailsPage from "../pages/RegisDetailsPage";
+import AuthRoute from "../middleware/AuthRoute";
 
 export default function RegisRoutes() {
   return [
@@ -24,32 +25,51 @@ export default function RegisRoutes() {
     },
     {
       path: "course",
-      children: [
-        {
-          path: "",
-          element: <CourseRegisPage />,
-        },
-        {
-          path: "add",
-          element: <AddCoursePage />,
-        },
-        {
-          path: "drop",
-          element: <DropCoursePage />,
-        },
-        {
-          path: "detail",
-          element: <RegisDetailsPage />,
-        },
-      ],
+      element: (
+        <AuthRoute>
+          <CourseRegisPage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "course/add",
+      element: (
+        <AuthRoute>
+          <AddCoursePage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "course/drop",
+      element: (
+        <AuthRoute>
+          <DropCoursePage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "course/detail",
+      element: (
+        <AuthRoute>
+          <RegisDetailsPage />
+        </AuthRoute>
+      ),
     },
     {
       path: "grade",
-      element: <GradePage />,
+      element: (
+        <AuthRoute>
+          <GradePage />
+        </AuthRoute>
+      ),
     },
     {
       path: "transcript",
-      element: <TranscriptPage />,
+      element: (
+        <AuthRoute>
+          <TranscriptPage />
+        </AuthRoute>
+      ),
     },
   ];
 }
