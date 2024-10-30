@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 function MainPage() {
-    const [building, setBuilding] = useState([]);
+    const [building, setBuilding] = useState([]); /* */
 
     const getBuilding = async () => {
         const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
