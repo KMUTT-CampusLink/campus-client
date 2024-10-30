@@ -17,7 +17,7 @@ const ChatPage = () => {
   const [startChat, setStartChat] = useState(false);
   const textRef = useRef(null);
 
-  const botImage = "./public/chatbot/botImage.jpg";
+  const botImage = "chatbot/botImage.jpg";
   useEffect(() => {
     const fetchFaqs = async () => {
         try{

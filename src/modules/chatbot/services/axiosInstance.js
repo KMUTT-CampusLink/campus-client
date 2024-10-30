@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api/botastra/',
+  baseURL: `${import.meta.env.VITE_API_URL}/botastra`,
   headers: {
     "Content-Type": "application/json",
   },
