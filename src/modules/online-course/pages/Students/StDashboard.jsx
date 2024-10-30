@@ -10,7 +10,7 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx
 import { useNavigate, useLocation } from "react-router-dom";
 
 const StDashboard = () => {
-
+  const navigate = useNavigate();
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />
@@ -20,36 +20,46 @@ const StDashboard = () => {
           className="flex mt-16 border-b-[1px] border-black text-lg gap-10 pt-5 
         max-sm:pl-16 max-md:pl-20 max-lg:pl-36 lg:pl-56"
         >
-          <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">
+          <span
+            className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+            onClick={() => navigate("/courses/St")}
+          >
             Dashboard
           </span>
-          <span className="hover:border-b-4 hover:border-black hover:cursor-pointer">
+          <span
+            className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+            onClick={() => navigate("/courses/St/all_courses")}
+          >
             Courses
           </span>
         </div>
         <Searchbar />
         <div className="w-3/4 m-auto">
           <div className="flex justify-between items-center gap-2 pb-3 lg:pr-10">
-            <span className="text-4xl font-bold">Recent Courses</span>
+            <span className="text-4xl font-bold ">Recent Courses</span>
             <button
               className="text-[#EC5A51] text-md font-bold lg:text-base hover:underline"
+              onClick={() => navigate("/courses/St/all_courses")}
             >
               See All
             </button>
           </div>
-          <div
-            className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
-            justify-items-center mx-auto max-w-7xl"
-          >
-            {courses.map((course) => (
-              <CourseCard
-                key={course.id}
-                imageURL={course.imageUrl}
-                title={course.title}
-                description={course.description}
-              />
-            ))}
-          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
+            justify-items-center mx-auto w-3/4"
+        >
+          {courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              imageURL={course.imageUrl}
+              title={course.title}
+              description={course.description}
+              route={"course_description"}
+            />
+          ))}
         </div>
       </div>
 
@@ -60,7 +70,7 @@ const StDashboard = () => {
         </span>
       </div>
       <div className="border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className=" flex justify-between max-md:mx-20 max-lg:mx-28 lg:mx-48">
+        <div className=" flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
           <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
             TITLE
           </span>
@@ -78,12 +88,12 @@ const StDashboard = () => {
         </div>
       </div>
 
-      <span className="max-md:text-smfont-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+      <span className="max-md:text-sm font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
         Upcoming events
         <FontAwesomeIcon icon={faFile} className="ml-2" size="lg" />
       </span>
       <div className=" border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className="flex justify-between max-md:mx-20 max-lg:mx-28 lg:mx-48">
+        <div className="flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
           <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
             TIME
           </span>
@@ -101,12 +111,12 @@ const StDashboard = () => {
         </div>
       </div>
 
-      <span className="font-bold max-sm:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+      <span className="max-md:text-sm font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
         Today Class Schedule
         <FontAwesomeIcon icon={faStar} className="ml-2" size="lg" />
       </span>
       <div className="border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className="flex justify-between max-md:mx-20 max-lg:mx-28 lg:mx-48">
+        <div className="flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
           <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
             TIME
           </span>

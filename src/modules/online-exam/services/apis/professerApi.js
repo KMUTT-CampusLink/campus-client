@@ -32,7 +32,7 @@ export const getExamById = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const deleteExamById = async (examId) => {
   try {
@@ -43,7 +43,7 @@ export const deleteExamById = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const getExamDataById = async (examId) => {
   try {
@@ -54,4 +54,28 @@ export const getExamDataById = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
+
+export const getFullMark = async (examId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/exams/professor/getFullMark?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const updateExamSettings = async (examId, exam) => {
+  console.log(examId, exam);
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/exams/professor/updateExamSettings`,
+      { examId: examId, exam: exam }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};

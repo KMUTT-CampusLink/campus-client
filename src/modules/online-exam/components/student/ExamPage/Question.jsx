@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 
 export default function Question({ questionNo, question, choice, type, handleAnswer, studentAnswer }) {
   const [localAnswer, setLocalAnswer] = useState(studentAnswer || []);
-
+  
   useEffect(() => {
     setLocalAnswer(studentAnswer);
   }, [studentAnswer]);
 
   const handleInputChange = (value) => {
-    if (type === 'multipleChoice') {
+    if (type === 'Multiple Choice') {
       setLocalAnswer([value]); // Only one answer for multiple choice
-    } else if (type === 'checkList') {
+    } else if (type === 'Checklist') {
       setLocalAnswer((prevAnswers) => {
         if (prevAnswers.includes(value)) {
           return prevAnswers.filter((answer) => answer !== value); // Uncheck if already selected
@@ -18,7 +18,7 @@ export default function Question({ questionNo, question, choice, type, handleAns
           return [...prevAnswers, value]; // Add to answers
         }
       });
-    } else if (type === 'essay') {
+    } else if (type === 'Essay') {
       setLocalAnswer([value]); // essay answer
     }
   };
@@ -27,46 +27,45 @@ export default function Question({ questionNo, question, choice, type, handleAns
     handleAnswer(questionNo, localAnswer);
   }, [localAnswer]);
 
-  // function to check if a choice is selected
   const isSelected = (value) => {
     return localAnswer.includes(value) ? "checked" : "";
   };
 
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
-      <h1>{questionNo}. {question}</h1>
+      <h1>{questionNo + 1}. {question}</h1>
       <div className="flex flex-col gap-[10px] pt-[20px]">
-        {choice.map((choiceText, index) => (
+        {choice.map((choiceObj, index) => (
           <div key={index} className="flex items-center gap-[10px]">
-            {/* multipleChoice */}
-            {type === 'multipleChoice' && (
+            {/* Multiple Choice */}
+            {type === 'Multiple Choice' && (
               <>
                 <input
                   type="radio"
                   name={`radio-${questionNo}`}
                   className={`radio checked:bg-[#C76650]`}
-                  checked={isSelected(choiceText)}
-                  onChange={() => handleInputChange(choiceText)}
+                  checked={isSelected(choiceObj.choiceText)}
+                  onChange={() => handleInputChange(choiceObj.choiceText)}
                 />
-                {choiceText}
+                {choiceObj.choiceText}
               </>
             )}
-            {/* checkList */}
-            {type === 'checkList' && (
+            {/* Checklist */}
+            {type === 'Checklist' && (
               <>
                 <input
                   type="checkbox"
                   className={`checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]`}
-                  checked={isSelected(choiceText)}
-                  onChange={() => handleInputChange(choiceText)}
+                  checked={isSelected(choiceObj.choiceText)}
+                  onChange={() => handleInputChange(choiceObj.choiceText)}
                 />
-                {choiceText}
+                {choiceObj.choiceText}
               </>
             )}
           </div>
         ))}
-        {/* essay */}
-        {type === 'essay' && (
+        {/* Essay */}
+        {type === 'Essay' && (
           <textarea
             className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
             placeholder="Type your Answer Here"
