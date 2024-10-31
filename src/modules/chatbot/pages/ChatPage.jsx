@@ -4,7 +4,7 @@ import FAQs from '../components/chatPage/FAQs';
 import MessageArea from '../components/chatPage/MessageArea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import axiosInstance from '../services/axiosInstance';
+import { axiosInstance } from '../../../utils/axiosInstance';
 
 const ChatPage = () => {
   const [dummyFaqs, setDummyFaqs] = useState([]);
@@ -21,7 +21,7 @@ const ChatPage = () => {
   useEffect(() => {
     const fetchFaqs = async () => {
         try{
-            const response = await axiosInstance.get('/faqs');
+            const response = await axiosInstance.get('/botastra/faqs');
             const questions = response.data.map(faq => faq.question);
             setDummyFaqs(questions);
             setLoading(false);
@@ -56,7 +56,7 @@ const ChatPage = () => {
       setStartChat(true);
       setQuestions([...questions, input]);
       try {
-        const reply = await axiosInstance.post("/message", {message : input, sessionId: sessionId} );
+        const reply = await axiosInstance.post("/botastra/message", {message : input, sessionId: sessionId} );
         console.log(reply.data.replyMessage);
         const ans = reply.data.replyMessage;
         setDummyAns([...dummyAns, ans]);
