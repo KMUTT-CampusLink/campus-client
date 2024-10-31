@@ -1,5 +1,4 @@
 import React from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
 
 const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
   function handleRouteSelection(routeID) {
@@ -24,7 +23,6 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
           >
             <div>
               <h3 className="text-2xl font-bold mb-2">{route.name}</h3>
-              <p className="text-gray-600 mb-4">{route.description}</p>
 
               {/* Button to show the route's schedule */}
               <button

@@ -6,8 +6,9 @@ import {
   fetchRoutesConnectingStops,
   fetchTripsByRouteID,
 } from "../services/api";
-import StopSelector from "../components/stopSelector";
+import StopSelector from "../components/StopSelector";
 import RouteList from "../components/RouteList";
+import TripList from "../components/ScheduleList";
 
 function HomePage() {
   const [startStop, setStartStop] = useState({ id: null, name: "" });
@@ -15,7 +16,8 @@ function HomePage() {
   const [stops, setStops] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState({});
-  const [schedule, setSchedule] = useState([]);
+  const [trips, setTrips] = useState([]);
+
   //fetch routes connecting the selected stops
   const handleRouteSearch = () => {
     fetchRoutesConnectingStops(startStop.id, endStop.id).then((data) => {
@@ -23,6 +25,7 @@ function HomePage() {
       setRoutes(data.routes);
     });
   };
+
   //fetch stops for dropdown menus
   useEffect(() => {
     fetchAllStops().then((data) => {
@@ -37,12 +40,12 @@ function HomePage() {
     }
   }, [startStop, endStop]);
 
-  //fetch schedule/trips for selected route
+  //fetch Trip/trips for selected route
   useEffect(() => {
     if (!selectedRoute.id) return;
     fetchTripsByRouteID(selectedRoute.id).then((data) => {
-      setSchedule(data.trips);
-      console.log(data.trips);
+      setTrips(data.trips);
+      // console.log(`trips for route: ${data.trips}`);
     });
   }, [selectedRoute]);
 
@@ -92,7 +95,17 @@ function HomePage() {
             />
           </div>
 
-          {/* Booking Schedule Button */}
+          {/* Trip List for selected route */}
+          {selectedRoute.id && (
+            <div className="w-full max-w-4xl mt-6 max-h-72 overflow-y-auto shadow-md p-4 border rounded">
+              <h2 className="text-xl font-semibold mb-4">
+                Trips for Route: {selectedRoute.name}
+              </h2>
+              <TripList trips={trips} />
+            </div>
+          )}
+
+          {/* Booking Trip Button */}
           {/* <div>
             <button
               onClick={handleRouteSearch}
