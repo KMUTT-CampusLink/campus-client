@@ -9,12 +9,14 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
 
   return (
     <div className="w-full">
+      {/* Show a message 'No routes available' if there are no routes */}
       {routes.length === 0 ? (
         <div className="text-3xl text-center text-gray-500">
           No routes available.
         </div>
       ) : (
         routes.map((route, index) => (
+          // Show a panel for each route
           <div
             key={index}
             value={route.id}
@@ -23,6 +25,8 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
             <div>
               <h3 className="text-2xl font-bold mb-2">{route.name}</h3>
               <p className="text-gray-600 mb-4">{route.description}</p>
+
+              {/* Button to show the route's schedule */}
               <button
                 className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
                 onClick={() => handleRouteSelection(route.id)}
@@ -30,10 +34,11 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
                 View Schedule
               </button>
             </div>
+
+            {/* Show the stops the route goes through in order */}
             <div className="flex flex-row items-center overflow-x-auto">
               {route.connection.map((connection, index) => (
                 <div key={index} className="bg-orange-200">
-                  {/* <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" /> */}
                   {connection.stop_connection_start_idTostop.name} ={">"}{" "}
                 </div>
               ))}
