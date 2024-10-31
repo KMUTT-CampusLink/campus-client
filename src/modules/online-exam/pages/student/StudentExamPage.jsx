@@ -10,6 +10,7 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
+import useIsTabActive from "../../services/activeTab";
 import { getExamDataById, toggleExamStatus, submitExam } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
@@ -17,6 +18,11 @@ export default function StudentExamPage() {
   const [studentQuestion, setStudentQuestion] = useState(0);
   const [studentAnswers, setStudentAnswers] = useState({});
   const navigate = useNavigate();
+
+  if (false) {
+  // if (!useIsTabActive()) {
+    navigate("/exams/student/exam");
+  }
 
   const [exam, setExam] = useState({
     title: '',
@@ -98,18 +104,22 @@ export default function StudentExamPage() {
   const handleSubmit = async () => {
     const res = await submitExam(examId, studentAnswers);
     if (res.status === 200) {
-      const status = await toggleExamStatus(examId, "123456");
-      if (status.status === 200){
+      const status = await toggleExamStatus(examId);
+      if (status.status === 200) {
         navigate("/exams/student/exam");
       }
     }
   };
 
+
   return (
     <div className="w-auto">
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
-        <div className="flex flex-col xl:flex-row justify-between pt-[35px] xl:pt-[50px] gap-[20px]">
+        <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
+          {exam.title}
+        </h2>
+        <div className="flex flex-col xl:flex-row justify-between pt-[35px] gap-[20px]">
           {/* Question */}
           {exam && exam.questions
             .filter((_, index) => index === studentQuestion) // filter by current question

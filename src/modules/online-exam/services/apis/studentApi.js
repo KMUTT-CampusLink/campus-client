@@ -1,53 +1,100 @@
-import axios from "axios";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
-export const getStudentExamsById = async (studentId) => {
-    try {
-        const response = await axios.get(`http://localhost:3000/api/exams/student/getAllExam?studentId=${studentId}`);
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+export const getStudentExamsById = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(`/exams/student/getAllExam?&sectionId=${sectionId}`);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const getHistoryStudentExams = async (studentId) => {
-    try {
-        const response = await axios.get(`http://localhost:3000/api/exams/student/getHistoryExams?studentId=${studentId}`);
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getHistoryExams?studentId=${studentId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const verifyExamPassword = async (examId, password) => {
-    try {
-        const response = await axios.post("http://localhost:3000/api/exams/student/verifyPassword", { examId, password });
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.post("/exams/student/verifyPassword", {
+      examId,
+      password,
+    });
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const getExamDataById = async (examId) => {
-    try {
-        const response = await axios.get(`http://localhost:3000/api/exams/student/getExamDataById?examId=${examId}`);
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getExamDataById?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
-export const submitExam = async (examId, studentAnswers) => {
-    try {
-        const response = await axios.post("http://localhost:3000/api/exams/student/submitExam", { examId, studentAnswers });
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+export const submitExam = async (examId, studentAnswers, studentId) => {
+  try {
+    const response = await axiosInstance.post("/exams/student/submitExam", {
+      examId,
+      studentAnswers,
+      studentId,
+    });
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const toggleExamStatus = async (examId, studentId) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/student/toggleExamStatus",
+      { examId, studentId }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getExamTitle = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getExamTitle?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getInprogressExam = async (studentId) => {
     try {
-        const response = await axios.put("http://localhost:3000/api/exams/student/toggleExamStatus", { examId, studentId });
+        const response = await axiosInstance.get(
+        `/exams/student/getInprogressExam?studentId=${studentId}`
+        );
+        return response;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const getStudentAnswerById = async (examId) => {
+    try {
+        const response = await axiosInstance.get(
+        `/exams/student/getStudentAnswer?examId=${examId}`
+        );
         return response;
     } catch (error) {
         return error.response.data;
