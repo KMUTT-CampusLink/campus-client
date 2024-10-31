@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 export default function Choice({ onAddChoice, choices, onDeleteChoice }) {
   const [choice, setChoice] = useState('');
-
   // add choice
   const handleAddChoice = () => {
     if (choice.trim()) {
