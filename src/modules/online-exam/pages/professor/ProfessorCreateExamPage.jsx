@@ -155,7 +155,7 @@ export default function ProfessorCreateExamPage() {
                 <button
                   className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
                   onClick={() => {
-                    // handleSubmit();
+                    handleSubmit();
                     console.log(exam)
                   }}
                 >
