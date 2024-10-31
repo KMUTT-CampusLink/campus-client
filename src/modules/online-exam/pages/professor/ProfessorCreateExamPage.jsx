@@ -157,7 +157,6 @@ export default function ProfessorCreateExamPage() {
                   onClick={() => {
                     handleSubmit();
                     console.log(exam)
-                    handleSubmit();
                   }}
                 >
                   Confirm
