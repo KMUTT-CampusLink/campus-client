@@ -1,25 +1,25 @@
 import { useState, useEffect } from 'react';
 
-export default function Question({ questionNo, question, choice, type, handleAnswer, studentAnswer }) {
+export default function Question({ questionid, questionNo, question, choice, type, handleAnswer, studentAnswer }) {
   const [localAnswer, setLocalAnswer] = useState(studentAnswer || []);
-  
   useEffect(() => {
     setLocalAnswer(studentAnswer);
   }, [studentAnswer]);
 
-  const handleInputChange = (value) => {
+  const handleInputChange = (choiceObj) => {
     if (type === 'Multiple Choice') {
-      setLocalAnswer([value]); // Only one answer for multiple choice
+      setLocalAnswer([choiceObj]);
     } else if (type === 'Checklist') {
       setLocalAnswer((prevAnswers) => {
-        if (prevAnswers.includes(value)) {
-          return prevAnswers.filter((answer) => answer !== value); // Uncheck if already selected
+        const isSelected = prevAnswers.some(answer => answer.choiceId === choiceObj.choiceId);
+        if (isSelected) {
+          return prevAnswers.filter(answer => answer.choiceId !== choiceObj.choiceId); // Remove if already selected
         } else {
-          return [...prevAnswers, value]; // Add to answers
+          return [...prevAnswers, choiceObj];
         }
       });
     } else if (type === 'Essay') {
-      setLocalAnswer([value]); // essay answer
+      setLocalAnswer([{question_id: questionid, choiceText: choiceObj, choiceId: '' }]); // Wrap essay text in object format
     }
   };
 
@@ -28,7 +28,7 @@ export default function Question({ questionNo, question, choice, type, handleAns
   }, [localAnswer]);
 
   const isSelected = (value) => {
-    return localAnswer.includes(value) ? "checked" : "";
+    return localAnswer.some(answer => answer.choiceText === value) ? true : false;
   };
 
   return (
@@ -45,7 +45,7 @@ export default function Question({ questionNo, question, choice, type, handleAns
                   name={`radio-${questionNo}`}
                   className={`radio checked:bg-[#C76650]`}
                   checked={isSelected(choiceObj.choiceText)}
-                  onChange={() => handleInputChange(choiceObj.choiceText)}
+                  onChange={() => handleInputChange(choiceObj)}
                 />
                 {choiceObj.choiceText}
               </>
@@ -57,7 +57,7 @@ export default function Question({ questionNo, question, choice, type, handleAns
                   type="checkbox"
                   className={`checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]`}
                   checked={isSelected(choiceObj.choiceText)}
-                  onChange={() => handleInputChange(choiceObj.choiceText)}
+                  onChange={() => handleInputChange(choiceObj)}
                 />
                 {choiceObj.choiceText}
               </>
@@ -69,7 +69,7 @@ export default function Question({ questionNo, question, choice, type, handleAns
           <textarea
             className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
             placeholder="Type your Answer Here"
-            value={localAnswer[0] || ''}
+            value={localAnswer[0]?.choiceText || ''}
             onChange={(e) => handleInputChange(e.target.value)}
           ></textarea>
         )}

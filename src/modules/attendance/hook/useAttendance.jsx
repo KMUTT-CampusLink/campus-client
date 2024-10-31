@@ -3,10 +3,29 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+/* import axios from "axios"; */
+
 
 const useAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+/* // Fetch announcements from API
+useEffect(() => {
+  const getAnnouncements = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/library/announce" // API endpoint
+      );
+      setAnnouncements(response.data); // Set fetched data to state
+      setFilteredAnnouncements(response.data); // Initialize filtered announcements
+    } catch (error) {
+      console.error("Error fetching announcements:", error); // Handle error
+    }
+  };
+  getAnnouncements(); // Call the function to fetch data
+}, []); */
+
   const [statuses, setStatuses] = useState([
     {
       date: "2024-10-12",
@@ -198,5 +217,6 @@ const useAttendance = () => {
 
   return { items, handleMenuClick, AttendanceDetail, chooseDate, table };
 };
+
 
 export default useAttendance;

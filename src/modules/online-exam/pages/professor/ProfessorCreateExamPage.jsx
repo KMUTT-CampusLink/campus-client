@@ -35,8 +35,11 @@ export default function ProfessorCreateExamPage() {
 
   // set default score for all questions function
   const handleDefaultScoreChange = (e) => {
-    const score = parseInt(e.target.value) || 0;
-    if (score < 0) return;
+    const score = parseInt(e.target.value);
+    if (score <= 0) {
+      setDefaultScore(1);
+      return;
+    };
     setDefaultScore(score);
     const updatedQuestions = exam.questions.map((question) => ({
       ...question,
@@ -122,7 +125,7 @@ export default function ProfessorCreateExamPage() {
             />
           </div>
           {/* Map question */}
-          {exam.questions.map((question, index) => (
+          {exam && exam.questions.map((question, index) => (
             <>
               <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
               <Question
@@ -155,8 +158,7 @@ export default function ProfessorCreateExamPage() {
                 <button
                   className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
                   onClick={() => {
-                    // handleSubmit();
-                    console.log(exam)
+                    handleSubmit();
                   }}
                 >
                   Confirm

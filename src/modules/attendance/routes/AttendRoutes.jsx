@@ -18,8 +18,9 @@ export default function AttendRoutes() {
       element: <StQrPage />,
     },
     {
-      path: "stAttendance",
-      element: <StAttendancePage />,
-    },
+      path: "statt",
+      element: <StAttendancePage/>
+    }
+
   ];
 }
