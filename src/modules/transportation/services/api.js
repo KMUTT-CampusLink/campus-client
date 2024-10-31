@@ -1,4 +1,4 @@
-import { axiosInstance } from "./axiosInstance";
+import { axiosInstance } from "../../../utils/axiosInstance.js";
 
 // Centralized error handling
 const handleApiError = (error) => {
@@ -28,6 +28,8 @@ const post = async (url, payload) => {
 };
 
 // API calls
+
+export const fetchUserBookings = () => get("/transport/user/bookings");
 
 export const fetchAllStops = () => get("/transport/user/queryAllStops");
 
