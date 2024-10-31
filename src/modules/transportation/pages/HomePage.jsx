@@ -39,7 +39,7 @@ function HomePage() {
 
   //fetch schedule/trips for selected route
   useEffect(() => {
-    console.log(selectedRoute);
+    if (!selectedRoute.id) return;
     fetchTripsByRouteID(selectedRoute.id).then((data) => {
       setSchedule(data.trips);
       console.log(data.trips);

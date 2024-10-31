@@ -1,7 +1,6 @@
 import React from "react";
 
 const StopSelector = ({ stops, stop, setStop, placeholder }) => {
-  console.log({ stops, stop, setStop });
   const handleSelectStartStop = (e) => {
     const selectedStop = stops.find((stop) => {
       return stop.id == e.target.value;
