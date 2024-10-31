@@ -36,6 +36,7 @@ function HomePage() {
   //fetch routes when start and end stops are selected
   useEffect(() => {
     if (startStop.id && endStop.id) {
+      setSelectedRoute({});
       handleRouteSearch();
     }
   }, [startStop, endStop]);
