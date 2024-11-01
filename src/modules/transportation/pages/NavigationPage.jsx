@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { fetchUserBookings } from "../services/api";
+import { format } from "date-fns";
 
 const NavigationPage = () => {
   const [userBookings, setUserBookings] = useState([]);
-  const [localStorageItems, setLocalStorageItems] = useState([]);
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
+  console.log(userRole);
 
   // testing authentication with signed in user, by fetching his bookings
   useEffect(() => {
@@ -19,13 +21,37 @@ const NavigationPage = () => {
     <div>
       <NavBar />
 
-      <div className="mx-auto max-w-7xl pt-20 pb-6 w-4/5">
-        Navigation Page
+      <div className="mx-auto max-w-7xl pt-20 pb-6 w-4/5 bg-orange-100">
+        <h2 className="text-3xl">Navigation Page</h2>
         <ul>
           <li>
-            <Link to="./home">Seach for routes</Link>
+            <Link
+              to="./home"
+              className="text-blue-500 underline hover:text-blue-700"
+            >
+              Search for routes
+            </Link>
           </li>
         </ul>
+        <br />
+        {userRole == "Student" ? (
+          <>
+            <h2 className="text-2xl">My bookings</h2>
+            {userBookings.map((booking, index) => (
+              <div key={index}>
+                {format(new Date(booking.trip.trip_date), "yyyy-MM-dd")} time:{" "}
+                {format(
+                  new Date(booking.trip.trip_schedule.start_time),
+                  "HH:mm"
+                )}
+                {" - "}
+                {format(new Date(booking.trip.trip_schedule.end_time), "HH:mm")}
+              </div>
+            ))}
+          </>
+        ) : (
+          <h2>Not signed in as student to view bookings</h2>
+        )}
       </div>
     </div>
   );

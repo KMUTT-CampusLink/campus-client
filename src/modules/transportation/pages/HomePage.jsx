@@ -8,7 +8,7 @@ import {
 } from "../services/api";
 import StopSelector from "../components/StopSelector";
 import RouteList from "../components/RouteList";
-import TripList from "../components/ScheduleList";
+import TripList from "../components/scheduleList";
 
 function HomePage() {
   const [startStop, setStartStop] = useState({ id: null, name: "" });
