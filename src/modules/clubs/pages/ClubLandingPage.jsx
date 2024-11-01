@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { axiosInstance } from "../../../utils/axiosInstance";
 import ClubCard from "../components/ClubCard"; // Assuming you have a ClubCard component
 
 function ClubLandingPage() {
@@ -11,7 +11,7 @@ function ClubLandingPage() {
   useEffect(() => {
     const fetchClubs = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/clubs/");
+        const response = await axiosInstance.get("/clubs"); 
         // Ensure you're getting the correct part of the response
         setClubs(response.data?.data || []); // Fallback to an empty array if response.data.data is undefined
       } catch (error) {
