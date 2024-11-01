@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function BookingPage() {
   // State for booking details
   const [bookingDetails, setBookingDetails] = useState(null);
-
-  const navigate = useNavigate(); // Initialize useNavigate
 
   // Simulated fetch from backend
   useEffect(() => {
@@ -69,7 +66,7 @@ function BookingPage() {
         {bookingDetails && (
           <div className="flex justify-center mt-6">
             <button
-              onClick={handleConfirmPage}
+              // onClick={handleConfirmPage}
               className="w-full max-w-xs bg-orange-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-orange-600 transition duration-200 ease-in-out transform hover:scale-105"
             >
               Confirm Booking
