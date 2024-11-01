@@ -23,12 +23,12 @@ function Building({ bdimg, bdname, avaslot }) {
 
     return (
         <>
-            <div className="flex items-center min-w-96 max-h-48 bg-white rounded-lg shadow-gray shadow-xl p-0 my-10">
-                <img src={bdimg} className="max-w-48 max-h-48 mr-3 rounded-lg" />
+            <div className="flex items-center min-w-96 min-h-44 bg-white rounded-lg shadow-gray shadow-xl p-0 my-10">
+                <img src={bdimg} className="w-60 h-44 mr-3 rounded-lg" />
 
                 <div className="flex flex-row w-full justify-between rounded-lg">
-                    <div className="flex flex-col justify-evenly">
-                        <h2 className="text-lg font-bold">{bdname}</h2>
+                    <div className="flex flex-col">
+                        <h2 className="text-lg font-bold ">{bdname}</h2>
                         <p className="text-green-600 font-semibold">Available Slot: {avaslot}</p>
                     </div>
                     <button
@@ -58,17 +58,17 @@ function Building({ bdimg, bdname, avaslot }) {
                     <div ref={reserveRef} className="relative z-50" onClick={(e) => e.stopPropagation()}>
                         <>
                             <div className="fixed inset-0 flex items-center justify-center bg-slate-200 bg-opacity-50 z-50">
-                                <div className="bg-white min-w-96 w-3/5 pb-24 rounded-2xl shadow-2xl">
+                                <div className="bg-white min-w-96 w-3/5 max-h-2/5 pb-24 rounded-2xl shadow-2xl">
                                     <div className='w-full flex justify-end pr-4 pt-2'>
                                         <button onClick={toggleComponent}>
                                             <FontAwesomeIcon className='w-6 h-6' icon={faCircleXmark} />
                                         </button>
                                     </div>
-                                    <div className='flex flex-row justify-evenly'>
-                                        <div className='flex flex-col justify-center items-center'>
-                                            <img src={bdimg} alt="" />
-                                            <div className="w-48"><div className='flex flex-row fixed gap-2 mb-10 px-3 py-2.5 text-black rounded-lg shadow-2xl shadow-black'>
-                                                <FontAwesomeIcon className=' w-6 h-6' icon={faCircleCheck} />
+                                    <div className='flex flex-row justify-evenly gap-10'>
+                                        <div className='flex flex-col items-center justify-evenly'>
+                                            <img className='mt-10 w-64 h-64' src={bdimg} alt="" />
+                                            <div className="w-56 mt-5"><div className='flex flex-row gap-2 mb-10 px-6 py-2 text-black rounded-lg shadow-2xl shadow-black'>
+                                                <FontAwesomeIcon className=' w-6 h-6 text-red-500' icon={faCircleCheck} />
                                                 Your Car is Verified
                                             </div></div>
 
@@ -87,6 +87,7 @@ function Building({ bdimg, bdname, avaslot }) {
                                             <form>
                                                 <div className="flex flex-col gap-6 ">
                                                     <select className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2">
+                                                        <option value="">FLOOR</option>
                                                         <option value="">1st Floor (24/30)</option>
                                                         <option value="">2nd Floor (24/30)</option>
                                                         <option value="">3rd Floor (30/30)</option>
