@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 // Display a list of trips for a route, filtering of what trips are shown is yet to be done, ie those which already hapenned should not be shown
 const TripList = ({ trips }) => {
@@ -33,9 +34,11 @@ const TripList = ({ trips }) => {
               <h1>date: {format(new Date(trip.trip_date), "yyyy-MM-dd")}</h1>
               <h1>day of week: {trip.trip_schedule.day}</h1>
               {/* Button, eventually link to booking confirmation */}
-              <button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
-                Book
-              </button>
+              <Link to="transport/booking">
+                <button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
+                  Book
+                </button>
+              </Link>
             </div>
           </div>
         ))
