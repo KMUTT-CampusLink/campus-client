@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBarComponents/NavBar";
-import { fetchUserBookings } from "../services/api";
+import { fetchUserBookings, fetchTripData } from "../services/api";
 import { format } from "date-fns";
 
 const NavigationPage = () => {
   const [userBookings, setUserBookings] = useState([]);
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
   console.log(userRole);
+
+  useEffect(() => {
+    fetchTripData(1).then((data) => {
+      console.log(data);
+    });
+  });
 
   // testing authentication with signed in user, by fetching his bookings
   useEffect(() => {
