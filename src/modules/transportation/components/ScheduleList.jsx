@@ -34,7 +34,7 @@ const TripList = ({ trips }) => {
               <h1>date: {format(new Date(trip.trip_date), "yyyy-MM-dd")}</h1>
               <h1>day of week: {trip.trip_schedule.day}</h1>
               {/* Button, eventually link to booking confirmation */}
-              <Link to="transport/booking">
+              <Link to="/transport/booking">
                 <button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
                   Book
                 </button>

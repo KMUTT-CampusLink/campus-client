@@ -1,37 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { fetchTripData } from "../services/api";
 
 function BookingPage() {
   // State for booking details
   const [bookingDetails, setBookingDetails] = useState(null);
 
-  // Simulated fetch from backend
   useEffect(() => {
-    // Simulate an API call to fetch booking details
-    const fetchBookingDetails = async () => {
-      // Mock data to simulate backend response
-      const data = {
-        driverId: "",
-        vehicleId: "",
-        startTime: "",
-        endTime: "",
-        date: "",
-        dayOfWeek: "",
+    const fetchData = async () => {
+      const tripData = await fetchTripData(1);
+      const trip = tripData.trip;
+
+      const bookingDetails = {
+        startTime: format(new Date(trip.trip_schedule.start_time), "HH:mm"),
+        endTime: format(new Date(trip.trip_schedule.end_time), "HH:mm"),
+        date: format(new Date(trip.trip_date), "yyyy-MM-dd"),
+        driverName: `${trip.driver.employee.firstname} ${trip.driver.employee.midname} ${trip.driver.employee.lastname}`,
+        vehicleLicenseNumber: trip.vehicle.registration_no,
       };
-      // Simulate a delay for fetching data
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setBookingDetails(data);
+
+      setBookingDetails(bookingDetails);
+      console.log(bookingDetails);
     };
 
-    fetchBookingDetails();
+    fetchData();
   }, []);
 
   const handleBooking = () => {
     // Handle booking logic here
-    if (bookingDetails) {
-      alert(
-        `Booking confirmed for Driver ID: ${bookingDetails.driverId}, Vehicle ID: ${bookingDetails.vehicleId} on ${bookingDetails.date} (${bookingDetails.dayOfWeek}) from ${bookingDetails.startTime} to ${bookingDetails.endTime}`
-      );
-    }
+    console.log("Booking confirmed, not handled yet");
   };
 
   return (
