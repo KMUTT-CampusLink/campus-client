@@ -3,16 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import Navbar from '../../../registration/components/NavBarComponents/NavBar';
 import Question from '../../components/professor/EditedExam/Question';
+import StudentQuestion from '../../components/professor/EditedExam/StudentQuestion';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPlus, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { getExamDataById, updateExam } from '../../services/apis/professerApi';
 
 export default function ProfessorEditExamPage() {
   const { examId } = useParams();
   const navigate = useNavigate();
-
+  const [viewAsStudent, setViewAsStudent] = useState(false);
+  
   //exam data all stored in here
   const [exam, setExam] = useState({
     examId: examId,
@@ -20,6 +22,7 @@ export default function ProfessorEditExamPage() {
     description: '',
     questions: [],
   });
+  
   const getExamData = async () => {
     try {
       const res = await getExamDataById(examId);
@@ -138,80 +141,102 @@ export default function ProfessorEditExamPage() {
     <div className='w-auto'>
       <Navbar />
       <div className='mx-[35px] xl:mx-[100px] pb-[30px] pt-20'>
-        <div className='flex flex-col justify-between gap-[20px]'>
-          <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">Edit Exam</h1>
-            {/* view as student button */}
-            <button className="btn"><FontAwesomeIcon icon={faEye} /> View as student</button>
-          </div>
-          {/* exam details */}
-          <h4>Exam Name</h4>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Exam Name Here"
-            value={exam.title}
-            onChange={handleExamNameChange}
-          />
-          <h4>Description</h4>
-          <textarea
-            className="textarea textarea-bordered w-full h-[100px]"
-            placeholder="Description Here"
-            value={exam.description}
-            onChange={handleDescriptionChange}
-          ></textarea>
-          {/* set default score for all questions */}
-          <div className='flex gap-[10px] items-center'>
-            <h4>Set Default Score: </h4>
-            <input
-              type="number"
-              className="input input-bordered w-[100px] h-[40px]"
-              value={defaultScore}
-              onChange={handleDefaultScoreChange}
-            />
-          </div>
-          {/* Map question */}
-          {exam && exam.questions.map((question, index) => (
-            <>
-              <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
-              <Question
-                key={index}
-                question={question}
-                index={index}
-                setExam={setExam}
-                exam={exam}
-                onDeleteQuestion={deleteQuestion}
-                defaultScore={defaultScore}
-              />
-            </>
-          ))}
-          {/* Add question button */}
-          <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white' onClick={addQuestion}><FontAwesomeIcon icon={faPlus} /> Add Question</button>
-        </div>
-        <hr className='mt-[30px] border' />
-        {/* subnit exam button */}
-        <div className='flex justify-end pt-[30px]'>
-          <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Confirm Edited Exam
-          </button>
-          <dialog id="confirmModal" className="p-[30px] rounded-xl">
-            <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
-            <p className="py-4">You can submit the exam only once.</p>
-            <div className="modal-action">
-              <form method="dialog" className="flex flex-row gap-[20px]">
-                <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
-                  Close
-                </button>
-                <button
-                  className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
-                  onClick={() => {
-                    handleSubmit();
-                  }}
-                >
-                  Confirm
-                </button>
-              </form>
+        <div className={`${viewAsStudent ? "hidden" : "block"}`}>
+          <div className='flex flex-col justify-between gap-[20px]'>
+            <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
+              <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">Edit Exam</h1>
+              {/* view as student button */}
+              <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(true) }}><FontAwesomeIcon icon={faEye} /> View as student</button>
             </div>
-          </dialog>
+            {/* exam details */}
+            <h4>Exam Name</h4>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Exam Name Here"
+              value={exam.title}
+              onChange={handleExamNameChange}
+            />
+            <h4>Description</h4>
+            <textarea
+              className="textarea textarea-bordered w-full h-[200px]"
+              placeholder="Description Here"
+              value={exam.description}
+              onChange={handleDescriptionChange}
+            ></textarea>
+            {/* set default score for all questions */}
+            <div className='flex gap-[10px] items-center'>
+              <h4>Set Default Score: </h4>
+              <input
+                type="number"
+                className="input input-bordered w-[100px] h-[40px]"
+                value={defaultScore}
+                onChange={handleDefaultScoreChange}
+              />
+            </div>
+            {/* Map question */}
+            {exam && exam.questions.map((question, index) => (
+              <>
+                <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
+                <Question
+                  key={index}
+                  question={question}
+                  index={index}
+                  setExam={setExam}
+                  exam={exam}
+                  onDeleteQuestion={deleteQuestion}
+                  defaultScore={defaultScore}
+                />
+              </>
+            ))}
+            {/* Add question button */}
+            <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white' onClick={addQuestion}><FontAwesomeIcon icon={faPlus} /> Add Question</button>
+          </div>
+          <hr className='mt-[30px] border' />
+          {/* subnit exam button */}
+          <div className='flex justify-end pt-[30px]'>
+            <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Confirm Edited Exam
+            </button>
+            <dialog id="confirmModal" className="p-[30px] rounded-xl">
+              <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
+              <p className="py-4">You can submit the exam only once.</p>
+              <div className="modal-action">
+                <form method="dialog" className="flex flex-row gap-[20px]">
+                  <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
+                    Close
+                  </button>
+                  <button
+                    className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Confirm
+                  </button>
+                </form>
+              </div>
+            </dialog>
+          </div>
+        </div>
+        <div className={`${viewAsStudent ? "block" : "hidden"}`}>
+          <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center'>
+            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">View as student of {exam.title || ""}</h1>
+            <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(false) }}> <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam</button>
+          </div>
+          <div className="my-[20px] flex flex-col gap-[20px]">
+            {exam.questions.map((question, index) => (
+              <>
+                <StudentQuestion
+                  key={index}
+                  questionid={question.question_id}
+                  questionNo={index}
+                  question={question.questionText}
+                  choice={question.options}
+                  type={question.type}
+                />
+              </>
+            ))}
+          </div>
         </div>
       </div>
     </div>

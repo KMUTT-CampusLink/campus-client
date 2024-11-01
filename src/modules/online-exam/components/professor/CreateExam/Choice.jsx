@@ -15,7 +15,7 @@ export default function Choice({ onAddChoice, choices, onDeleteChoice }) {
       <input
         className='border h-auto p-[10px] rounded-lg w-full'
         type="text"
-        placeholder="Add choice"
+        placeholder="Choice Text"
         value={choice}
         onChange={(e) => setChoice(e.target.value)}
       />
