@@ -2,14 +2,14 @@ import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-
-function Building({ bdimg, bdname, avaslot }) {
+import axios from 'axios';
+function Building({ bdimg, bdname, avaslot,maxslot }) {
     const [isComponentVisible, setIsComponentVisible] = useState(false);
     const reserveRef = useRef(null);
     const [data, setData] = useState([]);
 
     const getData = async () => {
-        const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
+        const res = await axios.get("http://localhost:3000/api/parking/getParking");
         setData(res.data);
     }
 
@@ -29,7 +29,7 @@ function Building({ bdimg, bdname, avaslot }) {
                 <div className="flex flex-row w-full justify-between rounded-lg">
                     <div className="flex flex-col">
                         <h2 className="text-lg font-bold ">{bdname}</h2>
-                        <p className="text-green-600 font-semibold">Available Slot: {avaslot}</p>
+                        <p className="text-green-600 font-semibold">Available Slot: {avaslot}/{maxslot}</p>
                     </div>
                     <button
                         className="flex bg-red-500 text-white w-10 h-10 mr-2 rounded-full justify-center"
@@ -77,7 +77,7 @@ function Building({ bdimg, bdname, avaslot }) {
                                         <div className='flex flex-col items-start justify-evenly'>
                                             <div>
 
-                                                <div className="text-2xl font-bold">Lx Building</div>
+                                                <div className="text-2xl font-bold">{bdname}</div>
 
                                                 <br />
                                                 <div className="font-medium">
@@ -100,7 +100,7 @@ function Building({ bdimg, bdname, avaslot }) {
                                                         <option value=""> A03</option>
                                                         <option value=""> B01</option>
                                                     </select>
-
+                                                  <input className='py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2' type="time" name="" id="" />
                                                 </div>
                                             </form>
 

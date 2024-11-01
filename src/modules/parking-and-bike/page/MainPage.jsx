@@ -13,7 +13,7 @@ function MainPage() {
     const [building, setBuilding] = useState([]); /* */
 
     const getBuilding = async () => {
-        const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
+        const res = await Axios.get("http://localhost:3000/api/parking/getParking");
         setBuilding(res.data);
     }
 
@@ -65,7 +65,8 @@ function MainPage() {
                         id={key.id}
                         bdimg={key.building_img}
                         bdname={key.name}
-                        avaslot={key.capacity}
+                        avaslot={key.reserved_slots}
+                        maxslot={key.parking_capacity}
                     />
                 ))}
             </div>

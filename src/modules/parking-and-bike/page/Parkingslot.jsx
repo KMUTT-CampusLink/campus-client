@@ -6,7 +6,7 @@ function Parkingslot() {
     const [building, setBuilding] = useState([]); /* */
 
     const getBuilding = async () => {
-        const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
+        const res = await Axios.get("http://localhost:3000/api/parking/getParking");
         setBuilding(res.data);
     }
 
