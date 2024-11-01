@@ -70,3 +70,6 @@ export const fetchRoutesConnectingStops = (startStopID, endStopId) =>
  */
 export const fetchTripsByRouteID = (routeID) =>
   get(`/transport/user/tripsByRouteID/${routeID}`);
+
+export const fetchTripData = (tripID) =>
+  get(`/transport/user/tripData/${tripID}`);
