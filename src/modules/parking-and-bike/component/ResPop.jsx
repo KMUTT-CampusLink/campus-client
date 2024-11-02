@@ -4,21 +4,22 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 
 function ResPop({ id, img, name, onClose }) {
+    const [parking, setParking] = useState([]);
+    const [selectedFloor, setSelectedFloor] = useState(null);
+
     const closeRespop = () => {
         if (onClose) {
             onClose();
         }
     };
 
-    const [parking, setParking] = useState([]);
-
     const getParking = async () => {
         const res = await Axios.get(`http://localhost:3000/api/parking/getBuildingById/${id}`);
         setParking(res.data);
 
-        // if (res.data && res.data.length > 0) {
-        //     console.log("Floors array:", res.data[0].floors);
-        // }
+        if (res.data && res.data.length > 0 && res.data[0].floors.length > 0) {
+            setSelectedFloor(res.data[0].floors[0].floor_id);
+        }
     };
 
     useEffect(() => {
@@ -28,6 +29,8 @@ function ResPop({ id, img, name, onClose }) {
     }, [id]);
 
     if (!parking.length) return <p>Loading...</p>;
+
+    const currentFloor = parking[0]?.floors.find(floor => floor.floor_id === selectedFloor);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-slate-200 bg-opacity-50 z-50">
@@ -58,7 +61,11 @@ function ResPop({ id, img, name, onClose }) {
                         </div>
                         <form>
                             <div className="flex flex-col gap-6">
-                                <select className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2">
+                                <select
+                                    className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2"
+                                    value={selectedFloor}
+                                    onChange={(e) => setSelectedFloor(Number(e.target.value))}
+                                >
                                     {parking[0]?.floors?.map((floor) => (
                                         <option key={floor.floor_id} value={floor.floor_id}>
                                             {floor.floor_name} (Slots Available: {floor.slots.length})
@@ -67,7 +74,7 @@ function ResPop({ id, img, name, onClose }) {
                                 </select>
 
                                 <select className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2">
-                                    {parking[0]?.floors?.[0]?.slots?.map((slot) => (
+                                    {currentFloor?.slots.map((slot) => (
                                         <option key={slot.slot_id} value={slot.slot_id}>
                                             {slot.slot_name} {slot.slot_status ? "(Available)" : "(Occupied)"}
                                         </option>
