@@ -6,14 +6,14 @@ import axiosInstance from "../utils/axiosInstance.js";
 
 // Map faculty names to numbers
 const facultyMapping = {
-  "Engineering": 1001,
-  "Information_Technology": 1002,
-  "Science": 1003,
-  "Architecture": 1004,
+  Engineering: 1001,
+  Information_Technology: 1002,
+  Science: 1003,
+  Architecture: 1004,
   "Liberal Art": 1005,
-  "Management": 1006,
-  "Environmental": 1007,
-  "Education": 1008,
+  Management: 1006,
+  Environmental: 1007,
+  Education: 1008,
 };
 
 const jobTitles = ["Student", "Professor", "Management", "Staff", "Driver"];
@@ -67,18 +67,16 @@ const EmployeeUpdate = () => {
     if (formData.position && !/^[a-zA-Z\s]+$/.test(formData.position))
       errors.position = "Position must contain only letters and spaces";
 
-    // Salary validation: numeric if provided
-    if (formData.salary && !/^\d+$/.test(formData.salary))
-      errors.salary = "Salary must be a valid number";
-
     // Identification No validation: numeric if provided
-    if (formData.identification_no && !/^[a-zA-Z0-9]+$/.test(formData.identification_no)) 
+    if (
+      formData.identification_no &&
+      !/^[a-zA-Z0-9]+$/.test(formData.identification_no)
+    )
       errors.identification_no = "Identification number must be alphanumeric";
-  
-  
-    // Phone validation: 10 digits if provided
-    if (formData.phone && !/^\d{10}$/.test(formData.phone))
-      errors.phone = "Phone number must be 10 digits";
+
+    // Phone validation: 10-15 digits if provided
+    if (formData.phone && !/^\d{10,15}$/.test(formData.phone))
+      errors.phone = "Phone number must be between 10 and 15 digits";
 
     // Validate date of birth (cannot be in the future)
     if (formData.date_of_birth) {
@@ -314,9 +312,6 @@ const EmployeeUpdate = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
-                  {errors.salary && (
-                    <p className="text-red-500 text-xs">{errors.salary}</p>
-                  )}
                 </div>
 
                 <div className="mb-4">

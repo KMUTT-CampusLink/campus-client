@@ -171,7 +171,7 @@ const EmployeeAdd = () => {
     };
  
     try {
-      const response = await axiosInstance.post("/employ/post", employeeData);
+      const response = await axiosInstance.post("/post", employeeData);
  
       if (response.status === 200) {
         console.log('Employee added successfully');
