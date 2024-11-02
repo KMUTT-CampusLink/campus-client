@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
 import { useState } from 'react'
 import axiosInstance from "../utils/axiosInstance.js";
-import EmployeeCard from "../components/EmployeeCard";
 
 // Map faculty names to numbers
 const facultyMapping = {
@@ -48,7 +47,7 @@ const EmployeeAdd = () => {
   }
 
   const handleClickback = () => {
-    navigate(`/employ`);
+    navigate(`/employ/employee`);
   };
   const handleUpdateClick = (e) => {
     e.preventDefault();
