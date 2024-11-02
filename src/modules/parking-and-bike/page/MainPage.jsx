@@ -68,6 +68,7 @@ function MainPage() {
                         bdname={key.name}
                         avaslot={key.reserved_slots}
                         maxslot={key.parking_capacity}
+                        bdid={key.id}
                     />
                 ))}
             </div>

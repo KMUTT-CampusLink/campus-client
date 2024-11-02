@@ -1,15 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import ResPop from '../ResPop';
 
-function Building({ bdimg, bdname, avaslot }) {
+function Building({ bdid , bdimg, bdname, avaslot }) {
     const [isComponentVisible, setIsComponentVisible] = useState(false);
     const reserveRef = useRef(null);
-    const [data, setData] = useState([]);
-
-    const getData = async () => {
-        const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
-        setData(res.data);
-    }
 
     const toggleComponent = () => {
         setIsComponentVisible((prev) => !prev);
@@ -18,10 +12,6 @@ function Building({ bdimg, bdname, avaslot }) {
     const handleClose = () => {
         setIsComponentVisible(false);
     };
-
-    useEffect(() => {
-        getData();
-    }, []);
 
     return (
         <>
@@ -58,7 +48,7 @@ function Building({ bdimg, bdname, avaslot }) {
             {isComponentVisible && (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
                     <div ref={reserveRef} className="relative z-50" onClick={(e) => e.stopPropagation()}>
-                        <ResPop name={bdname} img={bdimg} onClose={handleClose}/>
+                        <ResPop id={bdid} name={bdname} img={bdimg} onClose={handleClose}/>
                     </div>
                 </div>
             )}
