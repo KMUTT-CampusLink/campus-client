@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function MaintenanceList() {
+  const navigate = useNavigate();
   const requests = [
     {
       room: "CB305",
@@ -170,7 +172,7 @@ export default function MaintenanceList() {
       {/* Floating Add Button */}
       <div
         style={pageStyles.floatingButton}
-        onClick={() => console.log("Add new request")}
+        onClick={() => navigate("/security/administrator/request")}
       >
         +
       </div>

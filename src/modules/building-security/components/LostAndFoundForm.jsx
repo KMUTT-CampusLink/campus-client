@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LostAndFoundForm() {
+  const navigate = useNavigate();
   const [building, setBuilding] = useState("");
   const [room, setRoom] = useState("");
   const [floor, setFloor] = useState("");
@@ -130,7 +132,7 @@ export default function LostAndFoundForm() {
       {/* List Button */}
       <div
         style={formStyles.listButton}
-        onClick={() => console.log("Menu clicked")}
+        onClick={() => navigate("/security/administrator/lostandfoundlist")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
