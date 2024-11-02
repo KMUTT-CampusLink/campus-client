@@ -1,0 +1,35 @@
+import { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import ResPop from '../ResPop';
+
+function Searchresult({ result }) {
+    const [isComponentVisible, setIsComponentVisible] = useState(false);
+    const reserveRef = useRef(null);
+
+    const toggleComponent = () => {
+        setIsComponentVisible((prev) => !prev);
+    };
+
+    const handleClose = () => {
+        setIsComponentVisible(false);
+    };
+
+    return (
+        <>
+            <button className="bg-white hover:bg-gray-200 py-2 flex items-center justify-center px-28 w-full" onClick={toggleComponent}>{result.name}</button>
+
+            {isComponentVisible && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+                    <div ref={reserveRef} className="relative z-50" onClick={(e) => e.stopPropagation()}>
+                        <ResPop id={result.id} name={result.name} img={result.building_img} onClose={handleClose}/>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+export default Searchresult;

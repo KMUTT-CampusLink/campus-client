@@ -10,13 +10,19 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
-import { getExamDataById } from "../../services/apis/studentApi";
+import useIsTabActive from "../../services/activeTab";
+import { getExamDataById, toggleExamStatus, submitExam } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
   const { examId } = useParams();
   const [studentQuestion, setStudentQuestion] = useState(0);
   const [studentAnswers, setStudentAnswers] = useState({});
   const navigate = useNavigate();
+
+  if (false) {
+  // if (!useIsTabActive()) {
+    navigate("/exams/student/exam");
+  }
 
   const [exam, setExam] = useState({
     title: '',
@@ -37,14 +43,16 @@ export default function StudentExamPage() {
             questionText: question.title || '',
             type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
             options: questionChoices.map(choice => ({
+              question_id: choice.question_id,
+              choiceId: choice.id,
               choiceText: choice.choice_text || '',
-              choiceImg: choice.choice_img || null,
-              isCorrect: choice.correct_ans || false
+              choiceImg: choice.choice_img || ''
             })),
             answer: questionChoices
               .filter(choice => choice.correct_ans)
               .map(choice => choice.choice_text || ''),
-            score: question.mark || null
+            score: question.mark || null,
+            question_id: question.id || null
           };
         })
         : [];
@@ -64,10 +72,10 @@ export default function StudentExamPage() {
   }, []);
 
   // Handle answer for each question
-  const handleAnswer = (questionNo, answer) => {
+  const handleAnswer = (questionId, answer) => {
     setStudentAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [questionNo]: answer,
+      [questionId]: answer,
     }));
   };
 
@@ -93,27 +101,38 @@ export default function StudentExamPage() {
   };
 
   // Submit answers to backend
-  const handleSubmit = () => {
-    console.log(studentAnswers);
+  const handleSubmit = async () => {
+    const res = await submitExam(examId, studentAnswers);
+    if (res.status === 200) {
+      const status = await toggleExamStatus(examId);
+      if (status.status === 200) {
+        navigate("/exams/student/exam");
+      }
+    }
   };
+
 
   return (
     <div className="w-auto">
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
-        <div className="flex flex-col xl:flex-row justify-between pt-[35px] xl:pt-[50px] gap-[20px]">
+        <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
+          {exam.title}
+        </h2>
+        <div className="flex flex-col xl:flex-row justify-between pt-[35px] gap-[20px]">
           {/* Question */}
           {exam && exam.questions
             .filter((_, index) => index === studentQuestion) // filter by current question
             .map((question, index) => (
               <Question
                 key={index}
+                questionid={question.question_id}
                 questionNo={studentQuestion}
-                question={question.questionText} // Correctly access questionText
-                choice={question.options} // Correctly pass options
+                question={question.questionText}
+                choice={question.options}
                 type={question.type}
                 handleAnswer={handleAnswer}
-                studentAnswer={studentAnswers[studentQuestion] || []} // Correct student answer access
+                studentAnswer={studentAnswers[studentQuestion] || []}
               />
             ))}
           {/* Question Navigation */}
