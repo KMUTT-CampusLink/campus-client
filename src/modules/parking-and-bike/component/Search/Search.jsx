@@ -7,7 +7,7 @@ function Search({ setResults }) {
   const [input, setInput] = useState("");
 
   const fetchData = (value) => {
-    axios.get("https://jsonplaceholder.typicode.com/users")
+    axios.get("http://localhost:3000/api/parking/getParking")
     .then((response) => {
         const results = response.data.filter((user) => {
           return (

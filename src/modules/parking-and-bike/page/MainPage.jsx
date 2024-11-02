@@ -8,7 +8,8 @@ import Axios from "axios";
 import Search from "../component/Search/Search"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import Navbar from '../../registration/components/NavBarComponents/NavBar'
+import Navbar from '../../registration/components/NavBarComponents/NavBar';
+import Searchresultlist from "../component/Search/Searchresultlist";
 function MainPage() {
     const [building, setBuilding] = useState([]); /* */
 
@@ -31,11 +32,11 @@ function MainPage() {
             </div>
             <br />
             <br />
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-col justify-center">
                 <div className="flex flex-row justify-center">
                     <Search setResults={setResults} />
                 </div>
-                <searchResult results={results} />
+                <Searchresultlist results={results} />
             </div>
             <br />
             <br />
