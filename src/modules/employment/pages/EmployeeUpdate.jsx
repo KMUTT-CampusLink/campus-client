@@ -48,7 +48,7 @@ const EmployeeUpdate = () => {
   }
 
   const handleClickback = () => {
-    navigate(`/employ`);
+    navigate(`/employ/employeeDetail/${id}`);
   };
   const handleUpdateClick = (e) => {
     e.preventDefault();
