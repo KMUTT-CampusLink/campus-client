@@ -6,16 +6,15 @@ import uniImg from '../img/parking.png';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import Search from "../component/Search/Search"
-import searchResult from "../component/Search/Searchresult"
-import searchResultList from "../component/Search/Searchresultlist"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-
+import Navbar from '../../registration/components/NavBarComponents/NavBar';
+import Searchresultlist from "../component/Search/Searchresultlist";
 function MainPage() {
     const [building, setBuilding] = useState([]); /* */
 
     const getBuilding = async () => {
-        const res = await Axios.get("http://localhost:3000/api/parking/getAllBuildings");
+        const res = await Axios.get("http://localhost:3000/api/parking/getParking");
         setBuilding(res.data);
     }
 
@@ -27,16 +26,17 @@ function MainPage() {
 
     return (
         <>
-            <div className="flex flex-row justify-center">
+        <Navbar/>
+            <div className="flex flex-row justify-center pt-24">
                 <img className="w-2/6 h-1/12 min-w-96 min-h-70" src={uniImg} alt="" />
             </div>
             <br />
             <br />
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-col justify-center">
                 <div className="flex flex-row justify-center">
                     <Search setResults={setResults} />
                 </div>
-                <searchResult results={results} />
+                <Searchresultlist results={results} />
             </div>
             <br />
             <br />
@@ -62,10 +62,13 @@ function MainPage() {
 
                 {building.map((key) => (
                     <Building
+                        key={key.id}
                         id={key.id}
                         bdimg={key.building_img}
                         bdname={key.name}
-                        avaslot={key.capacity}
+                        avaslot={key.reserved_slots}
+                        maxslot={key.parking_capacity}
+                        bdid={key.id}
                     />
                 ))}
             </div>
