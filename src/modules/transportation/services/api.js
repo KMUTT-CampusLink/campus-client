@@ -29,8 +29,8 @@ const post = async (url, payload) => {
 
 // API calls
 
+export const bookTrip = (tripID) => post(`/transport/user/book/${tripID}`);
 export const fetchUserBookings = () => get("/transport/user/bookings");
-
 export const fetchAllStops = () => get("/transport/user/queryAllStops");
 
 /**
