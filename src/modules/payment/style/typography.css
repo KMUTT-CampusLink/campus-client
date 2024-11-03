@@ -131,3 +131,67 @@
         font-size: 15px;
     }
 }
+
+.animate-shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+}
+
+.animate-money-bill {
+    animation: money-bill-animation 1s ease forwards;
+}
+
+@keyframes money-bill-animation {
+    0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-50px) rotate(45deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(90deg);
+    }
+}
+
+.tilt {
+    animation: tilt-animation 1s ease;
+  }
+  
+  @keyframes tilt-animation {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    75% {
+      transform: rotate(-10deg);
+    }
+  }
