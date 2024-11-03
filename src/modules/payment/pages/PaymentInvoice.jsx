@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useParams } from "react-router-dom";
 import { transactions } from "../components/Transaction";
-import InvoiceImage from '../asset/invoice.svg';
+import InvoiceImage from "../asset/invoice.svg";
 import { dotenv } from "dotenv";
 
 const PaymentInvoice = () => {
@@ -46,9 +46,7 @@ const PaymentInvoice = () => {
     <div className="min-h-screen bg-white ">
       <NavBar />
       <div className="w-full pt-20 px-4">
-        <h1 className="h2 text-left md:ml-32">
-          INVOICE
-        </h1>
+        <h1 className="h2 text-left md:ml-32">INVOICE</h1>
         <div className="bg-white p-0 md:p-6 mb-6 w-full md:w-4/5 mx-auto">
           <div className="grid grid-cols-3 gap-4 mb-4 bg-gray-100 p-4 rounded-lg shadow-md ">
             <div className="flex flex-col border-r border-gray-300 ">
@@ -80,7 +78,9 @@ const PaymentInvoice = () => {
                 <th className="pb-4 body-1 border-b border-gray-300">
                   Service
                 </th>
-                <th className="pb-4  body-1 border-b border-gray-300">Amount</th>
+                <th className="pb-4  body-1 border-b border-gray-300">
+                  Amount
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -102,7 +102,11 @@ const PaymentInvoice = () => {
           </button>
         </div>
       </div>
-      <img src={InvoiceImage}alt="invoice" className="w-50 h-40 mx-auto mt-6"/>
+      <img
+        src={InvoiceImage}
+        alt="invoice"
+        className="w-50 h-40 mx-auto mt-6"
+      />
     </div>
   );
 };

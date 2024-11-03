@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
 import AllTransactions from "../components/AllTransactions";
-import ReceiptImage from '../asset/receipt.svg';
+import ReceiptImage from "../asset/receipt.svg";
 import { transactions } from "../components/Transaction";
-import '../style/typography.css';
+import "../style/typography.css";
 
 // at line 6 please comment that and line 11 uncomment that to use backend data
 const InvoiceCenter = () => {
@@ -39,8 +39,12 @@ const InvoiceCenter = () => {
       <NavBar />
       <main className="mx-auto max-w-full lg:max-w-7xl pt-10 lg:pt-20 w-full px-4 lg:px-0 ">
         <div className="flex flex-col lg:flex-row h-auto ">
-          <div className="w-full lg:w-1/2 flex items-center justify-center lg:mb-0 ">
-            <img src={ReceiptImage}alt="Receipt" className="w-50 h-80 mx-auto"/>
+          <div className="w-full lg:w-1/2 flex items-center justify-center mt-6 lg:mt-0  lg:mb-0 ">
+            <img
+              src={ReceiptImage}
+              alt="Receipt"
+              className="w-50 h-80 mx-auto"
+            />
           </div>
 
           <RecentTransactions
