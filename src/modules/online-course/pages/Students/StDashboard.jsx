@@ -64,7 +64,7 @@ const StDashboard = () => {
       </div>
 
       <div>
-        <span className="font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
+        <span className="font-bold max-md:text-sm max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
           Important Announcement
           <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
         </span>
