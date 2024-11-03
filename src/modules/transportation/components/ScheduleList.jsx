@@ -61,7 +61,7 @@ const TripList = ({ trips }) => {
 
             {/* Centered button to book the trip */}
             <div className="flex justify-center mt-4">
-              <Link to="/transport/booking">
+              <Link to={`/transport/booking/${trip.id}`}>
                 <button className="py-1 px-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition duration-200">
                   Book Now
                 </button>

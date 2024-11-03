@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { fetchTripData } from "../services/api";
+import { format, set } from "date-fns";
+import { fetchTripData, bookTrip, isBooked } from "../services/api";
+import { useParams } from "react-router-dom";
 
 function BookingPage() {
   // State for booking details
   const [bookingDetails, setBookingDetails] = useState(null);
+  const { tripID } = useParams(); // Extract tripID from URL parameters
+  const [bookingStatus, setBookingStatus] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
-      const tripData = await fetchTripData(1);
+      const tripData = await fetchTripData(tripID); // Use tripID from URL parameters
       const trip = tripData.trip;
+      const isBookedResponse = await isBooked(tripID);
+      setBookingStatus(isBookedResponse.isBooked ? "Already booked" : "");
 
       const bookingDetails = {
         startTime: format(new Date(trip.trip_schedule.start_time), "HH:mm"),
@@ -24,11 +29,21 @@ function BookingPage() {
     };
 
     fetchData();
-  }, []);
+  }, [tripID]);
 
   const handleBooking = () => {
-    // Handle booking logic here
-    console.log("Booking confirmed, not handled yet");
+    bookTrip(tripID)
+      .then((res) => {
+        if (res.status === 200) {
+          setBookingStatus("successful");
+        } else {
+          setBookingStatus("oops! Something went wrong");
+        }
+      })
+      .catch((error) => {
+        setBookingStatus("Booking failed. Please try again.");
+        console.error(error);
+      });
   };
 
   return (
@@ -63,11 +78,18 @@ function BookingPage() {
         {bookingDetails && (
           <div className="flex justify-center mt-6">
             <button
-              // onClick={handleConfirmPage}
+              onClick={handleBooking}
               className="w-full max-w-xs bg-orange-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-orange-600 transition duration-200 ease-in-out transform hover:scale-105"
             >
               Confirm Booking
             </button>
+          </div>
+        )}
+
+        {/* Booking Status */}
+        {bookingStatus && (
+          <div className="mt-4 text-center text-lg font-semibold text-orange-600">
+            {bookingStatus}
           </div>
         )}
       </div>
