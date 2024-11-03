@@ -11,7 +11,7 @@ import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
 import useIsTabActive from "../../services/activeTab";
-import { getExamDataById, toggleExamStatus, submitExam } from "../../services/apis/studentApi";
+import { getExamDataById, toggleExamStatus, submitExam, getToggleAnswer } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
   const { examId } = useParams();
@@ -20,7 +20,7 @@ export default function StudentExamPage() {
   const navigate = useNavigate();
 
   if (false) {
-  // if (!useIsTabActive()) {
+    // if (!useIsTabActive()) {
     navigate("/exams/student/exam");
   }
 
@@ -105,7 +105,8 @@ export default function StudentExamPage() {
     const res = await submitExam(examId, studentAnswers);
     if (res.status === 200) {
       const status = await toggleExamStatus(examId);
-      if (status.status === 200) {
+      const status2 = await getToggleAnswer(examId);
+      if (status.status === 200 && status2.status === 200) {
         navigate("/exams/student/exam");
       }
     }

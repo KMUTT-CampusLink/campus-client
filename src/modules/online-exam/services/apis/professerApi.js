@@ -2,10 +2,9 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 
 export const createNewExam = async (exam) => {
   try {
-    const response = await axiosInstance.post(
-      "/exams/professor/createExam",
-      { exam: exam }
-    );
+    const response = await axiosInstance.post("/exams/professor/createExam", {
+      exam: exam,
+    });
     return response;
   } catch (error) {
     return error.response.data;
@@ -14,9 +13,7 @@ export const createNewExam = async (exam) => {
 
 export const getExams = async () => {
   try {
-    const response = await axiosInstance.get(
-      "/exams/professor/getExams"
-    );
+    const response = await axiosInstance.get("/exams/professor/getExams");
     return response;
   } catch (error) {
     return error.response.data;
@@ -72,6 +69,17 @@ export const getFullMark = async (examId) => {
   try {
     const response = await axiosInstance.get(
       `/exams/professor/getFullMark?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const dashboard = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getDashboardData?examId=${examId}`
     );
     return response;
   } catch (error) {
