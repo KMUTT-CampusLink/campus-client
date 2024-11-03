@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { fetchTripData } from "../services/api";
+import { format, set } from "date-fns";
+import { fetchTripData, bookTrip, isBooked } from "../services/api";
+import { useParams } from "react-router-dom";
 
 function BookingPage() {
   const [bookingDetails, setBookingDetails] = useState(null);
+  const { tripID } = useParams(); // Extract tripID from URL parameters
+  const [bookingStatus, setBookingStatus] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const tripData = await fetchTripData(1);
-        const trip = tripData.trip;
+      const tripData = await fetchTripData(tripID); // Use tripID from URL parameters
+      const trip = tripData.trip;
+      const isBookedResponse = await isBooked(tripID);
+      setBookingStatus(isBookedResponse.isBooked ? "Already booked" : "");
 
         const bookingDetails = {
           startTime: format(new Date(trip.trip_schedule.start_time), "HH:mm"),
@@ -22,19 +26,24 @@ function BookingPage() {
         };
 
         setBookingDetails(bookingDetails);
-      } catch (error) {
-        console.error("Error fetching trip data:", error);
-      } finally {
-        setIsLoading(false);
-      }
     };
 
     fetchData();
-  }, []);
-
+  }, [tripID]);
+}
   const handleBooking = () => {
-    setIsConfirmed(true);
-    console.log("Booking confirmed");
+    bookTrip(tripID)
+      .then((res) => {
+        if (res.status === 200) {
+          setBookingStatus("successful");
+        } else {
+          setBookingStatus("oops! Something went wrong");
+        }
+      })
+      .catch((error) => {
+        setBookingStatus("Booking failed. Please try again.");
+        console.error(error);
+      });
   };
 
   return (
@@ -101,6 +110,13 @@ function BookingPage() {
               </div>
             )}
           </>
+        )}
+
+        {/* Booking Status */}
+        {bookingStatus && (
+          <div className="mt-4 text-center text-lg font-semibold text-orange-600">
+            {bookingStatus}
+          </div>
         )}
       </div>
     </div>
