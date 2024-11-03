@@ -8,44 +8,44 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
 
   return (
     <div className="w-full">
-      {/* Show a message 'No routes available' if there are no routes */}
       {routes.length === 0 ? (
         <div className="text-3xl text-center text-gray-500">
           No routes available.
         </div>
       ) : (
         routes.map((route, index) => (
-          // Show a panel for each route
           <div
             key={index}
             value={route.id}
-            className="flex flex-row bg-orange-100 shadow-lg rounded-lg p-6 w-full justify-between mb-4"
+            className="flex flex-col bg-gray-200 shadow-lg rounded-lg p-4 w-full justify-between mb-4"
           >
-            <div>
-              <h3 className="text-2xl font-bold mb-2">{route.name}</h3>
-
-              {/* Button to show the route's schedule */}
+            <div className="flex justify-between items-center">
+              <h3 className="text-3xl font-bold">{route.name}</h3>
               <button
-                className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
+                className="py-2 px-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
                 onClick={() => handleRouteSelection(route.id)}
               >
                 View Schedule
               </button>
             </div>
 
-            {/* Show the stops the route goes through in order */}
-            <div className="flex flex-row items-center overflow-x-auto">
+            <div className="flex flex-row items-center mt-4">
               {route.connection.map((connection, index) => (
-                <div key={index} className="bg-orange-200">
-                  {connection.stop_connection_start_idTostop.name} ={">"}{" "}
+                <div key={index} className="flex items-center">
+                  <span className="bg-orange-300 text-black px-2 py-1 rounded-md">
+                    {connection.stop_connection_start_idTostop.name}
+                  </span>
+                  {index < route.connection.length && (
+                    <span className="mx-3 text-lg font-semibold">→ 8:30PM</span>
+                  )}
                 </div>
               ))}
-              <div className="bg-orange-200">
+              <span className="bg-orange-300 text-black px-2 py-1 rounded-md">
                 {
                   route.connection[route.connection.length - 1]
                     .stop_connection_end_idTostop.name
-                }{" "}
-              </div>
+                }
+              </span>
             </div>
           </div>
         ))

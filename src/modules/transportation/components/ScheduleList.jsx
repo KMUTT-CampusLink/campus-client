@@ -1,42 +1,69 @@
 import React from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { FaUser, FaBus, FaCalendarAlt, FaClock } from "react-icons/fa"; // Updated to include bus icon
 
-// Display a list of trips for a route, filtering of what trips are shown is yet to be done, ie those which already hapenned should not be shown
 const TripList = ({ trips }) => {
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       {/* Show a message 'No routes available' if there are no routes */}
       {trips.length === 0 ? (
         <div className="text-3xl text-center text-gray-500">
-          No active Trip for this route.
+          No active trips for this route.
         </div>
       ) : (
         trips.map((trip, index) => (
-          // Show a panel for each route
           <div
             key={index}
-            value={trip.id}
-            className="flex flex-row bg-orange-100 shadow-lg rounded-lg p-6 w-full justify-between mb-4"
+            className="flex flex-col bg-white shadow-md rounded-lg p-6 w-full mb-4 transition-transform transform hover:scale-105"
           >
-            {/* info about the trip, not pretty for now */}
-            <div>
-              <h1>Driver (only id for now) : {trip.driver_id}</h1>
-              <h1>Vehicle (only id for now) : {trip.vehicle_id}</h1>
-              <h1>
-                start time:{" "}
-                {format(new Date(trip.trip_schedule.start_time), "HH:mm")}
-              </h1>
-              <h1>
-                end time:{" "}
-                {format(new Date(trip.trip_schedule.end_time), "HH:mm")}
-              </h1>
-              <h1>date: {format(new Date(trip.trip_date), "yyyy-MM-dd")}</h1>
-              <h1>day of week: {trip.trip_schedule.day}</h1>
-              {/* Button, eventually link to booking confirmation */}
+            <div className="flex justify-between mb-4">
+              <div className="flex flex-col items-start">
+                <div className="flex items-center mb-1">
+                  <FaUser className="text-orange-600 mr-2" />
+                  <span>Driver ID: {trip.driver_id}</span>
+                </div>
+                <div className="flex items-center">
+                  <FaBus className="text-orange-600 mr-2" />
+                  <span>Bus ID: {trip.vehicle_id}</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-start">
+                <div className="flex items-center mb-1">
+                  <FaClock className="text-orange-600 mr-2" />
+                  <span>
+                    Start:{" "}
+                    {format(new Date(trip.trip_schedule.start_time), "HH:mm")}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <FaClock className="text-orange-600 mr-2" />
+                  <span>
+                    End:{" "}
+                    {format(new Date(trip.trip_schedule.end_time), "HH:mm")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-start">
+                <div className="flex items-center mb-1">
+                  <FaCalendarAlt className="text-orange-600 mr-2" />
+                  <span>
+                    Date: {format(new Date(trip.trip_date), "yyyy-MM-dd")}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span>Day: {trip.trip_schedule.day}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Centered button to book the trip */}
+            <div className="flex justify-center mt-4">
               <Link to="/transport/booking">
-                <button className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
-                  Book
+                <button className="py-1 px-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition duration-200">
+                  Book Now
                 </button>
               </Link>
             </div>
