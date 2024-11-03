@@ -100,3 +100,25 @@ export const getStudentAnswerById = async (examId) => {
         return error.response.data;
     }
 }
+
+export const getStudentStatus = async (examId) => {
+    try {
+        const response = await axiosInstance.get(
+        `/exams/student/getStudentStatus?examId=${examId}`
+        );
+        return response;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const getRemainingTime = async (examId) => {
+    try {
+        const response = await axiosInstance.get(
+        `/exams/student/getExamTime?examId=${examId}`
+        );
+        return response;
+    } catch (error) {
+        return error.response.data;
+    }
+}

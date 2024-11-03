@@ -14,6 +14,7 @@ export default function ProfessorCreateExamPage() {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [viewAsStudent, setViewAsStudent] = useState(false);
+  
   //exam data all stored in here
   const [exam, setExam] = useState({
     title: '',
@@ -172,7 +173,7 @@ export default function ProfessorCreateExamPage() {
         </div>
         <div className={`${viewAsStudent ? "block" : "hidden"}`}>
           <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">View as student of {exam.title}</h1>
+            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">{exam.title}</h1>
             <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(false) }}> <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam</button>
           </div>
           <div className="my-[20px] flex flex-col gap-[20px]">
