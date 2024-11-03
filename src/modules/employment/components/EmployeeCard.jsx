@@ -9,7 +9,7 @@ const EmployeeCard = ({ employee}) => {
   };
 
   return (
-    <div onClick={handleClick} className="cursor-pointer border-[#8D493A] border-[0.1px] p-2   md:p-4 rounded-[15px] shadow-lg hover:shadow-xl transition flex flex-col  md:w-[160px] w-[140px] bg-[#F2F2F2]">
+    <div onClick={handleClick} className="cursor-pointer border-[#8D493A] border-[0.1px] p-2   md:p-4 rounded-[15px] shadow-lg hover:shadow-xl transition flex flex-col  md:w-[180px] w-[150px] h-[230px] md:h-[280px] bg-[#F2F2F2] overflow-scroll ">
       <div className="w-90 mt-3 border-[#8D493A] border-[0.1px] rounded-lg">
         <img src={employee.image || 'https://images.pexels.com/photos/3792581/pexels-photo-3792581.jpeg?cs=srgb&dl=pexels-bertellifotografia-3792581.jpg&fm=jpg'} alt={employee.id} className="object-cover rounded-lg shadow-lg md:w-[230px] md:h-[140px] w-[180px] h-[130px] " />
       </div>

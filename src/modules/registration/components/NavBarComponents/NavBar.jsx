@@ -44,6 +44,12 @@ const NavBar = () => {
       sublinks: [],
       subhrefs: [],
     },
+    {
+      name: "Employ",
+      href: "/employ",
+      sublinks: [],
+      subhrefs: [],
+    },
   ];
 
   const mobileNavRef = useRef(null); // mobile nav reference
@@ -96,7 +102,7 @@ const NavBar = () => {
     >
       {/* Desktop Nav Bar */}
       <div
-        className={`hidden min-[900px]:block text-white bg-gradient-to-r from-[#c2544d] to-[#f09107] `}
+        className={`hidden min-[990px]:block text-white bg-gradient-to-r from-[#c2544d] to-[#f09107] `}
       >
         <div className="h-16 flex py-2 mx-auto px-8 max-w-7xl justify-between items-center">
           <Link to="/">
@@ -113,7 +119,7 @@ const NavBar = () => {
 
       {/* Mobile Nav Bar */}
       <div
-        className={`min-[900px]:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r from-[#c2544d] to-[#f09107]  ${
+        className={`min-[990px]:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r from-[#c2544d] to-[#f09107]  ${
           isOpen && "w-3/4 h-full rounded-e-2xl"
         }`}
         ref={mobileNavRef}
