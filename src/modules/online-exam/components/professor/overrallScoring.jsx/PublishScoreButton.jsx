@@ -1,6 +1,6 @@
-
 import React, { useState } from "react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons";
 export default function PublishScoreButton() {
   const [showModal, setShowModal] = useState(false);
 
@@ -15,12 +15,12 @@ export default function PublishScoreButton() {
   return (
     <>
       {/* Button to open the modal */}
-      <button
-        className="bg-[#7F483C] p-[10px] px-[15px] text-center text-[white] text-[18px] rounded-2xl"
-        onClick={handleOpenModal}
-      >
-        Publish Scores
-      </button>
+
+        {/* view as student button */}
+        <button className="btn bg-[#864E41] hover:bg-[#6e4339] text-white" onClick={handleOpenModal}>
+          <FontAwesomeIcon icon={faBullhorn} />Annouce score
+        </button>
+
 
       {showModal && (
         <>
@@ -31,7 +31,7 @@ export default function PublishScoreButton() {
           <dialog id="my_modal_1" className="modal modal-open">
             <div className="modal-box relative z-50">
               <h3 className="font-bold text-lg">
-                Are you sure you want to publish the exam?
+                Are you sure you want to publish the score?
               </h3>
               <p className="py-4">
                 Please be aware that this action cannot be undone.
@@ -61,4 +61,3 @@ export default function PublishScoreButton() {
     </>
   );
 }
-

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-
-export default function DeleteExamButton() {
+import { useNavigate } from "react-router-dom";
+import { deleteExamById } from "../../../services/apis/professerApi";
+export default function DeleteExamButton( examId ) {
   const [showModal, setShowModal] = useState(false);
-
+  const examID = examId.examId;
+  const navigate = useNavigate();
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -10,8 +12,12 @@ export default function DeleteExamButton() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
-  return (
+  const handleDeleteExam = () => {
+    deleteExamById(examID).then(() => {
+      navigate("/exams/professor/1", { state: { refresh: true } });
+    });
+  };
+    return (
     <>
       {/* Button to open the modal */}
       <button
@@ -47,7 +53,7 @@ export default function DeleteExamButton() {
                   <button
                     type="button"
                     className="btn bg-red-500 ml-[10px] text-white hover:bg-red-700"
-                    onClick={handleCloseModal} // You might want to implement the delete logic here
+                    onClick={handleDeleteExam} // You might want to implement the delete logic here
                   >
                     Confirm Delete
                   </button>
