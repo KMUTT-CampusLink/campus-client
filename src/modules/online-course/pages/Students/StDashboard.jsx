@@ -2,15 +2,19 @@ import React from "react";
 
 import Searchbar from "../../components/Searchbar";
 import CourseCard from "../../components/CourseCard";
-import courses from "./dummyCourse.js";
+// import courses from "./dummyCourse.js";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAllCourses, useCoursesByStudentID } from "../../services/queries.js";
 
 const StDashboard = () => {
+  const studentId = "STU00019";
+  const semesterId = 1010;
   const navigate = useNavigate();
+  const { data: courses, isLoading } = useCoursesByStudentID(studentId);
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />
@@ -51,11 +55,12 @@ const StDashboard = () => {
           className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
             justify-items-center mx-auto w-3/4"
         >
-          {courses.map((course) => (
+          {courses?.map((course) => (
             <CourseCard
-              key={course.id}
+              key={course.code}
+              code={course.code}
               imageURL={course.imageUrl}
-              title={course.title}
+              title={course.course_name}
               description={course.description}
               route={"course_description"}
             />
