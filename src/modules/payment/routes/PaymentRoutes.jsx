@@ -19,7 +19,7 @@ export default function PaymentRoutes() {
       element: <PaymentInvoice />,
     },
     {
-      path: "/payment/checkout-success", // เปลี่ยนเส้นทางให้รับ query parameter แทน dynamic segment
+      path: "/payment/checkout-success",
       element: <CheckoutSuccess />,
     },
     {

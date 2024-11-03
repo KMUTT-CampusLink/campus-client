@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
 import AllTransactions from "../components/AllTransactions";
-import image from "../asset/receipt.png";
-//import { transactions } from "../components/Transaction";
+import ReceiptImage from '../asset/receipt.svg';
+import { transactions } from "../components/Transaction";
+import '../style/typography.css';
 
+// at line 6 please comment that and line 11 uncomment that to use backend data
 const InvoiceCenter = () => {
-  const [transactions, setTransactions] = useState([]);
+  //const [transactions, setTransactions] = useState([]);
   const [filterRecent, setFilterRecent] = useState("All");
   const [filterAll, setFilterAll] = useState("All");
   const [showAll, setShowAll] = useState(false);
@@ -16,7 +18,9 @@ const InvoiceCenter = () => {
     // Fetch transactions from the API
     const fetchTransactions = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/payment/invoice");
+        const response = await fetch(
+          "http://localhost:3000/api/payment/invoice"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch transactions");
         }
@@ -35,15 +39,8 @@ const InvoiceCenter = () => {
       <NavBar />
       <main className="mx-auto max-w-full lg:max-w-7xl pt-10 lg:pt-20 w-full px-4 lg:px-0 ">
         <div className="flex flex-col lg:flex-row h-auto ">
-          <div className="mt-16 w-full lg:w-1/2 flex items-center justify-center mb-6 lg:mb-0 ">
-            <div className="top-20">
-              <img
-                src={image}
-                alt="Credit"
-                className="max-w-full h-auto rounded-lg"
-                style={{ height: "300px" }}
-              />
-            </div>
+          <div className="w-full lg:w-1/2 flex items-center justify-center lg:mb-0 ">
+            <img src={ReceiptImage}alt="Receipt" className="w-50 h-80 mx-auto"/>
           </div>
 
           <RecentTransactions

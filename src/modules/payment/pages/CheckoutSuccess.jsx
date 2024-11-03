@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
+import loadingImage from '../asset/verify.svg';
+import SuccessImage from '../asset/success.svg';
 
 const CheckoutSuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
@@ -45,21 +47,26 @@ const CheckoutSuccess = () => {
     <div className="min-h-screen bg-gray-100">
       <NavBar />
       <div className="w-full pt-20 px-8">
-        <h1 className="text-3xl font-bold mb-6 text-center md:text-left md:ml-32">
+        <h1 className="h2 mb-6 text-left md:ml-20">
           Checkout Status
         </h1>
-        <div className="bg-white shadow-md rounded-lg p-8 w-full md:w-4/5 mx-auto">
+        <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-4/5 mx-auto">
           {paymentStatus ? (
             <>
-              <p className="text-lg font-semibold">{paymentStatus}</p>
-              <p className="text-lg mt-4">
+              <p className="h3">{paymentStatus}</p>
+              <p className="body-1 mt-4">
                 You will be redirected back in {countdown} seconds.
               </p>
+              <img src={SuccessImage} alt="Loading" className="w-50 h-80 mx-auto mt-8" />
             </>
           ) : (
-            <p className="text-lg">Verifying payment...</p>
+            <>
+            <p className="body-1">Verifying payment...</p>
+            <img src={loadingImage} alt="Loading" className="w-50 h-80 mx-auto mt-8" />
+            </>
           )}
         </div>
+        
       </div>
     </div>
   );
