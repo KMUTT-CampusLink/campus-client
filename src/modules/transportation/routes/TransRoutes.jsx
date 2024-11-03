@@ -9,7 +9,7 @@ export default function TransRoutes() {
   return [
     { path: "", element: <NavigationPage /> },
     { path: "home", element: <HomePage /> },
-    { path: "booking/:tripID", element: <BookingPage /> },
+    { path: "booking", element: <BookingPage /> },
     { path: "confirm", element: <ConfirmBookingPage /> },
     { path: "test", element: <TestPage /> },
   ];
