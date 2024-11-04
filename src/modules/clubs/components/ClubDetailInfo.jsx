@@ -70,7 +70,7 @@ function ClubDetailInfo() {
         <p className="text-lg text-gray-600 whitespace-pre-wrap p-4">{content}</p>
       </div>
 
-      <div className="flex flex-wrap justify-end md:mt-12">
+      <div className="flex flex-wrap justify-end md:mt-12 mt-6">
         <Link
           to="/clubs/club-home"
           className="bg-[#F69800] text-white px-2 md:px-14 py-2 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 md:ml-6 block"
