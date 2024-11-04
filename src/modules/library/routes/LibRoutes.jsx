@@ -7,7 +7,9 @@ import BookPage from "../Pages/BookPage";
 import EventPage from "../Pages/EventPage";
 import AnnouncePage from "../Pages/AnnouncePage";
 import MyBookPage from "../Pages/MyBookPage";
-
+import BrowseBookPage from "../Pages/BrowseBookPage";
+import BookSearchPage from "../Pages/BookSearchPage";
+import ViewallBookPage from "../Pages/ViewallBookPage";
 export default function LibRoutes() {
   return [
     {
@@ -16,7 +18,8 @@ export default function LibRoutes() {
     },
     {
       path: "/library/booklist",
-      element: <BookListPage />,
+      //element: <BookListPage />,
+      element: <BrowseBookPage />,
     },
     {
       path: "/library/mybook",
@@ -45,6 +48,14 @@ export default function LibRoutes() {
     {
       path: "/library/request/:title",
       element: <RequestPage />,
+    },
+    {
+      path: "/library/search/:keyword",
+      element: <BookSearchPage />,
+    },
+    {
+      path: "/library/viewall/:category",
+      element: <ViewallBookPage />,
     },
   ];
 }

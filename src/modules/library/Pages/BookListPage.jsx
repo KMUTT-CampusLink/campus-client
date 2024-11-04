@@ -3,6 +3,7 @@ import axios from "axios";
 import BookCard from "../components/Card/BookCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
+
 function BookListPage() {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -11,6 +12,8 @@ function BookListPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageRange, setPageRange] = useState([1, 10]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const booksPerPage = 9;
 
   useEffect(() => {
@@ -68,6 +71,19 @@ function BookListPage() {
 
     setFilteredBooks(filtered);
     setCurrentPage(1); // Reset to the first page when filters change
+
+    // Update suggestions based on search term
+    if (searchTerm) {
+      const newSuggestions = data.filter(
+        (book) =>
+          book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.author.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSuggestions(newSuggestions);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
   }, [data, selectedCategories, searchTerm]);
 
   // Ensure the current page is not out of bounds
@@ -110,10 +126,16 @@ function BookListPage() {
     setCurrentPage(newPage);
   };
 
+  // Handle suggestion click
+  const handleSuggestionClick = (suggestion) => {
+    setSearchTerm(suggestion.title);
+    setShowSuggestions(false);
+  };
+
   return (
     <div className="min-h-screen">
       <NavBar />
-      <main className=" pt-20 pb-6 mx-auto -z-10">
+      <main className="pt-20 pb-6 mx-auto -z-10">
         <MainNavbar />
         <div className="bg-neutral-100 min-w-[530px]">
           <div className="container mx-auto p-6 flex">
@@ -136,20 +158,36 @@ function BookListPage() {
               </div>
             </div>
 
-            <div className="container p-3 flex flex-col">
-              <h1 className="font-semibold text-3xl mb-3">
-                Total of {filteredBooks.length} Books
-              </h1>
-              <div className="form-control container pb-3 ">
+            <div className="container pt-3 flex flex-col">
+              <h1 className="font-semibold text-3xl mb-3">Book List</h1>
+              <p className="pb-3 text-orange-600 text-xl">
+                Found: <span className="font-semibold">{filteredBooks.length}</span> Book Title
+              </p>
+
+              <div className="form-control container pb-3 relative">
                 <input
                   type="text"
                   placeholder="Search (Bookname, Author or #ID)"
-                  className="input w-24 md:w-auto rounded-2xl shadow-xl"
+                  className="input w-full md:w-auto rounded-2xl shadow-xl"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute top-full left-0 w-full bg-white shadow-lg rounded-b-xl z-10 mt-1">
+                    {suggestions.slice(0, 5).map((suggestion) => (
+                      <div
+                        key={suggestion.id}
+                        className="p-2 hover:bg-gray-200 cursor-pointer"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        {suggestion.title} by {suggestion.author}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div className="bg-white p-3 rounded-lg shadow-xl">
+
+              <div className="bg-white p-6 rounded-lg shadow-xl ">
                 {currentBooks.map((book) => (
                   <BookCard
                     key={book.id}

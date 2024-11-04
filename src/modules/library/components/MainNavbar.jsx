@@ -4,7 +4,7 @@ import Logo from "../assets/CampusLogo.png";
 
 function MainNavbar() {
   return (
-    <div className=" max-w-7xl mx-auto pb-3">
+    <div className=" max-w-7xl min-w-[541px] mx-auto pb-3">
       <div className="bg-white rounded-t-lg">
         <div className="flex justify-between items-center">
           {/* Logo - visible only on medium and larger devices */}
