@@ -29,9 +29,9 @@ function ClubDetailCard() {
       </div>
 
       <div className="grid m-[10%] md:m-auto justify-content-start font-semibold text-[1rem] md:text-[2rem] gap-x-20">
-        <h1>{clubName}</h1>
-        <h1>Group Admin-5</h1>
-        <h1>Group Members-100</h1>
+        <h2 className="text-xl font-semibold text-gray-800">{clubName}</h2>
+        <h2 className="text-xl font-semibold text-gray-800">Group Admin-5</h2>
+        <h2 className="text-xl font-semibold text-gray-800">Group Members-100</h2>
         <Link to="/clubs/join-club">
           <button
             className="flex md:grid m-auto mt-3 md:mt-8 text-center p-3 md:p-3 w-max md:w-full rounded-2xl text-s md:text-xl shadow-lg text-white"
