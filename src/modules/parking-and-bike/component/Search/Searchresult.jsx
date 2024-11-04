@@ -1,7 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import ResPop from '../ResPop';
 ///rwrwerwerwerewrwrewrwerwer

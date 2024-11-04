@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck,faCircleDot, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect ,useNavigate } from 'react';
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Axios from 'axios';
 
 function ResPop({ id, img, name, onClose }) {
@@ -9,6 +10,7 @@ function ResPop({ id, img, name, onClose }) {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [reservationTime, setReservationTime] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate(); // Initialize navigate
 
     const closeRespop = () => {
         if (onClose) {
@@ -53,14 +55,11 @@ function ResPop({ id, img, name, onClose }) {
             reserve_time: reservationTime,
         };
     
-        console.log("Sending data to server:", requestData); // ตรวจสอบข้อมูลก่อนส่ง
-    
         try {
             const res = await Axios.post('http://localhost:3000/api/parking/postReservation', requestData);
             if (res.data.message === 'Reservation created successfully!') {
                 alert("Reservation successful!");
-                closeRespop();
-                
+                navigate('/parking/receipt', { state: requestData }); // Redirect to receipt page
             } else {
                 setErrorMessage("Failed to reserve slot. Please try again.");
             }
@@ -104,10 +103,10 @@ function ResPop({ id, img, name, onClose }) {
                                     className="py-3 px-4 rounded-lg mt-10 drop-shadow-2xl shadow-black p-2"
                                     value={selectedFloor}
                                     onChange={(e) => setSelectedFloor(Number(e.target.value))}
-                                >
+                                >   
                                     {parking[0]?.floors?.map((floor) => (
                                         <option key={floor.floor_id} value={floor.floor_id}>
-                                            {floor.floor_name} (Slots Available: {floor.floor_reserved_slots}/{floor.floor_capacity})
+                                            {floor.floor_name} (Slots Available: {floor.floor_capacity-floor.floor_reserved_slots}/{floor.floor_capacity})
                                         </option>
                                     ))}
                                 </select>
@@ -116,7 +115,7 @@ function ResPop({ id, img, name, onClose }) {
                                     className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2"
                                     value={selectedSlot}
                                     onChange={(e) => setSelectedSlot(Number(e.target.value))}
-                                >
+                                >  <option value="">Slots</option>
                                     {currentFloor?.slots.map((slot) => (
                                         <option key={slot.slot_id} value={slot.slot_id}>
                                             {slot.slot_name} {slot.slot_status ? "(Available)":"(Unavailable)"}
