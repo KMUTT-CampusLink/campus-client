@@ -1,73 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function LostAndFoundForm() {
   const [building, setBuilding] = useState("");
   const [room, setRoom] = useState("");
   const [floor, setFloor] = useState("");
   const [request, setRequest] = useState("");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Listen to window resize to change the form styles accordingly
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic
+    e.preventDefault(); // Prevent form refresh on submit
     console.log({ building, room, floor, request });
+    // You can add further logic to handle form data submission (API calls, etc.)
   };
 
-  // Inline style object for exact design
+  const isMobile = windowWidth <= 768;
+  const isLaptop = windowWidth > 768 && windowWidth <= 1199;
+
+  // Inline style object with responsive design
   const formStyles = {
     container: {
-      maxWidth: "900px", // Form width
-      margin: "100px 0 100px 600px", // Move form further to the right by increasing left margin
-      padding: "40px", // Padding inside the form
+      maxWidth: isMobile ? "90%" : isLaptop ? "70%" : "900px", // Adjust width based on screen size
+      margin: "100px 0 100px 22%",//***Chang the box on the middle on this */ */
+      padding: isMobile ? "20px" : "40px", // Adjust padding for mobile
       backgroundColor: "#ffffff",
-      borderRadius: "20px", // Rounded corners
-      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)", // Shadow for depth
+      borderRadius: "20px",
+      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
       textAlign: "center",
       position: "relative",
     },
     header: {
-      fontSize: "36px", // Font size for title
+      fontSize: isMobile ? "28px" : isLaptop ? "32px" : "36px", // Responsive font size
       fontWeight: "bold",
       color: "#000",
       marginBottom: "10px",
       textAlign: "left",
-      marginLeft: "20px",
-    },
-    subtitle: {
-      fontSize: "16px",
-      color: "#666",
-      marginBottom: "30px",
     },
     formGroup: {
       display: "flex",
+      flexDirection: isMobile ? "column" : "row", // Stack inputs vertically on mobile
       justifyContent: "space-between",
       flexWrap: "wrap",
-      marginBottom: "30px", // Spacing between inputs
+      marginBottom: "30px",
     },
     formItemFullWidth: {
       width: "100%",
       marginBottom: "20px",
     },
     formItemHalfWidth: {
-      width: "48%",
+      width: isMobile ? "100%" : "48%", // Full width for mobile, half for larger screens
       marginBottom: "20px",
     },
     select: {
       width: "100%",
-      padding: "20px", // Larger padding for fields
-      fontSize: "18px", // Larger font size
-      borderRadius: "30px", // Rounded corners
+      padding: isMobile ? "15px" : "20px", // Adjust padding for mobile
+      fontSize: isMobile ? "16px" : "18px", // Adjust font size for mobile
+      borderRadius: "30px",
       border: "1px solid #ccc",
       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
       appearance: "none",
       background:
-        "#f5f5f5 url(\"data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4z'/></svg>\") no-repeat right 20px center", // Dropdown icon
+        "#f5f5f5 url(\"data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4z'/></svg>\") no-repeat right 20px center",
       backgroundSize: "16px 16px",
       outline: "none",
     },
     textarea: {
       width: "100%",
-      padding: "20px", // Larger padding for textarea
-      fontSize: "18px", // Larger font size
+      padding: isMobile ? "15px" : "20px",
+      fontSize: isMobile ? "16px" : "18px",
       borderRadius: "15px",
       border: "1px solid #ccc",
       backgroundColor: "#f9f9f9",
@@ -76,22 +84,14 @@ export default function LostAndFoundForm() {
       outline: "none",
       boxSizing: "border-box",
     },
-    label: {
-      fontWeight: "bold",
-      fontSize: "18px",
-      color: "#333",
-      textAlign: "left",
-      display: "block",
-      marginBottom: "10px",
-    },
     submitBtn: {
       backgroundColor: "#8b5b34",
       color: "white",
-      padding: "20px 60px", // Larger button
-      borderRadius: "40px", // Rounded button
+      padding: isMobile ? "15px 40px" : "20px 60px", // Adjust button size for mobile
+      borderRadius: "40px",
       border: "none",
       cursor: "pointer",
-      fontSize: "20px", // Larger font size for button text
+      fontSize: isMobile ? "18px" : "20px", // Smaller font for mobile
       boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
       marginTop: "20px",
     },
@@ -99,7 +99,7 @@ export default function LostAndFoundForm() {
       position: "absolute",
       top: "20px",
       right: "20px",
-      width: "60px", // Size of the list button
+      width: "60px",
       height: "60px",
       borderRadius: "50%",
       backgroundColor: "#8b5b34",
@@ -111,8 +111,17 @@ export default function LostAndFoundForm() {
       boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
     },
     icon: {
-      width: "30px", // Larger icon for the list button
+      width: "30px",
       height: "30px",
+    },
+    label: {
+      fontWeight: "bold",
+      fontSize: "18px",
+      color: "#333",
+      textAlign: "left", // Ensures the text is aligned to the left
+      display: "block",
+      marginBottom: "10px",
+      width: "100%", // Takes up full width of the container
     },
   };
 
@@ -140,8 +149,8 @@ export default function LostAndFoundForm() {
       </div>
 
       <h1 style={formStyles.header}>Lost And Found</h1>
-      <hr/>
-      <br/>
+      <hr />
+      <br />
 
       {/* Building Field on Full Width */}
       <div style={{ ...formStyles.formGroup, ...formStyles.formItemFullWidth }}>
@@ -176,9 +185,9 @@ export default function LostAndFoundForm() {
             onChange={(e) => setFloor(e.target.value)}
             style={formStyles.select}
           >
-            <option value="">Floor</option>
-            <option value="Floor 1">Floor 1</option>
-            <option value="Floor 2">Floor 2</option>
+            <option value="">Status</option>
+            <option value="Found">Found</option>
+            <option value="Searching">Searching</option>
           </select>
         </div>
       </div>

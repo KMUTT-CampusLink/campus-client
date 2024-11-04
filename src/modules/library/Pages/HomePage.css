@@ -1,0 +1,18 @@
+/* Position the pagination below the card */
+.swiper-pagination {
+  position: relative;
+  bottom: 0;
+  margin-top: 10px; /* Adjust margin as needed */
+  text-align: center;
+}
+
+/* Change bullet colors to orange */
+.swiper-pagination-bullet {
+  background-color: #67676751; /* Orange color */
+  opacity: 0.6; /* Make it slightly transparent */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #ff9335; /* Solid orange for active bullets */
+  opacity: 1; /* Full opacity for active bullet */
+}
