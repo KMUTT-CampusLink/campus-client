@@ -45,8 +45,8 @@ const EmployeeGrid = () => {
               className="bg-[#F2F2F2] outline-none transition hover:shadow-md w-3/5 md:w-3/4 text-[12px] md:text-[16px] font-georama  md:h-10 h-7 rounded-lg pl-3 "
               type="text"
               id="search"
-              placeholder="search"
-            ></input>
+              placeholder="Search"
+            > </input>
           </div>           
           <button
             onClick={handleClick}
