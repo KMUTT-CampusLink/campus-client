@@ -6,13 +6,13 @@ import { logoHead, authContainer } from "../styles/styles";
 function ActivationPage() {
   return (
     <div className={`${authContainer}`}>
-      <SvgTopLeft />
-      <SvgBottomRight />
+      <SvgTopLeft aria-hidden="true" />
+      <SvgBottomRight aria-hidden="true" />
 
-      <h2 className={`${logoHead}`}>CampusLink</h2>
-      <div className="z-10">
+      <main className="z-10">
+        <h2 className={logoHead}>CampusLink</h2>
         <ActivationForm />
-      </div>
+      </main>
     </div>
   );
 }
