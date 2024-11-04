@@ -16,7 +16,7 @@ route }) => {
 
   return (
     <div
-      className="bg-white rounded-xl hover:cursor-pointer hover:scale-110 duration-300 shadow-lg overflow-hidden w-full h-auto max-sm:h-52 flex flex-col justify-between"
+      className="bg-white rounded-xl hover:cursor-pointer shadow-lg overflow-hidden w-full h-auto max-sm:h-52 flex flex-col justify-between"
       onClick={handleClick}
     >
       <img src={imageURL} alt={title} className="w-full h-3/5 object-cover" />
