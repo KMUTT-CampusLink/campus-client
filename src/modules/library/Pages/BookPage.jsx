@@ -107,8 +107,8 @@ function BookPage() {
           {/* Right Section: Book Details */}
           <div className="lg:w-2/3 w-full">
             <h1 className="text-2xl font-semibold mb-6">{title}</h1>
-            <div className="grid grid-cols-2 -space-x-24 text-gray-600 text-sm">
-              <div>
+            <div className="grid grid-cols-2 -space-x-56 text-gray-600 text-sm">
+              <div className="text-base">
                 <p>Author</p>
                 <p>Publisher</p>
                 <p>Edition</p>
@@ -116,7 +116,7 @@ function BookPage() {
                 <p>Total Pages</p>
                 <p>Publish Date</p>
               </div>
-              <div className="text-gray-600 text-sm">
+              <div className="text-gray-600  text-base">
                 <p>{author}</p>
                 <p>{publisher}</p>
                 <p>{edition}</p>
@@ -128,8 +128,8 @@ function BookPage() {
 
             {/* Book Description */}
             <div className="mt-3">
-              <h2 className="text-gray-800 text-sm mb-3">Description</h2>
-              <p className="text-gray-600 text-sm">{description}</p>
+              <h2 className="text-gray-800 text-lg mb-3">Description</h2>
+              <p className="text-gray-600 text-base">{description}</p>
             </div>
 
             {/* Request Button */}
