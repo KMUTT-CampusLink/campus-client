@@ -2,7 +2,7 @@ import Building from '../component/Main/Building';
 import ReceiptButton from '../component/Main/Menu/ReceiptButton';
 import ParkingButton from '../component/Main/Menu/ParkingButton';
 import HelpButton from '../component/Main/Menu/HelpButton';
-import uniImg from '../img/parking.png';
+import uniImg from '../img/kmutt-cover.png';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import Search from "../component/Search/Search"
@@ -28,7 +28,7 @@ function MainPage() {
         <>
         <Navbar/>
             <div className="flex flex-row justify-center pt-24">
-                <img className="w-2/6 h-1/12 min-w-96 min-h-70" src={uniImg} alt="" />
+                <img className="w-2/4 h-1/10 min-w-96 min-h-70" src={uniImg} alt="" />
             </div>
             <br />
             <br />

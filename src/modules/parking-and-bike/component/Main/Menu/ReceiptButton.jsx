@@ -13,7 +13,7 @@ function ReceiptButton() {
                 <button 
                  onClick={handleClick}
                 className="bg-red-500 text-white p-5 rounded-full">
-                    <FontAwesomeIcon className="w-6 h-6" icon={faReceipt} />
+                    <FontAwesomeIcon className="w-9 h-8" icon={faReceipt} />
                 </button>
                 <h1>Receipt</h1>
             </div>

@@ -19,7 +19,7 @@ function Searchresult({ result }) {
 
     return (
         <>
-            <button className="bg-white hover:bg-gray-200 py-2 flex items-center justify-center px-28 w-full" onClick={toggleComponent}>{result.name}</button>
+            <button className="bg-white max-w-2xl hover:bg-gray-200 py-2 px-28 text-smr" onClick={toggleComponent}>{result.name}</button>
 
             {isComponentVisible && (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">

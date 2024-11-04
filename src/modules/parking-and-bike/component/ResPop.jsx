@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck,faCircleDot, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+import { useState, useEffect ,useNavigate } from 'react';
 import Axios from 'axios';
 
 function ResPop({ id, img, name, onClose }) {
@@ -15,7 +15,7 @@ function ResPop({ id, img, name, onClose }) {
             onClose();
         }
     };
-
+    
     const getParking = async () => {
         try {
             const res = await Axios.get(`http://localhost:3000/api/parking/getBuildingById/${id}`);
@@ -48,7 +48,7 @@ function ResPop({ id, img, name, onClose }) {
         }
     
         const requestData = {
-            car_id: 1,
+            car_id: 1001,
             parking_slot_id: selectedSlot,
             reserve_time: reservationTime,
         };
@@ -60,6 +60,7 @@ function ResPop({ id, img, name, onClose }) {
             if (res.data.message === 'Reservation created successfully!') {
                 alert("Reservation successful!");
                 closeRespop();
+                
             } else {
                 setErrorMessage("Failed to reserve slot. Please try again.");
             }
@@ -100,7 +101,7 @@ function ResPop({ id, img, name, onClose }) {
                         <form onSubmit={handleReservation}>
                             <div className="flex flex-col gap-6">
                                 <select
-                                    className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2"
+                                    className="py-3 px-4 rounded-lg mt-10 drop-shadow-2xl shadow-black p-2"
                                     value={selectedFloor}
                                     onChange={(e) => setSelectedFloor(Number(e.target.value))}
                                 >
@@ -118,7 +119,7 @@ function ResPop({ id, img, name, onClose }) {
                                 >
                                     {currentFloor?.slots.map((slot) => (
                                         <option key={slot.slot_id} value={slot.slot_id}>
-                                            {slot.slot_name} {slot.slot_status ? "(Available)":"(Occupied)"}
+                                            {slot.slot_name} {slot.slot_status ? "(Available)":"(Unavailable)"}
                                         </option>
                                     ))}
                                 </select>
