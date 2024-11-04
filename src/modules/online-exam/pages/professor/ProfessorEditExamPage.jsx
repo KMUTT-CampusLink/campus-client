@@ -14,7 +14,7 @@ export default function ProfessorEditExamPage() {
   const { examId } = useParams();
   const navigate = useNavigate();
   const [viewAsStudent, setViewAsStudent] = useState(false);
-  
+
   //exam data all stored in here
   const [exam, setExam] = useState({
     examId: examId,
@@ -22,7 +22,8 @@ export default function ProfessorEditExamPage() {
     description: '',
     questions: [],
   });
-  
+
+  //get exam data by exam id
   const getExamData = async () => {
     try {
       const res = await getExamDataById(examId);
@@ -112,7 +113,7 @@ export default function ProfessorEditExamPage() {
 
   // delete question function
   const deleteQuestion = (index) => {
-    const updatedQuestions = exam.questions.filter((_, i) => i !== index);
+    const updatedQuestions = exam.questions.filter((question, i) => question.questionId !== index);
     setExam({ ...exam, questions: updatedQuestions });
   };
 
@@ -198,8 +199,8 @@ export default function ProfessorEditExamPage() {
             <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Confirm Edited Exam
             </button>
             <dialog id="confirmModal" className="p-[30px] rounded-xl">
-              <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
-              <p className="py-4">You can submit the exam only once.</p>
+              <h3 className="font-bold text-lg">Confirm Edited the Exam?</h3>
+              <p className="py-4">Review and confirm your edited exam before publishing in the system.</p>
               <div className="modal-action">
                 <form method="dialog" className="flex flex-row gap-[20px]">
                   <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
@@ -220,7 +221,7 @@ export default function ProfessorEditExamPage() {
         </div>
         <div className={`${viewAsStudent ? "block" : "hidden"}`}>
           <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center'>
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">View as student of {exam.title || ""}</h1>
+            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">{exam.title || ""}</h1>
             <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(false) }}> <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam</button>
           </div>
           <div className="my-[20px] flex flex-col gap-[20px]">

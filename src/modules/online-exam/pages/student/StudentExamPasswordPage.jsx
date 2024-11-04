@@ -11,15 +11,23 @@ export default function StudentExamPasswordPage() {
   const [description, setExamDescription] = useState("");
   const { examId } = useParams();
   const navigate = useNavigate();
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handlePassword = async () => {
     const res = await verifyExamPassword(examId, password);
     if (res.status === 200) {
       navigate(`/exams/student/exam/${examId}`);
     } else {
-      alert("Password is incorrect");
+      setAlertVisible(true);
+      setAlertMessage("Password is incorrect");
+      setTimeout(() => {
+        setAlertMessage("");
+        setAlertVisible(false);
+      }, 3000);
     }
-  }
+  };
+
 
   const getTitle = async () => {
     const res = await getExamTitle(examId);
@@ -32,7 +40,7 @@ export default function StudentExamPasswordPage() {
   }, []);
 
   return (
-    <div className="">
+    <>
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
@@ -57,10 +65,17 @@ export default function StudentExamPasswordPage() {
             <button className="btn w-[200px] mt-[20px] bg-[#7F483C] hover:bg-[#6f4036] text-white" onClick={handlePassword}>
               Enter
             </button>
-            <b className="pt-[20px] text-red-500">*** CAUTION : Don't SWITCH TAB while doing the Exam ***</b>
+            <b className="pt-[20px] text-red-500 text-center flex justify-center">*** CAUTION : Please avoid SWITCHING TAB during the exam, as we won’t be able to save your answers to prevent cheating. ***</b>
           </div>
         </div>
       </div>
-    </div>
+      {alertVisible && (
+        <div className="toast toast-center">
+          <div className={`alert alert-error transition-opacity duration-300 ease-in ${alertVisible ? "opacity-100" : "opacity-0"}`}>
+            <p className="text-white">{alertMessage}</p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
