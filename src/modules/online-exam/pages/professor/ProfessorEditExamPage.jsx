@@ -138,6 +138,8 @@ export default function ProfessorEditExamPage() {
     }
   };
 
+  // console.log(exam)
+
   return (
     <div className='w-auto'>
       <Navbar />
