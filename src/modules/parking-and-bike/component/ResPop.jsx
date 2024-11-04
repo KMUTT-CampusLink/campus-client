@@ -105,7 +105,7 @@ function ResPop({ id, img, name, onClose }) {
                                     value={selectedFloor}
                                     onChange={(e) => setSelectedFloor(Number(e.target.value))}
                                 >   
-                                    {parking[0]?.floors?.map((floor) => (
+                                    {parking[0]?.floors.map((floor) => (
                                         <option key={floor.floor_id} value={floor.floor_id}>
                                             {floor.floor_name} (Slots Available: {floor.floor_capacity-floor.floor_reserved_slots}/{floor.floor_capacity})
                                         </option>
