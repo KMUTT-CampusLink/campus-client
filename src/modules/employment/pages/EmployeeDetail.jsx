@@ -37,6 +37,11 @@ const EmployeeDetail = () => {
         const result = await fetch('http://localhost:3000/api/employ/get/' + id);
         const jsonResult = await result.json()
         setEmployee(jsonResult);
+
+        if (!jsonResult.faculty) {
+          console.error("Faculty data missing. Redirecting to main page.");
+          navigate(`/employ`);
+        }
       }
       catch (error) {
         console.error("Error fetching employee data:", error);
@@ -46,9 +51,10 @@ const EmployeeDetail = () => {
     fetchEmployee();
   }, [id,navigate]);
 
+  console.log(employee);
 
+  if (!employee) return <p>Loading employee data...</p>;
 
-  if (!employee) return <p>Loading...</p>;
 
   const dobS = employee.date_of_birth;
   const dob = new Date(dobS);
