@@ -52,14 +52,16 @@ function ResPop({ id, img, name, onClose }) {
         const requestData = {
             car_id: 1001,
             parking_slot_id: selectedSlot,
-            reserve_time: reservationTime,
+            reserve_time: reservationTime
         };
     
         try {
             const res = await Axios.post('http://localhost:3000/api/parking/postReservation', requestData);
             if (res.data.message === 'Reservation created successfully!') {
+                const resData = res.data.reservation;
+                console.log(resData)
                 alert("Reservation successful!");
-                navigate('/parking/receipt', { state: requestData }); // Redirect to receipt page
+                navigate('/parking/receipt', { state: resData }); // Redirect to receipt page
             } else {
                 setErrorMessage("Failed to reserve slot. Please try again.");
             }
@@ -115,7 +117,7 @@ function ResPop({ id, img, name, onClose }) {
                                     className="py-3 px-4 rounded-lg drop-shadow-2xl shadow-black p-2"
                                     value={selectedSlot}
                                     onChange={(e) => setSelectedSlot(Number(e.target.value))}
-                                >  <option value="">Slots</option>
+                                > 
                                     {currentFloor?.slots.map((slot) => (
                                         <option key={slot.slot_id} value={slot.slot_id}>
                                             {slot.slot_name} {slot.slot_status ? "(Available)":"(Unavailable)"}

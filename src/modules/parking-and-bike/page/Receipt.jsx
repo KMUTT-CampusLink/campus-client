@@ -4,11 +4,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import QRCode from 'react-qr-code';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import image from "../img/Receiptimage.png"; 
+import { useState } from 'react';
 
 function Receipt() {
-    const navigate = useNavigate();
     const location = useLocation();
-    const { car_id, parking_slot_id, reserve_time } = location.state || {};
+    const resData = location.state;
+    const expireTime = new Date(resData.expire_time);
+    const date = expireTime.toLocaleDateString();
+    const time = expireTime.toLocaleTimeString();
 
     const handleClick = () => {
         navigate('/parking');
@@ -33,16 +36,16 @@ function Receipt() {
                     <h1 className="text-2xl font-bold text-white">BOOKING SUCCESSFUL!</h1>
                     <p className="text-red-600 mt-5 text-xs">QR Expire in: 01:00:00</p>
                     <div className="border-4 border-yellow-500 mt-5 p-0 rounded-md bg-white">
-                        <QRCode 
+                        {/* <QRCode 
                             value={`car_id: ${car_id}, parking_slot_id: ${parking_slot_id}, reserve_time: ${reserve_time}`} 
                             size={96} 
-                        />
+                        /> */}
                     </div>
                     <div className="flex flex-col text-sm justify-center mt-10 items-center gap-5 font-semibold text-white">
                         <p>FLOOR - 4th Floor</p>
-                        <p>POSITION - A01</p>
-                        <p>EXPIRE DATE - 25/02/2025</p>
-                        <p>EXPIRE TIME - 03:00 PM</p>
+                        <p>POSITION - {resData.parking_slot_id}</p>
+                        <p>EXPIRE DATE - {date}</p>
+                        <p>EXPIRE TIME - {time}</p>
                     </div>
                     <div className="text-3xl font-bold text-orange-400 mt-10 gap-4 flex flex-col items-center">
                         <h1>License Number</h1>

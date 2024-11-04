@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../../registration/components/NavBarComponents/NavBar';
 import Searchresultlist from "../component/Search/Searchresultlist";
+
 function MainPage() {
     const [building, setBuilding] = useState([]); /* */
 
@@ -26,7 +27,7 @@ function MainPage() {
 
     return (
         <>
-        <Navbar/>
+            <Navbar />
             <div className="flex flex-row justify-center pt-24">
                 <img className="w-2/4 h-1/10 min-w-96 min-h-70" src={uniImg} alt="" />
             </div>
@@ -63,12 +64,11 @@ function MainPage() {
                 {building.map((key) => (
                     <Building
                         key={key.id}
-                        id={key.id}
+                        bdid={key.id}
                         bdimg={key.building_img}
                         bdname={key.name}
                         avaslot={key.reserved_slots}
                         maxslot={key.parking_capacity}
-                        bdid={key.id}
                     />
                 ))}
             </div>
