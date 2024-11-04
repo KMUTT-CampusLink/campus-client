@@ -58,8 +58,7 @@ function ResPop({ id, img, name, onClose }) {
         try {
             const res = await Axios.post('http://localhost:3000/api/parking/postReservation', requestData);
             if (res.data.message === 'Reservation created successfully!') {
-                const resData = res.data.reservation;
-                console.log(resData)
+                const resData = res.data;
                 alert("Reservation successful!");
                 navigate('/parking/receipt', { state: resData }); // Redirect to receipt page
             } else {
