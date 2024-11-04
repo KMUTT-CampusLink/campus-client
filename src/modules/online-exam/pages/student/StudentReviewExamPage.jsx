@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-
-import NavBar from "../../../registration/components/NavBarComponents/NavBar";
-import PassedChip from "../../components/professor/Scoring/PassedChip";
-import FailedChip from "../../components/professor/Scoring/FailedChip";
-import ProcessingChip from "../../components/professor/Scoring/ProcessingChip";
-import Question from "../../components/student/ReviewExamPage/Question";
-import { getStudentReview } from "../../services/apis/studentApi";
 import { useParams } from "react-router-dom";
+
+import NavBar from '../../../registration/components/NavBarComponents/NavBar'
+import Chip from '../../components/professor/Scoring/Chip'
+import Question from '../../components/student/ReviewExamPage/Question'
+import { getStudentReview } from "../../services/apis/studentApi";
 
 export default function StudentReviewExamPage() {
   const [permission, setPermission] = useState(1);
@@ -34,9 +32,7 @@ export default function StudentReviewExamPage() {
             Exam 1
           </p>
           <div className="flex flex-col items-end">
-            <PassedChip />
-            {/* <FailedChip/> */}
-            {/* <ProcessingChip/> */}
+            {/* <Chip /> */}
             <div className="flex gap-1">
               <p className="text-[22px] lg:text-[30px]">100/100</p>
               {/* <p className="text-[30px]">/</p>

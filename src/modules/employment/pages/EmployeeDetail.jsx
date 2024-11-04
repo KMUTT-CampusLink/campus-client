@@ -57,7 +57,7 @@ const EmployeeDetail = () => {
 
 
   const handleClickback = () => {
-    navigate(`/employ`);
+    navigate(`/employ/employee`);
   };
   const handleClick = () => {
     navigate(`/employ/employeeUpdate/${employee.id}`);
@@ -89,7 +89,7 @@ const EmployeeDetail = () => {
 
       <main className="pt-16 md:pt-20 px-4 md:px-20">
         <FontAwesomeIcon icon={faArrowLeft} className="hover:shadow-sm md:h-7" onClick={handleClickback} />
-        {/* <body className="lg:flex items-center justify-between xl:justify-around"> */}
+        <div className="lg:flex lg:justify-around lg:items-center"> 
           <div className="flex justify-center">
             <EmployeeCard employee={employee} />
           </div>
@@ -99,7 +99,7 @@ const EmployeeDetail = () => {
               Work History
             </h2>
 
-            <div className="border border-[#939393] rounded-md grid grid-cols-1 lg:grid-cols-2  md:divide-x divide-[#939393] ">
+            <div className="border lg:w-[700px] xl:w-[900px] 2xl:w-[1200px] border-[#939393] rounded-md grid grid-cols-1 lg:grid-cols-2  lg:divide-x divide-[#939393] ">
               {/* Left Side */}
               <div className="p-5 space-y-2 md:space-y-4">
                 <div>
@@ -171,7 +171,7 @@ const EmployeeDetail = () => {
               </div>
             </div>
           </article>
-        {/* </body> */}
+        </div>
 
         <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
           <button className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm" onClick={handleClick}>Edit</button>

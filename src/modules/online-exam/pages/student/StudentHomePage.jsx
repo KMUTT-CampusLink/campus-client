@@ -33,7 +33,7 @@ export default function StudentHomePage() {
     getInprogressExams();
     getHistoryExams();
   }, []);
-
+  
   return (
     <div className="w-auto">
       <NavBar />
