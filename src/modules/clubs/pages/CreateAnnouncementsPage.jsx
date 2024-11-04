@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod"; // Importing zod
 import { useNavigate } from "react-router-dom"; // Importing useNavigate
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 // Schema definition using Zod, including date, time, and place
 const schema = z.object({
@@ -28,11 +29,31 @@ function CreateAnnouncement() {
 
   const navigate = useNavigate(); // Hook to navigate between routes
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Navigate to the desired route after submitting the form
-    navigate("/clubs/club-home"); // Change this to your desired route
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  //   // Navigate to the desired route after submitting the form
+  //   navigate("/clubs/club-home"); // Change this to your desired route
+  // };
+  const onSubmit = async (data) => {
+    const formattedData = {
+      announcementTitle: data.announcementDescription,
+      announcementContent: data.announcementDetail,
+      eventDate: new Date(`${data.eventDate}T${data.eventTime}`), // Combine date and time
+      eventPlace: data.eventPlace,
+    };
+  
+    try {
+      const response = await axiosInstance.post("/clubs/announcements", formattedData);
+      if (response.data.success) {
+        navigate("/clubs/club-home");
+      } else {
+        console.error("Failed to create announcement:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error creating announcement:", error);
+    }
   };
+  
 
   return (
     <div className="mt-14">
