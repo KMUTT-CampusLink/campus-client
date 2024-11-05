@@ -92,7 +92,7 @@ const RecentTransactions = ({
 
         {/* See All Button */}
         <button
-          className="btn bg-orange-600 text-white w-fit body-1"
+          className="btn bg-payment-red hover:bg-red-400 text-white w-fit body-1"
           onClick={() => setShowAll(true)}
         >
           See All
@@ -138,9 +138,9 @@ const RecentTransactions = ({
 
             {/* Arrow for Unpaid Transactions */}
             {transaction.status === "Unpaid" && (
-              <div className="ml-2">
+              <div className="ml-2 ">
                 <button
-                  className="btn btn-sm btn-circle bg-red-500 hover:bg-red-600 text-white ml-2"
+                  className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
                   onClick={() => handleArrowClick(transaction)}
                   aria-label="Pay Now"
                 >

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { transactions } from "../components/Transaction";
 import InvoiceImage from "../asset/invoice.svg";
+import ArrowLeft from "../asset/arrowL.svg";
 import { dotenv } from "dotenv";
+import "../style/typography.css";
 
 const PaymentInvoice = () => {
   const { id } = useParams();
   const [invoice, setInvoice] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Route ID:", id);
@@ -47,8 +51,17 @@ const PaymentInvoice = () => {
       <NavBar />
       <div className="w-full pt-20 px-4">
         <div className="bg-white p-0 md:p-6 mb-6 w-full md:w-4/5 mx-auto ">
-        <h1 className="h2 text-left">INVOICE</h1>
-          <div className="grid grid-cols-3 gap-4 mb-4 bg-gray-100 p-4 rounded-lg mt-4 shadow-md ">
+          <h1 className="h2 text-left flex item-center">
+            <img
+              src={ArrowLeft}
+              alt="Back"
+              className="mr-4 w-8 cursor-pointer"
+              onClick={() => navigate(`/payment/`)}
+            />
+            INVOICE
+          </h1>
+
+          <div className="grid grid-cols-3 gap-2 mb-4 bg-gray-100 p-4 rounded-lg mt-4 shadow-md ">
             <div className="flex flex-col border-r border-gray-300 ">
               <span className="big-label">Issued</span>
               <span className="body-2">
@@ -95,7 +108,7 @@ const PaymentInvoice = () => {
         </div>
         <div className="flex justify-end w-full md:w-4/5 mx-auto">
           <button
-            className="bg-red-500 text-white px-10 py-2 rounded-md shadow-md hover:bg-red-600 body-1"
+            className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 rounded-md shadow-md body-1"
             onClick={handlePayment} // เมื่อกดปุ่มจะเรียกฟังก์ชัน handlePayment
           >
             PAY

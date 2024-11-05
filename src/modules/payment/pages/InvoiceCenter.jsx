@@ -9,7 +9,7 @@ import Money1 from "../asset/money1.png";
 import Money2 from "../asset/money2.png";
 import Money3 from "../asset/money3.png";
 
-// at line 6 please comment that and line 11 uncomment that to use backend data
+// at line 6 please comment that and line 14 uncomment that to use backend data
 const InvoiceCenter = () => {
   //const [transactions, setTransactions] = useState([]);
   const [filterRecent, setFilterRecent] = useState("All");
@@ -53,33 +53,34 @@ const InvoiceCenter = () => {
       <NavBar />
       <main className="mx-auto max-w-full lg:max-w-7xl pt-10 lg:pt-20 w-full px-4 lg:px-0 ">
         <div className="flex flex-col lg:flex-row h-auto ">
-          <div className="w-full lg:w-1/2 flex items-center justify-center mt-6 lg:mt-0 lg:mb-0 ">
-            <div className="relative">
-              <img
-                src={ReceiptImage}
-                alt="Receipt"
-                className={`w-50 h-80 mx-auto hover:rotate-6 cursor-pointer ${isTilting ? "tilt" : ""}`}
-                onClick={handleImageClick}
-              />
-              {showMoney && (
-                <div className="absolute inset-0 flex flex-wrap justify-center items-start">
-                  {Array.from({ length: 15 }).map((_, index) => (
-                    <img
-                      key={index}
-                      src={[Money1, Money2, Money3][index % 3]}
-                      alt="Money"
-                      className="w-20 h-20 animate-money-bill"
-                      style={{
-                        position: 'absolute',
-                        top: `${Math.random() * 100}%`,
-                        left: `${Math.random() * 100}%`,
-                        transform: `rotate(${Math.random() * 360}deg)`
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+          {/*Head UX/UI special request. i hope that she someday stub her pinky toe so hard🤗🤗🤗*/}
+          <div className="relative w-full lg:h-screen lg:w-1/2 flex items-center justify-center lg:pb-40 lg:mt-0 lg:mb-0 ">
+            <img
+              src={ReceiptImage}
+              alt="Receipt"
+              className={`w-50 h-80 mx-auto hover:rotate-6 cursor-pointer ${
+                isTilting ? "tilt" : ""
+              }`}
+              onClick={handleImageClick}
+            />
+            {showMoney && (
+              <div className="absolute inset-0 flex flex-wrap justify-center items-start">
+                {Array.from({ length: 15 }).map((_, index) => (
+                  <img
+                    key={index}
+                    src={[Money1, Money2, Money3][index % 3]}
+                    alt="Money"
+                    className="w-20 h-20 animate-money-bill"
+                    style={{
+                      position: "absolute",
+                      top: `${Math.random() * 100}%`,
+                      left: `${Math.random() * 100}%`,
+                      transform: `rotate(${Math.random() * 360}deg)`,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <RecentTransactions
@@ -112,4 +113,3 @@ const InvoiceCenter = () => {
 };
 
 export default InvoiceCenter;
-
