@@ -25,6 +25,7 @@ const TrDashboard = () => {
                 imageURL={course.imageUrl}
                 title={course.title}
                 description={course.description}
+                route={"course_description"}
               />
             ))}
           </div>
