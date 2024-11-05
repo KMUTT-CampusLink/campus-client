@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { getBuilding, getFloor, getRoom } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function LostAndFoundForm() {
+  const navigate = useNavigate();
   const [building, setBuilding] = useState("");
   const [room, setRoom] = useState("");
   const [floor, setFloor] = useState("");
@@ -11,10 +14,27 @@ export default function LostAndFoundForm() {
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
+    handleBuilding();
+    handleFloor();
+    handleRoom();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
+  const handleBuilding = async() => {
+    const data = await getBuilding()
+     console.log(data)
+     setBuilding(data.data)
+  }
+  const handleFloor = async() => {
+    const data = await getFloor()
+     console.log(data)
+     setFloor(data.data)
+  }
+  const handleRoom = async() => {
+    const data = await getRoom()
+     console.log(data)
+     setRoom(data.data)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent form refresh on submit
@@ -138,6 +158,7 @@ export default function LostAndFoundForm() {
           viewBox="0 0 24 24"
           stroke="currentColor"
           style={formStyles.icon}
+          onClick={() => navigate("/security/administrator/lostandfoundlist")} 
         >
           <path
             strokeLinecap="round"
@@ -159,9 +180,14 @@ export default function LostAndFoundForm() {
           onChange={(e) => setBuilding(e.target.value)}
           style={formStyles.select}
         >
-          <option value="">Building</option>
-          <option value="Building 1">Building 1</option>
-          <option value="Building 2">Building 2</option>
+          {/* <option value="">Building</option>
+          <option value="Building 1">Building 1</option> */}
+          {/* <option value="Building 2">Building 2</option> */}
+          {building&&building.map((building) => (
+            <option key={building.id} value={building.name}>
+              {building.name}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -173,9 +199,14 @@ export default function LostAndFoundForm() {
             onChange={(e) => setRoom(e.target.value)}
             style={formStyles.select}
           >
-            <option value="">Room No.</option>
+            {/* <option value="">Room No.</option>
             <option value="Room 101">Room 101</option>
-            <option value="Room 102">Room 102</option>
+            <option value="Room 102">Room 102</option> */}
+            {room&&room.map((room) => (
+            <option key={room.id} value={room.name}>
+              {room.name}
+            </option>
+          ))}
           </select>
         </div>
 
