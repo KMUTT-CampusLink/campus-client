@@ -5,6 +5,7 @@ import { mainStyles, containerDivStyles, logoHead } from "../styles/styles";
 import GradeCard from '../components/GradeCard';
 import { useSemestersByStudentId } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
+import SInfoCard from '../components/SInfoCard';
 
 
 function ProfilePage() {
@@ -42,12 +43,16 @@ function ProfilePage() {
         <div className={containerDivStyles}>
           <NavBar />
           <main className={mainStyles}>
-          <div>
+          <div className='grid grid-cols-1 md:grid-cols-3 bg-red-400'>
+            <div className='col-span-2 bg-green-400'>My Profile</div>
+            <div className='bg-blue-400 p-4'>
+                <SInfoCard/>
             <GradeCard
               studentId={studentId}
               semester={semester}
               semesterId={semesterId}
             />
+            </div>
           </div>
           </main>
         </div>
