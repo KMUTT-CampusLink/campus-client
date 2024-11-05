@@ -94,7 +94,6 @@ export default function StudentExamPage() {
       let remainingTime = res.data.data;
       const intervalId = setInterval(() => {
         remainingTime -= 1000;
-
         if (remainingTime <= 0) {
           clearInterval(intervalId);
           setTimeLeft(0);

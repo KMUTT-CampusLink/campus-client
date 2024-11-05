@@ -56,7 +56,7 @@ export default function ProfessorOverallScoringPage() {
             <PublishScoreButton />
           </div>
         </div>
-        <hr className="border-t border-[#798184]" />
+        <hr className="bg-[#bebebe]" />
         {/* content */}
         <div className=" py-[30px] ">
           <p className="font-bold text-[#D4A015] text-[22px] ">Participants</p>
@@ -79,7 +79,7 @@ export default function ProfessorOverallScoringPage() {
             <p className="w-[10%]">Total score</p>
             <p className="w-[15%]">Status</p>
           </p>
-          <hr className="border-t border-[#798184] pb-[20px]" />
+          <hr className="bg-[#bebebe] mb-[20px]" />
           <Participant examId={examId} participants={participants} fullMark={fullMark} passMark={passMark}/>
         </div>
       </div>

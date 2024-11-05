@@ -14,8 +14,11 @@ export default function Participant({
       {participants.map((participant) => (
         <button
           key={participant.id}
-          className="text-center w-[100%] text-[14px] flex rounded-lg py-[15px] gap-[10px] bg-gray-200 drop-shadow-sm hover:bg-gray-300"
+          className="text-center w-[100%] text-[14px] flex rounded-lg py-[15px] gap-[10px] bg-white drop-shadow-md hover:bg-gray-50"
           onClick={() => {
+            // if (participant.is_checked) {
+            //   return;
+            // }
             navigate(
               `/exams/professor/scoring/${participant.id}/${participant.student_id}/${examId}`
             );
@@ -26,7 +29,15 @@ export default function Participant({
           <p className="w-[45%]">Nudhana Sarutipaisan</p>
           <p className="w-[10%]">{participant.total_score}</p>
           <p className="w-[10%]">{fullMark}</p>
-          <p className="w-[15%]">
+          <p
+            className={`w-[15%] ${
+              !participant.is_checked
+                ? "text-yellow-500"
+                : participant.total_score >= passMark
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
             {!participant.is_checked
               ? "processing"
               : participant.total_score >= passMark
