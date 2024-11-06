@@ -1,33 +1,16 @@
-// import { QRCode } from "antd";
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-/* import axios from "axios"; */
+import QrScannerComponent from "../components/ScannerComponent";
 
 const useStQr = () => {
   const [h1] = useState("STQR Page");
   const navigate = useNavigate();
+  const [isScannerOpen, setIsScannerOpen] = useState(false); // State for controlling scanner modal
 
   const items = [
     { label: "Attendance", key: "Attendance" },
     { label: "QR CODE", key: "QR CODE" },
   ];
-
-  /* // Fetch announcements from API
-useEffect(() => {
-  const getAnnouncements = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:3000/api/library/announce" // API endpoint
-      );
-      setAnnouncements(response.data); // Set fetched data to state
-      setFilteredAnnouncements(response.data); // Initialize filtered announcements
-    } catch (error) {
-      console.error("Error fetching announcements:", error); // Handle error
-    }
-  };
-  getAnnouncements(); // Call the function to fetch data
-}, []); */
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
@@ -53,26 +36,11 @@ useEffect(() => {
   }
 
   function StQrButton() {
-    const [qrData, setQrData] = useState(null); // State to store the QR code data
-    const [loading, setLoading] = useState(false); // State to manage loading state
-
-    const handleClick = async () => {
-      setLoading(true); // Start loading
-      try {
-        const response = await axios.get("http://localhost:3000/api/qr-code"); // Replace with your API endpoint
-        setQrData(response.data); // Set the QR code data from response
-      } catch (error) {
-        console.error("Error fetching QR code data:", error); // Handle error
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    };
-
     return (
       <div>
         <button
           className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-1/6"
-          onClick={handleClick} // Call the handleClick function on button click
+          onClick={() => setIsScannerOpen(true)} // Open scanner modal on click
         >
           Scan QR CODE
           <svg
@@ -89,11 +57,20 @@ useEffect(() => {
             />
           </svg>
         </button>
-        {loading && <p>Loading...</p>}{" "}
-        {/* Show loading message if fetching data */}
-        {qrData && (
-          <div className="mt-4">
-            {/* <QRCode value={qrData} /> Display the QR code */}
+
+        {/* Modal for QR Scanner */}
+        {isScannerOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg p-6 w-1/2 max-w-sm text-center">
+              <h2 className="text-xl font-semibold mb-4">Scan QR Code</h2>
+              <QrScannerComponent /> {/* QR Scanner component for live scanning */}
+              <button
+                className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+                onClick={() => setIsScannerOpen(false)} // Close button
+              >
+                Close
+              </button>
+            </div>
           </div>
         )}
       </div>
