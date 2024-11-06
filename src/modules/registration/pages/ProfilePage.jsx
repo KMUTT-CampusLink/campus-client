@@ -1,20 +1,16 @@
-import React from 'react'
-import { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from "../components/NavBarComponents/NavBar";
-import { mainStyles, containerDivStyles, logoHead } from "../styles/styles";
+import { mainStyles, containerDivStyles } from "../styles/styles";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGraduationCap, faEnvelope, faPhone, faHome } from '@fortawesome/free-solid-svg-icons';
 import GradeCard from '../components/GradeCard';
 import { useSemestersByStudentId } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
 import SInfoCard from '../components/SInfoCard';
 
-
 function ProfilePage() {
-    const studentId = localStorage.getItem("studentId");
-  const {
-    data: semesters,
-    isLoading,
-    isError,
-  } = useSemestersByStudentId(studentId);
+  const studentId = localStorage.getItem("studentId");
+  const { data: semesters, isLoading, isError } = useSemestersByStudentId(studentId);
 
   const [semester, setSemester] = useState("");
   const [semesterId, setSemesterId] = useState("");
@@ -39,24 +35,71 @@ function ProfilePage() {
 
   if (isError) return <ErrorSkeleton />;
 
-    return (
-        <div className={containerDivStyles}>
-          <NavBar />
-          <main className={mainStyles}>
-          <div className='grid grid-cols-1 md:grid-cols-3 bg-red-400'>
-            <div className='col-span-2 bg-green-400'>My Profile</div>
-            <div className='bg-blue-400 p-4'>
-                <SInfoCard/>
-            <GradeCard
-              studentId={studentId}
-              semester={semester}
-              semesterId={semesterId}
-            />
+  return (
+    <div className={containerDivStyles}>
+      <NavBar />
+      <main className={mainStyles}>
+        <div className="grid grid-cols-1 md:grid-cols-3 bg-gray-100 p-6 rounded-lg shadow-lg">
+          <div className="col-span-2 bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-3xl font-bold">My Profile</h2>
+            {/* Logo Section */}
+            <div className="relative w-20 h-20 mx-auto mt-4">
+              <img
+                src="/logos/default-profile.png"
+                alt="Logo"
+                className="w-full h-full rounded-full object-cover border-4 border-gray-200"
+              />
+            </div>
+
+            <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
+              <div className="flex items-center space-x-2">
+                <FontAwesomeIcon icon={faGraduationCap} className="text-gray-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Education Level</p>
+                  <p className="font-semibold">Current student - Bachelor's Degree</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 mt-4">
+                <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Personal email</p>
+                  <p className="font-semibold">Thitapa.rns@gmail.com</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold">Contact Information</h3>
+              <div className="flex items-center space-x-2 mt-4">
+                <FontAwesomeIcon icon={faPhone} className="text-gray-600" />
+                <p className="font-semibold">099-999-9999</p>
+              </div>
+            </div>
+
+            <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold">Current Address</h3>
+              <div className="flex items-start space-x-2 mt-4">
+                <FontAwesomeIcon icon={faHome} className="text-gray-600" />
+                <div>
+                  <p>Country: Thailand</p>
+                  <p>Address: 009/001 road Somewhere</p>
+                  <p>Subdistrict: Somewhere</p>
+                  <p>District: Somewhere</p>
+                  <p>Province: Somewhere</p>
+                  <p>Postal Code: 11001</p>
+                </div>
+              </div>
             </div>
           </div>
-          </main>
+
+          <div className="bg-white p-4 rounded-lg shadow-lg">
+            <SInfoCard />
+            <GradeCard studentId={studentId} semester={semester} semesterId={semesterId} />
+          </div>
         </div>
-      );
+      </main>
+    </div>
+  );
 }
 
-export default ProfilePage
+export default ProfilePage;
