@@ -27,32 +27,34 @@ const NavigationPage = () => {
       <NavBar />
 
       <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
-        <h2 className="text-4xl font-bold text-gray-800 mb-6">
-          Navigation Page
+        {/* Dashboard Header */}
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">
+          Dashboard
         </h2>
 
-        <div className="mb-6">
+        {/* Search for Routes Link */}
+        <div className="mb-10 text-center">
           <Link
             to="./home"
-            className="text-lg text-blue-600 underline hover:text-blue-800"
+            className="text-lg font-medium text-blue-500 underline hover:text-blue-600 transition duration-200"
           >
-            Search for routes
+            Search for Routes
           </Link>
         </div>
 
         {userRole === "Student" ? (
           <>
-            <h2 className="text-3xl font-semibold text-gray-700 mb-4">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-4">
               My Bookings
-            </h2>
+            </h3>
 
             <div className="space-y-4">
               {userBookings.map((booking, index) => (
                 <div
                   key={index}
-                  className="bg-white shadow-lg rounded-lg p-4 border-l-4 border-orange-500"
+                  className="bg-white shadow-md rounded-md p-4 border-l-4 border-orange-400"
                 >
-                  <p className="text-xl font-medium text-gray-900">
+                  <p className="text-lg font-semibold text-gray-800">
                     {format(new Date(booking.trip.trip_date), "yyyy-MM-dd")}
                   </p>
                   <p className="text-gray-600">
@@ -72,7 +74,7 @@ const NavigationPage = () => {
             </div>
           </>
         ) : (
-          <div className="text-center text-xl text-gray-700 mt-6">
+          <div className="text-center text-lg text-gray-700 mt-6">
             <p>Not signed in as a student to view bookings</p>
           </div>
         )}

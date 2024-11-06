@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../components/NavBarComponents/NavBar";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import {
   fetchAllStops,
