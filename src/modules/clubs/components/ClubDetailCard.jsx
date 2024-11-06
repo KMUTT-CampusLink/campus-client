@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { useParams, Link } from "react-router-dom";
 
-
 function ClubDetailCard() {
   const [clubName, setClubName] = useState("");
   const [buildiingLocation, setBuildingLocation] = useState("");
   const { clubId } = useParams(); // club ID from the backend
-  const [ memberCount, setMemberCount] = useState(0); 
-  const [ adminCount, setAdminCount] = useState(0); 
-  //const [member, setMenber] = useState();
+
+  const [ memberCount, setMemberCount] = useState(0);
+  const [ adminCount, setAdminCount] = useState(0);
+
 
   useEffect(() => {
     const fetchClubName = async () => {
@@ -17,7 +17,7 @@ function ClubDetailCard() {
         const response = await axiosInstance.get(`/clubs/${clubId}`);
         const clubData = response.data.data;
         setClubName(clubData.name);
-        setBuildingLocation(clubData.building ? clubData.building.name : "Not located!"); 
+        setBuildingLocation(clubData.building ? clubData.building.name: "Not located!");
         setMemberCount(clubData.club_member.length);
 
         const admins = clubData.club_member.filter((member) => member.is_admin);
