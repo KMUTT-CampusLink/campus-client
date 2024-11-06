@@ -37,9 +37,9 @@ const useStQr = () => {
 
   function StQrButton() {
     return (
-      <div>
+      <div className="flex flex-col items-center">
         <button
-          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-1/6"
+          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
           onClick={() => setIsScannerOpen(true)} // Open scanner modal on click
         >
           Scan QR CODE

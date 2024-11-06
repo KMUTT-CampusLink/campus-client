@@ -19,12 +19,12 @@ export default function StudentHomePage() {
   }
 
   const getInprogressExams = async () => {
-    const res = await getInprogressExam(66130500850);
+    const res = await getInprogressExam(66130500849);
     setInProgress(res.data.data);
   }
 
   const getHistoryExams = async () => {
-    const res = await getHistoryStudentExams(66130500850);
+    const res = await getHistoryStudentExams(66130500849);
     setHistoryExams(res.data.data);
   }
 

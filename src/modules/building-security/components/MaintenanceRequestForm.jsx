@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function MaintenanceRequestForm() {
+  const navigate = useNavigate();
   const [building, setBuilding] = useState("");
   const [room, setRoom] = useState("");
   const [floor, setFloor] = useState("");
@@ -169,6 +171,7 @@ export default function MaintenanceRequestForm() {
           viewBox="0 0 24 24"
           stroke="currentColor"
           style={formStyles.icon}
+          onClick={() => navigate("/security/administrator/list")}         
         >
           <path
             strokeLinecap="round"

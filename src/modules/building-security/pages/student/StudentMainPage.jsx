@@ -1,7 +1,9 @@
 import React from "react";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+import { useNavigate } from "react-router-dom";
 
 export default function StudentMainPage() {
+  const navigate = useNavigate();
   const styles = {
     container: {
       position: "relative",
@@ -82,6 +84,7 @@ export default function StudentMainPage() {
                 (e.currentTarget.style.transform = "scale(1.05)")
               }
               onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onClick={() => navigate("/security/student/request")}
             >
               Maintenance Requests
             </button>
@@ -91,6 +94,7 @@ export default function StudentMainPage() {
                 (e.currentTarget.style.transform = "scale(1.05)")
               }
               onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onClick={() => navigate("/security/student/lostandfound")}
             >
               Lost and Found
             </button>
