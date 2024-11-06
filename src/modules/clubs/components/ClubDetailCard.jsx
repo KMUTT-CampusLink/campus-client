@@ -6,8 +6,10 @@ function ClubDetailCard() {
   const [clubName, setClubName] = useState("");
   const [buildiingLocation, setBuildingLocation] = useState("");
   const { clubId } = useParams(); // club ID from the backend
+
   const [ memberCount, setMemberCount] = useState(0);
   const [ adminCount, setAdminCount] = useState(0);
+
 
   useEffect(() => {
     const fetchClubName = async () => {
