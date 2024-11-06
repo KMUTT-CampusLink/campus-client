@@ -14,8 +14,8 @@ const QrComponent = () => {
 
       <div className="mt-16 flex-1 bg-white rounded-t-3xl relative">
         {/* Menu items */}
-        <div className="w-full flex justify-start mt-4 pl-48 pr-48">
-          <div className="flex gap-10">
+        <div className="w-full flex justify-start mt-4 px-4 md:px-48">
+          <div className="flex gap-4 md:gap-10 flex-wrap justify-center">
             {items?.map((item, index) => (
               <span
                 key={index}
@@ -30,12 +30,12 @@ const QrComponent = () => {
 
         <div className="px-0">
           <hr className="border-black w-full m-0" />
-          <div className="p-8 pl-24 pr-24">
+          <div className="p-4 md:p-8 pl-4 pr-4 md:pl-24 md:pr-24">
             {detail && detail()}
           </div>
 
           <hr className="border-gray-300 w-full m-0" />
-          <div className="p-8 pl-24 pr-24">
+          <div className="p-4 md:p-8 pl-4 pr-4 md:pl-24 md:pr-24">
             <div className="mt-2">
               {qrButton && qrButton()}
               {/* <GpsCard />

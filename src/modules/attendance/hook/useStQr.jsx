@@ -1,4 +1,3 @@
-// import { QRCode } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -69,9 +68,9 @@ useEffect(() => {
     };
 
     return (
-      <div>
+      <div className="flex flex-col items-center">
         <button
-          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-1/6"
+          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
           onClick={handleClick} // Call the handleClick function on button click
         >
           Scan QR CODE
