@@ -1,91 +1,84 @@
 import { useEffect, useRef, useState } from "react";
-import QrScanner from "qr-scanner"; // Import the qr-scanner library
+import QrScanner from "qr-scanner";
+import SuccessCard from "./SuccessCard"; // Import the SuccessCard component
 
 const QrScannerComponent = () => {
   const [scannedData, setScannedData] = useState(null);
+  const [showSuccessCard, setShowSuccessCard] = useState(false); // State to control the SuccessCard display
+  const [message, setMessage] = useState(""); // Message from backend
+  const [messageType, setMessageType] = useState("success"); // Type of message: success or error
   const videoRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   useEffect(() => {
-    // Initialize QrScanner when the component mounts
     const qrScanner = new QrScanner(
       videoRef.current,
       (result) => handleScanSuccess(result),
-      { highlightScanRegion: true } // Highlights the scanning area
+      { highlightScanRegion: true }
     );
 
-    qrScanner.start(); // Start the camera
+    qrScanner.start();
 
     return () => {
-      qrScanner.stop(); // Clean up by stopping the camera when component unmounts
+      qrScanner.stop();
     };
   }, []);
 
-  // Handle successful QR scan
   const handleScanSuccess = (result) => {
-    console.log("Scanned QR code:", result);
-    
-    let qrData = result.data; // Extract the data field from the result
+    let qrData = result.data;
 
-    // Try to parse the data as JSON to handle cases like {"id":1062}
     try {
       const parsedData = JSON.parse(qrData);
-      qrData = parsedData.id || qrData; // If JSON has "id", use it
+      qrData = parsedData.id || qrData;
     } catch (error) {
       console.warn("Scanned data is not in JSON format:", qrData);
     }
 
-    setScannedData(qrData); // Set the extracted text or id
-    sendScannedDataToBackend(qrData); // Send the scanned data to the backend
+    setScannedData(qrData);
+    sendScannedDataToBackend(qrData);
   };
 
-  // Function to send the scanned QR data to the backend
   const sendScannedDataToBackend = async (qrData) => {
-    console.log("Sending QR data to backend:", qrData);
     try {
       const response = await fetch(`http://localhost:3000/api/attend/validate/${qrData}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
-  
-      // Check if the response status is not ok (e.g., 400 or 500)
-      if (!response.ok) {
-        const errorResult = await response.json(); // Parse the JSON error message
-        console.error("Error response from backend:", errorResult.message);
-        alert(errorResult.message); // Display the error message from the backend
-        return;
-      }
-  
-      // If the response is ok, parse and handle success
+
       const result = await response.json();
-      console.log(result);
-  
-      if (result.success) {
-        alert(result.message); // Show success message
+
+      if (response.ok) {
+        setMessage(result.message);
+        setMessageType("success");
       } else {
-        alert(result.message); // Show error message from the backend
+        setMessage(result.message);
+        setMessageType("error");
       }
+
+      setShowSuccessCard(true); // Show the success card
     } catch (error) {
-      console.error("Error sending QR data to backend:", error);
-      alert("Failed to send QR data to backend. Please check the console.");
+      setMessage("Failed to send QR data to backend.");
+      setMessageType("error");
+      setShowSuccessCard(true);
     }
   };
-  
 
-  // Handle file input (QR code image upload)
-  
+  const handleCloseCard = () => {
+    setShowSuccessCard(false); // Hide the success card
+  };
 
   return (
     <div>
-      
-      {/* Video element for live camera scan */}
-      <video ref={videoRef} style={{ width: "300px", border: "1px solid black" }} />
-      
-      {/* Display scanned data */}
-      {scannedData && <p>Scanned Data: {scannedData}</p>}
-
+            <video
+            ref={videoRef}
+            className="border-2 border-gray-500 rounded-lg max-w-full w-full max-h-[60vh] md:max-h-[80vh] object-contain"
+            autoPlay/>
+      {showSuccessCard && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <SuccessCard message={message} messageType={messageType} onClose={handleCloseCard} />
+        </div>
+      )}
     </div>
   );
 };

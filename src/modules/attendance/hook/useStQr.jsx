@@ -22,11 +22,11 @@ const useStQr = () => {
 
   function stDetail() {
     return (
-      <div className="flex flex-col">
-        <span className="text-2xl font-bold text-orange-500">
+      <div className="flex flex-col p-4 space-y-2 md:space-y-4">
+        <span className="text-xl md:text-2xl font-bold text-orange-500">
           About Classroom
         </span>
-        <div className="text-lg font-semibold">
+        <div className="text-base md:text-lg font-semibold">
           <div>CSC-230 Computer Architecture & Design</div>
           <div>Lecturer - Arjan xxxxxxxx</div>
           <div>Time - 1:30 to 4:30 PM (Thursday)</div>
@@ -57,16 +57,18 @@ const useStQr = () => {
             />
           </svg>
         </button>
-
+  
         {/* Modal for QR Scanner */}
         {isScannerOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-6 w-1/2 max-w-sm text-center">
-              <h2 className="text-xl font-semibold mb-4">Scan QR Code</h2>
-              <QrScannerComponent /> {/* QR Scanner component for live scanning */}
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-lg p-6 flex flex-col items-center justify-center w-1/2 max-w-md text-center">
+              <h3 className="text-xl font-semibold mb-4">Scan QR Code</h3>
+              <div className="flex items-center justify-center w-full h-auto mb-4">
+                <QrScannerComponent /> {/* QR Scanner component for live scanning */}
+              </div>
               <button
                 className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-                onClick={() => setIsScannerOpen(false)} // Close button
+                onClick={() => setIsScannerOpen(false)} // Close button at the bottom
               >
                 Close
               </button>
@@ -76,6 +78,7 @@ const useStQr = () => {
       </div>
     );
   }
+  
 
   return {
     h1,
