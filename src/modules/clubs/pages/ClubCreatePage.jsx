@@ -1,22 +1,36 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import ClubCreateMemberAddPage from "./ClubCreateMemberAddPage";
+import { axiosInstance } from "../../../utils/axiosInstance";
+import { z } from "zod";
+
+const schema = z.object({
+  clubName: z.string().nonempty({ message: "Club name is required" }),
+  clubDescription: z.string().nonempty({ message: "Club description is required" }),
+  clubDetails: z.string().nonempty({ message: "Club details are required" }),
+  buildingId: z.string().nonempty({ message: "Building selection is required" }),
+  members: z.array(z.string()).min(3, { message: "At least 3 members are required" }),
+  clubImage: z.instanceof(File).optional(),
+});
 
 function ClubCreatePage() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
-  const [addedMembers, setAddedMembers] = useState([]);
   const [clubName, setClubName] = useState("");
   const [clubDescription, setClubDescription] = useState("");
   const [clubDetails, setClubDetails] = useState("");
-  const [memberList, setMemberList] = useState([]); // State to store both student and professor list
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [addedMembers, setAddedMembers] = useState([]);
+  const [memberList, setMemberList] = useState([]);
+  const [memberError, setMemberError] = useState("");
   const [buildings, setBuildings] = useState([]);
-  const [selectedBuilding, setSelectedBuilding] = useState("");
+  const [buildingId, setBuildingId] = useState("");
+  const [errors, setErrors] = useState({});
 
+  const MIN_MEMBERS = 3;
+  
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/clubs/buildings");
+        const response = await axiosInstance.get("/clubs/buildings");
         setBuildings(response.data.data);
       } catch (error) {
         console.error("Error fetching buildings:", error);
@@ -25,36 +39,29 @@ function ClubCreatePage() {
     fetchBuildings();
   }, []);
 
-  const handleBuildingChange = (event) => {
-    setSelectedBuilding(event.target.value);
-  };
-
   // Fetch student and professor data from the backend when the component mounts
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const stdResponse = await axios.get(
-          "http://localhost:3000/api/clubs/students"
+        const stdResponse = await axiosInstance.get(
+          "/clubs/students"
         );
-        const profResponse = await axios.get(
-          "http://localhost:3000/api/clubs/professors"
+        const profResponse = await axiosInstance.get(
+          "/clubs/professors"
         );
 
-        const formattedStds = stdResponse.data.data.map((student) => ({
-          id: student.id,
-          name: `${student.firstname} ${student.lastname}`,
-          //image: "https://img.placeholder.com/50", // Replace with actual image or placeholder
-          added: false,
-        }));
-
-        const formattedProfs = profResponse.data.data.map((professor) => ({
-          id: professor.id,
-          name: `${professor.firstname} ${professor.midname} ${professor.lastname}`,
-          //image: "https://img.placeholder.com/50", // Replace with actual image or placeholder
-          added: false,
-        }));
-
-        setMemberList([...formattedStds, ...formattedProfs]);
+        const formattedMembers = [
+                    ...stdResponse.data.data.map((student) => ({
+                      id: student.id,
+                      name: `${student.firstname} ${student.lastname}`,
+                    })),
+                    ...profResponse.data.data.map((professor) => ({
+                      id: professor.id,
+                      name: `${professor.firstname} ${professor.midname} ${professor.lastname}`,
+                    })),
+                  ];
+          
+                  setMemberList(formattedMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
@@ -63,117 +70,148 @@ function ClubCreatePage() {
     fetchMembers(); // Fetch members when component mounts
   }, []);
 
-  // Handler for adding members
+  const handleChange = (field, value) => {
+    // Clear the error for the specific field
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
+    // Update the state based on the field being updated
+    switch (field) {
+      case "clubName":
+        setClubName(value);
+        break;
+      case "clubDescription":
+        setClubDescription(value);
+        break;
+      case "clubDetails":
+        setClubDetails(value);
+        break;
+      case "buildingId":
+        setBuildingId(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const validateMembers = (members) => {
+    if (members.length < MIN_MEMBERS) {
+      setMemberError(`At least ${MIN_MEMBERS} members are required to create a club.`);
+    } else {
+      setMemberError("");
+    }
+  };
+
+  useEffect(() => {
+    validateMembers(addedMembers);
+  }, [addedMembers]);
+
   const handleAddMembers = (newAddedIds) => {
     setAddedMembers(newAddedIds);
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true); // Open the "Add Member" modal
+  const handleRemoveMember = (memberId) => {
+    const updatedMembers = addedMembers.filter((id) => id !== memberId);
+    setAddedMembers(updatedMembers);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the "Add Member" modal
+  const onFileChange = (e) => {
+    setSelectedFile(e.target.files[0] || null);
+    setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" }));
   };
 
-  const handleFileChange = (event) => {
-    if (event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
-    } else {
-      setSelectedFile(null);
-    }
-  };
+      const validateAndSubmit = async () => {
+        const formData = {
+          clubName,
+          clubDescription,
+          clubDetails,
+          buildingId,
+          members: addedMembers,
+        };
 
-  const handleSubmit = async () => {
-    if (addedMembers.length < 3) {
-      alert("There must be at least 3 members to create a club.");
-      return;
-    }
+        try{
+          schema.parse(formData);
+          setErrors({});
+          setMemberError("");
 
-    const formData = new FormData();
-    formData.append("clubName", clubName);
-    formData.append("clubDescription", clubDescription);
-    formData.append("clubDetails", clubDetails);
-    formData.append("buildingId", selectedBuilding);
-    formData.append("members", JSON.stringify(addedMembers));
-    if (selectedFile) {
-      formData.append("clubImage", selectedFile);
-    }
+          const submitData = new FormData();
+          submitData.append("clubName", clubName);
+          submitData.append("clubDescription", clubDescription);
+          submitData.append("clubDetails", clubDetails);
+          submitData.append("buildingId", buildingId);
+          submitData.append("members", JSON.stringify(addedMembers));
+          if (selectedFile) {
+            submitData.append("clubImage", selectedFile);
+          }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/clubs/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          const response = await axiosInstance.post("/clubs/create", submitData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+
+          if (response.status === 201) {
+            alert("Club created successfully!");
+            setClubName("");
+            setClubDescription("");
+            setClubDetails("");
+            setAddedMembers([]);
+            setSelectedFile(null);
+            setBuildingId("");
+          }
+        } catch(error) {
+          if (error instanceof z.ZodError) {
+            // Convert Zod errors into a usable error object for displaying messages
+            const formErrors = error.errors.reduce((acc, err) => {
+              acc[err.path[0]] = err.message;
+              return acc;
+            }, {});
+            setErrors(formErrors); // Set errors state with validation messages
+          } else {
+            console.error("Error creating club:", error);
+            alert("An error occurred while creating the club.");
+          }
         }
-      );
-
-      if (response.status !== 201) {
-        throw new Error(`Failed to create club: ${response.statusText}`);
-      }
-
-      alert("Club created successfully!");
-      // Optionally reset form fields
-      setClubName("");
-      setClubDescription("");
-      setClubDetails("");
-      setAddedMembers([]);
-      setSelectedFile(null);
-      setSelectedBuilding("");
-    } catch (error) {
-      if (error.response && error.response.status === 400 && error.response.data.message === "A club with this name already exists.") {
-        alert("Error: A club with this name already exists. Please choose a different name.");
-      } else {
-        console.error("Error creating club:", error);
-        alert("An error occurred while creating the club.");
-      }
-    }
-  };
+      };
 
   return (
     <>
-      <div className="bg-white min-h-screen rounded-lg sm:p-5">
+      <div className="bg-white min-h-screen rounded-lg sm:p-5" encType="multipart/form-data">
         {/* Club Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
           {/* Left Column */}
           <div className="md:pl-20 pl-10 pr-10">
             <div className="mb-4">
               <label className="block text-lg font-medium leading-6 text-gray-900">
-                Club Name
+                Club Name <span className="text-red-500">*</span>
               </label>
-              <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-lg">
+              
+                <div className="mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-lg">
                   <input
                     id="clubname"
-                    name="clubname"
                     type="text"
-                    placeholder="Enter club name"
                     value={clubName}
-                    onChange={(e) => setClubName(e.target.value)}
+                    onChange={(e) => handleChange("clubName", e.target.value)}
+                    placeholder="Enter club name"
                     className="block flex-1 border-0 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
+                  /> 
                 </div>
-              </div>
+                {errors.clubName && <p className="text-red-500">{errors.clubName}</p>}
+              
             </div>
             <div className="mb-4 pt-3">
               <label className="block text-lg font-medium leading-6 text-gray-900">
-                Club Description
+                Club Description <span className="text-red-500">*</span>
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-lg">
                   <input
                     id="clubdescription"
-                    name="clubdescription"
                     type="text"
-                    placeholder="Enter club description"
                     value={clubDescription}
-                    onChange={(e) => setClubDescription(e.target.value)}
+                    onChange={(e) => handleChange("clubDescription", e.target.value)}
+                    placeholder="Enter club description"
                     className="block flex-1 border-0 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                   />
+                 
                 </div>
+                {errors.clubDescription && <p className="text-red-500">{errors.clubDescription}</p>}
               </div>
             </div>
             {/* Club Image Upload */}
@@ -198,18 +236,18 @@ function ClubCreatePage() {
                     name="file-upload"
                     type="file"
                     className="sr-only"
-                    onChange={handleFileChange}
+                    onChange={onFileChange}
                   />
                 </label>
               </div>
             </div>
             <div className="mb-4 pt-3">
-              <label className="block text-lg font-medium leading-6 text-gray-900 mb-3" htmlFor="building">Select Building:</label>
+              <label className="block text-lg font-medium leading-6 text-gray-900 mb-3" htmlFor="building">Select Building: <span className="text-red-500">*</span></label>
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-lg">
               <select
                 id="building"
-                value={selectedBuilding}
-                onChange={handleBuildingChange}
+                value={buildingId}
+                onChange={(e) => handleChange("buildingId", e.target.value)}
                 className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
                 <option value="">Select a building</option>
@@ -219,25 +257,31 @@ function ClubCreatePage() {
                   </option>
                 ))}
               </select>
+             
             </div>
+            {errors.buildingId && <p className="text-red-500">{errors.buildingId}</p>}
             </div>
             <div className="pt-3">
               <button
                 className="bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600"
-                onClick={handleOpenModal} // Open the modal
+                onClick={() => setIsModalOpen(true)}
+                type="button"
               >
                 Add Member
               </button>
+              {memberError && <p className="text-red-500">{memberError}</p>}
             </div>
             {/* Member List Modal */}
             {/* Pass the student list and addedMembers to the child */}
+            {isModalOpen && (
             <ClubCreateMemberAddPage
               isOpen={isModalOpen}
-              onClose={handleCloseModal}
+              onClose={() => setIsModalOpen(false)}
               onAddMembers={handleAddMembers} // Pass function to add members
               addedMembers={addedMembers} // Pass added members to the modal
               memberList={memberList} // Dynamic student list
             />
+          )}
             {/* Display Member List */}
             <div className="mt-5">
               <h2 className="block text-lg font-medium leading-6 text-gray-900">
@@ -254,13 +298,9 @@ function ClubCreatePage() {
                       <span className="text-gray-800">{member?.name}</span>
                       <button
                         className="absolute top-0 right-0 transform translate-x-2 -translate-y-2 w-3 h-3 flex items-center justify-center rounded-full border border-black text-black hover:bg-gray-300"
-                        onClick={() => {
-                          setAddedMembers((prevMembers) =>
-                            prevMembers.filter((id) => id !== memberId)
-                          );
-                        }}
-                      >
-                        &times;
+                        onClick={() => handleRemoveMember(memberId)}> &times;
+                      
+                       
                       </button>
                     </div>
                   );
@@ -273,30 +313,25 @@ function ClubCreatePage() {
           <div className="pl-10 pr-10">
             <div className="mb-4">
               <label className="block text-lg font-medium leading-6 text-gray-900">
-                Club Details
+                Club Details <span className="text-red-500">*</span>
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-lg">
                   <textarea
                     id="clubdetail"
-                    name="clubdetail"
                     rows={8}
+                    value={clubDetails}
+                    onChange={(e) => handleChange("clubDetails", e.target.value)}
                     className="block flex-1 border-0 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     placeholder="Enter club details"
-                    value={clubDetails}
-                    onChange={(e) => setClubDetails(e.target.value)}
                   />
                 </div>
               </div>
+              {errors.clubDetails && <p className="text-red-500">{errors.clubDetails}</p>}
             </div>
-            <p className="text-gray-500 text-sm font-bold">
-              *There should be at least 3 members to create a club.
-            </p>
             <div className="mt-4 w-full max-w-lg flex justify-end pb-8">
-              <button
-                className="bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600"
-                onClick={handleSubmit}
-              >
+              <button onClick={validateAndSubmit}
+                className="bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600">
                 Create Club
               </button>
             </div>

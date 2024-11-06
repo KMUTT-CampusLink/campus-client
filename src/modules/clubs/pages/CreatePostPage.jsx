@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
 const schema = z.object({
@@ -37,8 +36,8 @@ function CreatePost() {
     }
   
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/clubs/admin/post",
+      const response = await axiosInstance.post(
+        "/clubs/admin/post",
         formData,
         {
           headers: {
