@@ -15,8 +15,9 @@ const StudentAdd = () => {
     firstname: '',
     midname: '',
     lastname: '',
-    program_id: '',
-    batch_id: '',
+    program: '',
+    degree: '',
+    semester_id: '',
     identification_no: '',
     gender: '',
     date_of_birth: '',
@@ -109,8 +110,8 @@ const StudentAdd = () => {
                     Program Name
                   </label>
                   <select
-                    name="program_id"
-                    value={formData.program_id}
+                    name="program"
+                    value={formData.program}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
@@ -125,20 +126,42 @@ const StudentAdd = () => {
                 
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Batch
+                    Degree
                   </label>
                   <select
-                    name="program_id"
-                    value={formData.batch_id}
+                    name="degree"
+                    value={formData.degree}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
                     <option value="" disabled>
-                      Select Year
+                      Select Degree
                     </option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
+                    <option value="Bachelor">Bachelor</option>
+                    <option value="Master">Master</option>
+                    <option value="PhD">PhD</option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Semester
+                  </label>
+                  <select
+                    name="semester_id"
+                    value={formData.semester_id}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                  >
+                    <option value="" disabled>
+                      Select Semester
+                    </option>
+                    <option value="1/2025">1/2025</option>
+                    <option value="2/2025">2/2025</option>
+                    <option value="S/2025">S/2025</option>
+                    <option value="1/2026">1/2026</option>
+                    <option value="2/2026">2/2026</option>
+                    <option value="S/2026">S/2026</option>
                   </select>
                 </div>
 

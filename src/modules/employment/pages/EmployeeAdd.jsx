@@ -66,8 +66,8 @@ const EmployeeAdd = () => {
     }
 
     // Validate faculty
-    if (!formData.faculty_id || !facultyMapping[formData.faculty_id]) {
-      errors.faculty_id = "Please select a valid faculty.";
+    if (!formData.faculty_id) {
+      errors.faculty_id = "Please select a faculty.";
     }
 
     // Validate job title
