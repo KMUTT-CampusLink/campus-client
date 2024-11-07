@@ -45,6 +45,8 @@ function Receipt() {
 
     const qrCodeUrl = `${window.location.origin}/parking/scanned/${encodeURIComponent(resEncrypt)}`;
 
+    console.log(qrCodeUrl)
+
     return (
         <>
             <NavBar />
