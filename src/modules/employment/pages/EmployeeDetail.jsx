@@ -89,7 +89,7 @@ const EmployeeDetail = () => {
 
       <main className="pt-16 md:pt-20 px-4 md:px-20">
         <FontAwesomeIcon icon={faArrowLeft} className="hover:shadow-sm md:h-7" onClick={handleClickback} />
-        <div className="lg:flex lg:justify-around lg:items-center"> 
+        <div className="lg:flex lg:justify-center lg:items-center lg:gap-7 xl:gap-20"> 
           <div className="flex justify-center">
             <EmployeeCard employee={employee} />
           </div>
@@ -99,7 +99,7 @@ const EmployeeDetail = () => {
               Work History
             </h2>
 
-            <div className="border lg:w-[700px] xl:w-[900px] 2xl:w-[1200px] border-[#939393] rounded-md grid grid-cols-1 lg:grid-cols-2  lg:divide-x divide-[#939393] ">
+            <div className="border lg:w-[700px] border-[#939393] rounded-md grid grid-cols-1 sm:grid-cols-2  sm:divide-x divide-[#939393] ">
               {/* Left Side */}
               <div className="p-5 space-y-2 md:space-y-4">
                 <div>
