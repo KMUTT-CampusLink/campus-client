@@ -34,7 +34,7 @@ const EmployeeDetail = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const result = await fetch('http://localhost:3000/api/employ/get/' + id);
+        const result = await fetch('http://localhost:3000/api/employ/getEmp/' + id);
         const jsonResult = await result.json()
         setEmployee(jsonResult);
 
@@ -77,11 +77,11 @@ const EmployeeDetail = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/api/employ/delete/${id}`);
+      const response = await axios.delete(`employ/deleteEmp/${id}`);
       console.log("Delete successful");
         setDeleteSuccess(true);
         setShowPopup(false);
-        navigate(`/employ`); // Redirect to employee list or desired page
+        navigate(`/employ/employee`); // Redirect to employee list or desired page
 
     } catch (error) {
       console.error('Error deleting employee:', error);

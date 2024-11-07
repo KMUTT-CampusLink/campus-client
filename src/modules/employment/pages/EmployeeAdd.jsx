@@ -7,13 +7,13 @@ import axiosInstance from "../utils/axiosInstance.js";
 // Map faculty names to numbers
 const facultyMapping = {
   "Engineering": 1001,
-  "Information_Technology": 1002,
-  "Science": 1003,
-  "Architecture": 1004,
-  "Liberal Art": 1005,
-  "Management": 1006,
-  "Environmental": 1007,
-  "Education": 1008,
+  "Information_Technology": 1010,
+  "Science": 1011,
+  "Architecture": 1009,
+  "Liberal Art": 1002,
+  "Business": 1012,
+  "Environmental": 1008,
+  "Education": 1007,
 };
 
 const EmployeeAdd = () => {
@@ -154,6 +154,7 @@ const EmployeeAdd = () => {
  
     const facultyNumber = facultyMapping[formData.faculty_id];
     console.log(facultyNumber)
+    console.log(formData.faculty_id)
  
     const employeeData = {
       firstname: formData.firstname,
@@ -171,12 +172,12 @@ const EmployeeAdd = () => {
     };
  
     try {
-      const response = await axiosInstance.post("/post", employeeData);
+      const response = await axiosInstance.post("/postEmp", employeeData);
  
       if (response.status === 200) {
         console.log('Employee added successfully');
         setShowPopup(false);
-        navigate("/employ");
+        navigate("/employ/employee");
       } else {
         console.error('Error adding employee:', response.data);
       }
@@ -286,7 +287,7 @@ const EmployeeAdd = () => {
                     <option value="Science">Science</option>
                     <option value="Architecture">Architecture</option>
                     <option value="Liberal Art">Liberal Art</option>
-                    <option value="Management">Management</option>
+                    <option value="Business">Business</option>
                     <option value="Environmental">Environmental</option>
                     <option value="Education">Education</option>
                   </select>

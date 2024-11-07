@@ -14,15 +14,13 @@ const EmployeeGrid = () => {
   useEffect(() => {
     const fetchData = async () =>
     {
-      const result = await fetch('http://localhost:3000/api/employ/get');
+      const result = await fetch('http://localhost:3000/api/employ/getEmp');
       const jsonResult = await result.json()
       setEmployees(jsonResult);
     }
 
     fetchData();
   }, []);
-
-
 
   const handleClick = () => {
     navigate(`/employ/employeeAdd`);
