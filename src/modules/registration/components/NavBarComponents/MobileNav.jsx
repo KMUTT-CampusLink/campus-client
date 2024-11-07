@@ -27,8 +27,8 @@ const MobileNav = ({ navigationLinks }) => {
           /> */}
           <img
             className="w-[6rem] h-[6rem]"
-            src="/logos/default-profile.png"
-            alt="big-logo"
+            src="/logos/mb-nav-logo.png"
+            alt="mb-nav-logo"
           />
         </div>
         <div className="mt-4 space-y-2">
