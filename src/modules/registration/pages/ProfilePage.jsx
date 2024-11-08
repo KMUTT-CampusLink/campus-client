@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles } from "../styles/styles";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGraduationCap, faEnvelope, faPhone, faHome } from '@fortawesome/free-solid-svg-icons';
-import GradeCard from '../components/GradeCard';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGraduationCap,
+  faEnvelope,
+  faPhone,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+import GradeCard from "../components/GradeCard";
 import { useSemestersByStudentId } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
-import SInfoCard from '../components/SInfoCard';
+import SInfoCard from "../components/SInfoCard";
 
 function ProfilePage() {
   const studentId = localStorage.getItem("studentId");
-  const { data: semesters, isLoading, isError } = useSemestersByStudentId(studentId);
+  const {
+    data: semesters,
+    isLoading,
+    isError,
+  } = useSemestersByStudentId(studentId);
 
   const [semester, setSemester] = useState("");
   const [semesterId, setSemesterId] = useState("");
@@ -53,10 +62,15 @@ function ProfilePage() {
 
             <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
               <div className="flex items-center space-x-2">
-                <FontAwesomeIcon icon={faGraduationCap} className="text-gray-600" />
+                <FontAwesomeIcon
+                  icon={faGraduationCap}
+                  className="text-gray-600"
+                />
                 <div>
                   <p className="text-sm text-gray-500">Education Level</p>
-                  <p className="font-semibold">Current student - Bachelor's Degree</p>
+                  <p className="font-semibold">
+                    Current student - Bachelor's Degree
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2 mt-4">
@@ -76,25 +90,48 @@ function ProfilePage() {
               </div>
             </div>
 
-            <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold">Current Address</h3>
-              <div className="flex items-start space-x-2 mt-4">
-                <FontAwesomeIcon icon={faHome} className="text-gray-600" />
-                <div>
-                  <p>Country: Thailand</p>
-                  <p>Address: 009/001 road Somewhere</p>
-                  <p>Subdistrict: Somewhere</p>
-                  <p>District: Somewhere</p>
-                  <p>Province: Somewhere</p>
-                  <p>Postal Code: 11001</p>
-                </div>
+            <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
+              <div className="flex space-x-2 items-center">
+                <FontAwesomeIcon icon={faHome} className=" text-gray-600" />
+                <h3 className="text-lg font-semibold">Current Address</h3>
+              </div>
+
+              <div className="mx-6 my-2">
+                <p className="flex justify-between">
+                  <span>Country</span>
+                  <span>Thailand</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Address</span>
+                  <span>Somewhere</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Subdistrict</span>
+                  <span>Somewhere</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>District</span>
+                  <span>Somewhere</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Province</span>
+                  <span>Somewhere</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Postal Code</span>
+                  <span>11001</span>
+                </p>
               </div>
             </div>
           </div>
 
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <SInfoCard />
-            <GradeCard studentId={studentId} semester={semester} semesterId={semesterId} />
+            <GradeCard
+              studentId={studentId}
+              semester={semester}
+              semesterId={semesterId}
+            />
           </div>
         </div>
       </main>
