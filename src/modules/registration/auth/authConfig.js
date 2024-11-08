@@ -1,6 +1,5 @@
 import { fetchAuth } from "../services/api";
-import axios from "axios";
-
+import { axiosInstance } from "../../../utils/axiosInstance";
 // Function to check if the user is authenticated and store the role in localStorage
 const isAuthenticated = async () => {
   try {
@@ -18,11 +17,7 @@ const isAuthenticated = async () => {
 // Function to log out the user and clear localStorage
 const logout = async () => {
   try {
-    await axios.post(
-      `${import.meta.env.VITE_API_URL}/users/logout`,
-      {},
-      { withCredentials: true }
-    ); // Ensure cookies are sent
+    await axiosInstance.post(`/users/logout`, {}, { withCredentials: true }); // Ensure cookies are sent
 
     // Clear all items from localStorage
     localStorage.clear();
