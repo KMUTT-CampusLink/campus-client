@@ -2,7 +2,7 @@ import AttendancePage from "../page/AttendancePage";
 import QrPage from "../page/QrPage";
 import StAttendancePage from "../page/StAttendancePage";
 import StQrPage from "../page/StQrPage";
-
+import QrScannerComponent from "../components/ScannerComponent";
 export default function AttendRoutes() {
   return [
     {
@@ -19,7 +19,7 @@ export default function AttendRoutes() {
     },
     {
       path: "statt",
-      element: <StAttendancePage/>
+      element: <StAttendancePage/>,
     }
 
   ];
