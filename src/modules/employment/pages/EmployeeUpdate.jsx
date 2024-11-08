@@ -6,14 +6,14 @@ import axiosInstance from "../utils/axiosInstance.js";
 
 // Map faculty names to numbers
 const facultyMapping = {
-  "Engineering": 1001,
-  "Information_Technology": 1010,
-  "Science": 1011,
-  "Architecture": 1009,
+  Engineering: 1001,
+  Information_Technology: 1010,
+  Science: 1011,
+  Architecture: 1009,
   "Liberal Art": 1002,
-  "Business": 1012,
-  "Environmental": 1008,
-  "Education": 1007,
+  Business: 1012,
+  Environmental: 1008,
+  Education: 1007,
 };
 
 const facultyMappingName = {
@@ -49,7 +49,6 @@ const EmployeeUpdate = () => {
     address: "",
   });
 
-
   const [errors, setErrors] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +61,9 @@ const EmployeeUpdate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetch(`http://localhost:3000/api/employ/getEmp/${id}`);
+        const result = await fetch(
+          `http://localhost:3000/api/employ/getEmp/${id}`
+        );
         const jsonResult = await result.json();
 
         setEmployees(jsonResult);
@@ -76,9 +77,9 @@ const EmployeeUpdate = () => {
           salary: jsonResult.salary || "",
           gender: jsonResult.gender || "",
           date_of_birth: jsonResult.date_of_birth || "",
-          identification_no: jsonResult.identification_no || "",
-          phone: jsonResult.phone || "",
-          address: jsonResult.address || "",
+          //identification_no: jsonResult.identification_no || "",
+          //phone: jsonResult.phone || "",
+          //address: jsonResult.address || "",
         });
       } catch (error) {
         console.error("Error fetching employee data:", error);
@@ -89,9 +90,7 @@ const EmployeeUpdate = () => {
   }, [id]);
   const facultyName = facultyMappingName[formData.faculty_id];
 
-
-  console.log("Employee get Data: " + employees)
-
+  console.log("Employee get Data: " + employees);
 
   // Validation function to check for form errors (without required checks)
   const validateForm = () => {
@@ -223,7 +222,9 @@ const EmployeeUpdate = () => {
               {/* Left side form inputs */}
               <div className="w-full">
                 <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">First Name</label>
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    First Name
+                  </label>
                   <input
                     name="firstname"
                     type="text"
@@ -232,11 +233,15 @@ const EmployeeUpdate = () => {
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px] "
                   />
-                  {errors.firstname && <p className="text-red-500 text-xs">{errors.firstname}</p>}
+                  {errors.firstname && (
+                    <p className="text-red-500 text-xs">{errors.firstname}</p>
+                  )}
                 </div>
 
                 <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">Middle Name</label>
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Middle Name
+                  </label>
                   <input
                     name="midname"
                     type="text"
@@ -245,31 +250,41 @@ const EmployeeUpdate = () => {
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   />
-                  {errors.midname && <p className="text-red-500 text-xs">{errors.midname}</p>}
+                  {errors.midname && (
+                    <p className="text-red-500 text-xs">{errors.midname}</p>
+                  )}
                 </div>
 
                 <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">Last Name</label>
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Last Name
+                  </label>
                   <input
                     name="lastname"
                     type="text"
-                    placeholder={employees.lastname || "Enter Last Name" }
+                    placeholder={employees.lastname || "Enter Last Name"}
                     value={formData.lastname || ""} // Use value from state
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   />
-                  {errors.lastname && <p className="text-red-500 text-xs">{errors.lastname}</p>}
+                  {errors.lastname && (
+                    <p className="text-red-500 text-xs">{errors.lastname}</p>
+                  )}
                 </div>
 
                 <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">Faculty</label>
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Faculty
+                  </label>
                   <select
                     name="faculty_id"
                     value={facultyName || ""} // Use value from state
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
-                    <option value="" disabled>Select Faculty</option>
+                    <option value="" disabled>
+                      Select Faculty
+                    </option>
                     {Object.keys(facultyMapping).map((faculty) => (
                       <option key={faculty} value={faculty}>
                         {faculty.replace("_", " ")}
@@ -280,14 +295,18 @@ const EmployeeUpdate = () => {
 
                 {/* Job Title as Dropdown */}
                 <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">Job Title</label>
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Job Title
+                  </label>
                   <select
                     name="job_title"
                     value={formData.job_title || ""} // Use value from state
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
-                    <option value="" disabled>Select Job Title</option>
+                    <option value="" disabled>
+                      Select Job Title
+                    </option>
                     {jobTitles.map((title) => (
                       <option key={title} value={title}>
                         {title}
@@ -297,16 +316,20 @@ const EmployeeUpdate = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">Position</label>
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Position
+                  </label>
                   <input
                     name="position"
                     type="text"
-                    placeholder={employees.position || "Enter Position"}
+                    placeholder={formData.position || "Enter Position"}
                     value={formData.position} // Use value from state
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   />
-                  {errors.position && <p className="text-red-500 text-xs">{errors.position}</p>}
+                  {errors.position && (
+                    <p className="text-red-500 text-xs">{errors.position}</p>
+                  )}
                 </div>
               </div>
 
@@ -320,7 +343,7 @@ const EmployeeUpdate = () => {
                     <input
                       name="salary"
                       type="number"
-                      placeholder={employees.salary || "Enter Salary"}
+                      placeholder={formData.salary || "Enter Salary"}
                       value={formData.salary}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -384,7 +407,7 @@ const EmployeeUpdate = () => {
                     <input
                       type="text"
                       name="identification_no"
-                      placeholder={employees.identification_no || "Enter ID"}
+                      placeholder={formData.identification_no || "Enter ID"}
                       value={formData.identification_no || ""}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
