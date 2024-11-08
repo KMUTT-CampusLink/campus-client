@@ -8,7 +8,6 @@ import SDeletePopUp from "../components/SDeletePopUp";
 
 
 
-
 const StudentDetail = () => {
   const { id } = useParams();
   const [student, setStudents] = useState(
