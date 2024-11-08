@@ -4,7 +4,6 @@ import {
   faAngleDown,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { faDocker } from "@fortawesome/free-brands-svg-icons";
 import { NavLink, Link } from "react-router-dom";
 
 const MobileNav = ({ navigationLinks }) => {
