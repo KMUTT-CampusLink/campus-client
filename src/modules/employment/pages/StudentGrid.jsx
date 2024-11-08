@@ -8,100 +8,19 @@ import { useNavigate } from "react-router-dom";
 
 
 const StudentGrid = () => {
-  const [students, setStudents] = useState([
-    {
-    "id": 66130500813,
-    "firstname": "Kyaw",
-    "middlename": "Nanda",
-    "lastname": "Thu",
-    "program_id": 6,
-    "batch_id": 2,
-    "identification_no": "MF234344",
-    "gender": "male",
-    "date_of_birth": "20-4-2004",
-    "phone": 934324532,
-    "address": "Yangon Myanmar"
-    },
-    {
-        "id": 66130500814,
-        "firstname": "Aung",
-        "middlename": "Min",
-        "lastname": "Kyaw",
-        "program_id": 6,
-        "batch_id": 2,
-        "identification_no": "MF234345",
-        "gender": "male",
-        "date_of_birth": "15-7-2004",
-        "phone": 934324533,
-        "address": "Yangon Myanmar"
-    },
-    {
-        "id": 66130500815,
-        "firstname": "Zin",
-        "middlename": "Mar",
-        "lastname": "Aung",
-        "program_id": 6,
-        "batch_id": 2,
-        "identification_no": "MF234346",
-        "gender": "female",
-        "date_of_birth": "28-3-2005",
-        "phone": 934324534,
-        "address": "Mandalay Myanmar"
-    },
-    {
-        "id": 66130500816,
-        "firstname": "Soe",
-        "middlename": "Thu",
-        "lastname": "Win",
-        "program_id": 6,
-        "batch_id": 2,
-        "identification_no": "MF234347",
-        "gender": "male",
-        "date_of_birth": "12-12-2003",
-        "phone": 934324535,
-        "address": "Naypyidaw Myanmar"
-    },
-    {
-        "id": 66130500817,
-        "firstname": "Hnin",
-        "middlename": "Lae",
-        "lastname": "Wai",
-        "program_id": 6,
-        "batch_id": 2,
-        "identification_no": "MF234348",
-        "gender": "female",
-        "date_of_birth": "10-5-2004",
-        "phone": 934324536,
-        "address": "Yangon Myanmar"
-    },
-    {
-        "id": 66130500818,
-        "firstname": "Nay",
-        "middlename": "Thit",
-        "lastname": "Zaw",
-        "program_id": 6,
-        "batch_id": 2,
-        "identification_no": "MF234349",
-        "gender": "male",
-        "date_of_birth": "1-9-2005",
-        "phone": 934324537,
-        "address": "Bago Myanmar"
-    }
-]);
+  const [students, setStudents] = useState([]);
   const navigate = useNavigate();
 
-  // Dummy data,replace with API call
-//   useEffect(() => {
-//     const fetchData = async () =>
-//     {
-//       const result = await fetch('http://localhost:3000/api/employ/get');
-//       const jsonResult = await result.json()
-//       //const array = Object.values(jsonResult)
-//       setEmployees(jsonResult);
-//     }
+  useEffect(() => {
+    const fetchData = async () =>
+    {
+      const result = await fetch('http://localhost:3000/api/employ/getStu');
+      const jsonResult = await result.json()
+      setStudents(jsonResult);
+    }
 
-//     fetchData();
-//   }, []);
+    fetchData();
+  }, []);
 
 
 

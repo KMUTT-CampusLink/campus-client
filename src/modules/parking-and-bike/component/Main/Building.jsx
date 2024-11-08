@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import ResPop from '../ResPop';
 
-function Building({ bdid , bdimg, bdname, avaslot }) {
+function Building({ bdid , bdimg, bdname, avaslot,maxslot }) {
     const [isComponentVisible, setIsComponentVisible] = useState(false);
     const reserveRef = useRef(null);
 
@@ -21,7 +21,7 @@ function Building({ bdid , bdimg, bdname, avaslot }) {
                 <div className="flex flex-row w-full justify-between rounded-lg">
                     <div className="flex flex-col">
                         <h2 className="text-lg font-bold ">{bdname}</h2>
-                        <p className="text-green-600 font-semibold">Available Slot: {avaslot}</p>
+                        <p className="text-green-600 font-semibold">Available Slot: {maxslot-avaslot}</p>
                     </div>
                     <button
                         className="flex bg-red-500 text-white w-10 h-10 mr-2 rounded-full justify-center"

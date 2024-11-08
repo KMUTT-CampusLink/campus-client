@@ -26,8 +26,8 @@ const ProfileButton = () => {
       >
         <img
           alt="Profile"
-          src="https://www.kmutt.ac.th/wp-content/uploads/2020/09/KMUTT_CI_Primary_Logo-Full-2048x2048.png"
-          className="h-10 w-10 rounded-full"
+          src="/logos/profile-pic.png"
+          className="h-10 w-10 rounded-full object-cover"
         />
       </button>
       <ProfileDropdown isProfileOpen={isProfileOpen} />

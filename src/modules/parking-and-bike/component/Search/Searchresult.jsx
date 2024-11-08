@@ -4,11 +4,11 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import ResPop from '../ResPop';
-
+///rwrwerwerwerewrwrewrwerwer
 function Searchresult({ result }) {
     const [isComponentVisible, setIsComponentVisible] = useState(false);
     const reserveRef = useRef(null);
-
+//sdsdsd
     const toggleComponent = () => {
         setIsComponentVisible((prev) => !prev);
     };

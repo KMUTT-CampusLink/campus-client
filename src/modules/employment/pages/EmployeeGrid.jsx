@@ -11,20 +11,16 @@ const EmployeeGrid = () => {
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
 
-  // Dummy data,replace with API call
   useEffect(() => {
     const fetchData = async () =>
     {
-      const result = await fetch('http://localhost:3000/api/employ/get');
+      const result = await fetch('http://localhost:3000/api/employ/getEmp');
       const jsonResult = await result.json()
-      //const array = Object.values(jsonResult)
       setEmployees(jsonResult);
     }
 
     fetchData();
   }, []);
-
-
 
   const handleClick = () => {
     navigate(`/employ/employeeAdd`);

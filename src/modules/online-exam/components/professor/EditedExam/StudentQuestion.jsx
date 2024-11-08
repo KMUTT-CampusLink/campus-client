@@ -11,7 +11,7 @@ export default function StudentQuestion({ questionid, questionNo, question, choi
                 <input
                   type="radio"
                   name={`radio-${questionNo}`}
-                  className={`radio checked:bg-[#C76650]`}
+                  className={`radio checked:bg-[#C76650] border-black`}
                   disabled
                 />
                 {choiceObj.choiceText ? choiceObj.choiceText : choiceObj}

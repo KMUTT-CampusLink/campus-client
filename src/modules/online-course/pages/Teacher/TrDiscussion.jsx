@@ -3,80 +3,75 @@ import NavForIndvCourse from "../../components/NavForIndvCourse";
 import gallery from "../../assets/gallery.png";
 import profile from "../../assets/profile-circle.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPenToSquare,
-  faTrash,
-  faPlus,
-  faChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
-import UploadPopup from "../../components/Upload_Popup";
-import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
+import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import CommentPopup from "../../components/CommentPopup";
 
 const TrDiscussion = () => {
-  const [discussions, setDiscussions] = useState([
+  const [discussions] = useState([
     {
+      no: 1,
       person: "AKARI KYAW THEIN(66130500801)",
       title: "#Ch2 1st Complement",
       timestamp: "30 minutes ago",
       description:
-        " How does the 1's complement represe- ntation of negative numbers work in binary, and what are its advantages.......",
+        "How does the 1's complement representation of negative numbers work in binary, and what are its advantages...",
     },
     {
+      no: 2,
       person: "AKARI KYAW THEIN(66130500801)",
-      title: "#Ch2 1st Complement",
+      title: "#Ch2 2nd Complement",
       timestamp: "30 minutes ago",
-      description:
-        " How does the 1's complement represe- ntation of negative numbers work in binary, and what are its advantages.......",
+      description: "What's the difference between 1 and 2 complement?",
     },
     {
+      no: 3,
       person: "AKARI KYAW THEIN(66130500801)",
-      title: "#Ch2 1st Complement",
+      title: "#Ch3 NRZ",
       timestamp: "30 minutes ago",
-      description:
-        " How does the 1's complement represe- ntation of negative numbers work in binary, and what are its advantages.......",
+      description: "I don't know how to draw NRZ Signal",
     },
   ]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
 
-  const [currentMaterial, setCurrentMaterial] = useState(null);
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
-  const [materialToDelete, setMaterialToDelete] = useState(null);
-  const [fileToDelete, setFileToDelete] = useState(null);
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-gray-100">
-      <NavForIndvCourse page={"tasks"} />
+    <div className="min-h-screen bg-white overflow-auto">
+      <NavForIndvCourse page={"discussion"} />
 
-      <div className="max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
-          <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
+      <div className="border-b">
+        <div className="py-12 px-4 border-gray-300 w-full lg:w-3/4 mx-auto">
+          <h2 className="text-2xl font-bold text-[#ecb45e] mb-4">
             About Classroom
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Course:</span> CSC-230 Computer
-            Architecture & Design
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Lecturer:</span> Arjan
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
-            (Thursday)
+          </h2>
+          <div className="text-gray-800 space-y-1">
+            <p>
+              <span className="font-semibold">Course:</span> CSC-230 Computer
+              Architecture & Design
+            </p>
+            <p>
+              <span className="font-semibold">Lecturer:</span> Arjan
+            </p>
+            <p>
+              <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
+              (Thursday)
+            </p>
           </div>
         </div>
       </div>
+
       {!isPopupOpen && (
-        <div className="py-8 w-full">
-          <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-4">
-            <div className="text-2xl font-bold text-[#ecb45e]">Upload bar</div>
-            <div className="flex relative">
+        <div className="py-8 w-full px-4">
+          <div className="flex justify-between items-center lg:w-3/4 mx-auto mb-6 relative">
+            <h2 className="text-2xl font-bold text-[#ecb45e]">Upload bar</h2>
+            <div className="relative">
               <button
-                className="relative bg-[#FFFFFF] rounded-lg shadow-lg px-4 py-2"
+                className="border bg-white rounded-full shadow-sm px-4 py-2 flex items-center hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-gray-200"
                 onClick={() => setDropDownOpen(!dropDownOpen)}
               >
-                <span>Sort by time</span>
+                <span className="text-gray-700 font-medium">Sort by time</span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
                   color="#D4A015"
@@ -84,97 +79,86 @@ const TrDiscussion = () => {
                 />
               </button>
               {dropDownOpen && (
-                <div className="flex flex-col border-[1px] border-[#BEBEBE] shadow-lg bg-[#FFFFF] absolute top-10 w-full">
-                  <p className="border-b-[1px] border-[#BEBEBE] flex items-center justify-center py-2">
+                <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-md w-36 z-20">
+                  <p
+                    className="py-2 px-4 text-gray-700 text-sm cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition"
+                    onClick={() => {
+                      setDropDownOpen(false);
+                      // Add sorting functionality here if needed
+                    }}
+                  >
                     Sort by time
                   </p>
-                  <p className="border-b-[1px] border-[#BEBEBE] flex items-center justify-center py-2">
-                    Sort by time
+                  <p
+                    className="py-2 px-4 text-gray-700 text-sm cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition"
+                    onClick={() => {
+                      setDropDownOpen(false);
+                      // Add sorting functionality here if needed
+                    }}
+                  >
+                    Sort by title
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="flex justify-center items-center w-screen">
-            <div className="border border-black rounded-md w-[379px] h-[249px] max-w-full max-h-full sm:w-[261px] sm:h-[171px] md:w-[379px] md:h-[249px]">
-              <div className="flex flex-col justify-between h-full">
-                <div className="flex flex-col justify-center items-center">
-                  <img src={gallery} alt="Image" width={67} height={67} />
-                  <div className="border border-black rounded-lg p-4 w-[356px] h-[99px] max-w-full max-h-full sm:w-[241px] sm:h-[67px] md:w-[356px] md:h-[99px] mt-2">
-                    <h2 className="text-lg font-bold"># Title</h2>
-                    <h2
-                      className="text-lg font-bold"
-                      style={{ color: "rgba(0, 0, 0, 0.5)" }}
-                    >
-                      Upload here!
-                    </h2>
-                  </div>
-                </div>
-
-                <button className="mt-2 w-full h-8 bg-[#ecb45e] hover:bg-[#d9a24b] rounded-b-lg text-white transition duration-200">
-                  <FontAwesomeIcon icon={faPlus} className="mr-2" size="xl" />
-                  Upload
-                </button>
+          <div className="flex justify-center items-center max-w-xs mx-auto mb-6">
+            <div className="border border-gray-300 rounded-md w-full h-48 flex flex-col items-center justify-center p-4">
+              <img src={gallery} alt="Upload Icon" className="w-12 h-12 mb-2" />
+              <div className="text-center">
+                <h2 className="text-lg font-bold"># Title</h2>
+                <p className="text-gray-500">Upload here!</p>
               </div>
+              <button className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white py-2 mt-4 rounded-md flex items-center justify-center">
+                <FontAwesomeIcon icon={faPlus} className="mr-1" /> Upload
+              </button>
             </div>
           </div>
 
-          <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-6 mt-8">
-            <div className="text-2xl font-bold text-[#ecb45e]">
+          <div className="lg:w-3/4 mx-auto">
+            <h2 className="text-2xl font-bold text-[#ecb45e] mb-4 text-center lg:text-left">
               Discussion Area
-            </div>
-          </div>
-
-          <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center mb-6 mt-8 flex-wrap">
-            {discussions.map((discussion, index) => {
-              return (
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {discussions.map((discussion) => (
                 <div
-                  key={index}
-                  className="border border-black rounded-md mb-8 w-[100%] sm:w-[30%]"
+                  key={discussion.no}
+                  className="border border-gray-300 rounded-lg p-4 flex flex-col justify-between"
                 >
-                  <div className="flex flex-col justify-between h-full">
-                    <div className="flex flex-col justify-left items-left m-2">
-                      <div className="flex items-center gap-2">
-                        <div>
-                          <img
-                            src={profile}
-                            alt="Image"
-                            width={38}
-                            height={38}
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <h2>{discussion.person}</h2>
-                          <span className="text-[14px] text-[#BEBEBE]">
-                            {discussion.timestamp}
-                          </span>
-                        </div>
-                      </div>
-                      <h2 className="text-lg font-bold my-2">
-                        {discussion.title}
-                      </h2>
-                      <div className="text-gray-800">
-                        {discussion.description}
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <img src={profile} alt="Profile" className="w-10 h-10" />
+                      <div>
+                        <h3 className="text-sm font-semibold">
+                          {discussion.person}
+                        </h3>
+                        <span className="text-xs text-gray-500">
+                          {discussion.timestamp}
+                        </span>
                       </div>
                     </div>
-
-                    <button
-                      className="mt-2 w-full h-8 bg-[#ecb45e] hover:bg-[#d9a24b] rounded-b-lg text-white transition duration-200"
-                      onClick={() => setIsPopupOpen(!isPopupOpen)}
-                    >
-                      Comment
-                    </button>
+                    <h3 className="text-md font-semibold">
+                      {discussion.title}
+                    </h3>
+                    <p className="text-sm text-gray-700 line-clamp-3">
+                      {discussion.description}
+                    </p>
                   </div>
+                  <button
+                    className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white py-2 rounded-md"
+                    onClick={openPopup}
+                  >
+                    Comment
+                  </button>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       )}
-      {isPopupOpen && (
-        <CommentPopup onClose={() => setIsPopupOpen(!isPopupOpen)} />
-      )}
+
+      {isPopupOpen && <CommentPopup closePopup={closePopup} />}
     </div>
   );
 };

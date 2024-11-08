@@ -11,6 +11,7 @@ import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
+import Comment from "../components/Comment";
 
 export default function CourseRoutes() {
   return [
@@ -68,8 +69,8 @@ export default function CourseRoutes() {
             },
             {
               path: "all_courses",
-              element: <StAllCourses/>
-            }
+              element: <StAllCourses />,
+            },
           ],
         },
         {
@@ -86,7 +87,16 @@ export default function CourseRoutes() {
         },
         {
           path: "discussion",
-          element: <StDiscussion />,
+          children: [
+            {
+              path: "",
+              element: <StDiscussion />,
+            },
+            {
+              path: "comment",
+              element: <Comment/>,
+            }
+          ],
         },
         // {
         //   path: "online_exam",
