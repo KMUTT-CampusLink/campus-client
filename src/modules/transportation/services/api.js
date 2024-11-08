@@ -1,4 +1,4 @@
-import { axiosInstance } from "./axiosInstance";
+import { axiosInstance } from "../../../utils/axiosInstance.js";
 
 // Centralized error handling
 const handleApiError = (error) => {
@@ -20,8 +20,8 @@ const get = async (url) => {
 // Generic POST request
 const post = async (url, payload) => {
   try {
-    const { data } = await axiosInstance.post(url, payload);
-    return data;
+    const response = await axiosInstance.post(url, payload);
+    return response;
   } catch (error) {
     handleApiError(error);
   }
@@ -29,7 +29,10 @@ const post = async (url, payload) => {
 
 // API calls
 
+export const bookTrip = (tripID) => post(`/transport/user/book`, { tripID });
+export const fetchUserBookings = () => get("/transport/user/bookings");
 export const fetchAllStops = () => get("/transport/user/queryAllStops");
+export const isBooked = (tripID) => get(`/transport/user/isBooked/${tripID}`);
 
 /**
  * Fetches the route connecting two stops.
@@ -68,3 +71,6 @@ export const fetchRoutesConnectingStops = (startStopID, endStopId) =>
  */
 export const fetchTripsByRouteID = (routeID) =>
   get(`/transport/user/tripsByRouteID/${routeID}`);
+
+export const fetchTripData = (tripID) =>
+  get(`/transport/user/tripData/${tripID}`);

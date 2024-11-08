@@ -1,5 +1,4 @@
 import React from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
 
 const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
   function handleRouteSelection(routeID) {
@@ -18,31 +17,35 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
           <div
             key={index}
             value={route.id}
-            className="flex flex-row bg-orange-100 shadow-lg rounded-lg p-6 w-full justify-between mb-4"
+            className="flex flex-col bg-gray-200 shadow-lg rounded-lg p-4 w-full justify-between mb-4"
           >
-            <div>
-              <h3 className="text-2xl font-bold mb-2">{route.name}</h3>
-              <p className="text-gray-600 mb-4">{route.description}</p>
+            <div className="flex justify-between items-center">
+              <h3 className="text-3xl font-bold">{route.name}</h3>
               <button
-                className="mt-auto py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
+                className="py-2 px-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
                 onClick={() => handleRouteSelection(route.id)}
               >
                 View Schedule
               </button>
             </div>
-            <div className="flex flex-row items-center overflow-x-auto">
+
+            <div className="flex flex-row items-center mt-4">
               {route.connection.map((connection, index) => (
-                <div key={index} className="bg-orange-200">
-                  {/* <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" /> */}
-                  {connection.stop_connection_start_idTostop.name} ={">"}{" "}
+                <div key={index} className="flex items-center">
+                  <span className="bg-orange-300 text-black px-2 py-1 rounded-md">
+                    {connection.stop_connection_start_idTostop.name}
+                  </span>
+                  {index < route.connection.length && (
+                    <span className="mx-3 text-lg font-semibold">→ 8:30PM</span>
+                  )}
                 </div>
               ))}
-              <div className="bg-orange-200">
+              <span className="bg-orange-300 text-black px-2 py-1 rounded-md">
                 {
                   route.connection[route.connection.length - 1]
                     .stop_connection_end_idTostop.name
-                }{" "}
-              </div>
+                }
+              </span>
             </div>
           </div>
         ))
