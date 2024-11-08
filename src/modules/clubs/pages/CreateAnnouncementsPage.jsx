@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod"; // Importing zod
 import { useNavigate } from "react-router-dom"; // Importing useNavigate
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { useParams } from "react-router-dom";
 
 // Schema definition using Zod, including date, time, and place
 const schema = z.object({
@@ -14,11 +15,12 @@ const schema = z.object({
     .string()
     .nonempty({ message: "Announcement detail is required" }),
   eventDate: z.string().nonempty({ message: "Event date is required" }),
-  eventTime: z.string().nonempty({ message: "Event time is required" }),
+  eventTimeFrom: z.string().nonempty({ message: "Event time is required" }),
   eventPlace: z.string().nonempty({ message: "Event place is required" }),
 });
 
 function CreateAnnouncement() {
+  const { clubId } = useParams();
   const {
     register,
     handleSubmit,
@@ -34,18 +36,61 @@ function CreateAnnouncement() {
   //   // Navigate to the desired route after submitting the form
   //   navigate("/clubs/club-home"); // Change this to your desired route
   // };
+  // const onSubmit = async (data) => {
+  //   const formData = new formData();
+
+  //     formData.append("announcementTitle", data.announcementDescription);
+  //     formData.append("announcementContent", data.announcementDetail);
+  //     formData.append("eventDate", data.eventDate);
+  //     formData.append("eventTime", data.eventTime);
+  //     formData.append("eventPlace", data.eventPlace);
+  //     // announcementTitle: data.announcementDescription,
+  //     // announcementContent: data.announcementDetail,
+  //     // eventDate: new Date(`${data.eventDate}T${data.eventTime}`), // Combine date and time
+  //     // eventPlace: data.eventPlace,
+    
+  
+  //   try {
+  //     const response = await axiosInstance.post(`/clubs/admin/announcements/${clubId}`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+  //     if (response.data.success) {
+  //       alert("Announcement created successfully");
+  //       navigate(`/clubs/club-home/${clubId}`);
+  //     } else {
+  //       console.error("Failed to create announcement:", response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating announcement:", error);
+  //   }
+  // };
   const onSubmit = async (data) => {
-    const formattedData = {
+    const formData = new FormData();
+  
+    formData.append("announcementTitle", data.announcementDescription);
+    formData.append("announcementContent", data.announcementDetail);
+    formData.append("eventDateTime", `${data.eventDate}T${data.eventTime}:00`); // Ensure ISO-8601 format
+    formData.append("eventPlace", data.eventPlace);
+  
+    console.log("Form Data:", {
       announcementTitle: data.announcementDescription,
       announcementContent: data.announcementDetail,
-      eventDate: new Date(`${data.eventDate}T${data.eventTime}`), // Combine date and time
+      eventDateTime: `${data.eventDate}T${data.eventTime}:00`,
       eventPlace: data.eventPlace,
-    };
-  
+    });
+
     try {
-      const response = await axiosInstance.post("/clubs/announcements", formattedData);
+      const response = await axiosInstance.post(`/clubs/admin/announcements/${clubId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
       if (response.data.success) {
-        navigate("/clubs/club-home");
+        alert("Announcement created successfully");
+        navigate(`/clubs/club-home/${clubId}`);
       } else {
         console.error("Failed to create announcement:", response.data.message);
       }
@@ -53,6 +98,8 @@ function CreateAnnouncement() {
       console.error("Error creating announcement:", error);
     }
   };
+  
+  
   
 
   return (
@@ -63,7 +110,7 @@ function CreateAnnouncement() {
       >
         {/* Announcement Description */}
         <div>
-          <label className="block text-xl font-semibold">(Announcement) Description</label>
+          <label className="block text-xl font-semibold">Event Description <span className="text-red-500">*</span></label>
           <input
             {...register("announcementDescription")}
             className={`border p-2 w-full rounded-md shadow-sm ${
@@ -77,7 +124,7 @@ function CreateAnnouncement() {
 
         {/* Announcement Detail */}
         <div>
-          <label className="block text-xl font-semibold">(Announcement) Detail</label>
+          <label className="block text-xl font-semibold">Event Detail <span className="text-red-500">*</span></label>
           <textarea
             {...register("announcementDetail")}
             className={`border p-2 w-full rounded-md shadow-sm ${
@@ -91,7 +138,7 @@ function CreateAnnouncement() {
 
         {/* Event Date */}
         <div>
-          <label className="block text-xl font-semibold">Event Date</label>
+          <label className="block text-xl font-semibold">Event Date <span className="text-red-500">*</span></label>
           <input
             type="date"
             {...register("eventDate")}
@@ -106,7 +153,21 @@ function CreateAnnouncement() {
 
         {/* Event Time */}
         <div>
-          <label className="block text-xl font-semibold">Event Time</label>
+          <label className="block text-xl font-semibold">Event Time (From) <span className="text-red-500">*</span></label>
+          <input
+            type="time"
+            {...register("eventTime")}
+            className={`border p-2 w-full rounded-md shadow-sm ${
+              errors.eventTime ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          {errors.eventTime && (
+            <p className="text-red-500">{errors.eventTime.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-xl font-semibold">Event Time (To) <span className="text-red-500">*</span></label>
           <input
             type="time"
             {...register("eventTime")}
@@ -121,7 +182,7 @@ function CreateAnnouncement() {
 
         {/* Event Place */}
         <div>
-          <label className="block text-xl font-semibold">Event Place</label>
+          <label className="block text-xl font-semibold">Event Place <span className="text-red-500">*</span></label>
           <input
             {...register("eventPlace")}
             className={`border p-2 w-full rounded-md shadow-sm ${
@@ -138,7 +199,7 @@ function CreateAnnouncement() {
           type="submit"
           className="bg-orange-500 text-white p-2 rounded-lg mt-4 hover:bg-orange-600 transition-all duration-200 w-fit shadow-md"
         >
-          Create Announcement
+          Create Event
         </button>
       </form>
     </div>

@@ -1,31 +1,72 @@
-//AdminViewRequestPage
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { axiosInstance } from '../../../utils/axiosInstance';
 
 const ViewRequest = () => {
-  const requests = [
-    { id: 1, name: 'John' },
-    { id: 2, name: 'Smith' },
-    { id: 3, name: 'Linc' },
-    { id: 4, name: 'Salah' },
-  ];
+  const [requests, setRequests] = useState([]);
+  //const clubId = 1026; // Replace with actual Club ID from the backend
+  const {clubId} = useParams();
+  
+  // Fetch pending requests when the component mounts
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await axiosInstance.get(`/clubs/${clubId}/pending-requests`);
+        setRequests(response.data.data); // Assuming response data has a data property with the list of requests
+      } catch (error) {
+        console.error("Failed to fetch requests:", error);
+      }
+    };
 
-  const handleAccept = (id) => {
-    console.log(`Accepted member with ID: ${id}`);
-    // Call API to accept the member
+    fetchRequests();
+  }, [clubId]);
+
+  // Function to handle accepting a request
+  const handleAccept = async (memberId) => {
+    try {
+      const response = await axiosInstance.put(`/clubs/${clubId}/members/${memberId}/status`, {
+        status: "Accepted",
+      });
+      if (response.data.success) {
+        console.log(`Accepted member with ID: ${memberId}`);
+        setRequests((prevRequests) =>
+          prevRequests.filter((request) => request.id !== memberId)
+        );
+      } else {
+        console.error("Failed to accept request:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Failed to accept request:", error);
+    }
   };
-
-  const handleDecline = (id) => {
-    console.log(`Declined member with ID: ${id}`);
-    // Call API to decline the member
+  
+  // Function to handle declining a request
+  const handleDecline = async (memberId) => {
+    try {
+      const response = await axiosInstance.put(`/clubs/${clubId}/members/${memberId}/status`, {
+        status: "Rejected",
+      });
+      if (response.data.success) {
+        console.log(`Declined member with ID: ${memberId}`);
+        setRequests((prevRequests) =>
+          prevRequests.filter((request) => request.id !== memberId)
+        );
+      } else {
+        console.error("Failed to decline request:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Failed to decline request:", error);
+    }
   };
-
+  
   return (
     <div className="container mx-auto p-4">
-      {/* <h1 className="text-2xl font-bold mb-6">View Requests</h1> */}
       <ul className="space-y-4">
         {requests.map((request) => (
           <li key={request.id} className="flex justify-between items-center border p-4 rounded-md">
-            <div className="font-medium">{request.name}</div>
+            <div className="font-medium">
+              {request.student ? `${request.student.firstname} ${request.student.lastname}` : "Unknown Student"}
+            </div>
             <div className="space-x-2">
               <button 
                 onClick={() => handleAccept(request.id)} 
