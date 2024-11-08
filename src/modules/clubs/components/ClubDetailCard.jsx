@@ -37,7 +37,7 @@ function ClubDetailCard() {
       console.error("Error sending join request:", err);
       alert("Failed to send join request.");
     }
-  };  
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 md:mb-8">
