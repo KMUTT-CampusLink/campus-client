@@ -46,20 +46,20 @@ const footerLinks = [
 
 const FooterCard = () => {
   return (
-    <footer className="bg-gradient-to-r from-[rgba(194,84,77,0.5)] via-[rgba(238,143,9,0.5)] to-[rgba(255,234,191,0.5)] p-10 w-full font-georama">
-      <div className="flex flex-wrap">
-        <div className="w-1/2 md:w-1/6">
+    <footer className="bg-gradient-to-r from-[rgba(194,84,77,0.5)] via-[rgba(238,143,9,0.5)] to-[rgba(255,234,191,0.5)] p-10 font-georama">
+      <div className="grid grid-cols-1 md:grid-cols-6">
+        <div className="">
           <img
-            className="bg-white p-2 rounded-full"
+            className="mx-auto bg-white max-w-48 p-2 rounded-full"
             src="/logos/long-logo.png"
             alt="mb-long-logo"
           />
-          <p className="mt-2">
+          <p className="my-4 text-center">
             Campus Link is a complete school management platform designed to
             simplify campus life and enhance the student experience.
           </p>
         </div>
-        <div className="order-last flex-grow md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mx-6 grid grid-cols-2 md:grid-cols-4 md:col-span-4 gap-6">
           {footerLinks.map((section, index) => (
             <div key={index}>
               <h6 className="font-semibold my-4">{section.title}</h6>
@@ -71,9 +71,9 @@ const FooterCard = () => {
             </div>
           ))}
         </div>
-        <div className="w-1/2 md:w-auto md:order-last font-opensans">
-          <p className="font-semibold mb-2">Subscribe Now</p>
-          <form className="items-center justify-center ">
+        <div className="font-opensans">
+          <p className="font-semibold my-2">Subscribe Now</p>
+          <form className="">
             <input
               type="email"
               placeholder="Your email"

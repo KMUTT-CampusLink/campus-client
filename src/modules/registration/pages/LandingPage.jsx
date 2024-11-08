@@ -1,6 +1,6 @@
 import FooterCard from "../components/FooterCard";
 import NavBar from "../components/NavBarComponents/NavBar";
-import { mainStyles, containerDivStyles, logoHead } from "../styles/styles";
+import { mainStyles, containerDivStyles } from "../styles/styles";
 
 function LandingPage() {
   return (
