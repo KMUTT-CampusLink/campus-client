@@ -5,11 +5,29 @@ import React, { useState, useEffect } from "react";
 import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
+import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 
+const ITEMS_PER_PAGE = 12;
 
 const EmployeeGrid = () => {
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const selectedEmployees = employees.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(employees.length / ITEMS_PER_PAGE);
+
+
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   useEffect(() => {
     const fetchData = async () =>
@@ -54,9 +72,27 @@ const EmployeeGrid = () => {
         </div>
 
         <div className="flex justify-center flex-wrap gap-x-7 gap-y-4 sm:gap-7 pt-4 md:pt-6 ">
-          {employees.map((employee) => (
+          {selectedEmployees.map((employee) => (
             <EmployeeCard key={employee.id} employee={employee} />
           ))}
+        </div>
+
+        <div className="flex justify-center items-center mt-6">
+          <button 
+            onClick={handlePrevPage} 
+            disabled={currentPage === 1} 
+            className="  rounded-full w-6 h-7 transition hover:shadow-xl shadow-sm"
+          >
+            {currentPage > 1 && <FontAwesomeIcon icon={faLessThan} />}
+          </button>
+          <span className="px-4 py-2 md:text-lg ">{currentPage} of {totalPages}</span>
+          <button 
+            onClick={handleNextPage} 
+            disabled={currentPage === totalPages} 
+            className=" rounded-full w-6 h-7 transition hover:shadow-xl shadow-sm"
+          >
+            {currentPage < totalPages && <FontAwesomeIcon icon={faGreaterThan} />}
+          </button>
         </div>
 
       </main>
