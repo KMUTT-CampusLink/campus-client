@@ -12,7 +12,7 @@ const ViewRequest = () => {
     const fetchRequests = async () => {
       try {
         const response = await axiosInstance.get(`/clubs/${clubId}/pending-requests`);
-        setRequests(response.data.data); // Assuming response data has a `data` property with the list of requests
+        setRequests(response.data.data); // Assuming response data has a data property with the list of requests
       } catch (error) {
         console.error("Failed to fetch requests:", error);
       }

@@ -18,7 +18,7 @@ const NotificationList = ({ notifications }) => (
 
 const NotificationPage = () => {
     const location = useLocation();
-    const { clubId } = useParams(); // Get `clubId` from the route
+    const { clubId } = useParams(); // Get clubId from the route
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const NotificationPage = () => {
                 const response = await axiosInstance.get(`/api/clubs/notifications`, {
                     params: {
                         userType,
-                        clubId, // Use `clubId` from the URL
+                        clubId, // Use clubId from the URL
                     },
                 });
                 setNotifications(response.data.data);

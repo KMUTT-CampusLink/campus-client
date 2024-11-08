@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
 const schema = z.object({
@@ -11,6 +11,7 @@ const schema = z.object({
 });
 
 function CreatePost() {
+  const { clubId } = useParams();
   const {
     register,
     handleSubmit,
@@ -37,7 +38,7 @@ function CreatePost() {
   
     try {
       const response = await axiosInstance.post(
-        "/clubs/admin/post",
+        `/clubs/admin/post/${clubId}`,
         formData,
         {
           headers: {
@@ -47,7 +48,7 @@ function CreatePost() {
       );
   
       alert("Post created successfully");
-      navigate("/"); // Optional: navigate to another page
+      navigate(`/clubs/club-home/${clubId}`); // Optional: navigate to another page
     } catch (error) {
       console.error("Error creating post:", error.message);
       alert("Failed to create post");
@@ -63,7 +64,7 @@ function CreatePost() {
       >
         {/* Post Title */}
         <div>
-          <label className="block text-xl font-semibold">Post Title</label>
+          <label className="block text-xl font-semibold">Post Title <span className="text-red-500">*</span></label>
           <input
             {...register("title")}
             className={`border p-2 w-full rounded-md shadow-sm ${
@@ -77,7 +78,7 @@ function CreatePost() {
 
         {/* Post Content */}
         <div>
-          <label className="block text-xl font-semibold">Post Content</label>
+          <label className="block text-xl font-semibold">Post Content <span className="text-red-500">*</span></label>
           <textarea
             {...register("content")}
             className={`border p-2 w-full rounded-md shadow-sm ${
