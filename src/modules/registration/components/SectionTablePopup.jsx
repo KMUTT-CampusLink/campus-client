@@ -8,10 +8,11 @@ const SectionTablePopup = ({
   courseCode,
   studentId,
   headId,
+  semesterId,
 }) => {
   const popupRef = useRef();
   const { data: sectionData, refetch: refetchSections } =
-    useSectionByCourseCode(courseCode);
+    useSectionByCourseCode(courseCode, semesterId);
   const [sections, setSelectedSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
   const mutation = useAddEnrollmentDetail();

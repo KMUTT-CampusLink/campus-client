@@ -127,6 +127,7 @@ function AddCoursePage() {
         onClose={() => setIsPopupOpen(false)}
         courseCode={courseCode}
         studentId={studentId}
+        semesterId={currentSemesterId}
         headId={headId}
       />
     </>

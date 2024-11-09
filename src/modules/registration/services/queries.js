@@ -67,11 +67,11 @@ export const useCourseBySearch = (searchTerm) => {
 };
 
 // Custom hook for fetching sections by course code
-export const useSectionByCourseCode = (courseCode) => {
+export const useSectionByCourseCode = (courseCode, semesterId) => {
   return useQuery({
-    queryKey: ["sections", courseCode],
-    queryFn: () => fetchSectionByCourseCode(courseCode),
-    enabled: !!courseCode,
+    queryKey: ["sections", courseCode, semesterId],
+    queryFn: () => fetchSectionByCourseCode(courseCode, semesterId),
+    enabled: !!courseCode && !!semesterId,
     onError: (error) => {
       console.error("Error fetching sections:", error);
     },

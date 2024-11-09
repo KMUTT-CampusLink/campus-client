@@ -39,8 +39,8 @@ export const fetchCourseBySearchTerm = async (searchTerm) => {
   if (!searchTerm.trim()) throw new Error("Search term cannot be empty.");
   return get(`/regis/course/search?query=${searchTerm}`);
 };
-export const fetchSectionByCourseCode = (courseCode) =>
-  get(`/regis/course/${courseCode}/section`);
+export const fetchSectionByCourseCode = (courseCode, semesterId) =>
+  get(`/regis/course/${courseCode}/section/${semesterId}`);
 export const fetchActiveCoursesByStudentId = (studentId) =>
   get(`/regis/course/${studentId}/active`);
 
