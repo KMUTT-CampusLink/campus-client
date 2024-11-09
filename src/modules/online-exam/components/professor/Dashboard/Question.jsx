@@ -19,18 +19,10 @@ export default function Question({
                     <input
                       type={type === "Checklist" ? "checkbox" : "radio"}
                       name={`radio-${questionNo}`}
-                      className={`${
-                        type === "Checklist" ? "checkbox" : "radio"
-                      } checked:bg-[#C76650] border-[1px] border-black`}
-                      checked={
-                        !studentAnswer ||
-                        studentAnswer.find(
-                          (sa) => sa.answer == choiceObj.choice_text
-                        ) !== undefined
-                      }
+                      className={`radio checked:bg-[#C76650] border-[1px] border-black`}
                       disabled
                     />
-                    {choiceObj.choice_text}
+                    {choiceObj}
                   </>
                 )}
               </div>

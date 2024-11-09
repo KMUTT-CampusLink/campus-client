@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Chip from "../../components/professor/Scoring/Chip";
@@ -11,7 +11,8 @@ import {
   getExamDataById,
   getStudentAnswers,
   getStudentExam,
-  getExamParticipants
+  getExamParticipants,
+  updateStudentScore,
 } from "../../services/apis/professerApi";
 
 export default function ProfessorScoringPage() {
@@ -24,12 +25,19 @@ export default function ProfessorScoringPage() {
   const [studentScore, setStudentScore] = useState(0);
   const [studentAnswer, setStudentAnswer] = useState([]);
   const [studentExamData, setStudentExamData] = useState([]);
+  const navigate = useNavigate();
 
   const [exam, setExam] = useState({
     examId: examId,
     title: "",
     description: "",
     questions: [],
+  });
+
+  const [essayScore, setEssayScore] = useState({
+    studentId: studentId,
+    examId: examId,
+    scoring: [],
   });
 
   const getParticipants = async () => {
@@ -40,7 +48,7 @@ export default function ProfessorScoringPage() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const getExamData = async () => {
     try {
@@ -102,17 +110,17 @@ export default function ProfessorScoringPage() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const getStudentExamData = async () => {
     try {
       const response = await getStudentExam(studentExamId);
+
       setStudentExamData(response.data.data);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getExamData();
@@ -121,6 +129,24 @@ export default function ProfessorScoringPage() {
     getStudentExamData();
     getParticipants();
   }, []);
+
+  const handleSubmit = async () => {
+    try {
+      const finalEssayScore = {
+        ...essayScore,
+        scoring: essayScore.scoring.map((item) => ({
+          ...item,
+          score: parseFloat(item.score),
+        })),
+      };
+      const res = await updateStudentScore(finalEssayScore, studentExamId, studentId);
+      if (res.status === 200) {
+        navigate(`/exams/professor/overallScoring/${examId}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -133,12 +159,16 @@ export default function ProfessorScoringPage() {
               Individual Scoring
             </p>
             <div className="text-[12px] lg:text-[16px]">
-              <p className="">66130500846</p>
+              <p className="">{studentId}</p>
               <p className="">Nudhana Sarutipaisan</p>
             </div>
           </div>
           <div className="flex flex-col items-end">
-            <Chip status={studentExamData.isChecked} score={studentScore} passMark={passMark}/>
+            <Chip
+              status={studentExamData.is_checked}
+              score={studentScore}
+              passMark={passMark}
+            />
             <div className="flex gap-1">
               <p className="text-[22px] lg:text-[30px]">
                 {studentScore}/{fullMark}
@@ -150,7 +180,7 @@ export default function ProfessorScoringPage() {
         <div className="flex justify-evenly font-semibold text-[20px] pb-5">
           <button
             className={`focus:underline decoration-[#D4A015] decoration-2 underline-offset-[5px] ${
-              activeButton === "multipleChoice" ? "underline" : ""
+              activeButton === "Multiple Choice" ? "underline" : ""
             }`}
             onClick={() => setActiveButton("Multiple Choice")}
           >
@@ -178,6 +208,9 @@ export default function ProfessorScoringPage() {
             .map((filteredItem, index) => (
               <StudentQuestion
                 key={index}
+                studentId={studentId}
+                essayScore={essayScore}
+                setEssayScore={setEssayScore}
                 studentAnswer={studentAnswer}
                 questionid={filteredItem.question_id}
                 questionNo={index}
@@ -186,6 +219,34 @@ export default function ProfessorScoringPage() {
                 type={filteredItem.type}
               />
             ))}
+        </div>
+        <div className="w-full flex justify-end">
+          <button
+          disabled={studentExamData.is_checked}
+            className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+            onClick={() => document.getElementById("confirmModal").showModal()}
+          >
+            Finish Scoring
+          </button>
+          <dialog id="confirmModal" className="p-[30px] rounded-xl">
+            <h3 className="font-bold text-lg">Confirm Finishing the Score?</h3>
+            <p className="py-4">You can finish scoring only once.</p>
+            <div className="modal-action">
+              <form method="dialog" className="flex flex-row gap-[20px]">
+                <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
+                  Close
+                </button>
+                <button
+                  className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                >
+                  Confirm
+                </button>
+              </form>
+            </div>
+          </dialog>
         </div>
       </div>
     </>
