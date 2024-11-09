@@ -15,7 +15,32 @@ const SectionTablePopup = ({
     useSectionByCourseCode(courseCode, semesterId);
   const [sections, setSelectedSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
+
   const mutation = useAddEnrollmentDetail();
+
+  // Reset sections when popup is closed
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedSections([]); // Clear sections when popup closes
+      setSelectedSectionId(null); // Reset selected section ID as well
+    }
+  }, [isOpen]);
+
+  // Refetch sections and handle no sections case
+  useEffect(() => {
+    if (isOpen) {
+      refetchSections(); // Fetch sections every time the popup is opened
+    }
+  }, [isOpen, courseCode, refetchSections]);
+
+  // Update sections when new section data is fetched
+  useEffect(() => {
+    if (sectionData && sectionData.length > 0) {
+      setSelectedSections(sectionData); // Update sections if available
+    } else {
+      setSelectedSections([]); // Reset sections if no data is available
+    }
+  }, [sectionData, courseCode]); // Make sure to include courseCode here
 
   const handleAddEnrollment = async () => {
     const selectedSection = sections.find(
@@ -23,32 +48,20 @@ const SectionTablePopup = ({
     );
 
     if (selectedSection && selectedSection.seats_left > 0) {
-      try {
-        await mutation.mutateAsync({
-          head_id: headId,
-          student_id: studentId,
-          section_id: selectedSectionId,
-        });
-      } catch (error) {
-        // Check for 409 Conflict (Enrollment already exists)
-        if (error.response?.status === 409) {
-          popToast("You have already added this section.", "error");
-        }
-      }
+      await mutation.mutateAsync({
+        head_id: headId,
+        student_id: studentId,
+        section_id: selectedSectionId,
+      });
     } else {
       popToast("Cannot add section. No seats left.", "error");
     }
   };
 
-  useEffect(() => {
-    if (sectionData) {
-      setSelectedSections(sectionData);
-    }
-  }, [sectionData, courseCode]); // Re-run when sectionData or courseCode changes
-
   const handleClose = () => {
     if (mutation.isLoading) return; // Prevent closing while loading
     onClose();
+    setSelectedSectionId(null);
   };
 
   useEffect(() => {
