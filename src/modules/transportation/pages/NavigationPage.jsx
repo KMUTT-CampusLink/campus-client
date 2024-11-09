@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBarComponents/NavBar";
-import { fetchUserBookings, fetchTripData } from "../services/api";
+import { fetchUserBookings, fetchDriverTrips } from "../services/api";
 import { format } from "date-fns";
 
 const NavigationPage = () => {
   const [userBookings, setUserBookings] = useState([]);
+  const [driverTrips, setDriverTrips] = useState([]);
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
-
-  useEffect(() => {
-    fetchTripData(1).then((data) => {
-      console.log(data);
-    });
-  });
+  console.log(driverTrips);
 
   // Fetch user's bookings if they are authenticated
   useEffect(() => {
-    fetchUserBookings().then((data) => {
-      setUserBookings(data.bookings);
-      console.log(data.bookings);
-    });
-  }, []);
+    switch (userRole) {
+      case "Driver":
+        fetchDriverTrips().then((data) => {
+          setDriverTrips(data.trips);
+        });
+        break;
+      case "Student":
+        fetchUserBookings().then((data) => {
+          setUserBookings(data.bookings);
+          console.log(data.bookings);
+        });
+        break;
+      default:
+        break;
+    }
+  }, [userRole]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-orange-100">
@@ -41,7 +48,7 @@ const NavigationPage = () => {
             Search for Routes
           </Link>
         </div>
-
+        {userRole ? <p>signed in as {userRole}</p> : <p>not signed in</p>}
         {userRole === "Student" ? (
           <>
             <h3 className="text-2xl font-semibold text-gray-700 mb-4">
@@ -73,9 +80,33 @@ const NavigationPage = () => {
               ))}
             </div>
           </>
+        ) : userRole === "Driver" ? (
+          <>
+            <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+              My Trips
+            </h3>
+
+            <div className="space-y-4">
+              {driverTrips.map((trip, index) => (
+                <div
+                  key={index}
+                  className="bg-white shadow-md rounded-md p-4 border-l-4 border-orange-400"
+                >
+                  <p className="text-lg font-semibold text-gray-800">
+                    {format(new Date(trip.trip_date), "yyyy-MM-dd")}
+                  </p>
+                  <p className="text-gray-600">
+                    Time:{" "}
+                    {format(new Date(trip.trip_schedule.start_time), "HH:mm")} -{" "}
+                    {format(new Date(trip.trip_schedule.end_time), "HH:mm")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <div className="text-center text-lg text-gray-700 mt-6">
-            <p>Not signed in as a student to view bookings</p>
+            <p>Not signed in</p>
           </div>
         )}
       </div>

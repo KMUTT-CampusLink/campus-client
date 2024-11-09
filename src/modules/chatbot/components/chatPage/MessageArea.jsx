@@ -11,7 +11,7 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
   }, [dummyAns]);
 
   return (
-    <div className=' overflow-auto px-10 max-h-[20rem]'>{
+    <div className=' overflow-auto px-10 max-h-[12rem] sm:max-h-[18rem]'>{
       questions.map((question, i) => {
         return <div key ={i}>
           <div className='flex flex-row-reverse'>

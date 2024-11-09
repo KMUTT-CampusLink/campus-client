@@ -138,13 +138,13 @@ const StCourseMaterials = () => {
       <div className="py-8 w-full">
         <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center">
           <div className="text-2xl font-bold text-[#ecb45e]">MATERIALS</div>
-          <button
+          {/* <button
             className="bg-[#ecb45e] text-white py-2 px-4 rounded hover:bg-[#d9a24b] transition duration-200"
             onClick={handleUploadClick}
           >
             <FontAwesomeIcon icon={faPlus} className="mr-2" size="xl" />
             Upload
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -165,14 +165,14 @@ const StCourseMaterials = () => {
             <div className="flex items-start gap-2 flex-col">
               <div>{material.attachments.join(", ")}</div>
               <div>{material.quantity} file(s)</div>
-              <div className="flex gap-2">
+              {/* <div className="flex gap-2">
                 <button onClick={() => handleEditClick(material)}>
                   <FontAwesomeIcon icon={faPenToSquare} color="red" />
                 </button>
                 <button onClick={() => handleDeleteAttachmentClick(material)}>
                   <FontAwesomeIcon icon={faTrash} color="red" />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -180,11 +180,11 @@ const StCourseMaterials = () => {
                 <div key={i} className="flex items-center gap-2">
                   <FontAwesomeIcon icon={faVideo} color="red" />
                   {video}
-                  <button
+                  {/* <button
                     onClick={() => handleDeleteRecordingClick(material, i)}
                   >
                     <FontAwesomeIcon icon={faTrash} color="red" />
-                  </button>
+                  </button> */}
                 </div>
               ))}
             </div>
@@ -192,16 +192,16 @@ const StCourseMaterials = () => {
         ))}
       </div>
 
-      {isPopupOpen && (
+      {/* {isPopupOpen && (
         <UploadPopup
           onClose={handleClosePopup}
           onSubmit={handleSubmitMaterial}
           material={currentMaterial}
           showVideos={true}
         />
-      )}
+      )} */}
 
-      {isDeletePopupOpen && (
+      {/* {isDeletePopupOpen && (
         <DeleteConfirmationPopup
           onClose={() => setIsDeletePopupOpen(false)}
           onDeleteAction={
@@ -224,7 +224,7 @@ const StCourseMaterials = () => {
           }
           showAction2={deleteContext === "attachment"}
         />
-      )}
+      )} */}
     </div>
   );
 };
