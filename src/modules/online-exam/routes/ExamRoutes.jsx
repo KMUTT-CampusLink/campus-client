@@ -68,7 +68,7 @@ export default function ExamRoutes() {
           element: <ProfessorDashboardPage />,
         },
         {
-          path: "scoring/:studentExamId",
+          path: "scoring/:studentExamId/:studentId/:examId",
           element: <ProfessorScoringPage />,
         },
         {

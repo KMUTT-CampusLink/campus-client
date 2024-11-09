@@ -3,7 +3,7 @@ import { faTrash, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 import QuestionImageUploader from '../CreateExam/QuestionImageUploader';
 import ChoiceImageUploader from '../CreateExam/ChoiceImageUploader';
-import Choice from '../CreateExam/Choice';
+import Choice from '../EditedExam/Choice'
 
 export default function Question({
   question,
@@ -16,9 +16,14 @@ export default function Question({
   //set answer for each question
   const handleAnswerChange = (choiceText) => {
     const updatedQuestions = [...exam.questions];
-    updatedQuestions[index].answer = choiceText; // Only save the choiceText
+    updatedQuestions[index].answer = choiceText;
+    updatedQuestions[index].options = updatedQuestions[index].options.map(option => ({
+      ...option,
+      isCorrect: option.choiceText === choiceText,
+    }));
     setExam({ ...exam, questions: updatedQuestions });
   };
+
 
   //set score for each question
   const handleScoreChange = (e) => {
@@ -30,17 +35,23 @@ export default function Question({
   //add choice for multiple choice question
   const addChoice = (choice) => {
     const updatedQuestions = [...exam.questions];
-    updatedQuestions[index].options.push(choice);
+    updatedQuestions[index].options.push({
+      choiceText: choice.choiceText,
+      choiceImg: null,
+      isCorrect: choice.isCorrect || false, // Default is false
+      choiceId: null,
+    });
     setExam({ ...exam, questions: updatedQuestions });
   };
 
+
   //delete choice for multiple choice and checkList question
-  const deleteChoice = (choice) => {
+  const deleteChoice = async (choice, id) => {
     const updatedQuestions = [...exam.questions];
-    updatedQuestions[index].options = updatedQuestions[index].options.filter(
-      (opt) => opt !== choice
-    );
-    setExam({ ...exam, questions: updatedQuestions });
+      updatedQuestions[index].options = updatedQuestions[index].options.filter(
+        (opt) => opt !== choice
+      );
+      setExam({ ...exam, questions: updatedQuestions });
   };
 
   //set answer for each checklist question
@@ -91,7 +102,7 @@ export default function Question({
               onChange={handleScoreChange}
             />
           </div>
-          <button onClick={() => onDeleteQuestion(index)}>
+          <button onClick={() => onDeleteQuestion(question.questionId)}>
             <FontAwesomeIcon icon={faTrash} className="text-[#864E41]" />
           </button>
         </div>
@@ -144,7 +155,7 @@ export default function Question({
                     checked={question.answer == option.choiceText}
                     onChange={() => handleAnswerChange(option.choiceText)}
                   />
-                  {option.choiceText}
+                  {option.choiceText ? option.choiceText : option}
                 </div>
                 <div className="flex items-center">
                   <ChoiceImageUploader
@@ -180,7 +191,7 @@ export default function Question({
                     checked={question.answer.includes(option.choiceText)} // Use choiceText
                     onChange={() => handleChecklistAnswerChange(option.choiceText)} // Pass choiceText
                   />
-                  {option.choiceText}
+                  {option.choiceText ? option.choiceText : option}
                 </div>
                 <div className="flex items-center">
                   <ChoiceImageUploader
