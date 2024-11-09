@@ -46,7 +46,7 @@ const footerLinks = [
 
 const FooterCard = () => {
   return (
-    <footer className="bg-gradient-to-r from-[rgba(194,84,77,0.5)] via-[rgba(238,143,9,0.5)] to-[rgba(255,234,191,0.5)] p-10 font-georama">
+    <footer className="absolute inset-x-0 bottom-0 bg-gradient-to-r from-[rgba(194,84,77,0.5)] via-[rgba(238,143,9,0.5)] to-[rgba(255,234,191,0.5)] p-10 font-georama">
       <div className="grid grid-cols-1 md:grid-cols-6">
         <div className="">
           <img

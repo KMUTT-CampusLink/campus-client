@@ -54,7 +54,7 @@ function ProfilePage() {
             {/* Logo Section */}
             <div className="relative w-20 h-20 mx-auto mt-4">
               <img
-                src="/logos/default-profile.png"
+                src="/logos/profile-pic.png"
                 alt="Logo"
                 className="w-full h-full rounded-full object-cover border-4 border-gray-200"
               />

@@ -15,7 +15,7 @@ import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
-  const currentSemesterId = 2;
+  const currentSemesterId = 1001;
 
   const [headId, setHeadId] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
