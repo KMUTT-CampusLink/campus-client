@@ -13,6 +13,7 @@ import {
   fetchActiveCoursesByStudentId,
   fetchEnrollmentHead,
   fetchPaymentStatus,
+  fetchAllSemesters,
 } from "./api";
 
 // Custom hook for authentication
@@ -83,6 +84,16 @@ export const useSemestersByStudentId = (studentId) => {
     queryKey: ["semesters", studentId],
     queryFn: () => fetchSemestersByStudentId(studentId),
     enabled: !!studentId,
+    onError: (error) => {
+      console.error("Error fetching semesters:", error);
+    },
+  });
+};
+
+export const useAllSemesters = () => {
+  return useQuery({
+    queryKey: ["semesters"],
+    queryFn: () => fetchAllSemesters(),
     onError: (error) => {
       console.error("Error fetching semesters:", error);
     },

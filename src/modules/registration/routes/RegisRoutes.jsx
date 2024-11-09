@@ -10,12 +10,17 @@ import RegisDetailsPage from "../pages/RegisDetailsPage";
 import AuthRoute from "../middleware/AuthRoute";
 import PeriodPage from "../pages/PeriodPage";
 import ProfilePage from "../pages/ProfilePage";
+import AdminPage from "../pages/AdminPage";
 
 export default function RegisRoutes() {
   return [
     {
       path: "",
       element: <LandingPage />,
+    },
+    {
+      path: "admin",
+      element: <AdminPage />,
     },
     {
       path: "activation",

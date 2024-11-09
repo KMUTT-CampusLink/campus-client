@@ -41,18 +41,23 @@ export const fetchCourseBySearchTerm = async (searchTerm) => {
 };
 export const fetchSectionByCourseCode = (courseCode) =>
   get(`/regis/course/${courseCode}/section`);
+export const fetchActiveCoursesByStudentId = (studentId) =>
+  get(`/regis/course/${studentId}/active`);
+
 export const fetchSemestersByStudentId = (studentId) =>
-  get(`/regis/enroll/semesters/${studentId}`);
+  get(`/regis/semesters/${studentId}`);
+export const fetchAllSemesters = () =>
+  get(`/regis/semesters/all`);
+
 export const fetchTranscriptBySemesterId = (studentId, semesterId) =>
   get(`/regis/transcript/${studentId}/${semesterId}`);
 export const fetchTranscriptByStudentId = (studentId) =>
   get(`/regis/transcript/${studentId}`);
+
 export const fetchGPAXBySemesterId = (studentId, semesterId) =>
   get(`/regis/gpax/${studentId}/${semesterId}`);
 export const fetchGPAXByStudentId = (studentId) =>
   get(`/regis/gpax/${studentId}`);
-export const fetchActiveCoursesByStudentId = (studentId) =>
-  get(`/regis/course/${studentId}/active`);
 
 export const fetchEnrollmentHead = (enrollment) =>
   post("/regis/enroll/head", enrollment);

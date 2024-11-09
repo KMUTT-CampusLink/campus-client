@@ -12,7 +12,7 @@ import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
 
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
-  const currentSemesterId = 1001;
+  const currentSemesterId = 1016;
   const navigate = useNavigate();
 
   const [headId, setHeadId] = useState("");
