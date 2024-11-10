@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,19 +7,29 @@ import {
   faEnvelope,
   faPhone,
   faHome,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import GradeCard from "../components/GradeCard";
-import { useSemestersByStudentId } from "../services/queries";
+import {
+  useSemestersByStudentId,
+  useStudentProfileData,
+} from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
 import SInfoCard from "../components/SInfoCard";
 
 function ProfilePage() {
   const studentId = localStorage.getItem("studentId");
-  const {
-    data: semesters,
-    isLoading,
-    isError,
-  } = useSemestersByStudentId(studentId);
+  const { data: semesters, isError } = useSemestersByStudentId(studentId);
+  const { data: profileInfo, isProfileError } =
+    useStudentProfileData(studentId);
+  const [profileData, setProfileData] = useState({});
+
+  useEffect(() => {
+    if (profileInfo) {
+      setProfileData(profileInfo);
+    }
+    console.log(profileData);
+  }, [profileInfo]);
 
   const [semester, setSemester] = useState("");
   const [semesterId, setSemesterId] = useState("");
@@ -42,7 +52,7 @@ function ProfilePage() {
     }
   };
 
-  if (isError) return <ErrorSkeleton />;
+  if (isError || isProfileError) return <ErrorSkeleton />;
 
   return (
     <div className={containerDivStyles}>
@@ -59,7 +69,6 @@ function ProfilePage() {
                 className="w-full h-full rounded-full object-cover border-4 border-gray-200"
               />
             </div>
-
             <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
               <div className="flex items-center space-x-2">
                 <FontAwesomeIcon
@@ -68,16 +77,14 @@ function ProfilePage() {
                 />
                 <div>
                   <p className="text-sm text-gray-500">Education Level</p>
-                  <p className="font-semibold">
-                    Current student - Bachelor's Degree
-                  </p>
+                  <p className="font-semibold">{profileData.degree_level}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2 mt-4">
                 <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
                 <div>
                   <p className="text-sm text-gray-500">Personal email</p>
-                  <p className="font-semibold">Thitapa.rns@gmail.com</p>
+                  <p className="font-semibold">{profileData.personal_email}</p>
                 </div>
               </div>
             </div>
@@ -86,10 +93,32 @@ function ProfilePage() {
               <h3 className="text-lg font-semibold">Contact Information</h3>
               <div className="flex items-center space-x-2 mt-4">
                 <FontAwesomeIcon icon={faPhone} className="text-gray-600" />
-                <p className="font-semibold">099-999-9999</p>
+                <p className="font-semibold">{profileData.phone}</p>
+              </div>
+              <div className="flex items-center space-x-2 mt-4">
+                <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
+                <p className="font-semibold">{profileData.personal_email}</p>
               </div>
             </div>
+            <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
+              <div className="flex space-x-2 items-center">
+                <FontAwesomeIcon icon={faUser} className=" text-gray-600" />
+                <h3 className="text-lg font-semibold">Personal Information</h3>
+              </div>
 
+              <div className="mx-6 my-2">
+                <p className="flex justify-between">
+                  <span>Identification Number</span>
+                  <span>{profileData.identification_no || "N/A"}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Date of Birth</span>
+                  <span>
+                    {new Date(profileData.date_of_birth).toLocaleDateString()}
+                  </span>
+                </p>
+              </div>
+            </div>
             <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
               <div className="flex space-x-2 items-center">
                 <FontAwesomeIcon icon={faHome} className=" text-gray-600" />
@@ -99,27 +128,27 @@ function ProfilePage() {
               <div className="mx-6 my-2">
                 <p className="flex justify-between">
                   <span>Country</span>
-                  <span>Thailand</span>
+                  <span>{profileData.address}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Address</span>
-                  <span>Somewhere</span>
+                  <span>{profileData.address}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Subdistrict</span>
-                  <span>Somewhere</span>
+                  <span>{profileData.address}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>District</span>
-                  <span>Somewhere</span>
+                  <span>{profileData.address}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Province</span>
-                  <span>Somewhere</span>
+                  <span>{profileData.address}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Postal Code</span>
-                  <span>11001</span>
+                  <span>{profileData.address}</span>
                 </p>
               </div>
             </div>

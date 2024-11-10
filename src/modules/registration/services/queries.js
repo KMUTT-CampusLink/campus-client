@@ -14,6 +14,7 @@ import {
   fetchEnrollmentHead,
   fetchPaymentStatus,
   fetchAllSemesters,
+  fetchStudentProfileById,
 } from "./api";
 
 // Custom hook for authentication
@@ -47,6 +48,17 @@ export const useStudentData = (studentId) => {
   return useQuery({
     queryKey: ["student", studentId],
     queryFn: () => fetchStudentById(studentId),
+    enabled: !!studentId,
+    onError: (error) => {
+      console.error("Error fetching student data:", error);
+    },
+  });
+};
+
+export const useStudentProfileData = (studentId) => {
+  return useQuery({
+    queryKey: ["studentProfile", studentId],
+    queryFn: () => fetchStudentProfileById(studentId),
     enabled: !!studentId,
     onError: (error) => {
       console.error("Error fetching student data:", error);

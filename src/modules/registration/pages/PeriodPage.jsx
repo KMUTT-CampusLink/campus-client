@@ -7,7 +7,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 function PeriodPage() {
-  const regis = "late"; // Example value: change dynamically as needed
+  const regis = "registration";
 
   const Button = ({ to, disabled, icon, text }) => (
     <Link to={to}>
@@ -17,7 +17,7 @@ function PeriodPage() {
         }`}
         disabled={disabled}
       >
-        {icon && <FontAwesomeIcon icon={faLock} className="px-3" />}
+        {icon && <FontAwesomeIcon icon={faLock} className="px-2" />}
         {text}
       </button>
     </Link>
@@ -33,7 +33,6 @@ function PeriodPage() {
           <div className="">
             <SInfoCard />
             <div className="grid gap-4 mx-auto w-1/2 mt-8">
-              {/* Register Button */}
               <Button
                 to="/regis/course"
                 disabled={regis === "late"}
@@ -41,7 +40,6 @@ function PeriodPage() {
                 text="Register"
               />
 
-              {/* Late Register Button */}
               <Button
                 to="/regis/course"
                 disabled={regis === "registration"}
