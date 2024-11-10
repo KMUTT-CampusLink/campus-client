@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const images = [
   "/regis/newsHolder.jpg",
@@ -11,7 +11,7 @@ const images = [
 
 export default function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const delay = 3000; // Change slide every 3 seconds
+  const delay = 5000; // Change slide every 3 seconds
   const imagesPerSlide = 3; // Number of images to show at once
 
   // Adjust the current index to move one image at a time
@@ -41,7 +41,7 @@ export default function Carousel() {
         ❮
       </button>
 
-      <div className="overflow-hidden w-full">
+      <div className="overflow-hidden w-full h-48">
         <div
           className="flex transition-transform space-x-4 duration-500"
           style={{
@@ -53,7 +53,7 @@ export default function Carousel() {
               key={index}
               src={image}
               alt={`Slide ${index}`}
-              className="w-1/3 object-cover"
+              className="w-1/3 h-full object-cover"
             />
           ))}
         </div>
@@ -65,23 +65,6 @@ export default function Carousel() {
       >
         ❯
       </button>
-
-      {/* Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {Array(Math.ceil(images.length / imagesPerSlide))
-          .fill()
-          .map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index * imagesPerSlide)}
-              className={`w-3 h-3 rounded-full ${
-                Math.floor(currentIndex / imagesPerSlide) === index
-                  ? "bg-gray-700"
-                  : "bg-gray-300"
-              }`}
-            ></button>
-          ))}
-      </div>
     </div>
   );
 }

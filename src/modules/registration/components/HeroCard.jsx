@@ -18,7 +18,7 @@ function HeroCard() {
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
   return (
-    <div className="relative w-full sm:h-64 xl:h-80 2xl:h-96 overflow-hidden">
+    <div className="relative w-full h-48 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
       <div
         className="flex transition-transform duration-500"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -28,7 +28,7 @@ function HeroCard() {
             key={index}
             src={image}
             alt={`Slide ${index}`}
-            className="flex-shrink-0"
+            className="object-cover h-full w-auto"
           />
         ))}
       </div>

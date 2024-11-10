@@ -1,3 +1,4 @@
+import AnnouncementCard from "../components/AnnouncementCard";
 import FooterCard from "../components/FooterCard";
 import HeroCard from "../components/HeroCard";
 import NavBar from "../components/NavBarComponents/NavBar";
@@ -11,6 +12,7 @@ function LandingPage() {
       <main className={mainStyles}>
         <HeroCard />
         <NewsCard />
+        <AnnouncementCard />
       </main>
       <FooterCard />
     </div>
