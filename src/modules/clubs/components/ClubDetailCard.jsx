@@ -18,7 +18,8 @@ function ClubDetailCard() {
         const clubData = response.data.data;
         setClubName(clubData.name);
         setBuildingLocation(clubData.building ? clubData.building.name: "Not located!");
-        setMemberCount(clubData.club_member.length);
+        const members = clubData.club_member.filter((member) => member.status === "Accepted");
+        setMemberCount(members.length);
 
         const admins = clubData.club_member.filter((member) => member.is_admin);
         setAdminCount(admins.length);
@@ -35,7 +36,7 @@ function ClubDetailCard() {
       alert(response.data.message);
     } catch (err) {
       console.error("Error sending join request:", err);
-      alert("Failed to send join request.");
+      alert("Failed to send join request. Already a member or pending request!");
     }
   };
 
