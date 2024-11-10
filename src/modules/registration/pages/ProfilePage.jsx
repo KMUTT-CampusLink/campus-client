@@ -127,28 +127,24 @@ function ProfilePage() {
 
               <div className="mx-6 my-2">
                 <p className="flex justify-between">
-                  <span>Country</span>
-                  <span>{profileData.address}</span>
-                </p>
-                <p className="flex justify-between">
                   <span>Address</span>
                   <span>{profileData.address}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Subdistrict</span>
-                  <span>{profileData.address}</span>
+                  <span>{profileData.sub_district}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>District</span>
-                  <span>{profileData.address}</span>
+                  <span>{profileData.district}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Province</span>
-                  <span>{profileData.address}</span>
+                  <span>{profileData.province}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Postal Code</span>
-                  <span>{profileData.address}</span>
+                  <span>{profileData.postal_code}</span>
                 </p>
               </div>
             </div>
