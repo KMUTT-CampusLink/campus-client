@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useStudentData } from "../services/queries";
 import { CardErrorSkeleton, SInfoLoadingSkeleton } from "../styles/Skeletons";
 
@@ -5,12 +6,11 @@ function SInfoCard({ onStudentData }) {
   const studentId = localStorage.getItem("studentId");
   const { data: student, isLoading, isError } = useStudentData(studentId);
 
-  // Once student data is available, pass it to the parent using onStudentData
-  if (student) {
-    if (onStudentData) {
-      onStudentData(student); // Call the function only if it's provided
+  useEffect(() => {
+    if (student && onStudentData) {
+      onStudentData(student); // Call only when student data is available
     }
-  }
+  }, [student, onStudentData]); // This will only run once the student data is available
 
   if (isLoading) return <SInfoLoadingSkeleton />;
   if (isError) return <CardErrorSkeleton data="student" />;
