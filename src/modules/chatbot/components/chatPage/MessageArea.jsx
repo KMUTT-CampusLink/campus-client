@@ -11,7 +11,7 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
   }, [dummyAns]);
 
   return (
-    <div className=' overflow-auto px-10 max-h-[12rem] sm:max-h-[18rem]'>{
+    <div className=' overflow-auto px-10 sm:px-4 lg:px-14 max-h-[19rem] sm:max-h-[16rem] md:max-h-[20rem] xl:max-h-[22rem]'>{
       questions.map((question, i) => {
         return <div key ={i}>
           <div className='flex flex-row-reverse'>
@@ -19,7 +19,7 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
           </div>
           <br />
           <div className='flex flex-row gap-6'>
-            <MessageReply answer = {dummyAns[i]} profilePic = {profilePic} />
+            <MessageReply dummyAns = {dummyAns} questions = {questions} answer = {dummyAns[i]} profilePic = {profilePic} />
           </div>
           <br/>
           <div ref={messageendref} />
