@@ -42,7 +42,7 @@ export default function ClubRoutes() {
           element: <JoinFormPage />,
         },
         {
-          path: "club-home", // Club home page at "/clubs/club-home"
+          path: "club-home/:clubId", // Club home page at "/clubs/club-home"
           element: <ClubHomePage />,
         },
       ],
@@ -73,19 +73,19 @@ export default function ClubRoutes() {
           element: <ClubCreatePage />,
         },
         {
-          path: "view-requests", // Admin view requests at "/clubs/admin/view-requests"
+          path: ":clubId/view-requests", // Admin view requests at "/clubs/admin/view-requests"
           element: <ViewRequest />,
         },
         {
-          path: "create-post", // Admin create post at "/clubs/admin/create-post"
+          path: "create-post/:clubId", // Admin create post at "/clubs/admin/create-post"
           element: <CreatePost />,
         },
         {
-          path: "create-announcement", // Admin create announcement at "/clubs/admin/create-announcement"
+          path: "create-announcement/:clubId", // Admin create announcement at "/clubs/admin/create-announcement"
           element: <CreateAnnouncement />,
         },
         {
-          path: "notifications", // Admin notifications at "/clubs/admin/notifications"
+          path: ":clubId/notifications", // Admin notifications at "/clubs/admin/notifications"
           element: <AdminNotification />,
         },
       ],

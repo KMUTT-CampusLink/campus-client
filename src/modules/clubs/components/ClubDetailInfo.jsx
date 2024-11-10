@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
-import { set } from "react-hook-form";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 function ClubDetailInfo() {
   const {clubId } = useParams();
@@ -17,7 +16,7 @@ function ClubDetailInfo() {
   useEffect(() => {
     const fetchClubDetails = async () => {
     try{
-      const response = await axios.get(`http://localhost:3000/api/clubs/${clubId}`);
+      const response = await axiosInstance.get(`/clubs/${clubId}`);
       setTitle(response.data.data.name);
       setDescription(response.data.data.description);
       setContent(response.data.data.content);
@@ -41,7 +40,7 @@ function ClubDetailInfo() {
   // Function to update description
   const handlePost = async () => {
     try{
-      await axios.put(`http://localhost:3000/api/clubs/${clubId}`, {
+      await axiosInstance.put(`/clubs/${clubId}`, {
         description: newDescription,
         content: newContent,
       });
@@ -72,7 +71,7 @@ function ClubDetailInfo() {
 
       <div className="flex flex-wrap justify-end md:mt-12 mt-6">
         <Link
-          to="/clubs/club-home"
+          to={`/clubs/club-home/${clubId}`}
           className="bg-[#F69800] text-white px-2 md:px-14 py-2 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 md:ml-6 block"
         >
           Announcements
