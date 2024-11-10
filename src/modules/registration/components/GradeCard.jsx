@@ -55,12 +55,12 @@ const GradeCard = ({ semester, semesterId, studentId }) => {
       </div>
 
       <div className="p-4 divide-y divide-gray-200">
-        {courses.length === 0 ? (
+        {courses?.length === 0 ? (
           <div className="text-center py-4 text-gray-500">
             No courses available for this semester.
           </div>
         ) : (
-          courses.map((course, index) => (
+          courses?.map((course, index) => (
             <div
               key={course.id || index}
               className="py-3 flex justify-between items-center"

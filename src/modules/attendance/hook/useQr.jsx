@@ -47,9 +47,9 @@ const useQr = () => {
 
   function qrButton() {
     return (
-      <div className="flex justify-center mt-4">
+      <div className="flex flex-col items-center">
         <button
-          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-12 rounded-lg w-full md:w-1/2 lg:w-1/4"
+          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
           onClick={() => handleGenerateQrButton(1001)}
         >
           Generate QR CODE

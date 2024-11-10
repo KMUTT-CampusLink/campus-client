@@ -8,6 +8,8 @@ import DropCoursePage from "../pages/DropCoursePage";
 import LandingPage from "../pages/LandingPage";
 import RegisDetailsPage from "../pages/RegisDetailsPage";
 import AuthRoute from "../middleware/AuthRoute";
+import PeriodPage from "../pages/PeriodPage";
+import ProfilePage from "../pages/ProfilePage";
 
 export default function RegisRoutes() {
   return [
@@ -22,6 +24,10 @@ export default function RegisRoutes() {
     {
       path: "login",
       element: <LoginPage />,
+    },
+    {
+      path: "period",
+      element: <PeriodPage />,
     },
     {
       path: "course",
@@ -68,6 +74,14 @@ export default function RegisRoutes() {
       element: (
         <AuthRoute>
           <TranscriptPage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "profile",
+      element: (
+        <AuthRoute>
+          <ProfilePage />
         </AuthRoute>
       ),
     },
