@@ -1,11 +1,11 @@
-import { Children } from "react";
+import { Navigate } from "react-router-dom";
 import TrDashboard from "../pages/Teacher/TrDashboard";
 import TrCourseDescription from "../pages/Teacher/TrCourseDescription";
 import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
 import TrTasks from "../pages/Teacher/TrTasks";
 import TrDiscussion from "../pages/Teacher/TrDiscussion";
 import StDashboard from "../pages/Students/StDashboard";
-import StAllCourses from "../pages/Students/StAllCourses"
+import StAllCourses from "../pages/Students/StAllCourses";
 import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
@@ -13,10 +13,23 @@ import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
 
+// const role = "Professor";
+const role = localStorage.getItem("userRole");
+
 export default function CourseRoutes() {
   return [
     {
-      path: "Tr",
+      path: "",
+      element:
+        role === "Student" ? (
+          <Navigate to="/courses/st" />
+        ) : (
+          <Navigate to="/courses/tr" />
+        ),
+    },
+    {
+      path: "tr",
+      element: role === "Professor" ? null : <Navigate to="/courses/st" />,
       children: [
         {
           path: "",
@@ -58,7 +71,8 @@ export default function CourseRoutes() {
       ],
     },
     {
-      path: "St",
+      path: "st",
+      element: role === "Student" ? null : <Navigate to="/courses/tr" />,
       children: [
         {
           path: "",
@@ -94,8 +108,8 @@ export default function CourseRoutes() {
             },
             {
               path: "comment",
-              element: <Comment/>,
-            }
+              element: <Comment />,
+            },
           ],
         },
         // {

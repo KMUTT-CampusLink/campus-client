@@ -11,7 +11,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAllCourses, useCoursesByStudentID } from "../../services/queries.js";
 
 const StDashboard = () => {
-  const studentId = "STU00019";
+  const studentId = localStorage.getItem("studentId");
   const semesterId = 1010;
   const navigate = useNavigate();
   const { data: courses, isLoading } = useCoursesByStudentID(studentId);
