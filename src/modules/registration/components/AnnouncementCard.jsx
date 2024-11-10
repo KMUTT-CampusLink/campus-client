@@ -6,15 +6,19 @@ function AnnouncementCard() {
     "/regis/announce.png",
     "/regis/announce.png",
     "/regis/announce.png",
-    "/regis/newsHolder.jpg",
-    "/regis/newsHolder.jpg",
+    "/regis/announce.png",
+    "/regis/announce.png",
+    "/regis/announce.png",
   ];
   return (
-    <div className="">
-      <div className="flex justify-between">
-        <h2 className="font-bold text-xl">NewsCard</h2>
-        <span className="text-sm text-gray-800">View More</span>
+    <div className="my-6">
+      <div className="flex justify-between items-center">
+        <h2 className="font-bold text-xl">Announcements</h2>
+        <span className="text-sm text-gray-500 hover:text-black hover:cursor-pointer">
+          View More
+        </span>
       </div>
+      <div className="divider m-0 mb-4 w-1/2 lg:w-1/5"></div>
       <div>
         <Carousel images={images} />
       </div>
