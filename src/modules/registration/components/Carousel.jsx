@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-const images = [
-  "/regis/newsHolder.jpg",
-  "/regis/announce.png",
-  "/regis/newsHolder.jpg",
-  "/regis/newsHolder.jpg",
-  "/regis/newsHolder.jpg",
-  "/regis/newsHolder.jpg",
-];
-
-export default function Carousel() {
+export default function Carousel({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const delay = 5000; // Change slide every 3 seconds
-  const imagesPerSlide = 3; // Number of images to show at once
+  const delay = 5000; // Change slide every 5 seconds
+  const spaceBetweenImages = 5;
+
+  // Detect the number of images per slide based on screen size
+  const getImagesPerSlide = () => (window.innerWidth < 640 ? 2 : 3);
+  const [imagesPerSlide, setImagesPerSlide] = useState(getImagesPerSlide());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setImagesPerSlide(getImagesPerSlide());
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const imageWidthPercentage = 100 / imagesPerSlide;
 
   // Adjust the current index to move one image at a time
   const handleNext = () => {
@@ -34,37 +40,38 @@ export default function Carousel() {
   return (
     <div className="relative w-full flex items-center">
       {/* Navigation Buttons Outside */}
-      <button
-        onClick={handlePrev}
-        className="p-2 bg-gray-700 text-white rounded-full mr-2"
-      >
+      <button onClick={handlePrev} className="p-2 text-black mr-2">
         ❮
       </button>
 
-      <div className="overflow-hidden w-full h-48">
+      <div className="overflow-hidden w-full h-24 md:h-32 lg:h-48">
         <div
-          className="flex transition-transform space-x-4 duration-500"
+          className="flex transition-transform duration-500"
           style={{
-            transform: `translateX(-${(currentIndex * 100) / imagesPerSlide}%)`,
+            transform: `translateX(-${
+              currentIndex * (imageWidthPercentage + spaceBetweenImages)
+            }%)`,
+            gap: `${spaceBetweenImages}%`,
           }}
         >
           {images.map((image, index) => (
             <img
               key={index}
               src={image}
-              alt={`Slide ${index}`}
-              className="w-1/3 h-full object-cover"
+              className="object-cover object-left h-full"
+              style={{ width: `${imageWidthPercentage}%` }}
             />
           ))}
         </div>
       </div>
 
-      <button
-        onClick={handleNext}
-        className="p-2 bg-gray-700 text-white rounded-full ml-2"
-      >
+      <button onClick={handleNext} className="p-2 text-black ml-2">
         ❯
       </button>
     </div>
   );
 }
+// PropTypes validation
+Carousel.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

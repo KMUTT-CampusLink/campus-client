@@ -28,7 +28,7 @@ function HeroCard() {
             key={index}
             src={image}
             alt={`Slide ${index}`}
-            className="object-cover h-full w-auto"
+            className="h-full min-w-full object-cover object-left"
           />
         ))}
       </div>
