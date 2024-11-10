@@ -33,24 +33,6 @@ function HeroCard() {
         ))}
       </div>
 
-      {/* Navigation Buttons */}
-      <button
-        onClick={() =>
-          setCurrentIndex(
-            currentIndex === 0 ? images.length - 1 : currentIndex - 1
-          )
-        }
-        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white p-2 rounded-full shadow"
-      >
-        ❮
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white p-2 rounded-full shadow"
-      >
-        ❯
-      </button>
-
       {/* Indicators */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
