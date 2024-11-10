@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 function CourseTable({ courses }) {
   return (
     <div className="bg-gray-200 rounded-md overflow-x-auto">
@@ -27,8 +26,3 @@ function CourseTable({ courses }) {
 }
 
 export default CourseTable;
-
-// PropTypes validation
-CourseTable.propTypes = {
-  courses: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
