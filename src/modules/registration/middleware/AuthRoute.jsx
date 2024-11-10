@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import authConfig from "../auth/authConfig";
+import popToast from "../../../utils/popToast";
 
 const AuthRoute = ({ children, allowed_roles }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,12 +18,10 @@ const AuthRoute = ({ children, allowed_roles }) => {
         // role-based access control
         if (allowed_roles) {
           const user_role = localStorage.getItem("userRole");
-          setIsAllowed((prev) =>
-            allowed_roles.filter(
+          setIsAllowed(
+            allowed_roles.some(
               (role) => role.toLowerCase() === user_role.toLowerCase()
-            ).length > 0
-              ? true
-              : false
+            )
           );
         }
       } catch (err) {
@@ -34,7 +33,20 @@ const AuthRoute = ({ children, allowed_roles }) => {
     };
 
     checkAuth();
-  }, []);
+  }, [allowed_roles]);
+
+  useEffect(() => {
+    // Show popToast when user is redirected, but only once
+    if (isLoading || error) return; // Do nothing if loading or error exists
+
+    if (!isAuthenticated) {
+      popToast("Please Login First", "warning");
+    }
+
+    if (!isAllowed) {
+      popToast("Access not Allowed", "warning");
+    }
+  }, [isAuthenticated, isAllowed, isLoading, error]);
 
   // If still loading, show loading state
   if (isLoading) {
