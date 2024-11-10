@@ -23,8 +23,8 @@ const ClubHomeMemLis = (props) => {
   }, [clubId]);
 
   const admins = clubMembers.filter((members) => members.is_admin);
-  const members = clubMembers.filter((members) => !members.is_admin);
-
+  const members = clubMembers.filter((members) => members.status === "Accepted" && !members.is_admin);
+  console.log(admins, members);
   const handleClick = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
@@ -38,11 +38,11 @@ const ClubHomeMemLis = (props) => {
 
   const renderName = (members) => {
     if(members.student) {
-      return `${members.student.firstname} ${members.student.lastname}`;
+      return `${members.student.firstname || ''} ${members.student.midname || ''} ${members.student.lastname || ''}`;
     }
 
     if(members.employee) {
-      return `${members.employee.firstname} ${members.employee.midname} ${members.employee.lastname}`;
+      return `${members.employee.firstname || ''} ${members.employee.midname || ''} ${members.employee.lastname || ''}`;
     }
     return "Unknown";
   };

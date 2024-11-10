@@ -4,7 +4,6 @@ import { axiosInstance } from '../../../utils/axiosInstance';
 
 const ViewRequest = () => {
   const [requests, setRequests] = useState([]);
-  //const clubId = 1026; // Replace with actual Club ID from the backend
   const {clubId} = useParams();
   
   // Fetch pending requests when the component mounts
@@ -61,10 +60,10 @@ const ViewRequest = () => {
 
   const renderName = (request) => {
     if (request.student) {
-      return `${request.student.firstname} ${request.student.lastname}`;
+      return `${request.student.firstname || ''} ${request.student.midname || ''} ${request.student.lastname || ''}`;
     }
     if (request.employee) {
-      return `Prof. ${request.employee.firstname} ${request.employee.midname || ''} ${request.employee.lastname}`;
+      return `Prof. ${request.employee.firstname || ''} ${request.employee.midname || ''} ${request.employee.lastname || ''}`;
     }
     return "Unknown Member";
   }; 
