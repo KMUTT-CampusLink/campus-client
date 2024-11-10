@@ -200,12 +200,14 @@
 // export default ClubHomePost;
 
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import ClubHomePostEditModal from "./ClubHomePostEditModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
 const ClubHomePost = (props) => {
+  const { clubId } = useParams();
   const [toggleVisiblity, setToggleVisible] = useState(false); // false for posts, true for announcements
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
@@ -218,7 +220,7 @@ const ClubHomePost = (props) => {
   useEffect(() => {
     const fetchClubPost = async () => {
       try {
-        const response = await axiosInstance.get("/clubs/posts");
+        const response = await axiosInstance.get(`/clubs/posts/${clubId}`);
         setClubPost(response.data.data);
       } catch (err) {
         console.error("Error fetching club post:", err);
@@ -226,13 +228,13 @@ const ClubHomePost = (props) => {
       }
     };
     fetchClubPost();
-  }, []);
+  }, [clubId]);
 
   // Fetch announcements
   useEffect(() => {
     const fetchClubAnnouncement = async () => {
       try {
-        const response = await axiosInstance.get("/clubs/announcements");
+        const response = await axiosInstance.get(`/clubs/announcements/${clubId}`);
         setClubAnnouncement(response.data.data);
       } catch (err) {
         console.error("Error fetching club announcement:", err);
@@ -240,7 +242,7 @@ const ClubHomePost = (props) => {
       }
     };
     fetchClubAnnouncement();
-  }, []);
+  }, [clubId]);
 
   // Sort posts and announcements by pin status
   const sortByPin = (list) => list.sort((a, b) => (b.ispin === a.ispin ? 0 : b.ispin ? 1 : -1));
@@ -293,6 +295,7 @@ const ClubHomePost = (props) => {
   };
 
   const { toggleLeft } = props;
+  const itemsToDisplay = toggleVisiblity ? clubAnnouncement : clubPost;
 
   return (
     <div
@@ -317,8 +320,12 @@ const ClubHomePost = (props) => {
           View Announcement
         </button>
       </div>
-
-      {(toggleVisiblity ? clubAnnouncement : clubPost).map((item) => (
+      {itemsToDisplay.length === 0 ? (
+        <p className="text-center text-gray-500 mt-6">
+        There are no {toggleVisiblity ? "announcements" : "posts"} available.
+      </p>
+      ) : (
+        itemsToDisplay.map((item) => (
         <div key={item.id} className="m-4 p-4 pt-0 md:p-6 border-solid border-[1px] rounded-lg h-max text-base">
           <div className="relative">
             <button
@@ -362,7 +369,8 @@ const ClubHomePost = (props) => {
             </button>
           </div>
         </div>
-      ))}
+      ))
+    )}
 
       <ClubHomePostEditModal isOpen={isModalOpen} onClose={closeModal} data={modalData} />
     </div>
