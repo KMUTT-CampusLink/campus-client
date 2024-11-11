@@ -65,7 +65,7 @@ const StudentAdd = () => {
             />
           </div>
           <form className=" text-[#7F483C]">
-            <div className="md:flex md:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
+            <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
 
               {/* Left side form inputs */}
               <div className="w-full">
