@@ -5,10 +5,26 @@ import React, { useState, useEffect } from "react";
 import StudentCard from "../components/StudentCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
+import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 
+const ITEMS_PER_PAGE = 12
 const StudentGrid = () => {
   const [students, setStudents] = useState([]);
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const selectedStudents = students.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(students.length / ITEMS_PER_PAGE);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,10 +71,29 @@ const StudentGrid = () => {
         </div>
 
         <div className="flex justify-center flex-wrap gap-x-7 gap-y-4 sm:gap-7 pt-4 md:pt-6 ">
-          {students.map((student) => (
+          {selectedStudents.map((student) => (
             <StudentCard key={student.id} student={student} />
           ))}
         </div>
+
+        <div className="flex justify-center items-center mt-6">
+          <button 
+            onClick={handlePrevPage} 
+            disabled={currentPage === 1} 
+            className="  rounded-full w-6 h-7 transition hover:shadow-xl shadow-sm"
+          >
+            {currentPage > 1 && <FontAwesomeIcon icon={faLessThan} />}
+          </button>
+          <span className="px-4 py-2 md:text-lg ">{currentPage} of {totalPages}</span>
+          <button 
+            onClick={handleNextPage} 
+            disabled={currentPage === totalPages} 
+            className=" rounded-full w-6 h-7 transition hover:shadow-xl shadow-sm"
+          >
+            {currentPage < totalPages && <FontAwesomeIcon icon={faGreaterThan} />}
+          </button>
+        </div>
+
       </main>
     </div>
   );
