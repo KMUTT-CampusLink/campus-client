@@ -1,4 +1,4 @@
-import NavBar from "../modules/registration/components/NavBarComponents/NavBar";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 
 const UnAuthorized = () => {

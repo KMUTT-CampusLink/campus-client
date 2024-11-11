@@ -1,7 +1,7 @@
-import NavBar from "../modules/registration/components/NavBarComponents/NavBar";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 
-const UnAuthorized = () => {
+const NotFound = () => {
   const navigate = useNavigate();
   return (
     <div className="w-full min-h-screen bg-white">
@@ -10,13 +10,13 @@ const UnAuthorized = () => {
         <div className="w-[25rem] h-auto">
           <img
             className="w-full h-full object-cover"
-            src="/logos/401.png"
+            src="/logos/404.png"
             alt=""
           />
         </div>
         <div className="flex flex-col items-center justify-center gap-8">
-          <p className="font-opensans font-semibold text-red-500 text-xl tracking-widest">
-            OOP! UNAUTHORIZED ACCESS
+          <p className="font-opensans font-semibold text-[#565872] text-xl tracking-widest">
+            OOP! NO PAGE FOUND
           </p>
           <button
             onClick={() => {
@@ -34,4 +34,4 @@ const UnAuthorized = () => {
   );
 };
 
-export default UnAuthorized;
+export default NotFound;
