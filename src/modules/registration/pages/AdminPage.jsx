@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarWeek } from "@fortawesome/free-solid-svg-icons";
 import { useAllSemesters } from "../services/queries";
-import FooterCard from "../components/FooterCard";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 
@@ -83,7 +82,6 @@ function AdminPage() {
           </div>
         </div>
       </main>
-      <FooterCard />
     </div>
   );
 }

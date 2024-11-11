@@ -8,8 +8,8 @@ import HeadLineCard from "../components/HeadLineCard";
 import SectionTablePopup from "../components/SectionTablePopup";
 import { useCourseBySearch, useGetEnrollmentHead } from "../services/queries";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
-
+import { ErrorSkeleton } from "../styles/Skeletons";
+import LoadingPage from "../../../pages/LoadingPage";
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
   const currentSemesterId = 1016;
@@ -49,7 +49,7 @@ function AddCoursePage() {
     setIsPopupOpen(true);
   };
 
-  if (isLoading) return <LoadingSkeleton />;
+  if (isLoading) return <LoadingPage />;
   if (isError) return <ErrorSkeleton />;
 
   return (

@@ -11,7 +11,8 @@ import {
   usePaymentStatus,
   useGetEnrollmentHead,
 } from "../services/queries";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
+import { ErrorSkeleton } from "../styles/Skeletons";
+import LoadingPage from "../../../pages/LoadingPage";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
@@ -66,12 +67,10 @@ function CourseRegisPage() {
     : 0;
 
   const totalCourses = courses?.length || 0;
-
-  // Use studentData to get programPrice instead of localStorage
   const grandTotal = studentData?.programprice || "N/A";
 
   if (isEnrollmentLoading || isCoursesLoading || isPaymentLoading) {
-    return <LoadingSkeleton />;
+    return <LoadingPage />;
   }
 
   if (enrollmentError || isCoursesError || isPaymentError) {
