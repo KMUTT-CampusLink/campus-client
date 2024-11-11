@@ -31,13 +31,9 @@ const StudentDetail = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const result = await fetch(
-          "http://localhost:3000/api/employ/getStu/" + id
-        );
-        const jsonResult = await result.json();
-        setStudents(jsonResult);
-
-        if (!jsonResult.uni_batch) {
+        const result = await axiosInstance.get(`employ/getEmp/${id}`);
+        setStudents(result.data);
+        if (!result.data.uni_batch) {
           console.error("Faculty data missing. Redirecting to main page.");
           navigate(`/employ/student`);
         }

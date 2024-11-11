@@ -2,7 +2,7 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
 import UpdatePopUp from "../components/UpdatePopUp";
 import { useState, useEffect } from "react";
-import axiosInstance from "../utils/axiosInstance.js";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 // Map faculty names to numbers
 const facultyMapping = {
@@ -61,25 +61,22 @@ const EmployeeUpdate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetch(
-          `http://localhost:3000/api/employ/getEmp/${id}`
-        );
-        const jsonResult = await result.json();
-
-        setEmployees(jsonResult);
+        const result = await axiosInstance.get(`employ/getEmp/${id}`);
+        //const result.data = result.data;
+        setEmployees(result.data);
         setFormData({
-          firstname: jsonResult.firstname || "",
-          midname: jsonResult.midname || "",
-          lastname: jsonResult.lastname || "",
-          faculty_id: jsonResult.faculty_id || "",
-          job_title: jsonResult.job_title || "",
-          position: jsonResult.position || "",
-          salary: jsonResult.salary || "",
-          gender: jsonResult.gender || "",
-          date_of_birth: jsonResult.date_of_birth || "",
-          //identification_no: jsonResult.identification_no || "",
-          //phone: jsonResult.phone || "",
-          //address: jsonResult.address || "",
+          firstname: result.data.firstname || "",
+          midname: result.data.midname || "",
+          lastname: result.data.lastname || "",
+          faculty_id: result.data.faculty_id || "",
+          job_title: result.data.job_title || "",
+          position: result.data.position || "",
+          salary: result.data.salary || "",
+          gender: result.data.gender || "",
+          date_of_birth: result.data.date_of_birth || "",
+          //identification_no: result.data.identification_no || "",
+          //phone: result.data.phone || "",
+          //address: result.data.address || "",
         });
       } catch (error) {
         console.error("Error fetching employee data:", error);
@@ -185,7 +182,7 @@ const EmployeeUpdate = () => {
 
     try {
       const response = await axiosInstance.post(
-        "/updateEmp/" + id,
+        "employ/updateEmp/" + id,
         filteredEmployeeData
       );
       if (response.status === 200) {

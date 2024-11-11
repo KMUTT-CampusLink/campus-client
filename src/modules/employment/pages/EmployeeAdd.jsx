@@ -2,7 +2,7 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
 import { useState } from "react";
-import axiosInstance from "../utils/axiosInstance.js";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 // Map faculty names to numbers
 const facultyMapping = {
@@ -172,7 +172,7 @@ const EmployeeAdd = () => {
     };
  
     try {
-      const response = await axiosInstance.post("/postEmp", employeeData);
+      const response = await axiosInstance.post("/employ/postEmp", employeeData);
  
       if (response.status === 200) {
         console.log('Employee added successfully');
