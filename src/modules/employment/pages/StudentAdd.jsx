@@ -59,12 +59,8 @@ const StudentAdd = () => {
             />
           </div>
           <form className=" text-[#7F483C]">
-<<<<<<< HEAD
-            <div className="md:flex md:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
-=======
             <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
 
->>>>>>> e853b0f1caf17af012e55d121c9def181581f83e
               {/* Left side form inputs */}
               <div className="w-full">
                 <div className="mb-4 ">
