@@ -5,6 +5,7 @@ import { logIn } from "../../services/api";
 import FormInput from "./FormInput";
 import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
+import popToast from "../../../../utils/popToast";
 
 function LoginForm() {
   const [campus_email, setCampusEmail] = useState("");
@@ -21,10 +22,12 @@ function LoginForm() {
       localStorage.setItem("userId", id);
       localStorage.setItem("userRole", role);
       localStorage.setItem("studentId", studentId);
+      popToast("Login Successful", "success");
       navigate("/regis");
     },
     onError: (error) => {
       console.error("Login failed:", error);
+      popToast("Login Failed", "error");
       setErrorMessage("Invalid email or password. Please try again.");
     },
   });
