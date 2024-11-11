@@ -11,6 +11,7 @@ const StudentUpdate = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const [formData, setFormData] = useState({
+<<<<<<< HEAD
     firstname: "",
     midname: "",
     lastname: "",
@@ -21,6 +22,22 @@ const StudentUpdate = () => {
     date_of_birth: "",
     phone: "",
     address: "",
+=======
+    firstname: '',
+    midname: '',
+    lastname: '',
+    program_id: '',
+    batch_id: '',
+    identification_no: '',
+    gender: '',
+    date_of_birth: '',
+    phone: '',
+    address: '',
+    sub_district: "",
+    district: "",
+    province: "",
+    postal_code: ""
+>>>>>>> e853b0f1caf17af012e55d121c9def181581f83e
   });
 
   const handleChange = (e) => {
@@ -144,10 +161,14 @@ const StudentUpdate = () => {
                     <option value="2024">2024</option>
                   </select>
                 </div>
+<<<<<<< HEAD
               </div>
 
               {/* Right side form inputs */}
               <div className="w-full">
+=======
+
+>>>>>>> e853b0f1caf17af012e55d121c9def181581f83e
                 <div className="mb-4">
                   <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Identification_no
@@ -162,6 +183,12 @@ const StudentUpdate = () => {
                     />
                   </div>
                 </div>
+
+              </div>
+
+              {/* Right side form inputs */}
+              <div className="w-full">
+                
 
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
@@ -206,10 +233,16 @@ const StudentUpdate = () => {
                   </div>
                 </div>
 
+<<<<<<< HEAD
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Phone_no
                   </label>
+=======
+
+                <div className="mb-9">
+                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">Phone_no</label>
+>>>>>>> e853b0f1caf17af012e55d121c9def181581f83e
                   <div className="flex items-center">
                     <input
                       type="text"
@@ -221,6 +254,7 @@ const StudentUpdate = () => {
                   </div>
                 </div>
 
+<<<<<<< HEAD
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Address
@@ -234,6 +268,83 @@ const StudentUpdate = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
+=======
+                <div className="border border-orange-300 rounded-md px-9 ">
+                    <div className="mb-4 mt-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Address
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="address"
+                          value={formData.address}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Sub-district
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="sub_district"
+                          value={formData.sub_district}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        District
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="district"
+                          value={formData.district}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Province
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="province"
+                          value={formData.province}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Postal Code
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="postal_code"
+                          value={formData.postal_code}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+>>>>>>> e853b0f1caf17af012e55d121c9def181581f83e
                 </div>
               </div>
             </div>
