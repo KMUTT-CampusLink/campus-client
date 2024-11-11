@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+import { useNavigate } from "react-router-dom";
 
 export default function AdministratorMainPage() {
   const navigate = useNavigate();
@@ -109,7 +110,9 @@ export default function AdministratorMainPage() {
                 (e.currentTarget.style.transform = "scale(1.05)")
               }
               onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              onClick={() => navigate("/security/administrator/lostandfoundform")}
+              onClick={() =>
+                navigate("/security/administrator/lostandfoundform")
+              }
             >
               Lost and Found
             </button>

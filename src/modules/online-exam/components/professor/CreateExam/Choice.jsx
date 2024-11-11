@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 export default function Choice({ onAddChoice, choices, onDeleteChoice }) {
   const [choice, setChoice] = useState('');
-
   // add choice
   const handleAddChoice = () => {
     if (choice.trim()) {
@@ -16,7 +15,7 @@ export default function Choice({ onAddChoice, choices, onDeleteChoice }) {
       <input
         className='border h-auto p-[10px] rounded-lg w-full'
         type="text"
-        placeholder="Add choice"
+        placeholder="Choice Text"
         value={choice}
         onChange={(e) => setChoice(e.target.value)}
       />

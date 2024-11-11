@@ -171,6 +171,7 @@ export default function MaintenanceRequestForm() {
           viewBox="0 0 24 24"
           stroke="currentColor"
           style={formStyles.icon}
+          onClick={() => navigate("/security/administrator/list")}         
         >
           <path
             strokeLinecap="round"

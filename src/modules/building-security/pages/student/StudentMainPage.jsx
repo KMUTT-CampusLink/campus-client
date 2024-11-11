@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+import { useNavigate } from "react-router-dom";
 
 export default function StudentMainPage() {
   const navigate = useNavigate();
