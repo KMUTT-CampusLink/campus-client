@@ -1,30 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function MaintenanceList() {
-  const requests = [
-    {
-      room: "CB305",
-      detail:
-        "It's pink backpack with my name tag It's pink backpack with my name tag It's pink backpack with my name tag",
-      status: "Processing",
-    },
-    {
-      room: "CB305",
-      detail:
-        "It's pink backpack with my name tag It's pink backpack with my name tag It's pink backpack with my name tag",
-      status: "Processed",
-    },
-    {
-      room: "CB305",
-      detail:
-        "It's pink backpack with my name tag It's pink backpack with my name tag It's pink backpack with my name tag",
-      status: "Finished",
-    },
-  ];
+  const [requests, setRequests] = useState([]); // State to hold fetched data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
+  // Fetch maintenance requests from the backend API
+  useEffect(() => {
+    fetch("http://localhost:3000/api/security/MaintenanceList") // Adjust URL if necessary
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setRequests(data.data); // Update state with fetched data
+        } else {
+          console.error("Failed to fetch maintenance requests:", data.message);
+          setError(data.message);
+        }
+        setLoading(false); // Stop loading indicator
+      })
+      .catch((error) => {
+        console.error("Error fetching maintenance requests:", error);
+        setError("Error fetching data");
+        setLoading(false); // Stop loading even on error
+      });
+  }, []);
+
+  // Style based on status
   const getStatusStyle = (status) => {
     switch (status) {
-      case "Processing":
+      case "Pending":
         return { color: "green" };
       case "Processed":
         return { color: "orange" };
@@ -35,11 +39,25 @@ export default function MaintenanceList() {
     }
   };
 
-  // Responsive styles with media queries
+  // Style based on priority
+  const getPriorityStyle = (priority) => {
+    switch (priority) {
+      case "High":
+        return { color: "red", fontWeight: "bold" };
+      case "Medium":
+        return { color: "orange", fontWeight: "bold" };
+      case "Low":
+        return { color: "green", fontWeight: "bold" };
+      default:
+        return { color: "black" };
+    }
+  };
+
+  // Page styles including responsive adjustments
   const pageStyles = {
     container: {
       maxWidth: "1000px",
-      margin: "50px auto", // Center container horizontally
+      margin: "50px auto",
       padding: "40px",
       backgroundColor: "#ffffff",
       borderRadius: "20px",
@@ -54,7 +72,7 @@ export default function MaintenanceList() {
     },
     tableHeader: {
       display: "grid",
-      gridTemplateColumns: "1fr 3fr 1fr",
+      gridTemplateColumns: "1fr 3fr 1fr 1fr", // Added column for Priority
       fontWeight: "bold",
       textAlign: "left",
       padding: "10px",
@@ -63,7 +81,7 @@ export default function MaintenanceList() {
     },
     requestCard: {
       display: "grid",
-      gridTemplateColumns: "1fr 3fr 1fr",
+      gridTemplateColumns: "1fr 3fr 1fr 1fr", // Adjusted to include Priority column
       alignItems: "center",
       padding: "20px",
       marginBottom: "15px",
@@ -91,57 +109,11 @@ export default function MaintenanceList() {
       fontSize: "36px",
       boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
     },
-    // Responsive adjustments with media queries
-    "@media (max-width: 1024px)": {
-      container: {
-        maxWidth: "90%", // Adjust width for tablet sizes
-        padding: "30px",
-      },
-      header: {
-        fontSize: "28px",
-      },
-      requestCard: {
-        padding: "15px",
-        gridTemplateColumns: "1fr 2fr 1fr",
-      },
-    },
-    "@media (max-width: 768px)": {
-      container: {
-        maxWidth: "95%", // Narrower width for mobile devices
-        padding: "20px",
-      },
-      header: {
-        fontSize: "24px",
-      },
-      tableHeader: {
-        display: "none", // Hide table headers on smaller screens
-      },
-      requestCard: {
-        gridTemplateColumns: "1fr", // Stack items vertically
-        padding: "15px",
-        textAlign: "center", // Center text for smaller devices
-      },
-      floatingButton: {
-        width: "50px", // Smaller button on mobile
-        height: "50px",
-        fontSize: "24px",
-      },
-    },
-    "@media (max-width: 480px)": {
-      container: {
-        padding: "15px",
-      },
-      header: {
-        fontSize: "20px",
-      },
-      requestCard: {
-        padding: "10px",
-      },
-      floatingButton: {
-        width: "40px", // Further reduce size for very small screens
-        height: "40px",
-        fontSize: "20px",
-      },
+    icon: {
+      cursor: "pointer",
+      color: "#8b5b34",
+      fontSize: "18px",
+      marginLeft: "10px",
     },
   };
 
@@ -149,23 +121,36 @@ export default function MaintenanceList() {
     <div style={pageStyles.container}>
       <h1 style={pageStyles.header}>Maintenance Request List</h1>
 
-      {/* Table Headers */}
-      <div style={pageStyles.tableHeader}>
-        <div>Room</div>
-        <div>Detail</div>
-        <div>Status</div>
-      </div>
-
-      {/* Request Cards */}
-      {requests.map((request, index) => (
-        <div key={index} style={pageStyles.requestCard}>
-          <div>{request.room}</div>
-          <div>{request.detail}</div>
-          <div style={getStatusStyle(request.status)}>
-            <span style={pageStyles.statusText}>{request.status}</span>
+      {/* Loading Indicator */}
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <>
+          {/* Table Headers */}
+          <div style={pageStyles.tableHeader}>
+            <div>Room</div>
+            <div>Detail</div>
+            <div>Status</div>
+            <div>Priority</div> {/* Priority column header */}
           </div>
-        </div>
-      ))}
+
+          {/* Request Cards */}
+          {requests.map((request, index) => (
+            <div key={index} style={pageStyles.requestCard}>
+              <div>{request.location}</div>
+              <div>{request.description}</div>
+              <div style={getStatusStyle(request.status)}>
+                <span style={pageStyles.statusText}>{request.status}</span>
+              </div>
+              <div style={getPriorityStyle(request.priority)}>
+                <span>{request.priority}</span> {/* Styled Priority */}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
 
       {/* Floating Add Button */}
       <div

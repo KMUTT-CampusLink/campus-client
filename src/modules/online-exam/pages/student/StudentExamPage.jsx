@@ -11,7 +11,7 @@ import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
 import useIsTabActive from "../../services/activeTab";
-import { getExamDataById, toggleExamStatus, submitExam, getStudentStatus, getRemainingTime } from "../../services/apis/studentApi";
+import { getExamDataById, toggleExamStatus, submitExam, getStudentStatus, getRemainingTime, getToggleAnswer } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
   const { examId } = useParams();
@@ -19,7 +19,7 @@ export default function StudentExamPage() {
   const [studentAnswers, setStudentAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState("00:00:00");
   const navigate = useNavigate();
-
+  
   if (!useIsTabActive()) {
     navigate("/exams/student/exam");
   }
@@ -94,7 +94,6 @@ export default function StudentExamPage() {
       let remainingTime = res.data.data;
       const intervalId = setInterval(() => {
         remainingTime -= 1000;
-
         if (remainingTime <= 0) {
           clearInterval(intervalId);
           setTimeLeft(0);
@@ -152,7 +151,8 @@ export default function StudentExamPage() {
     const res = await submitExam(examId, studentAnswers);
     if (res.status === 200) {
       const status = await toggleExamStatus(examId);
-      if (status.status === 200) {
+      const status2 = await getToggleAnswer(examId);
+      if (status.status === 200 && status2.status === 200) {
         navigate("/exams/student/exam");
       }
     }

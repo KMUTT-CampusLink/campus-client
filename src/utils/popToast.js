@@ -12,6 +12,7 @@ const popToast = (message, type, theme = "light") => {
     theme: theme,
     transition: Flip,
     type: type || "default",
+    bodyClassName: "toast-custom-font",
   });
 };
 
