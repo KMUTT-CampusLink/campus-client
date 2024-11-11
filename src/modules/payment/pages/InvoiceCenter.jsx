@@ -58,7 +58,7 @@ const InvoiceCenter = () => {
             <img
               src={ReceiptImage}
               alt="Receipt"
-              className={`w-50 h-80 mx-auto hover:rotate-6 cursor-pointer ${
+              className={`w-50 h-80 mx-auto cursor-pointer ${
                 isTilting ? "tilt" : ""
               }`}
               onClick={handleImageClick}

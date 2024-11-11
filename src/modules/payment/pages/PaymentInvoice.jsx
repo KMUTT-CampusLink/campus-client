@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
 import { transactions } from "../components/Transaction";
+import PartialSelect from "../components/partialSelect.jsx";
 import InvoiceImage from "../asset/invoice.svg";
 import ArrowLeft from "../asset/arrowL.svg";
 import { dotenv } from "dotenv";
@@ -10,6 +11,7 @@ import "../style/typography.css";
 const PaymentInvoice = () => {
   const { id } = useParams();
   const [invoice, setInvoice] = useState({});
+  const [showPartialSelect, setShowPartialSelect] = useState(false);
 
   const navigate = useNavigate();
 
@@ -108,6 +110,12 @@ const PaymentInvoice = () => {
         </div>
         <div className="flex justify-end w-full md:w-4/5 mx-auto">
           <button
+            className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 mr-2 rounded-md shadow-md body-1"
+            onClick={() => setShowPartialSelect(true)} //this send to partialSelect component
+          >
+            PARTIAL PAY
+          </button>
+          <button
             className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 rounded-md shadow-md body-1"
             onClick={handlePayment} // เมื่อกดปุ่มจะเรียกฟังก์ชัน handlePayment
           >
@@ -120,6 +128,9 @@ const PaymentInvoice = () => {
         alt="invoice"
         className="w-50 h-40 mx-auto mt-12"
       />
+      {showPartialSelect && (
+        <PartialSelect setShowPartialSelect={setShowPartialSelect} />
+      )}
     </div>
   );
 };

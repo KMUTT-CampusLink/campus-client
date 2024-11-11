@@ -3,6 +3,7 @@ import InvoiceCenter from "../pages/InvoiceCenter";
 import PaymentInvoice from "../pages/PaymentInvoice";
 import CheckoutSuccess from "../pages/CheckoutSuccess";
 import CheckoutCancel from "../pages/CheckoutCancel";
+import PartialPayment from '../pages/partialPayment';
 
 export default function PaymentRoutes() {
   return [
@@ -25,6 +26,10 @@ export default function PaymentRoutes() {
     {
       path: "/payment/checkout-cancel",
       element: <CheckoutCancel />,
+    },
+    {
+      path: "/payment/partial-payment/:id/:installmentCount",
+      element: <PartialPayment />,
     },
   ];
 }
