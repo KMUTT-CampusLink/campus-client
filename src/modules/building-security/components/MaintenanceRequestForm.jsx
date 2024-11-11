@@ -3,31 +3,31 @@ import { useNavigate } from "react-router-dom";
 
 export default function MaintenanceRequestForm() {
   const navigate = useNavigate();
-  const [building, setBuilding] = useState("");
-  const [room, setRoom] = useState("");
-  const [floor, setFloor] = useState("");
-  const [request, setRequest] = useState("");
+  const [location, setLocation] = useState("");
+  const [type, setType] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ building, room, floor, request });
+    console.log({ location, type, priority, status, description });
   };
 
-  // Inline style object for responsive design
   const formStyles = {
     container: {
-      maxWidth: "900px", // Form width
-      margin: "100px auto", // Center form vertically and horizontally
-      padding: "40px", // Padding inside the form
+      maxWidth: "900px",
+      margin: "100px auto",
+      padding: "40px",
       backgroundColor: "#ffffff",
-      borderRadius: "20px", // Rounded corners
-      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)", // Shadow for depth
+      borderRadius: "20px",
+      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
       textAlign: "center",
       position: "relative",
-      transform: "translateX(50px)", // Push the form further to the right
+      transform: "translateX(50px)",
     },
     header: {
-      fontSize: "36px", // Font size for title
+      fontSize: "36px",
       fontWeight: "bold",
       color: "#000",
       marginBottom: "10px",
@@ -41,7 +41,7 @@ export default function MaintenanceRequestForm() {
       display: "flex",
       justifyContent: "space-between",
       flexWrap: "wrap",
-      marginBottom: "30px", // Spacing between inputs
+      marginBottom: "30px",
     },
     formItemFullWidth: {
       width: "100%",
@@ -53,21 +53,21 @@ export default function MaintenanceRequestForm() {
     },
     select: {
       width: "100%",
-      padding: "20px", // Larger padding for fields
-      fontSize: "18px", // Larger font size
-      borderRadius: "30px", // Rounded corners
+      padding: "20px",
+      fontSize: "18px",
+      borderRadius: "30px",
       border: "1px solid #ccc",
       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
       appearance: "none",
       background:
-        "#f5f5f5 url(\"data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4z'/></svg>\") no-repeat right 20px center", // Dropdown icon
+        "#f5f5f5 url(\"data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4z'/></svg>\") no-repeat right 20px center",
       backgroundSize: "16px 16px",
       outline: "none",
     },
     textarea: {
       width: "100%",
-      padding: "20px", // Larger padding for textarea
-      fontSize: "18px", // Larger font size
+      padding: "20px",
+      fontSize: "18px",
       borderRadius: "15px",
       border: "1px solid #ccc",
       backgroundColor: "#f9f9f9",
@@ -87,11 +87,11 @@ export default function MaintenanceRequestForm() {
     submitBtn: {
       backgroundColor: "#8b5b34",
       color: "white",
-      padding: "20px 60px", // Larger button
-      borderRadius: "40px", // Rounded button
+      padding: "20px 60px",
+      borderRadius: "40px",
       border: "none",
       cursor: "pointer",
-      fontSize: "20px", // Larger font size for button text
+      fontSize: "20px",
       boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
       marginTop: "20px",
     },
@@ -99,7 +99,7 @@ export default function MaintenanceRequestForm() {
       position: "absolute",
       top: "20px",
       right: "20px",
-      width: "60px", // Size of the list button
+      width: "60px",
       height: "60px",
       borderRadius: "50%",
       backgroundColor: "#8b5b34",
@@ -111,59 +111,57 @@ export default function MaintenanceRequestForm() {
       boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
     },
     icon: {
-      width: "30px", // Larger icon for the list button
+      width: "30px",
       height: "30px",
     },
-    // Media queries for responsive design
     "@media (max-width: 768px)": {
       container: {
-        padding: "20px", // Reduce padding for smaller screens
-        margin: "50px auto", // Adjust margin for tablets
-        transform: "translateX(0px)", // Center it back on smaller screens
+        padding: "20px",
+        margin: "50px auto",
+        transform: "translateX(0px)",
       },
       header: {
-        fontSize: "28px", // Reduce header size for smaller screens
+        fontSize: "28px",
       },
       formGroup: {
-        flexDirection: "column", // Stack form fields vertically
+        flexDirection: "column",
       },
       formItemHalfWidth: {
-        width: "100%", // Full width form fields on small screens
+        width: "100%",
       },
       select: {
-        padding: "15px", // Adjust padding for inputs
-        fontSize: "16px", // Adjust font size for inputs
+        padding: "15px",
+        fontSize: "16px",
       },
       submitBtn: {
-        padding: "15px 40px", // Adjust button size for smaller screens
-        fontSize: "18px", // Adjust font size for button
+        padding: "15px 40px",
+        fontSize: "18px",
       },
     },
     "@media (max-width: 480px)": {
       container: {
-        padding: "15px", // Reduce padding for mobile devices
-        margin: "30px auto", // Smaller vertical margin on mobile
+        padding: "15px",
+        margin: "30px auto",
       },
       header: {
-        fontSize: "24px", // Further reduce header size on mobile
+        fontSize: "24px",
       },
       select: {
-        padding: "12px", // Smaller padding for inputs on mobile
-        fontSize: "14px", // Smaller font size for inputs on mobile
+        padding: "12px",
+        fontSize: "14px",
       },
       submitBtn: {
-        padding: "12px 30px", // Smaller button on mobile
-        fontSize: "16px", // Smaller button text
+        padding: "12px 30px",
+        fontSize: "16px",
       },
     },
   };
 
   return (
     <form onSubmit={handleSubmit} style={formStyles.container}>
-      {/* List Button */}
       <div
         style={formStyles.listButton}
-        onClick={() => console.log("Menu clicked")}
+        onClick={() => navigate("/security/administrator/list")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +169,6 @@ export default function MaintenanceRequestForm() {
           viewBox="0 0 24 24"
           stroke="currentColor"
           style={formStyles.icon}
-          onClick={() => navigate("/security/administrator/list")}         
         >
           <path
             strokeLinecap="round"
@@ -185,53 +182,72 @@ export default function MaintenanceRequestForm() {
       <h1 style={formStyles.header}>My Maintenance Requests</h1>
       <p style={formStyles.subtitle}>Detailed information</p>
 
-      {/* Building Field on Full Width */}
+      {/* Location Field on Full Width */}
       <div style={{ ...formStyles.formGroup, ...formStyles.formItemFullWidth }}>
         <select
-          value={building}
-          onChange={(e) => setBuilding(e.target.value)}
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           style={formStyles.select}
         >
-          <option value="">Building</option>
-          <option value="Building 1">Building 1</option>
-          <option value="Building 2">Building 2</option>
+          <option value="">Location</option>
+          <option value="Building A">Building A</option>
+          <option value="Building B">Building B</option>
         </select>
       </div>
 
-      {/* Room No. and Floor Fields on New Line */}
+      {/* Type and Priority Fields on New Line */}
       <div style={formStyles.formGroup}>
         <div style={formStyles.formItemHalfWidth}>
           <select
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
+            value={type}
+            onChange={(e) => setType(e.target.value)}
             style={formStyles.select}
           >
-            <option value="">Room No.</option>
-            <option value="Room 101">Room 101</option>
-            <option value="Room 102">Room 102</option>
+            <option value="">Type</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="HVAC">HVAX</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
         <div style={formStyles.formItemHalfWidth}>
           <select
-            value={floor}
-            onChange={(e) => setFloor(e.target.value)}
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
             style={formStyles.select}
           >
-            <option value="">Floor</option>
-            <option value="Floor 1">Floor 1</option>
-            <option value="Floor 2">Floor 2</option>
+            <option value="">Priority</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
           </select>
         </div>
       </div>
 
-      {/* Textarea for Request */}
+      {/* Status Field */}
+      <div style={formStyles.formGroup}>
+        <div style={formStyles.formItemFullWidth}>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            style={formStyles.select}
+          >
+            <option value="">Status</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Description Textarea */}
       <div>
-        <label style={formStyles.label}>My Request is :</label>
+        <label style={formStyles.label}>Description:</label>
         <textarea
-          value={request}
-          onChange={(e) => setRequest(e.target.value)}
-          placeholder="Type something..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Describe the maintenance request..."
           style={formStyles.textarea}
         ></textarea>
       </div>
