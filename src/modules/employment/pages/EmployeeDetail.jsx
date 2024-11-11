@@ -191,7 +191,9 @@ const EmployeeDetail = () => {
                     Address
                   </p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                    {employee?.address?.address}
+                    {employee.address.address} {employee.address.sub_district}{" "}
+                    {employee.address.district} {employee.address.province}{" "}
+                    {employee.address.postal_code}
                   </p>
                 </div>
               </div>

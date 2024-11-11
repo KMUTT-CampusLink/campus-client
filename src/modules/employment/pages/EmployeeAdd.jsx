@@ -168,7 +168,11 @@ const EmployeeAdd = () => {
       date_of_birth: formData.date_of_birth,
       identification_no: formData.identification_no,
       phone: formData.phone,
-      address: formData.address
+      address: formData.address,
+      sub_district: formData.sub_district,
+      province: formData.province,
+      district: formData.district,
+      postal_code: formData.postal_code,
     };
  
     try {

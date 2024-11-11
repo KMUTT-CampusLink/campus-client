@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import StudentCard from "../components/StudentCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import SDeletePopUp from "../components/SDeletePopUp";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const calculateAge = (dob) => {
   const today = new Date();
@@ -31,7 +32,7 @@ const StudentDetail = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const result = await axiosInstance.get(`employ/getEmp/${id}`);
+        const result = await axiosInstance.get(`employ/getStu/${id}`);
         setStudents(result.data);
         if (!result.data.uni_batch) {
           console.error("Faculty data missing. Redirecting to main page.");
@@ -169,7 +170,9 @@ const StudentDetail = () => {
                     Address
                   </p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                    {student.address}
+                    {student.address.address} {student.address.sub_district}{" "}
+                    {student.address.district} {student.address.province}{" "}
+                    {student.address.postal_code}
                   </p>
                 </div>
               </div>

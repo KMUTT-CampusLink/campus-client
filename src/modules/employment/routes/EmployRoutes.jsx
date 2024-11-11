@@ -7,48 +7,82 @@ import StudentAdd from "../pages/StudentAdd";
 import StudentDetail from "../pages/StudentDetail";
 import StudentUpdate from "../pages/StudentUpdate";
 import StudentGrid from "../pages/StudentGrid";
-
-
+import AuthRoute from "../../registration/middleware/AuthRoute";
 export default function EmployRoutes() {
-  const role = localStorage.getItem("userRole");
   return [
     {
       path: "",
-      element: <LandingPage />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <LandingPage />
+        </AuthRoute>
+      ),
     },
 
     {
       path: "employee",
-      element: <EmployeeGrid />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <EmployeeGrid />
+        </AuthRoute>
+      ),
     },
     {
       path: "employeeDetail/:id",
-      element: <EmployeeDetail />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <EmployeeDetail />
+        </AuthRoute>
+      ),
     },
     {
       path: "employeeAdd",
-      element: <EmployeeAdd />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <EmployeeAdd />
+        </AuthRoute>
+      ),
     },
     {
       path: "employeeUpdate/:id",
-      element: <EmployeeUpdate />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <EmployeeUpdate />
+        </AuthRoute>
+      ),
     },
 
     {
       path: "student",
-      element: <StudentGrid />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <StudentGrid />
+        </AuthRoute>
+      ),
     },
     {
       path: "studentDetail/:id",
-      element: <StudentDetail />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <StudentDetail />
+        </AuthRoute>
+      ),
     },
     {
       path: "studentAdd",
-      element: <StudentAdd />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <StudentAdd />
+        </AuthRoute>
+      ),
     },
     {
       path: "studentUpdate/:id",
-      element: <StudentUpdate />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <StudentUpdate />
+        </AuthRoute>
+      ),
     },
   ];
 }
