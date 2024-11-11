@@ -1,19 +1,20 @@
 import EmployeeAdd from "../pages/EmployeeAdd";
 import EmployeeDetail from "../pages/EmployeeDetail";
-import EmployeeGrid from "../pages/EmployeeGrid"
+import EmployeeGrid from "../pages/EmployeeGrid";
 import EmployeeUpdate from "../pages/EmployeeUpdate";
-import LandingPage from "../pages/LandingPage"
-import StudentAdd from "../pages/StudentAdd"
-import StudentDetail from "../pages/StudentDetail"
-import StudentUpdate from "../pages/StudentUpdate"
-import StudentGrid from "../pages/StudentGrid"
+import LandingPage from "../pages/LandingPage";
+import StudentAdd from "../pages/StudentAdd";
+import StudentDetail from "../pages/StudentDetail";
+import StudentUpdate from "../pages/StudentUpdate";
+import StudentGrid from "../pages/StudentGrid";
 
 
 export default function EmployRoutes() {
+  const role = localStorage.getItem("userRole");
   return [
     {
       path: "",
-      element: <LandingPage/>
+      element: <LandingPage />,
     },
 
     {
@@ -22,32 +23,32 @@ export default function EmployRoutes() {
     },
     {
       path: "employeeDetail/:id",
-      element: <EmployeeDetail />
+      element: <EmployeeDetail />,
     },
     {
       path: "employeeAdd",
-      element: <EmployeeAdd />
+      element: <EmployeeAdd />,
     },
     {
       path: "employeeUpdate/:id",
-      element: <EmployeeUpdate />
+      element: <EmployeeUpdate />,
     },
-    
+
     {
       path: "student",
       element: <StudentGrid />,
     },
     {
       path: "studentDetail/:id",
-      element: <StudentDetail />
+      element: <StudentDetail />,
     },
     {
       path: "studentAdd",
-      element: <StudentAdd />
+      element: <StudentAdd />,
     },
     {
       path: "studentUpdate/:id",
-      element: <StudentUpdate />
-    }
+      element: <StudentUpdate />,
+    },
   ];
 }
