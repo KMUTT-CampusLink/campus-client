@@ -33,6 +33,10 @@ const EmployeeAdd = () => {
     identification_no: "",
     phone: "",
     address: "",
+    sub_district: "",
+    district: "",
+    province: "",
+    postal_code: ""
   });
 
   const [validationErrors, setValidationErrors] = useState({});
@@ -119,10 +123,6 @@ const EmployeeAdd = () => {
         "Phone number is required and should contain 10-15 digits.";
     }
 
-    // Validate address
-    if (!formData.address) {
-      errors.address = "Address is required.";
-    }
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -203,7 +203,7 @@ const EmployeeAdd = () => {
             />
           </div>
           <form className=" text-[#7F483C]">
-            <div className="md:flex md:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
+            <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
               <div className="w-full">
                 <div className="mb-4 ">
@@ -343,10 +343,8 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-              </div>
 
-              {/* Right side form inputs */}
-              <div className="w-full">
+                
                 <div className="mb-4 ">
                   <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Salary
@@ -400,6 +398,11 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
+              </div>
+
+              {/* Right side form inputs */}
+              <div className="w-full">
+
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Date_of_birth
@@ -440,7 +443,7 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-9">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Phone_no
                   </label>
@@ -459,26 +462,85 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
+                
+                <div className="border border-orange-300 rounded-md px-9 ">
+                    <div className="mb-4 mt-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Address
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="address"
+                          value={formData.address}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
 
-                <div className="mb-4">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Address
-                  </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
-                  {validationErrors.address && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.address}
-                    </p>
-                  )}
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Sub-district
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="sub_district"
+                          value={formData.sub_district}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        District
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="district"
+                          value={formData.district}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Province
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="province"
+                          value={formData.province}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                        Postal Code
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          name="postal_code"
+                          value={formData.postal_code}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                        />
+                      </div>
+                    </div>
                 </div>
+                
+
               </div>
             </div>
 
