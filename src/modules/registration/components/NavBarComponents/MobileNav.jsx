@@ -20,10 +20,6 @@ const MobileNav = ({ navigationLinks }) => {
     <>
       <div className="w-4/5 h-full overflow-x-hidden flex flex-grow flex-col justify-between">
         <div className="mx-auto my-6">
-          {/* <FontAwesomeIcon
-            icon={faDocker}
-            className="text-black w-20 h-20 mr-4"
-          /> */}
           <img
             className="w-[6rem] h-[6rem]"
             src="/logos/mb-nav-logo.png"

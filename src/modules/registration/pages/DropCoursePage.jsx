@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
 import NavBar from "../components/NavBarComponents/NavBar";
 import HeadLineCard from "../components/HeadLineCard";
-import Alert from "../components/Alert";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useActiveCoursesByStudentId } from "../services/queries";
 import { useDeleteEnrollmentDetail } from "../services/mutations";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
+import { ErrorSkeleton } from "../styles/Skeletons";
+import popToast from "../../../utils/popToast";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function DropCoursePage() {
   const navigate = useNavigate();
@@ -23,42 +24,27 @@ function DropCoursePage() {
   const mutation = useDeleteEnrollmentDetail();
 
   const [selectedEnrollmentId, setSelectedEnrollmentId] = useState(null);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState("");
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const handleDropCourses = async () => {
     if (!selectedEnrollmentId) {
-      setAlertMessage("No course selected to drop.");
-      setAlertSeverity("error");
-      setIsAlertVisible(true);
+      popToast("No course selected to drop.", "warning");
       return;
     }
 
     try {
       await mutation.mutateAsync({ enrollmentDetailId: selectedEnrollmentId });
-      setAlertMessage("Selected course has been dropped successfully.");
-      setAlertSeverity("success");
+      popToast("Course Successfully Dropped", "success");
       queryClient.invalidateQueries("courses");
-      setIsAlertVisible(true);
     } catch (error) {
       console.error("Error dropping course:", error);
-      setAlertMessage("Failed to drop the selected course. Please try again.");
-      setAlertSeverity("error");
-      setIsAlertVisible(true);
+      popToast(
+        "Failed to drop the selected course. Please try again.",
+        "error"
+      );
     }
   };
 
-  useEffect(() => {
-    if (isAlertVisible) {
-      const timer = setTimeout(() => {
-        setIsAlertVisible(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isAlertVisible]);
-
-  if (isLoading) return <LoadingSkeleton />;
+  if (isLoading) return <LoadingPage />;
   if (isError) return <ErrorSkeleton />;
 
   return (
@@ -68,14 +54,6 @@ function DropCoursePage() {
         <HeadLineCard title="Drop Courses" link="/regis/course/detail" />
         <div className="divider"></div>
         <div className="bg-white p-6 shadow-md rounded-md">
-          {isAlertVisible && (
-            <Alert
-              severity={alertSeverity}
-              message={alertMessage}
-              onClose={() => setIsAlertVisible(false)}
-            />
-          )}
-
           {courses?.length === 0 ? (
             <div className="text-center py-6">
               <p>No active courses available for this student.</p>

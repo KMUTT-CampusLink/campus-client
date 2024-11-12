@@ -11,15 +11,16 @@ import {
   usePaymentStatus,
   useGetEnrollmentHead,
 } from "../services/queries";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
+import { ErrorSkeleton } from "../styles/Skeletons";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
-  const currentSemesterId = 2;
+  const currentSemesterId = 1016;
 
   const [headId, setHeadId] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
-
+  const regis = "registration";
   const {
     data: enrollmentHeadData,
     error: enrollmentError,
@@ -66,12 +67,10 @@ function CourseRegisPage() {
     : 0;
 
   const totalCourses = courses?.length || 0;
-
-  // Use studentData to get programPrice instead of localStorage
   const grandTotal = studentData?.programprice || "N/A";
 
   if (isEnrollmentLoading || isCoursesLoading || isPaymentLoading) {
-    return <LoadingSkeleton />;
+    return <LoadingPage />;
   }
 
   if (enrollmentError || isCoursesError || isPaymentError) {
@@ -119,18 +118,38 @@ function CourseRegisPage() {
                     </span>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 py-4">
-                  <Link to="add">
-                    <button className={`${button} h-full`}>Add Course</button>
-                  </Link>
+                {(regis === "registration" || regis === "late") && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 py-10">
+                    <Link to="add">
+                      <button className={`${button} h-full`}>Add Course</button>
+                    </Link>
+                    <Link to="drop">
+                      <button className={`${button} h-full`}>
+                        Drop Course
+                      </button>
+                    </Link>
+                    <Link to="/payment" className="sm:col-span-2">
+                      <button className={`${button}`}>Payment</button>
+                    </Link>
+                  </div>
+                )}
+                {regis === "no" && (
+                  <>
+                    <div className="bg-red-500 text-white text-center font-bold p-4 rounded-md mt-10">
+                      Not In Time
+                    </div>
+                    <p className="text-sm text-gray-500 text-center my-4">
+                      Please check the registration time again.
+                    </p>
+                  </>
+                )}
+                {regis === "withdraw" && (
                   <Link to="drop">
-                    <button className={`${button} h-full`}>Drop Course</button>
+                    <button className={`${button} my-10`}>
+                      Withdraw Course
+                    </button>
                   </Link>
-                  <Link to="/payment" className="sm:col-span-2">
-                    <button className={`${button}`}>Payment</button>
-                  </Link>
-                </div>
+                )}
               </div>
             </div>
 
@@ -140,47 +159,7 @@ function CourseRegisPage() {
                   Course Table
                 </h3>
               </div>
-
-              {isCoursesLoading ? (
-                <div className="bg-gray-200 rounded-md overflow-x-auto animate-pulse">
-                  <table className="min-w-full text-left border">
-                    <thead>
-                      <tr className="bg-[#c3554e] text-white">
-                        <th className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </th>
-                        <th className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </th>
-                        <th className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </th>
-                        <th className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="odd:bg-white even:bg-gray-100">
-                        <td className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </td>
-                        <td className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </td>
-                        <td className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </td>
-                        <td className="border px-4 py-2">
-                          <div className="h-4 bg-gray-400 rounded w-4"></div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <CourseTable courses={Array.isArray(courses) ? courses : []} />
-              )}
+              <CourseTable courses={Array.isArray(courses) ? courses : []} />
             </div>
           </div>
         </div>
