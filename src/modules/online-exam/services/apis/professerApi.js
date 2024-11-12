@@ -14,6 +14,7 @@ export const createNewExam = async (exam) => {
 export const getExams = async () => {
   try {
     const response = await axiosInstance.get("/exams/professor/getExams");
+    console.log(response);
     return response;
   } catch (error) {
     return error.response.data;
