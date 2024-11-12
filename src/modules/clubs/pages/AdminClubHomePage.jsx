@@ -1,6 +1,6 @@
 import React from "react";
 import ClubHomeMemLis from "../components/ClubHomeMemLis";
-import ClubHomePost from "../components/ClubHomePost";
+import ClubHomePost from "../components/AdminClubHomePost";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
