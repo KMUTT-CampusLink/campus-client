@@ -12,7 +12,7 @@ import {
   useGetEnrollmentHead,
 } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
-import LoadingPage from "../../../pages/LoadingPage";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");

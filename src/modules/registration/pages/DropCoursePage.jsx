@@ -9,7 +9,7 @@ import { useActiveCoursesByStudentId } from "../services/queries";
 import { useDeleteEnrollmentDetail } from "../services/mutations";
 import { ErrorSkeleton } from "../styles/Skeletons";
 import popToast from "../../../utils/popToast";
-import LoadingPage from "../../../pages/LoadingPage";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function DropCoursePage() {
   const navigate = useNavigate();

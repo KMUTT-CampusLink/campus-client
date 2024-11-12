@@ -9,7 +9,7 @@ import SectionTablePopup from "../components/SectionTablePopup";
 import { useCourseBySearch, useGetEnrollmentHead } from "../services/queries";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { ErrorSkeleton } from "../styles/Skeletons";
-import LoadingPage from "../../../pages/LoadingPage";
+import LoadingPage from "../../dev/pages/LoadingPage";
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
   const currentSemesterId = 1016;

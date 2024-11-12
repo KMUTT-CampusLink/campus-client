@@ -16,7 +16,7 @@ import {
 } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
 import SInfoCard from "../components/SInfoCard";
-import LoadingPage from "../../../pages/LoadingPage";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function ProfilePage() {
   const studentId = localStorage.getItem("studentId");

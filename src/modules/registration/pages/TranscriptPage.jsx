@@ -5,7 +5,7 @@ import TranscriptCard from "../components/TranscriptCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import { useTranscriptByStudentId } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
-import LoadingPage from "../../../pages/LoadingPage";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function TranscriptPage() {
   const studentId = localStorage.getItem("studentId");
