@@ -7,8 +7,9 @@ import HeadLineCard from "../components/HeadLineCard";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useActiveCoursesByStudentId } from "../services/queries";
 import { useDeleteEnrollmentDetail } from "../services/mutations";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
+import { ErrorSkeleton } from "../styles/Skeletons";
 import popToast from "../../../utils/popToast";
+import LoadingPage from "../../../pages/LoadingPage";
 
 function DropCoursePage() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function DropCoursePage() {
     }
   };
 
-  if (isLoading) return <LoadingSkeleton />;
+  if (isLoading) return <LoadingPage />;
   if (isError) return <ErrorSkeleton />;
 
   return (

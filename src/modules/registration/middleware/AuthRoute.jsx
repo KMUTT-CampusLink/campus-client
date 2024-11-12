@@ -16,7 +16,7 @@ const AuthRoute = ({ children, allowed_roles }) => {
         setIsAuthenticated(!!authStatus); // Authenticated if authStatus is true
 
         // role-based access control
-        if (allowed_roles) {
+        if (authStatus && allowed_roles) {
           const user_role = localStorage.getItem("userRole");
           setIsAllowed(
             allowed_roles.some(

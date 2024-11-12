@@ -34,7 +34,7 @@ const NavBar = () => {
     },
     {
       name: "Registration",
-      href: "/regis/period",
+      href: "/regis",
       sublinks: [],
       subhrefs: [],
     },
