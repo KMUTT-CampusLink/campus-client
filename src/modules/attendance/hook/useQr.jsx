@@ -32,11 +32,11 @@ const useQr = () => {
 
   function detail() {
     return (
-      <div className="flex flex-col">
-        <span className="text-2xl font-bold text-orange-500">
+      <div className="flex flex-col p-4 space-y-2 md:space-y-4">
+        <span className="text-xl md:text-2xl font-bold text-orange-500">
           About Classroom
         </span>
-        <div className="text-lg font-semibold">
+        <div className="text-base md:text-lg font-semibold">
           <div>CSC-230 Computer Architecture & Design</div>
           <div>Lecturer - Arjan xxxxxxxx</div>
           <div>Time - 1:30 to 4:30 PM (Thursday)</div>
@@ -47,9 +47,9 @@ const useQr = () => {
 
   function qrButton() {
     return (
-      <div>
+      <div className="flex flex-col items-center">
         <button
-          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-1/6"
+          className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
           onClick={() => handleGenerateQrButton(1001)}
         >
           Generate QR CODE

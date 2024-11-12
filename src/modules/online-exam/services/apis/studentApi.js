@@ -2,7 +2,9 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 
 export const getStudentExamsById = async (sectionId) => {
   try {
-    const response = await axiosInstance.get(`/exams/student/getAllExam?&sectionId=${sectionId}`);
+    const response = await axiosInstance.get(
+      `/exams/student/getAllExam?&sectionId=${sectionId}`
+    );
     return response;
   } catch (error) {
     return error.response.data;
@@ -80,26 +82,48 @@ export const getExamTitle = async (examId) => {
 };
 
 export const getInprogressExam = async (studentId) => {
-    try {
-        const response = await axiosInstance.get(
-        `/exams/student/getInprogressExam?studentId=${studentId}`
-        );
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getInprogressExam?studentId=${studentId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const getStudentAnswerById = async (examId) => {
-    try {
-        const response = await axiosInstance.get(
-        `/exams/student/getStudentAnswer?examId=${examId}`
-        );
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getStudentAnswer?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getToggleAnswer = async (examId) => {
+  try {
+    const response = await axiosInstance.put(
+      `/exams/student/getToggleAnswer?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentReview = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getStudentReview?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const getStudentStatus = async (examId) => {
     try {
