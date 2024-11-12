@@ -16,7 +16,7 @@ const HomePage = () => {
     <div className="w-full min-h-screen">
       <NavBar />
       {/* Main Page */}
-      <div className="w-full flex flex-col items-center min-h-screen pt-[4rem] md:pt-[4.5rem] gap-[1rem] navigation pagination scrollbar">
+      <div className="w-full flex flex-col items-center min-h-screen pt-[4rem] md:pt-[4.5rem] gap-[1rem] pagination scrollbar">
         <PhotoSlider />
         <NewsEvents />
         <NewsUpdates />

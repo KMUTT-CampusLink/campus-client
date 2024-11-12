@@ -11,7 +11,7 @@ const ImageElement = ({ src }) => {
 
 const Announcer = () => {
   return (
-    <div className="w-full max-w-7xl flex flex-col items-center justify-center gap-4 sm:gap-6">
+    <div className="w-full max-w-7xl flex flex-col items-center justify-center gap-4 sm:gap-6 navigation-announcement">
       {/* Title */}
       <div className="w-[90%] h-fit flex flex-col itemse-center justify-start">
         <p className="font-geologica font-bold text-[20px] px-[1rem]">
