@@ -1,4 +1,11 @@
-.navigation {
+.navigation-update {
+  --swiper-navigation-size: 25px;
+  --swiper-navigation-top-offset: 35%;
+  --swiper-navigation-sides-offset: 10px;
+  --swiper-navigation-color: #de5248;
+}
+
+.navigation-announcement {
   --swiper-navigation-size: 25px;
   --swiper-navigation-top-offset: 50%;
   --swiper-navigation-sides-offset: 10px;
@@ -6,7 +13,11 @@
 }
 
 @media (min-width: 640px) {
-  .navigation {
+  .navigation-update {
+    --swiper-navigation-size: 40px;
+  }
+
+  .navigation-announcement {
     --swiper-navigation-size: 40px;
   }
 }
