@@ -16,6 +16,7 @@ export default function ProfessorHomePage() {
 
   const getAllExams = async () => {
     const res = await getExams();
+    console.log(res)
     setExams(res.data);
   }
 
