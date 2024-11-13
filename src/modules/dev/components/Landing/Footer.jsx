@@ -83,7 +83,9 @@ const Footer = () => {
                   <p className="font-semibold mb-1">{section.title}</p>
                   {section.links.map((link, linkIndex) => (
                     <Link key={linkIndex} to={link.href}>
-                      <span className="text-sm">{link.name}</span>
+                      <span className="text-sm hover:text-white">
+                        {link.name}
+                      </span>
                     </Link>
                   ))}
                 </div>

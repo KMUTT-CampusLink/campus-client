@@ -13,7 +13,7 @@ import {
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { getExamDataById, updateExam } from "../../services/apis/professerApi";
+import { getExamDataById, updateExam, uploadFile } from '../../services/apis/professerApi';
 
 export default function ProfessorEditExamPage() {
   const { examId } = useParams();
@@ -138,19 +138,22 @@ export default function ProfessorEditExamPage() {
         score: question.score || defaultScore,
         options: question.options.map((option) => ({
           choiceText: option.choiceText,
-          choiceImg: option.choiceImg,
+          // choiceImg: option.choiceImg,
           isCorrect: option.isCorrect,
           choiceId: option.choiceId,
         })),
       })),
     };
+    // const results = await Promise.all(finalExam.questions.map(async (question) => {
+    //   console.log(question.image);
+    //   // const uploadImage = await uploadFile(question.image);
+    // }));
     const res = await updateExam(finalExam);
     if (res.status === 200) {
-      navigate(`/exams/professor/setting/${1}`);
+      navigate(`/exams/professor/setting/${examId}`);
     }
+    // console.log(finalExam)
   };
-
-  // console.log(exam)
 
   return (
     <div className="w-auto">

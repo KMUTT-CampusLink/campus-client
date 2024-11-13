@@ -181,6 +181,7 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
     return error.response.data;
   }
 };
+
  export const updateExamAnnouncement = async (examId, isAnnounced) => {
   try {
     const response = await axiosInstance.put(
@@ -190,6 +191,17 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
         publicScoreStatus: isAnnounced,
       }
     );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
+export const uploadFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axiosInstance.post("/exams/professor/uploadFile", file);
     return response;
   } catch (error) {
     return error.response.data;
