@@ -45,7 +45,7 @@ function ProfilePage() {
     <div className={containerDivStyles}>
       <NavBar />
       <main className={mainStyles}>
-        <div className="grid grid-cols-1 md:grid-cols-3 bg-gray-100 p-6 rounded-lg shadow-lg">
+        <div className="grid grid-cols-1 min-[1200px]:grid-cols-3 bg-gray-100 p-6 rounded-lg shadow-lg">
           <div className="col-span-2 p-4">
             <h2 className="text-3xl font-bold">My Profile</h2>
             {/* Logo Section */}
