@@ -18,10 +18,11 @@ function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: logIn,
     onSuccess: (data) => {
-      const { id, role, studentId } = data;
+      const { id, role, studentId, empId } = data;
       localStorage.setItem("userId", id);
       localStorage.setItem("userRole", role);
       localStorage.setItem("studentId", studentId);
+      localStorage.setItem("empId", empId);
       popToast("Login Successful", "success");
       navigate("/regis");
     },

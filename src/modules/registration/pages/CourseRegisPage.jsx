@@ -43,17 +43,9 @@ function CourseRegisPage() {
   } = usePaymentStatus(headId);
 
   useEffect(() => {
-    if (enrollmentHeadData) {
-      console.log(enrollmentHeadData);
-      setHeadId(enrollmentHeadData.head_id);
-    }
-  }, [enrollmentHeadData]);
-
-  useEffect(() => {
-    if (payment) {
-      setPaymentStatus(payment.data);
-    }
-  }, [payment]);
+    if (enrollmentHeadData) setHeadId(enrollmentHeadData.head_id);
+    if (payment) setPaymentStatus(payment.data);
+  }, [enrollmentHeadData, payment]);
 
   const [studentData, setStudentData] = useState(null);
 
