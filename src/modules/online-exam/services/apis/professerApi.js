@@ -181,3 +181,17 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
     return error.response.data;
   }
 };
+ export const updateExamAnnouncement = async (examId, isAnnounced) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/professor/updateExamAnnouncement",
+      {
+        examId: examId,
+        publicScoreStatus: isAnnounced,
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
