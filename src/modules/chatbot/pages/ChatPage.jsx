@@ -85,7 +85,7 @@ const ChatPage = () => {
             {/* messaging area  */}
             <div className= {` w-full sm:w-[90%] flex ${startChat? `gap-0 pt-0 mt-10 pb-0 mb-0 flex-col-reverse h-[100%] `: ` h-[80%] gap-6 lg:gap-8 xl:gap-10 flex-col py-0 `} justify-start`}>
                 {/* bot profile div  */}
-                <div className= {`${startChat ? `hidden`: `visible`} w-full h-fit flex justify-center items-center `}>
+                <div className= {`${startChat ? `hidden`: `visible`} w-full h-fit flex justify-center items-center lg:mt-6 `}>
                     <img src={botImage} alt="batman" className="object-contain w-[6rem] md:w-[8rem] lg:w-[9rem] h-auto rounded-full"/>
                 </div>
                 {/* faqs div  */}
@@ -102,7 +102,7 @@ const ChatPage = () => {
                 }
             </div>
             {/* chat input area  */}
-            <div className=' w-full h-fit flex flex-col justify-center items-center pb-0 mb-0'>
+            <div className=' w-full h-fit flex flex-col justify-center items-center pb-0 lg:pb-2 mb-0'>
                 <form action="#" className={`bg-[white] shadow-lg w-4/5 min-h-[3rem] sm:min-h-[4rem] max-h-[3.5rem] sm:max-h-[4rem] md:max-h-[4.5rem] rounded-[1.75rem] flex flex-row justify-between px-4 py-1 sm:py-2 gap-4 sm:pt-1 md:pt-2`}>
                     <div className='flex w-full h-fit'>
                         <textarea

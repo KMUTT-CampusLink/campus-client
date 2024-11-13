@@ -19,9 +19,9 @@ const MessageReply = ({dummyAns, questions, answer, profilePic}) => {
               <div className="📦 w-1 sm:w-2 h-1 sm:h-2 rounded-[1px] sm:rounded-sm"></div>
             </div>
           </div> 
-          : 
-          <div className=' max-w-[22rem] sm:max-w-[25rem] md:max-w-[30rem] p-1'>
-            <pre className='font-opensans text-sm lg:text-md max-w-full whitespace-pre-wrap '>{answer}</pre>
+          :
+          <div className=' max-w-[22rem] sm:max-w-[25rem] md:max-w-[30rem] lg:max-w-[45rem] xl:max-w-[50rem] p-1'>
+            <pre className='font-opensans text-sm lg:text-base max-w-full whitespace-pre-wrap '>{answer}</pre>
           </div>
         }
     </>
