@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "../../../utils/axiosInstance";
-axiosInstance;
 
 const ITEMS_PER_PAGE = 12;
 const StudentGrid = () => {
@@ -92,9 +91,7 @@ const StudentGrid = () => {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
-            >
-              {" "}
-            </input>
+            ></input>
           </div>
           <button
             onClick={handleClick}

@@ -122,7 +122,7 @@ const StudentAdd = () => {
                     <option value="" disabled>
                       Select Program
                     </option>
-                    <option value="Computer Science">Computer Science</option>
+                    <option value="Computer Science"> Bachelor of Computer Science</option>
                     <option value="Environmental Engneering">
                       Environmental Engneering
                     </option>
