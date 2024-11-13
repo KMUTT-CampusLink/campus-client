@@ -50,7 +50,7 @@ const EmployeeUpdate = () => {
     sub_district: "",
     district: "",
     province: "",
-    postal_code: ""
+    postal_code: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -383,8 +383,6 @@ const EmployeeUpdate = () => {
 
               {/* Right side form inputs */}
               <div className="w-full">
-                
-
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Date_of_birth
@@ -444,87 +442,84 @@ const EmployeeUpdate = () => {
                     <p className="text-red-500 text-xs">{errors.phone}</p>
                   )}
                 </div>
-                
+
                 <div className="border border-orange-300 rounded-md px-9 ">
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Address
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="address"
-                          placeholder={employees.address || "Enter Address"}
-                          value={formData.address || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Address
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="address"
+                        placeholder={employees.address || "Enter Address"}
+                        value={formData.address || ""}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                          <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                            Sub-district
-                          </label>
-                          <div className="flex items-center">
-                            <input
-                              type="text"
-                              name="sub_district"
-                              value={formData.sub_district || ""}
-                              onChange={handleChange}
-                              className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                            />
-                          </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Sub-district
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="sub_district"
+                        value={formData.sub_district || ""}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        District
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="district"
-                          value={formData.district || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      District
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="district"
+                        value={formData.district || ""}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Province
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="province"
-                          value={formData.province || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Province
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="province"
+                        value={formData.province || ""}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Postal Code
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="postal_code"
-                          value={formData.postal_code || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Postal Code
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="postal_code"
+                        value={formData.postal_code || ""}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
                 </div>
-                
-
-
               </div>
             </div>
 
