@@ -1,24 +1,15 @@
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-// Map faculty names to numbers
-const facultyMapping = {
-  "Engineering": 1001,
-  "Information_Technology": 1010,
-  "Science": 1011,
-  "Architecture": 1009,
-  "Liberal Art": 1002,
-  "Business": 1012,
-  "Environmental": 1008,
-  "Education": 1007,
-};
+const jobTitles = ["Professor", "Management", "Staff", "Driver"];
 
 const EmployeeAdd = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [faculties, setFaculties] = useState([]);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -36,7 +27,7 @@ const EmployeeAdd = () => {
     sub_district: "",
     district: "",
     province: "",
-    postal_code: ""
+    postal_code: "",
   });
 
   const [validationErrors, setValidationErrors] = useState({});
@@ -48,6 +39,20 @@ const EmployeeAdd = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      try {
+        const result = await axiosInstance.get(`employ/getFaculty`);
+        setFaculties(result.data);
+        console.log(result.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+
+    fetchFaculties();
+  }, []);
 
   const validateForm = () => {
     const errors = {};
@@ -123,7 +128,6 @@ const EmployeeAdd = () => {
         "Phone number is required and should contain 10-15 digits.";
     }
 
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -145,22 +149,21 @@ const EmployeeAdd = () => {
   };
 
   const handleSumbit = async (e) => {
- 
     e.preventDefault();
- 
+
     console.log("Submit button clicked");
     // Debugging: Check if this logs
     setShowPopup(false);
- 
-    const facultyNumber = facultyMapping[formData.faculty_id];
-    console.log(facultyNumber)
-    console.log(formData.faculty_id)
- 
+
+    //const facultyNumber = facultyMapping[formData.faculty_id];
+    // console.log(facultyNumber);
+    console.log(formData.faculty_id);
+
     const employeeData = {
       firstname: formData.firstname,
       midname: formData.midname,
       lastname: formData.lastname,
-      faculty_id: facultyNumber,
+      faculty_id: formData.faculty_id,
       job_title: formData.job_title,
       position: formData.position,
       salary: formData.salary,
@@ -174,22 +177,23 @@ const EmployeeAdd = () => {
       district: formData.district,
       postal_code: formData.postal_code,
     };
- 
+
     try {
-      const response = await axiosInstance.post("/employ/postEmp", employeeData);
- 
+      const response = await axiosInstance.post(
+        "/employ/postEmp",
+        employeeData
+      );
+
       if (response.status === 200) {
-        console.log('Employee added successfully');
+        console.log("Employee added successfully");
         setShowPopup(false);
         navigate("/employ/employee");
       } else {
-        console.error('Error adding employee:', response.data);
+        console.error("Error adding employee:", response.data);
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Cannot create user:", error);
     }
- 
   };
 
   return (
@@ -271,7 +275,8 @@ const EmployeeAdd = () => {
                 </div>
 
                 {/* Faculty dropdown */}
-                <div className="mb-4">
+
+                {/* <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Faculty
                   </label>
@@ -300,7 +305,37 @@ const EmployeeAdd = () => {
                       {validationErrors.faculty_id}
                     </p>
                   )}
+                </div> */}
+
+                {/* up to here  */}
+
+                {/* 1 */}
+                <div className="mb-4">
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Faculty
+                  </label>
+                  <select
+                    name="faculty_id"
+                    value={formData.faculty_id}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                  >
+                    <option value="" disabled>
+                      Select Faculty
+                    </option>
+                    {faculties.map((faculty) => (
+                      <option key={faculty.id} value={faculty.id}>
+                        {faculty.name}
+                      </option>
+                    ))}
+                  </select>
+                  {validationErrors.faculty_id && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.faculty_id}
+                    </p>
+                  )}
                 </div>
+                {/* 2 */}
 
                 <div className="mb-4 ">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
@@ -313,12 +348,14 @@ const EmployeeAdd = () => {
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     >
-                      <option value="">Select Job-title</option>
-                      <option value="Student">Student</option>
-                      <option value="Professor">Professor</option>
-                      <option value="Management">Management</option>
-                      <option value="Staff">Staff</option>
-                      <option value="Driver">Driver</option>
+                      <option value="" disabled>
+                        Select Job Title
+                      </option>
+                      {jobTitles.map((title) => (
+                        <option key={title} value={title}>
+                          {title}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   {validationErrors.job_title && (
@@ -348,7 +385,6 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                
                 <div className="mb-4 ">
                   <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Salary
@@ -401,12 +437,10 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-
               </div>
 
               {/* Right side form inputs */}
               <div className="w-full">
-
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Date_of_birth
@@ -466,92 +500,101 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-                
+
                 <div className="border border-orange-300 rounded-md px-9 ">
-                    <div className="mb-4 mt-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Address
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="address"
-                          value={formData.address}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4 mt-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Address
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Sub-district
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="sub_district"
-                          value={formData.sub_district}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Sub-district
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="sub_district"
+                        value={formData.sub_district}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        District
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="district"
-                          value={formData.district}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      District
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="district"
+                        value={formData.district}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Province
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="province"
-                          value={formData.province}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Province
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="province"
+                        value={formData.province}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Postal Code
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="postal_code"
-                          value={formData.postal_code}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Postal Code
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="postal_code"
+                        value={formData.postal_code}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
                 </div>
-                
-
               </div>
             </div>
 
             {/* Buttons Section */}
             <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
-              <button onClick={handleClickback} className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Cancel</button>
-              <button type="button" onClick={handleAddClick} className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Add</button>
+              <button
+                onClick={handleClickback}
+                className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleAddClick}
+                className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm"
+              >
+                Add
+              </button>
             </div>
           </form>
         </div>

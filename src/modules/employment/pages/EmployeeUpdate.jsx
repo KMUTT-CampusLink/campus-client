@@ -4,35 +4,14 @@ import UpdatePopUp from "../components/UpdatePopUp";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-// Map faculty names to numbers
-const facultyMapping = {
-  Engineering: 1001,
-  Information_Technology: 1010,
-  Science: 1011,
-  Architecture: 1009,
-  "Liberal Art": 1002,
-  Business: 1012,
-  Environmental: 1008,
-  Education: 1007,
-};
-
-const facultyMappingName = {
-  1001: "Engineering",
-  1010: "Information_Technology",
-  1011: "Science",
-  1009: "Architecture",
-  1002: "Liberal Art",
-  1008: "Environmental",
-  1007: "Education",
-};
-
-const jobTitles = ["Student", "Professor", "Management", "Staff", "Driver"];
+const jobTitles = ["Professor", "Management", "Staff", "Driver"];
 
 const EmployeeUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [facultyList, setFacultyList] = useState([]);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -50,7 +29,7 @@ const EmployeeUpdate = () => {
     sub_district: "",
     district: "",
     province: "",
-    postal_code: ""
+    postal_code: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -60,13 +39,14 @@ const EmployeeUpdate = () => {
       ...formData,
       [name]: value,
     });
+    //console.log("FormData on change:", { ...formData });
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    // Fetch employee data
+    const fetchEmployeeData = async () => {
       try {
         const result = await axiosInstance.get(`employ/getEmp/${id}`);
-        //const result.data = result.data;
         setEmployees(result.data);
         setFormData({
           firstname: result.data.firstname || "",
@@ -78,53 +58,56 @@ const EmployeeUpdate = () => {
           salary: result.data.salary || "",
           gender: result.data.gender || "",
           date_of_birth: result.data.date_of_birth || "",
-          //identification_no: result.data.identification_no || "",
-          //phone: result.data.phone || "",
-          //address: result.data.address || "",
+          identification_no: result.data.identification_no || "",
+          phone: result.data.phone || "",
+          address: result.data.address.address || "",
+          sub_district: result.data.address.sub_district || "",
+          district: result.data.address.district || "",
+          province: result.data.address.province || "",
+          postal_code: result.data.address.postal_code || "",
         });
+        // console.log("FormData after fetching:", {
+        //   ...formData,
+        // });
       } catch (error) {
         console.error("Error fetching employee data:", error);
       }
     };
 
-    fetchData();
+    // Fetch faculty data for the dropdown
+    const fetchFacultyList = async () => {
+      try {
+        const response = await axiosInstance.get(`employ/getFaculty`); // Update with your actual API endpoint
+        setFacultyList(response.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+
+    fetchEmployeeData();
+    fetchFacultyList();
   }, [id]);
-  const facultyName = facultyMappingName[formData.faculty_id];
 
-  console.log("Employee get Data: " + employees);
+  //console.log(employees);
 
-  // Validation function to check for form errors (without required checks)
   const validateForm = () => {
     const errors = {};
 
-    // First Name validation: only letters if provided
     if (formData.firstname && !/^[a-zA-Z]+$/.test(formData.firstname))
       errors.firstname = "First name must contain only letters";
-
-    // Middle Name validation: only letters if provided
     if (formData.midname && !/^[a-zA-Z]+$/.test(formData.midname))
       errors.midname = "Middle name must contain only letters";
-
-    // Last Name validation: only letters if provided
     if (formData.lastname && !/^[a-zA-Z]+$/.test(formData.lastname))
       errors.lastname = "Last name must contain only letters";
-
-    // Position validation: only letters and spaces if provided
     if (formData.position && !/^[a-zA-Z\s]+$/.test(formData.position))
       errors.position = "Position must contain only letters and spaces";
-
-    // Identification No validation: numeric if provided
     if (
       formData.identification_no &&
       !/^[a-zA-Z0-9]+$/.test(formData.identification_no)
     )
       errors.identification_no = "Identification number must be alphanumeric";
-
-    // Phone validation: 10-15 digits if provided
     if (formData.phone && !/^\d{10,15}$/.test(formData.phone))
       errors.phone = "Phone number must be between 10 and 15 digits";
-
-    // Validate date of birth (cannot be in the future)
     if (formData.date_of_birth) {
       const dob = new Date(formData.date_of_birth);
       const today = new Date();
@@ -133,50 +116,31 @@ const EmployeeUpdate = () => {
       }
     }
 
-    setErrors(errors); // Update state with errors
-    return Object.keys(errors).length === 0; // Return true if no errors
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleClickback = () => {
     navigate(`/employ/employeeDetail/${id}`);
   };
+
   const handleUpdateClick = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Only show popup if form is valid
       setShowPopup(true);
     }
   };
+
   const handleClosePopup = () => {
     setShowPopup(false);
   };
 
-  const handleSumbit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    console.log("Submit button clicked");
-    // Debugging: Check if this logs
     setShowPopup(false);
 
-    const facultyNumber = facultyMapping[formData.faculty_id];
-    console.log(facultyNumber);
-
-    const employeeData = {
-      firstname: formData.firstname,
-      midname: formData.midname,
-      lastname: formData.lastname,
-      faculty_id: facultyNumber,
-      job_title: formData.job_title,
-      position: formData.position,
-      salary: formData.salary,
-      gender: formData.gender,
-      date_of_birth: formData.date_of_birth,
-      identification_no: formData.identification_no,
-      phone: formData.phone,
-      address: formData.address,
-    };
-
-    console.log("Employee Data:", employeeData);
+    const employeeData = { ...formData };
 
     const filteredEmployeeData = Object.fromEntries(
       Object.entries(employeeData).filter(([key, value]) => value)
@@ -186,13 +150,12 @@ const EmployeeUpdate = () => {
 
     try {
       const response = await axiosInstance.post(
-        "employ/updateEmp/" + id,
+        `employ/updateEmp/${id}`,
         filteredEmployeeData
       );
       if (response.status === 200) {
-        console.log("Employee update successfully");
-        setShowPopup(false);
-        navigate("/employ/employeeDetail/" + id);
+        console.log("Employee updated successfully");
+        navigate(`/employ/employeeDetail/${id}`);
       } else {
         console.error("Error updating employee:", response.data);
       }
@@ -201,13 +164,17 @@ const EmployeeUpdate = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 10);
+  };
+
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
       <NavBar />
 
       <main className="pt-16 md:pt-20 px-5 md:px-20 ">
         <div className=" space-y-5 md:space-y-7 mt-2 md:mt-4">
-          {/* Employee Avatar */}
           <div className="flex justify-center">
             <img
               src="https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
@@ -220,7 +187,6 @@ const EmployeeUpdate = () => {
 
           <form className=" text-[#7F483C]">
             <div className="md:flex md:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
-              {/* Left side form inputs */}
               <div className="w-full">
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
@@ -229,48 +195,46 @@ const EmployeeUpdate = () => {
                   <input
                     name="firstname"
                     type="text"
-                    placeholder={employees.firstname || "Enter First Name"}
-                    value={formData.firstname || ""} // Use value from state
+                    placeholder={formData.firstname || "Enter FirstName"}
+                    value={formData.firstname}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px] "
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   />
                   {errors.firstname && (
                     <p className="text-red-500 text-xs">{errors.firstname}</p>
                   )}
                 </div>
 
-                <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                <div className="mb-4 ">
+                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Middle Name
                   </label>
-                  <input
-                    name="midname"
-                    type="text"
-                    placeholder={employees.midname || "Enter Middle Name"}
-                    value={formData.midname || ""} // Use value from state
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                  />
-                  {errors.midname && (
-                    <p className="text-red-500 text-xs">{errors.midname}</p>
-                  )}
+                  <div className="flex items-center">
+                    <input
+                      name="midname"
+                      type="text"
+                      placeholder={formData.midname || "Enter MidName"}
+                      value={formData.midname}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                    />
+                  </div>
                 </div>
 
-                <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                <div className="mb-4 ">
+                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Last Name
                   </label>
-                  <input
-                    name="lastname"
-                    type="text"
-                    placeholder={employees.lastname || "Enter Last Name"}
-                    value={formData.lastname || ""} // Use value from state
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                  />
-                  {errors.lastname && (
-                    <p className="text-red-500 text-xs">{errors.lastname}</p>
-                  )}
+                  <div className="flex items-center">
+                    <input
+                      name="lastname"
+                      type="text"
+                      placeholder={formData.lastname || "Enter lastName"}
+                      value={formData.lastname}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                    />
+                  </div>
                 </div>
 
                 <div className="mb-4">
@@ -279,29 +243,28 @@ const EmployeeUpdate = () => {
                   </label>
                   <select
                     name="faculty_id"
-                    value={facultyName || ""} // Use value from state
+                    value={formData.faculty_id}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
                     <option value="" disabled>
                       Select Faculty
                     </option>
-                    {Object.keys(facultyMapping).map((faculty) => (
-                      <option key={faculty} value={faculty}>
-                        {faculty.replace("_", " ")}
+                    {facultyList.map((faculty) => (
+                      <option key={faculty.id} value={faculty.id}>
+                        {faculty.name}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                {/* Job Title as Dropdown */}
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Job Title
                   </label>
                   <select
                     name="job_title"
-                    value={formData.job_title || ""} // Use value from state
+                    value={formData.job_title}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
@@ -324,7 +287,7 @@ const EmployeeUpdate = () => {
                     name="position"
                     type="text"
                     placeholder={formData.position || "Enter Position"}
-                    value={formData.position} // Use value from state
+                    value={formData.position}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   />
@@ -333,36 +296,34 @@ const EmployeeUpdate = () => {
                   )}
                 </div>
 
-                <div className="mb-4 ">
-                  <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                <div className="mb-4">
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Salary
                   </label>
-                  <div className="flex items-center">
-                    <input
-                      name="salary"
-                      type="number"
-                      placeholder={formData.salary || "Enter Salary"}
-                      value={formData.salary}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
+                  <input
+                    name="salary"
+                    type="number"
+                    placeholder={formData.salary || "Enter Salary"}
+                    value={formData.salary}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                  />
                 </div>
 
                 <div className="mb-4">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Gender
                   </label>
-                  <div className="flex items-center ">
+                  <div className="flex items-center">
                     <label htmlFor="Male">Male</label>
                     <input
                       type="radio"
                       value="Male"
                       name="gender"
                       onChange={handleChange}
-                      checked={formData.gender === "Male" || ""}
-                      className=" ml-1 mr-5"
-                    ></input>
+                      checked={formData.gender === "Male"}
+                      className="ml-1 mr-5"
+                    />
                     <label htmlFor="Female" className="ml-5 md:ml-8">
                       Female
                     </label>
@@ -371,30 +332,29 @@ const EmployeeUpdate = () => {
                       value="Female"
                       name="gender"
                       onChange={handleChange}
-                      checked={formData.gender === "Female" || ""}
-                      className=" ml-1 mr-5"
-                    ></input>
+                      checked={formData.gender === "Female"}
+                      className="ml-1 mr-5"
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* Right side form inputs */}
               <div className="w-full">
-                
-
                 <div className="mb-4">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Date_of_birth
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Date of Birth
                   </label>
-                  <div className="flex items-center">
-                    <input
-                      type="date"
-                      name="date_of_birth"
-                      value={formData.date_of_birth || ""}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
+                  <input
+                    type="date"
+                    name={"date_of_birth"}
+                    value={
+                      formData.date_of_birth
+                        ? formatDate(formData.date_of_birth)
+                        : ""
+                    }
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                  />
                   {errors.date_of_birth && (
                     <p className="text-red-500 text-xs">
                       {errors.date_of_birth}
@@ -403,19 +363,17 @@ const EmployeeUpdate = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Identification_no
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Identification No
                   </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="identification_no"
-                      placeholder={formData.identification_no || "Enter ID"}
-                      value={formData.identification_no || ""}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="identification_no"
+                    placeholder={formData.identification_no || "Enter ID"}
+                    value={formData.identification_no}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                  />
                   {errors.identification_no && (
                     <p className="text-red-500 text-xs">
                       {errors.identification_no}
@@ -424,108 +382,109 @@ const EmployeeUpdate = () => {
                 </div>
 
                 <div className="mb-9">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Phone_no
+                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Phone No
                   </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="phone"
-                      placeholder={employees.phone || "Enter Phone Number"}
-                      value={formData.phone || ""}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="phone"
+                    placeholder={formData.phone || "Enter Phone Number"}
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                  />
                   {errors.phone && (
                     <p className="text-red-500 text-xs">{errors.phone}</p>
                   )}
                 </div>
-                
                 <div className="border border-orange-300 rounded-md px-9 ">
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Address
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="address"
-                          placeholder={employees.address || "Enter Address"}
-                          value={formData.address || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4 mt-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Address
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="address"
+                        placeholder={formData.address || "Enter Address"}
+                        value={formData.address}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                          <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                            Sub-district
-                          </label>
-                          <div className="flex items-center">
-                            <input
-                              type="text"
-                              name="sub_district"
-                              value={formData.sub_district || ""}
-                              onChange={handleChange}
-                              className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                            />
-                          </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Sub-district
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="sub_district"
+                        placeholder={
+                          formData.sub_district || "Enter Sub-district"
+                        }
+                        value={formData.sub_district}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        District
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="district"
-                          value={formData.district || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      District
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="district"
+                        placeholder={formData.district || "Enter District"}
+                        value={formData.district}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Province
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="province"
-                          value={formData.province || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Province
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="province"
+                        placeholder={formData.province || "Enter Province"}
+                        value={formData.province}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                        Postal Code
-                      </label>
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          name="postal_code"
-                          value={formData.postal_code || ""}
-                          onChange={handleChange}
-                          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                        />
-                      </div>
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Postal Code
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="postal_code"
+                        placeholder={
+                          formData.postal_code || "Enter Postal Code"
+                        }
+                        value={formData.postal_code}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
                     </div>
+                  </div>
                 </div>
-                
-
-
               </div>
             </div>
 
-            {/* Buttons Section */}
             <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
               <button
                 onClick={handleClickback}
@@ -545,7 +504,7 @@ const EmployeeUpdate = () => {
         </div>
       </main>
 
-      {showPopup && <UpdatePopUp a={handleSumbit} onClose={handleClosePopup} />}
+      {showPopup && <UpdatePopUp a={handleSubmit} onClose={handleClosePopup} />}
     </div>
   );
 };
