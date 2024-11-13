@@ -13,15 +13,31 @@ const ITEMS_PER_PAGE = 12;
 
 const EmployeeGrid = () => {
   const [employees, setEmployees] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const selectedEmployees = employees.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE
-  );
-  const totalPages = Math.ceil(employees.length / ITEMS_PER_PAGE);
+    const filteredEmployees = employees.filter((employee) => {   
+    const searchQueryNormalized = searchQuery.trim().replace(/\s+/g, ' ').toLowerCase();
+    if (searchQueryNormalized === '') {
+      return true;
+    }
+    const searchWords = searchQueryNormalized.split(' ');
+    const nameMatches = searchWords.every((word) => 
+      (employee.firstname && employee.firstname.toLowerCase().includes(word)) ||
+      (employee.midname && employee.midname.toLowerCase().includes(word)) ||
+      (employee.lastname && employee.lastname.toLowerCase().includes(word))
+    );
+    const idMatches = searchWords.every((word) => 
+      employee.id && employee.id.toLowerCase().includes(word)
+    );
+      return nameMatches || idMatches;
+  });
+  const selectedEmployees = filteredEmployees.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredEmployees.length / ITEMS_PER_PAGE);
+
+
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -32,10 +48,13 @@ const EmployeeGrid = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axiosInstance.get(`employ/getEmp/`);
-      setEmployees(result.data);
-    };
+    const fetchData = async () =>
+    {
+      const result = await fetch('http://localhost:3000/api/employ/getEmp');
+      const jsonResult = await result.json()
+      // console.log(jsonResult)
+      setEmployees(jsonResult);
+    }
 
     fetchData();
   }, []);
@@ -46,6 +65,7 @@ const EmployeeGrid = () => {
   const handleClickback = () => {
     navigate(`/employ`);
   };
+ 
 
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
@@ -63,8 +83,13 @@ const EmployeeGrid = () => {
               type="text"
               id="search"
               placeholder="Search"
-            ></input>
-          </div>
+              value={searchQuery} 
+              onChange={(e) => {
+                // console.log(typeof(e.target.value) ); 
+                setSearchQuery(e.target.value);
+              }}
+            > </input>
+          </div>           
           <button
             onClick={handleClick}
             className="p-1 border border-black text-[12px] md:text-[16px]  rounded-md shadow-lg hover:shadow-xl transition font-opensans md:h-10 md:w-[150px] w-[112px] flex jusfiy-center items-center"

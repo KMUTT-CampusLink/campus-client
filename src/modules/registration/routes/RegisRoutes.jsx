@@ -5,7 +5,6 @@ import LoginPage from "../pages/LoginPage";
 import TranscriptPage from "../pages/TranscriptPage";
 import AddCoursePage from "../pages/AddCoursePage";
 import DropCoursePage from "../pages/DropCoursePage";
-import LandingPage from "../pages/LandingPage";
 import RegisDetailsPage from "../pages/RegisDetailsPage";
 import AuthRoute from "../middleware/AuthRoute";
 import PeriodPage from "../pages/PeriodPage";
@@ -16,7 +15,11 @@ export default function RegisRoutes() {
   return [
     {
       path: "",
-      element: <LandingPage />,
+      element: (
+        <AuthRoute>
+          <PeriodPage />
+        </AuthRoute>
+      ),
     },
     {
       path: "admin",
@@ -31,13 +34,9 @@ export default function RegisRoutes() {
       element: <LoginPage />,
     },
     {
-      path: "period",
-      element: <PeriodPage />,
-    },
-    {
       path: "course",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <CourseRegisPage />
         </AuthRoute>
       ),
@@ -45,7 +44,7 @@ export default function RegisRoutes() {
     {
       path: "course/add",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <AddCoursePage />
         </AuthRoute>
       ),
@@ -53,7 +52,7 @@ export default function RegisRoutes() {
     {
       path: "course/drop",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <DropCoursePage />
         </AuthRoute>
       ),
@@ -61,7 +60,7 @@ export default function RegisRoutes() {
     {
       path: "course/detail",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <RegisDetailsPage />
         </AuthRoute>
       ),
@@ -69,7 +68,7 @@ export default function RegisRoutes() {
     {
       path: "grade",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <GradePage />
         </AuthRoute>
       ),
@@ -77,7 +76,7 @@ export default function RegisRoutes() {
     {
       path: "transcript",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <TranscriptPage />
         </AuthRoute>
       ),
@@ -85,7 +84,7 @@ export default function RegisRoutes() {
     {
       path: "profile",
       element: (
-        <AuthRoute>
+        <AuthRoute allowed_roles={["Student"]}>
           <ProfilePage />
         </AuthRoute>
       ),

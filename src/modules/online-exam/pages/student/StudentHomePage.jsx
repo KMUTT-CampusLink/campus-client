@@ -11,20 +11,20 @@ export default function StudentHomePage() {
   const [exams, setExams] = useState([]);
   const [historyExams, setHistoryExams] = useState([]);
   const [inProgress, setInProgress] = useState([]);
-  const courseId = 123;
+  const sectionId = 1001;
 
   const getExams = async () => {
-    const res = await getStudentExamsById(courseId);
+    const res = await getStudentExamsById(sectionId);
     setExams(res.data.data);
   }
 
   const getInprogressExams = async () => {
-    const res = await getInprogressExam(66130500849);
+    const res = await getInprogressExam();
     setInProgress(res.data.data);
   }
 
   const getHistoryExams = async () => {
-    const res = await getHistoryStudentExams(66130500849);
+    const res = await getHistoryStudentExams();
     setHistoryExams(res.data.data);
   }
 

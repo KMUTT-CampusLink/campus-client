@@ -11,7 +11,8 @@ import {
   usePaymentStatus,
   useGetEnrollmentHead,
 } from "../services/queries";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
+import { ErrorSkeleton } from "../styles/Skeletons";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
@@ -42,17 +43,9 @@ function CourseRegisPage() {
   } = usePaymentStatus(headId);
 
   useEffect(() => {
-    if (enrollmentHeadData) {
-      console.log(enrollmentHeadData);
-      setHeadId(enrollmentHeadData.head_id);
-    }
-  }, [enrollmentHeadData]);
-
-  useEffect(() => {
-    if (payment) {
-      setPaymentStatus(payment.data);
-    }
-  }, [payment]);
+    if (enrollmentHeadData) setHeadId(enrollmentHeadData.head_id);
+    if (payment) setPaymentStatus(payment.data);
+  }, [enrollmentHeadData, payment]);
 
   const [studentData, setStudentData] = useState(null);
 
@@ -66,12 +59,10 @@ function CourseRegisPage() {
     : 0;
 
   const totalCourses = courses?.length || 0;
-
-  // Use studentData to get programPrice instead of localStorage
   const grandTotal = studentData?.programprice || "N/A";
 
   if (isEnrollmentLoading || isCoursesLoading || isPaymentLoading) {
-    return <LoadingSkeleton />;
+    return <LoadingPage />;
   }
 
   if (enrollmentError || isCoursesError || isPaymentError) {

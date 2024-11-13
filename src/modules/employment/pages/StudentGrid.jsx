@@ -13,15 +13,41 @@ axiosInstance;
 const ITEMS_PER_PAGE = 12;
 const StudentGrid = () => {
   const [students, setStudents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const selectedStudents = students.slice(
+  const filteredStudents = students.filter((student) => {
+    const searchQueryNormalized = searchQuery
+      .trim()
+      .replace(/\s+/g, " ")
+      .toLowerCase();
+
+    if (searchQueryNormalized === "") {
+      return true;
+    }
+
+    const searchWords = searchQueryNormalized.split(" ");
+
+    const nameMatches = searchWords.every(
+      (word) =>
+        (student.firstname && student.firstname.toLowerCase().includes(word)) ||
+        (student.lastname && student.lastname.toLowerCase().includes(word))
+    );
+
+    const idMatches = searchWords.every(
+      (word) => student.id && student.id.toLowerCase().includes(word)
+    );
+
+    return nameMatches || idMatches;
+  });
+
+  const selectedStudents = filteredStudents.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
-  const totalPages = Math.ceil(students.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredStudents.length / ITEMS_PER_PAGE);
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -62,7 +88,13 @@ const StudentGrid = () => {
               type="text"
               id="search"
               placeholder="Search"
-            ></input>
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+            >
+              {" "}
+            </input>
           </div>
           <button
             onClick={handleClick}

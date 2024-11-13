@@ -29,7 +29,7 @@ function PeriodPage() {
       <main className={mainStyles}>
         <HeadLineCard link="/" title="My Profile" />
         <div className="divider"></div>
-        <div className="grid md:grid-cols-2 gap-10 bg-white p-10 shadow-md rounded-md">
+        <div className="grid min-[990px]:grid-cols-2 gap-10 bg-white p-10 shadow-md rounded-md">
           <div className="">
             <SInfoCard />
             <div className="grid gap-4 mx-auto w-1/2 mt-8">

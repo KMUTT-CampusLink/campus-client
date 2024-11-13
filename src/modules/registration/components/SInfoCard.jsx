@@ -5,7 +5,6 @@ import { CardErrorSkeleton, SInfoLoadingSkeleton } from "../styles/Skeletons";
 function SInfoCard({ onStudentData }) {
   const studentId = localStorage.getItem("studentId");
   const { data: student, isLoading, isError } = useStudentData(studentId);
-
   useEffect(() => {
     if (student && onStudentData) {
       onStudentData(student); // Call only when student data is available
