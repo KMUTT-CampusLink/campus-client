@@ -22,6 +22,7 @@ export default function ProfessorOverallScoringPage() {
       setFullMark(response.data.full_mark);
       setPassMark(response.data.pass_mark);
       setParticipants(response.data.data);
+      console.log(response.data.data)
       setScoringFinished(response.data.data.filter(participant => participant.is_checked).length);
     } catch (error) {
       console.log(error);

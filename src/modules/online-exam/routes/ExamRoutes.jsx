@@ -12,13 +12,13 @@ import ProfessorExamSettingPage from "../pages/professor/ProfessorExamSettingPag
 import ProfessorDashboardPage from "../pages/professor/ProfessorDashboardPage";
 import ProfessorScoringPage from "../pages/professor/ProfessorScoringPage";
 import ProfessorOverallScoringPage from "../pages/professor/ProfessorOverallScoringPage";
-import Redirecting from "../services/redirecting";
+import Redirecting from "../services/Redirecting";
 
 export default function ExamRoutes() {
   return [
     //Student Routes
     {
-      path: "",
+      path: ":id",
       element: <Redirecting/>,
     },
     {

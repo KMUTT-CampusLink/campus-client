@@ -1,26 +1,16 @@
 import PropTypes from "prop-types"; // Import PropTypes
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
-function HeadLineCard({ profilePic, link, title }) {
-  const hasProfilePic = profilePic && profilePic !== ""; // Check if profilePic exists and is valid
+function HeadLineCard({ link, title, subText = "Detailed Information" }) {
+  const profilePic = "/logos/profile-pic.png";
 
   return (
     <div className="flex flex-start items-center bg-white p-4 shadow-md rounded-md">
-      {hasProfilePic ? (
-        <img
-          src={profilePic}
-          alt="Profile"
-          className="w-10 h-10 mr-4 rounded-full"
-        />
-      ) : (
-        <FontAwesomeIcon
-          icon={faCircleUser}
-          className="text-black w-20 h-20 mr-4"
-          aria-label="Default profile icon"
-        />
-      )}
+      <img
+        src={profilePic}
+        alt="Profile"
+        className="w-20 h-20 mr-4 rounded-full"
+      />
       <div>
         <h1 className="text-2xl font-geologica font-bold">{title}</h1>
         {link ? ( // Check if link is valid before rendering
@@ -28,7 +18,7 @@ function HeadLineCard({ profilePic, link, title }) {
             to={link}
             className="text-sm text-[#DC5A52] font-georama underline underline-offset-auto font-light"
           >
-            Detailed Information
+            {subText}
           </Link>
         ) : null}
       </div>
@@ -38,9 +28,9 @@ function HeadLineCard({ profilePic, link, title }) {
 
 // Define prop types
 HeadLineCard.propTypes = {
-  profilePic: PropTypes.string, // Make profilePic optional
   link: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  subText: PropTypes.string,
 };
 
 export default HeadLineCard;
