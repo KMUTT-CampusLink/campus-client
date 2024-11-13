@@ -32,9 +32,9 @@ function ProfilePage() {
 
   useEffect(() => {
     if (semesters && semesters.length > 0) {
-      const firstSemester = semesters[0];
-      setSemester(firstSemester.semester_name);
-      setSemesterId(firstSemester.semester_id);
+      const lastSemester = semesters[semesters.length - 1];
+      setSemester(lastSemester.semester_name);
+      setSemesterId(lastSemester.semester_id);
     }
   }, [semesters]);
 
