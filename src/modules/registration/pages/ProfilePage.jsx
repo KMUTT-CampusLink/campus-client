@@ -38,15 +38,6 @@ function ProfilePage() {
     }
   }, [semesters]);
 
-  const handleSemesterChange = (event) => {
-    const selectedSemester = semesters.find(
-      (sem) => sem.semester_name === event.target.value
-    );
-    if (selectedSemester) {
-      setSemester(selectedSemester.semester_name);
-      setSemesterId(selectedSemester.semester_id);
-    }
-  };
   if (isLoading) return <LoadingPage />;
   if (isError || isProfileError) return <ErrorSkeleton />;
 
@@ -55,7 +46,7 @@ function ProfilePage() {
       <NavBar />
       <main className={mainStyles}>
         <div className="grid grid-cols-1 md:grid-cols-3 bg-gray-100 p-6 rounded-lg shadow-lg">
-          <div className="col-span-2 bg-gray-50 p-4 rounded-lg">
+          <div className="col-span-2 p-4">
             <h2 className="text-3xl font-bold">My Profile</h2>
             {/* Logo Section */}
             <div className="relative w-20 h-20 mx-auto mt-4">
