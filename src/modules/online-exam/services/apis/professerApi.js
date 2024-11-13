@@ -180,3 +180,14 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
     return error.response.data;
   }
 };
+
+export const uploadFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axiosInstance.post("/exams/professor/uploadFile", file);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
