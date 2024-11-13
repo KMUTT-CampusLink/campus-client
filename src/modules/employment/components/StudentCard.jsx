@@ -15,7 +15,7 @@ const StudentCard = ({ student}) => {
       <div className=" mt-3 ">
         <h1 className="text-left font-geologica font-bold text-[17px] md:text-[20px]">{student.firstname} {student.midname} {student.lastname}</h1>
         <p className="font-geologica text-[10px] md:text-[12px] text-left">{student.id}</p>
-        <p className="font-geologica text-[10px] md:text-[12px] text-left">{'batch'}</p>
+        <p className="font-geologica text-[10px] md:text-[12px] text-left">{'batch'} {student.uni_batch.batch_no}</p>
       </div>
     </div>
   );
