@@ -10,8 +10,9 @@ import AdminMainPage from "../pages/AdminMainPage";
 import ClubCreatePage from "../pages/ClubCreatePage";
 import JoinFormPage from "../pages/JoinFormPage";
 import ClubDetailPage from "../pages/ClubDetailPage";
-import ClubHomePage from "../pages/ClubHomePage";
+import ClubHomePage from "../pages/AdminClubHomePage";
 import CreateAnnouncement from "../pages/CreateAnnouncementsPage";
+import MemClubHomePage from "../pages/MemClubHomePage";
 
 export default function ClubRoutes() {
   return [
@@ -92,7 +93,7 @@ export default function ClubRoutes() {
     },
     // Member Section under /clubs/member
     {
-      path: "/clubs/member",
+      path: "/clubs/member/:memberId",
       element: (
         <div>
           <NavBar />
@@ -114,6 +115,10 @@ export default function ClubRoutes() {
         {
           path: "notifications", // Member notifications at "/clubs/member/notifications"
           element: <AdminNotification />, // Ensure Notifications component is correctly imported
+        },
+        {
+          path: "club-home/:clubId", 
+          element: <MemClubHomePage />, 
         },
       ],
     },

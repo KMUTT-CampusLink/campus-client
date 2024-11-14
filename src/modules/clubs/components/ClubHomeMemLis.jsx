@@ -51,7 +51,7 @@ const ClubHomeMemLis = (props) => {
     <div
       className={` ${
         toggleRight ? "grid" : "hidden"
-      } md:grid border-solid border-[1px] rounded-lg md:rounded-l-none p-4 h-max`}
+      } md:grid border-solid border-[1px] sm:border-black md:border-none rounded-lg md:rounded-l-none p-4 h-max`}
     >
       <div className="">
         <h5 className="  pt-3 mb-3 m-auto text-center font-semibold w-4/5 border-b-2 border-black border-solid">
