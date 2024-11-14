@@ -5,7 +5,7 @@ import { axiosInstance } from "../../../utils/axiosInstance";
 
 const ClubHomeMemLis = (props) => {
   const { clubId } = useParams();
-  const [ clubMembers, setClubMemebers ] = useState([]); 
+  const [clubMembers, setClubMemebers] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toggleRight } = props;
@@ -15,15 +15,17 @@ const ClubHomeMemLis = (props) => {
       try {
         const response = await axiosInstance.get(`/clubs/members/${clubId}`);
         setClubMemebers(response.data.data);
-      }catch(error){
+      } catch (error) {
         console.error("Error fetching club members:", error);
-    }
-  };
+      }
+    };
     fetchMembers();
   }, [clubId]);
 
   const admins = clubMembers.filter((members) => members.is_admin);
-  const members = clubMembers.filter((members) => members.status === "Accepted" && !members.is_admin);
+  const members = clubMembers.filter(
+    (members) => members.status === "Accepted" && !members.is_admin
+  );
   console.log(admins, members);
   const handleClick = (item) => {
     setSelectedItem(item);
@@ -37,12 +39,16 @@ const ClubHomeMemLis = (props) => {
   };
 
   const renderName = (members) => {
-    if(members.student) {
-      return `${members.student.firstname || ''} ${members.student.midname || ''} ${members.student.lastname || ''}`;
+    if (members.student) {
+      return `${members.student.firstname || ""} ${
+        members.student.midname || ""
+      } ${members.student.lastname || ""}`;
     }
 
-    if(members.employee) {
-      return `${members.employee.firstname || ''} ${members.employee.midname || ''} ${members.employee.lastname || ''}`;
+    if (members.employee) {
+      return `${members.employee.firstname || ""} ${
+        members.employee.midname || ""
+      } ${members.employee.lastname || ""}`;
     }
     return "Unknown";
   };
@@ -51,7 +57,7 @@ const ClubHomeMemLis = (props) => {
     <div
       className={` ${
         toggleRight ? "grid" : "hidden"
-      } md:grid border-solid border-[1px] rounded-lg md:rounded-l-none p-4 h-max`}
+      } md:grid border-solid border-[1px] sm:border-black md:border-none rounded-lg md:rounded-l-none p-4 h-max`}
     >
       <div className="">
         <h5 className="  pt-3 mb-3 m-auto text-center font-semibold w-4/5 border-b-2 border-black border-solid">
@@ -112,7 +118,10 @@ const ClubHomeMemLis = (props) => {
                   <h2>StudentID: {selectedItem.student.id}</h2>
                 </p>
                 <p>
-                  <h2>Name: {selectedItem.student.firstname} {selectedItem.student.lastname} </h2>
+                  <h2>
+                    Name: {selectedItem.student.firstname}{" "}
+                    {selectedItem.student.lastname}{" "}
+                  </h2>
                 </p>
               </div>
             )}
@@ -127,7 +136,11 @@ const ClubHomeMemLis = (props) => {
                   <h2>Employee ID: {selectedItem.employee.id}</h2>
                 </p>
                 <p>
-                  <h2>Name: {selectedItem.employee.firstname} {selectedItem.employee.midname} {selectedItem.student.lastname} </h2>
+                  <h2>
+                    Name: {selectedItem.employee.firstname}{" "}
+                    {selectedItem.employee.midname}{" "}
+                    {selectedItem.student.lastname}{" "}
+                  </h2>
                 </p>
               </div>
             )}
