@@ -104,7 +104,7 @@ function ResPop({ id, img, name, onClose }) {
                 </div>
                 <div className="flex flex-col justify-around md:flex-row items-center gap-6 md:gap-10">
                     <div className="flex flex-col items-center">
-                        <img className="w-40 h-40 md:w-72 md:h-48 object-cover rounded-lg" src={img} alt="Building" />
+                        <img className="w-40 h-40 md:w-72 md:h-48 object-cover rounded-lg aspect-square" src={img} alt="Building" />
                         <div className="mt-4 md:mt-6 flex items-center gap-2 text-black font-semibold px-3 py-2 rounded-lg shadow-md">
                             <FontAwesomeIcon className="w-4 h-4 md:w-5 md:h-5 text-red-500" icon={faCircleCheck} />
                             <span>Your Car is verified</span>

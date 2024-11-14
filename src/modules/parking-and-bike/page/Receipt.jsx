@@ -19,7 +19,13 @@ function Receipt() {
         )
     }
 
-    const resEncrypt = JSON.stringify(resData.QRCode);
+    const resEncrypt = JSON.stringify({
+        qr: resData.QRCode,
+        rid: resData.reservation_id,
+    });
+    
+    console.log(resEncrypt);
+    
 
     const [countdown, setCountdown] = useState('');
     const [isQrCodeValid, setIsQrCodeValid] = useState(true);
@@ -53,7 +59,8 @@ function Receipt() {
 
     const qrCodeUrl = `${window.location.origin}/parking/scanned/${encodeURIComponent(resEncrypt)}`;
 
-    console.log(qrCodeUrl)
+    console.log(qrCodeUrl);
+    
 
     return (
         <>

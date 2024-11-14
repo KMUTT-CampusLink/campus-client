@@ -2,7 +2,6 @@ import Building from '../component/Main/Building';
 import ReceiptButton from '../component/Main/Menu/ReceiptButton';
 import ParkingButton from '../component/Main/Menu/ParkingButton';
 import HelpButton from '../component/Main/Menu/HelpButton';
-import img3 from '../img/kmutt-cover.png';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import Search from "../component/Search/Search"
@@ -13,8 +12,6 @@ import Searchresultlist from "../component/Search/Searchresultlist";
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import img1 from "../img/slide2.png";
-import img2 from "../img/slide4-2.png"
 function MainPage() {
     const [building, setBuilding] = useState([]); /* */
 
@@ -51,8 +48,8 @@ function MainPage() {
               <div style={{'backgroundImage': `url(${slideImage.url})` }} className='w-2/4 h-1/10 aspect-video min-w-96 min-h-70 bg-cover'>
                 <span className="">{slideImage.caption}</span>
               </div>
-            </div>
-          ))} 
+              </div>
+           ))}
         </Slide>
             <br />
             <br />

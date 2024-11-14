@@ -4,6 +4,7 @@ import Receipt from "../page/Receipt"
 import Help from "../page/Help";
 import Parkingslot from "../page/Parkingslot";
 import Scanned from "../page/Scanned";
+import CheckOut from "../page/CheckOut";
 
 export default function ParkRoutes() {
   return [
@@ -31,5 +32,9 @@ export default function ParkRoutes() {
       path:"scanned/:id",
       element:<Scanned/>,
     },
+    {
+      path:"checkout",
+      element:<CheckOut/>
+    }
   ];
 }
