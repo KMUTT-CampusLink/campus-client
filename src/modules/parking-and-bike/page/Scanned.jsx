@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function Scanned() {
   const { id } = useParams();
@@ -11,13 +13,12 @@ function Scanned() {
     try {
       const decodedData = JSON.parse(decodeURIComponent(id));
       setReservationData(decodedData);
-
     } catch (error) {
       console.error('Error decoding reservation data:', error);
     }
   }, [id]);
 
-  const handleSubmit = async () => {
+  const handleCheckin = async () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const requestData = {
@@ -29,7 +30,9 @@ function Scanned() {
 
     try {
       const res = await axios.post(`http://localhost:3000/api/parking/postCheckin`, requestData);
-      console.log("Response:", res.data);
+      if (res.data.message === "QR Checkout created successfully!") {
+        alert("Checkin successful!");
+      }
     } catch (error) {
       if (error.response) {
         alert(error.response.data.error);
@@ -39,24 +42,30 @@ function Scanned() {
     }
   };
 
+  const handleClick = () => {
+    navigate('/parking');
+  };
 
   if (!reservationData) {
     return <div>Loading...</div>;
+  } else {
+    setTimeout(() => {
+      handleCheckin();
+    }, 1500);
   }
 
   return (
     <div class="min-h-screen bg-gray-100 flex items-center justify-center">
       <div class="w-full max-w-md bg-white rounded-lg shadow-lg">
-        <div class="px-6 py-4 border-b border-gray-200">
-          <h2 class="text-2xl font-semibold">Reservation</h2>
+        <div class="flex justify-center px-5 py-10 border-b border-gray-200">
+          <h2 class="text-2xl font-semibold">Parking CheckIn</h2>
         </div>
-        <div class="px-6 py-4">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+        <div class="flex flex-col px-5 py-10 gap-2 justify-center items-center">
+          <FontAwesomeIcon className='w-14 h-14 text-yellow-500 animate-spin' icon={faSpinner} />
+          <button onClick={handleClick}
+            className="bg-red-500 text-white px-10 py-1 mt-10 rounded-lg hover:bg-red-600 transition z-10"
           >
-            Continue
+            BACK
           </button>
         </div>
       </div>
