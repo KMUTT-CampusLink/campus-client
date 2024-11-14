@@ -29,7 +29,7 @@ function MainPage() {
         <>
             <Navbar />
             <div className="flex flex-row justify-center pt-24">
-                <img className="w-2/4 h-1/10 min-w-96 min-h-70" src={uniImg} alt="" />
+                <img className="w-2/4 h-1/10 aspect-video min-w-96 min-h-70" src={uniImg} alt="" />
             </div>
             <br />
             <br />
