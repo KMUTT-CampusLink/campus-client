@@ -121,6 +121,25 @@ const ClubHomePost = (props) => {
   const { toggleLeft } = props;
   const itemsToDisplay = toggleVisiblity ? clubAnnouncement : clubPost;
 
+  const deleteItem = async (id) => {
+    try {
+      const endpoint = toggleVisiblity ? `/clubs/announcements/${id}` : `/clubs/posts/${id}`;
+      await axiosInstance.delete(endpoint);
+
+      if (toggleVisiblity) {
+        setClubAnnouncement((prevAnnouncements) =>
+          prevAnnouncements.filter((announcement) => announcement.id !== id)
+        );
+      } else {
+        setClubPost((prevPosts) =>
+          prevPosts.filter((post) => post.id !== id)
+        );
+      }
+    } catch (error) {
+      console.error(`Error deleting ${toggleVisiblity ? "announcement" : "post"}:`, error);
+    }
+  };
+  
   return (
     <div
       className={` ${
@@ -158,7 +177,7 @@ const ClubHomePost = (props) => {
         itemsToDisplay.map((item) => (
           <div
             key={item.id}
-            className="m-4 p-4 pt-0 md:p-6 border-solid border-[1px] rounded-lg h-max text-base"
+            className="m-4 p-4 pt-0 md:p-6 border-solid border-[2px] border-black rounded-lg h-max text-base"
           >
             <div className="relative">
               <button
@@ -205,7 +224,9 @@ const ClubHomePost = (props) => {
               >
                 Edit
               </button>
-              <button className="bg-[#EC5A51] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg">
+              <button 
+                onClick={() => deleteItem(item.id)}
+                className="bg-[#EC5A51] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg">
                 Delete
               </button>
             </div>

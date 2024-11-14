@@ -158,7 +158,7 @@ const MemClubHomePost = (props) => {
         itemsToDisplay.map((item) => (
           <div
             key={item.id}
-            className="m-4 p-4 pt-0 md:p-6 border-solid border-[1px] rounded-lg h-max text-base"
+            className="m-4 p-4 pt-0 md:p-6 border-solid border-[2px] border-black rounded-lg h-max text-base"
           >
             <div className="relative">
               <button

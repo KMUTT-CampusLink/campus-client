@@ -23,7 +23,7 @@ const MemClubHomePage = () => {
           >
             View Members
           </button>
-          <div className="grid grid-cols-1 md:grid-cols-[80%_20%] w-full overflow-scroll rounded-lg md:h-[70%] md:border-solid md:border-[1px] md:border-black">
+          <div className="grid grid-cols-1 overflow-scroll md:grid-cols-[75%_25%] w-full rounded-lg">
             <MemClubHomePost toggleLeft={!isVisible} />
             <ClubHomeMemLis toggleRight={isVisible} />
           </div>
