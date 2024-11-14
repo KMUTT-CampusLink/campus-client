@@ -13,7 +13,7 @@ export default function EmployRoutes() {
     {
       path: "",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <LandingPage />
         </AuthRoute>
       ),
@@ -22,7 +22,7 @@ export default function EmployRoutes() {
     {
       path: "employee",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <EmployeeGrid />
         </AuthRoute>
       ),
@@ -30,7 +30,7 @@ export default function EmployRoutes() {
     {
       path: "employeeDetail/:id",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <EmployeeDetail />
         </AuthRoute>
       ),
@@ -38,7 +38,7 @@ export default function EmployRoutes() {
     {
       path: "employeeAdd",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <EmployeeAdd />
         </AuthRoute>
       ),
@@ -46,7 +46,7 @@ export default function EmployRoutes() {
     {
       path: "employeeUpdate/:id",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <EmployeeUpdate />
         </AuthRoute>
       ),
@@ -55,7 +55,7 @@ export default function EmployRoutes() {
     {
       path: "student",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <StudentGrid />
         </AuthRoute>
       ),
@@ -63,7 +63,7 @@ export default function EmployRoutes() {
     {
       path: "studentDetail/:id",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <StudentDetail />
         </AuthRoute>
       ),
@@ -71,7 +71,7 @@ export default function EmployRoutes() {
     {
       path: "studentAdd",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <StudentAdd />
         </AuthRoute>
       ),
@@ -79,7 +79,7 @@ export default function EmployRoutes() {
     {
       path: "studentUpdate/:id",
       element: (
-        <AuthRoute allowed_roles={["Staff"]}>
+        <AuthRoute allowed_roles={["Management"]}>
           <StudentUpdate />
         </AuthRoute>
       ),

@@ -1,7 +1,7 @@
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import SUpdatePopUp from "../components/SUpdatePopUp";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
@@ -9,13 +9,16 @@ const StudentUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [showPopup, setShowPopup] = useState(false);
+  const [programs, setPrograms] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  const [students, setStudents] = useState([]);
 
   const [formData, setFormData] = useState({
     firstname: "",
     midname: "",
     lastname: "",
-    program_id: "",
-    batch_id: "",
+    degree_id: "",
+    semester_id: "",
     identification_no: "",
     gender: "",
     date_of_birth: "",
@@ -35,6 +38,56 @@ const StudentUpdate = () => {
     });
   };
 
+  useEffect(() => {
+    const fetchStudentDetails = async () => {
+      try {
+        const result = await axiosInstance.get(`employ/getStu/${id}`);
+        setStudents(result.data);
+        setFormData({
+          firstname: result.data.firstname || "",
+          midname: result.data.midname || "",
+          lastname: result.data.lastname || "",
+          degree_id: result.data.degree_id || "",
+          semester_id: result.data.semester_id || "",
+          gender: result.data.gender || "",
+          date_of_birth: result.data.date_of_birth || "",
+          identification_no: result.data.identification_no || "",
+          phone: result.data.phone || "",
+          address: result.data.address.address || "",
+          sub_district: result.data.address.sub_district || "",
+          district: result.data.address.district || "",
+          province: result.data.address.province || "",
+          postal_code: result.data.address.postal_code || "",
+        });
+      } catch (error) {
+        console.error("Error fetching students data:", error);
+      }
+    };
+    const fetchPrograms = async () => {
+      try {
+        const r = await axiosInstance.get(`employ/getProgramName`);
+        setPrograms(r.data);
+        console.log(r.data);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      }
+    };
+
+    const fetchSemesters = async () => {
+      try {
+        const respond = await axiosInstance.get(`employ/getSemester`);
+        setSemesters(respond.data);
+        console.log(respond.data);
+      } catch (error) {
+        console.error("Error fetching semesters:", error);
+      }
+    };
+
+    fetchStudentDetails();
+    fetchPrograms();
+    fetchSemesters();
+  }, [id]);
+
   const handleClickback = () => {
     navigate(`/employ/studentDetail/${id}`);
   };
@@ -43,6 +96,39 @@ const StudentUpdate = () => {
   };
   const handleClosePopup = () => {
     setShowPopup(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setShowPopup(false);
+
+    const StudentData = { ...formData };
+
+    const filteredStudentData = Object.fromEntries(
+      Object.entries(StudentData).filter(([key, value]) => value)
+    );
+
+    console.log("Filtered Student Data:", filteredStudentData);
+
+    try {
+      const response = await axiosInstance.post(
+        `employ/updateStu/${id}`,
+        filteredStudentData
+      );
+      if (response.status === 200) {
+        console.log("Student updated successfully");
+        navigate(`/employ/studentDetail/${id}`);
+      } else {
+        console.error("Error updating student:", response.data);
+      }
+    } catch (error) {
+      console.error("Cannot update user:", error);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 10);
   };
 
   return (
@@ -108,46 +194,52 @@ const StudentUpdate = () => {
                   </div>
                 </div>
 
-                {/* need to do matching */}
+                {/* 1 */}
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Program Name
+                    Program
                   </label>
                   <select
-                    name="program_id"
-                    value={formData.program_id}
+                    name="degree_id"
+                    value={formData.degree_id}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
                     <option value="" disabled>
                       Select Program
                     </option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Environmental Engneering">
-                      Environmental Engneering
-                    </option>
-                    <option value="Civil Engineering">Civil Engineering</option>
+                    {programs.map((degree) => (
+                      <option key={degree.id} value={degree.id}>
+                        {degree.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
+                {/* 2 */}
 
+                {/* 1 */}
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Batch
+                    Semester
                   </label>
                   <select
-                    name="program_id"
-                    value={formData.batch_id}
+                    name="semester_id"
+                    value={formData.semester_id}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
                     <option value="" disabled>
-                      Select Year
+                      Select Program
                     </option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
+                    {semesters.map((semester) => (
+                      <option key={semester.id} value={semester.id}>
+                        {semester.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
+                {/* 2 */}
+
                 <div className="mb-4">
                   <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Identification_no
@@ -202,7 +294,11 @@ const StudentUpdate = () => {
                     <input
                       type="date"
                       name="date_of_birth"
-                      value={formData.date_of_birth}
+                      value={
+                        formData.date_of_birth
+                          ? formatDate(formData.date_of_birth)
+                          : ""
+                      }
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
@@ -323,7 +419,9 @@ const StudentUpdate = () => {
         </div>
       </main>
 
-      {showPopup && <SUpdatePopUp onClose={handleClosePopup} />}
+      {showPopup && (
+        <SUpdatePopUp a={handleSubmit} onClose={handleClosePopup} />
+      )}
     </div>
   );
 };

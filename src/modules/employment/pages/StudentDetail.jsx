@@ -30,7 +30,7 @@ const StudentDetail = () => {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   useEffect(() => {
-    const fetchEmployee = async () => {
+    const fetchStudent = async () => {
       try {
         const result = await axiosInstance.get(`employ/getStu/${id}`);
         setStudents(result.data);
@@ -39,10 +39,10 @@ const StudentDetail = () => {
           navigate(`/employ/student`);
         }
       } catch (error) {
-        console.error("Error fetching employee data:", error);
+        console.error("Error fetching student data:", error);
       }
     };
-    fetchEmployee();
+    fetchStudent();
   }, [id, navigate]);
 
   console.log(student);
@@ -64,6 +64,18 @@ const StudentDetail = () => {
   };
   const handleClosePopup = () => {
     setShowPopup(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`employ/deleteStu/${id}`);
+      console.log("Delete successful");
+      setDeleteSuccess(true);
+      setShowPopup(false);
+      navigate(`/employ/student`);
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
   };
 
   return (
@@ -197,7 +209,13 @@ const StudentDetail = () => {
         </div>
       </main>
 
-      {showPopup && <SDeletePopUp onClose={handleClosePopup} />}
+      {showPopup && (
+        <SDeletePopUp
+          a={() => handleDelete(student.id)}
+          onClose={handleClosePopup}
+        />
+      )}
+      {deleteSuccess && <p>Student deleted successfully.</p>}
     </div>
   );
 };

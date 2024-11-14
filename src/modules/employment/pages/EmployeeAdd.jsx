@@ -339,7 +339,7 @@ const EmployeeAdd = () => {
 
                 <div className="mb-4 ">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Job-title
+                    Role
                   </label>
                   <div className="flex items-center">
                     <select
@@ -349,7 +349,7 @@ const EmployeeAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     >
                       <option value="" disabled>
-                        Select Job Title
+                        Select Role
                       </option>
                       {jobTitles.map((title) => (
                         <option key={title} value={title}>

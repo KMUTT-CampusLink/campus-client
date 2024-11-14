@@ -128,7 +128,7 @@ const EmployeeDetail = () => {
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">
-                    Job-title
+                    Role
                   </p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                     {employee.job_title}

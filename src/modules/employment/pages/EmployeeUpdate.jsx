@@ -39,11 +39,9 @@ const EmployeeUpdate = () => {
       ...formData,
       [name]: value,
     });
-    //console.log("FormData on change:", { ...formData });
   };
 
   useEffect(() => {
-    // Fetch employee data
     const fetchEmployeeData = async () => {
       try {
         const result = await axiosInstance.get(`employ/getEmp/${id}`);
@@ -66,18 +64,13 @@ const EmployeeUpdate = () => {
           province: result.data.address.province || "",
           postal_code: result.data.address.postal_code || "",
         });
-        // console.log("FormData after fetching:", {
-        //   ...formData,
-        // });
       } catch (error) {
         console.error("Error fetching employee data:", error);
       }
     };
-
-    // Fetch faculty data for the dropdown
     const fetchFacultyList = async () => {
       try {
-        const response = await axiosInstance.get(`employ/getFaculty`); // Update with your actual API endpoint
+        const response = await axiosInstance.get(`employ/getFaculty`);
         setFacultyList(response.data);
       } catch (error) {
         console.error("Error fetching faculties:", error);
@@ -87,8 +80,6 @@ const EmployeeUpdate = () => {
     fetchEmployeeData();
     fetchFacultyList();
   }, [id]);
-
-  //console.log(employees);
 
   const validateForm = () => {
     const errors = {};
@@ -260,7 +251,7 @@ const EmployeeUpdate = () => {
 
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Job Title
+                    Role
                   </label>
                   <select
                     name="job_title"
@@ -269,7 +260,7 @@ const EmployeeUpdate = () => {
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
                     <option value="" disabled>
-                      Select Job Title
+                      Select Role
                     </option>
                     {jobTitles.map((title) => (
                       <option key={title} value={title}>
