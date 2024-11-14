@@ -2,6 +2,7 @@ import App from "./App";
 
 // feature routes
 import AttendRoutes from "./modules/attendance/routes/AttendRoutes";
+import DevAttendRoutes from "./modules/dev-attendance/routes/DevAttendRoutes";
 import SecureRoutes from "./modules/building-security/routes/SecureRoutes";
 import BotRoutes from "./modules/chatbot/routes/BotRoutes";
 import ClubRoutes from "./modules/clubs/routes/ClubRoutes";
@@ -28,6 +29,10 @@ const main_router = [
       {
         path: "",
         element: <HomePage />,
+      },
+      {
+        path: "dev-attendance",
+        children: DevAttendRoutes(),
       },
       {
         path: "attendance",
