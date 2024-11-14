@@ -4,7 +4,7 @@ import { updateSetting } from "./apis";
 
 export const useUpdateSetting = (queryClient) => {
   return useMutation({
-    mutationFn: (data, section_id) => updateSetting(data, section_id),
+    mutationFn: (data) => updateSetting(data),
     onError: (error) => {
       popToast(error.message, "error");
     },

@@ -6,8 +6,8 @@ export const getSetting = async (section_id) => {
     .then((res) => res.data);
 };
 
-export const updateSetting = async (data, section_id) => {
+export const updateSetting = async (data) => {
   return axiosInstance
-    .post(`/dev-attend/setting/${section_id}`, data)
+    .post(`/dev-attend/setting/${data.id}`, data)
     .then((res) => res.data);
 };

@@ -27,7 +27,6 @@ const Setting = ({ section_id }) => {
   const [error, setError] = useState(null);
   const [geoLoading, setGeoLoading] = useState(false);
   const queryClient = useQueryClient();
-
   const {
     register,
     handleSubmit,
@@ -65,8 +64,9 @@ const Setting = ({ section_id }) => {
         location: form_data.location,
         lat: lat,
         long: long,
+        id: data?.data?.id,
       };
-      mutate(form_data, queryClient);
+      mutate(form_data);
     }
   });
 
