@@ -10,13 +10,21 @@ function Receipt() {
     const navigate = useNavigate();
     const location = useLocation();
     const resData = location.state;
-    const Data = resData.responseData;
-    const resEncrypt = JSON.stringify(resData.encryptedData);
+
+    if(!resData){
+        return (
+            <>
+            <NavBar/>
+            </>
+        )
+    }
+
+    const resEncrypt = JSON.stringify(resData.QRCode);
 
     const [countdown, setCountdown] = useState('');
     const [isQrCodeValid, setIsQrCodeValid] = useState(true);
 
-    const expireTime = new Date(Data.expire_time);
+    const expireTime = new Date(resData.expire_time);
 
     useEffect(() => {
         const updateCountdown = () => {
@@ -75,14 +83,14 @@ function Receipt() {
                         )}
                     </div>
                     <div className="flex flex-col text-sm justify-center mt-10 items-center gap-5 font-semibold text-black">
-                        <p>FLOOR - {Data.floor_name}</p>
-                        <p>POSITION - {Data.slot_name}</p>
+                        <p>FLOOR - {resData.floor_name}</p>
+                        <p>POSITION - {resData.slot_name}</p>
                         <p>EXPIRE DATE - {expireTime.toLocaleDateString()}</p>
                         <p>EXPIRE TIME - {expireTime.toLocaleTimeString()}</p>
                     </div>
                     <div className="text-3xl font-bold text-orange-400 mt-10 gap-4 flex flex-col items-center">
                         <h1>License Number</h1>
-                        <h1>{Data.license_no}</h1>
+                        <h1>{resData.license_no}</h1>
                     </div>
                 </div>
 
