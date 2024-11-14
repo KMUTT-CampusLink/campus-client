@@ -2,7 +2,7 @@ import Building from '../component/Main/Building';
 import ReceiptButton from '../component/Main/Menu/ReceiptButton';
 import ParkingButton from '../component/Main/Menu/ParkingButton';
 import HelpButton from '../component/Main/Menu/HelpButton';
-import uniImg from '../img/kmutt-cover.png';
+import img3 from '../img/kmutt-cover.png';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import Search from "../component/Search/Search"
@@ -10,7 +10,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../../registration/components/NavBarComponents/NavBar';
 import Searchresultlist from "../component/Search/Searchresultlist";
-
+import 'react-slideshow-image/dist/styles.css'
+import { Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css';
+import img1 from "../img/slide2.png";
+import img2 from "../img/slide4-2.png"
 function MainPage() {
     const [building, setBuilding] = useState([]); /* */
 
@@ -24,13 +28,32 @@ function MainPage() {
     }, []);
 
     const [results, setResults] = useState([]);
-
+    const slideImages = [
+        {
+          url:"https://sustainable.kmutt.ac.th/wp-content/uploads/2024/03/DJI_0205-copy-scaled.jpg",
+          caption: ''
+        },
+        {
+            url: "https://campus.campus-star.com/app/uploads/2020/10/lx-bu.jpg",
+            caption: ''
+        },
+        {
+          url:"https://contributor.lib.kmutt.ac.th:8443/images/contents/9c001b03-61a9-421e-a6ad-4986039ea399/1.jpeg",
+          caption: ''
+        },
+      ];
     return (
         <>
             <Navbar />
-            <div className="flex flex-row justify-center pt-24">
-                <img className="w-2/4 h-1/10 min-w-96 min-h-70" src={uniImg} alt="" />
+            <Slide>
+         {slideImages.map((slideImage, index)=> (
+            <div key={index} className='flex justify-center items-center pt-20'>
+              <div style={{'backgroundImage': `url(${slideImage.url})` }} className='w-2/4 h-1/10 aspect-video min-w-96 min-h-70 bg-cover'>
+                <span className="">{slideImage.caption}</span>
+              </div>
             </div>
+          ))} 
+        </Slide>
             <br />
             <br />
             <div className="flex flex-col justify-center">
