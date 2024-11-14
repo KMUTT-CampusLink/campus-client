@@ -6,6 +6,7 @@ import Manage from "../../components/professor/Manage";
 import { useState } from "react";
 
 const ProfessorDashBoard = () => {
+  const section_id = 1019;
   const [tab, setTab] = useState("record");
   return (
     <div className="w-full min-h-screen">
@@ -14,7 +15,7 @@ const ProfessorDashBoard = () => {
         {/* Container */}
         <div className="w-full flex-col items-center justify-center">
           <NavBarProfessor tab={tab} setTab={setTab} />
-          {(tab === "setting" && <Setting />) ||
+          {(tab === "setting" && <Setting section_id={section_id} />) ||
             (tab === "record" && <Record />) ||
             (tab === "manage" && <Manage />)}
         </div>

@@ -1,8 +1,13 @@
+import { useUpdateSetting } from "../../services/mutations";
+import SmallLoading from "../../../dev/pages/SmallLoading";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetSetting } from "../../services/queries";
 import popToast from "../../../../utils/popToast";
 import geoLocation from "../../utils/geoLocation";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const schema = z.object({
@@ -14,43 +19,61 @@ const schema = z.object({
 
 const labelStyle = "font-geologica text-sm font-semibold";
 const inputStyle =
-  "w-[100%] h-[2rem] border-2 px-2 text-black font-geologica text-sm outline-none col-span-2";
+  "w-[100%] h-[2rem] border-2 px-2 text-black font-geologica text-sm font-semibold outline-none col-span-2";
 
-const Setting = () => {
+const Setting = ({ section_id }) => {
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
+  const [error, setError] = useState(null);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
-    reset,
+    setValue,
   } = useForm({
     mode: "onChange",
     resolver: zodResolver(schema),
   });
 
-  const getLocation = () => {
-    const obj = geoLocation();
-    if (obj.error.length > 0) {
-      console.log(obj.error);
-    } else {
-      setLat(() => obj.data[0]);
-      setLong(() => obj.data[1]);
-      console.log(obj);
-    }
-  };
+  const { data, isLoading, error: settingError } = useGetSetting(section_id);
+  const { mutate, isPending } = useUpdateSetting(queryClient);
 
-  const handleSave = handleSubmit((data) => {
+  useEffect(() => {
+    setLat(data?.data?.latitude);
+    setLong(data?.data?.longitude);
+    setValue("expire", data?.data?.expired_at + "");
+    setValue("late", data?.data?.late_after + "");
+    setValue("absent", data?.data?.absent_after + "");
+    setValue("location", data?.data?.use_location);
+  }, [data]);
+
+  const handleSave = handleSubmit((form_data) => {
     if (Object.keys(errors).length > 0) {
       popToast("Form not complete", "error");
       console.log(errors);
-    } else if (data.location && (lat === null || long === null)) {
+    } else if (form_data.location && (lat + "" === "0" || long + "" === "0")) {
       popToast("Location required", "error");
+    } else if (error) {
+      popToast(error, "error");
     } else {
-      console.log(data);
+      form_data = {
+        ...form_data,
+        location: form_data.location,
+        lat: lat,
+        long: long,
+      };
+      mutate(form_data, queryClient);
     }
   });
+
+  if (isLoading) {
+    return <SmallLoading message="fetching" />;
+  }
+  if (settingError) console.error(settingError.message);
 
   return (
     <div className="w-full h-fit flex items-center justify-center p-[1rem] mt-2">
@@ -68,7 +91,7 @@ const Setting = () => {
           className={`${inputStyle}`}
           {...register("expire")}
           id="expire"
-          type="number"
+          type="text"
         />
         <label
           className={`font-geologica text-sm font-semibold`}
@@ -85,7 +108,7 @@ const Setting = () => {
           className={`${inputStyle}`}
           {...register("late")}
           id="late"
-          type="number"
+          type="text"
         />
         <label
           className={`font-geologica text-sm font-semibold`}
@@ -102,7 +125,7 @@ const Setting = () => {
           className={`${inputStyle}`}
           {...register("absent")}
           id="absent"
-          type="number"
+          type="text"
         />
         <label
           className={`font-geologica text-sm font-semibold`}
@@ -122,17 +145,51 @@ const Setting = () => {
           id="location"
         />
         <button
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
-            getLocation();
+            setGeoLoading(true);
+            await geoLocation(setLat, setLong, setError).then((res) => {
+              if (res) {
+                setGeoLoading(false);
+              }
+            });
           }}
           disabled={!watch("location")}
-          className="font-geologica text-sm font-semibold p-1 bg-gray-200 rounded-md col-span-2 w-[80%] hover:bg-gray-300 disabled:text-gray-400"
+          className="font-geologica text-sm font-semibold p-1 bg-gray-200 rounded-md col-span-2 w-[80%] hover:bg-gray-300 disabled:text-gray-400 h-[2rem]"
         >
-          Locate
+          {geoLoading ? (
+            <ScaleLoader
+              height={20}
+              width={4}
+              color={`#fff`}
+              speedMultiplier={1.2}
+              loading={geoLoading}
+            />
+          ) : (
+            "Locate"
+          )}
         </button>
 
         {/* Latitude & Longitude */}
+        {watch("location") && (
+          <div className="col-span-4 flex items-center justify-start w-full gap-4 font-geologica text-sm font-semibold tracking-wide">
+            <div className="flex items-center justify-start w-[50%] gap-1">
+              <p>Lat :</p>
+              <p className="flex-1 border-2 text-center p-1">
+                {lat || "0.0000000"}
+              </p>
+            </div>
+            <div className="flex items-center justify-start w-[50%] gap-1">
+              <p>Long :</p>
+              <p
+                className="flex-1 border-2 text-center p-1
+              "
+              >
+                {long || "0.0000000"}
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="col-span-4 w-full flex items-center justify-center">
           <button
@@ -143,7 +200,7 @@ const Setting = () => {
             style={{
               boxShadow: "rgba(0, 0, 0, .1) 0 2px 4px 0",
             }}
-            className="font-geologica text-sm font-semibold tracking-widest bg-[#13aa52] rounded-none border-[1px] border-solid border-[#13aa52] text-white cursor-pointer outline-none text-center py-[10px] px-[25px]"
+            className="font-geologica text-sm font-semibold tracking-widest bg-[#13aa52] rounded-none border-[1px] border-solid border-[#13aa52] text-white cursor-pointer outline-none text-center py-[8px] px-[35px]"
           >
             SAVE
           </button>

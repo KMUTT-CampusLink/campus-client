@@ -59,6 +59,12 @@ const NewsUpdates = () => {
           }}
           navigation
           breakpoints={{
+            320: {
+              slidesPerView: 2,
+              navigation: {
+                enabled: false,
+              },
+            },
             640: {
               slidesPerView: 2,
             },
