@@ -14,7 +14,7 @@ const NavBarProfessor = ({ tab, setTab }) => {
       <div className="flex items-center justify-center gap-4">
         <div
           onClick={() => setTab("setting")}
-          className={`font-geologica font-semibold text-sm p-[1rem] flex items-center justify-center gap-2 relative cursor-pointer rounded-md hover:bg-gray-200`}
+          className={`font-geologica font-semibold text-base p-[1rem] flex items-center justify-center gap-2 relative cursor-pointer rounded-md hover:bg-gray-200`}
         >
           <FontAwesomeIcon icon={faGear} />
           <span>Setting</span>
@@ -24,7 +24,7 @@ const NavBarProfessor = ({ tab, setTab }) => {
         </div>
         <div
           onClick={() => setTab("record")}
-          className={`font-geologica font-semibold text-sm p-[1rem] flex items-center justify-center gap-2 relative cursor-pointer rounded-md hover:bg-gray-200`}
+          className={`font-geologica font-semibold text-base p-[1rem] flex items-center justify-center gap-2 relative cursor-pointer rounded-md hover:bg-gray-200`}
         >
           <FontAwesomeIcon icon={faQrcode} />
           <span>Record</span>
@@ -34,7 +34,7 @@ const NavBarProfessor = ({ tab, setTab }) => {
         </div>
         <div
           onClick={() => setTab("manage")}
-          className={`font-geologica font-semibold text-sm p-[1rem] flex items-center justify-center gap-2 relative cursor-pointer rounded-md hover:bg-gray-200`}
+          className={`font-geologica font-semibold text-base p-[1rem] flex items-center justify-center gap-2 relative cursor-pointer rounded-md hover:bg-gray-200`}
         >
           <FontAwesomeIcon icon={faListCheck} />
           <span>Manage</span>

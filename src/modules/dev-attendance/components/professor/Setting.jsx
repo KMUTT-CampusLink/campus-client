@@ -1,43 +1,55 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import popToast from "../../../../utils/popToast";
+import geoLocation from "../../utils/geoLocation";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { z } from "zod";
 
 const schema = z.object({
-  expire: z
-    .number()
-    .int()
-    .positive()
-    .min(1, "1 to 60 mins")
-    .max(60, "1 to 60 mins"),
-  late: z
-    .number()
-    .int()
-    .positive()
-    .min(1, "1 to 60 mins")
-    .max(60, "1 to 60 mins"),
-  absent: z
-    .number()
-    .int()
-    .positive()
-    .min(1, "1 to 60 mins")
-    .max(60, "1 to 60 mins"),
+  expire: z.string().regex(/^([1-9]|[1-5][0-9]|60|all)$/),
+  late: z.string().regex(/^([1-9]|[1-5][0-9]|60|all)$/),
+  absent: z.string().regex(/^([1-9]|[1-5][0-9]|60|all)$/),
   location: z.boolean(),
 });
 
 const labelStyle = "font-geologica text-sm font-semibold";
 const inputStyle =
-  "w-[100%] h-[2rem] border-2 px-2 text-white text-base outline-none col-span-2";
+  "w-[100%] h-[2rem] border-2 px-2 text-black font-geologica text-sm outline-none col-span-2";
 
 const Setting = () => {
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    getValues,
+    watch,
     reset,
   } = useForm({
     mode: "onChange",
     resolver: zodResolver(schema),
+  });
+
+  const getLocation = () => {
+    const obj = geoLocation();
+    if (obj.error.length > 0) {
+      console.log(obj.error);
+    } else {
+      setLat(() => obj.data[0]);
+      setLong(() => obj.data[1]);
+      console.log(obj);
+    }
+  };
+
+  const handleSave = handleSubmit((data) => {
+    if (Object.keys(errors).length > 0) {
+      popToast("Form not complete", "error");
+      console.log(errors);
+    } else if (data.location && (lat === null || long === null)) {
+      popToast("Location required", "error");
+    } else {
+      console.log(data);
+    }
   });
 
   return (
@@ -56,13 +68,13 @@ const Setting = () => {
           className={`${inputStyle}`}
           {...register("expire")}
           id="expire"
-          type="text"
+          type="number"
         />
         <label
           className={`font-geologica text-sm font-semibold`}
           htmlFor="expire"
         >
-          m(s)
+          min(s)
         </label>
 
         {/* Late */}
@@ -73,13 +85,13 @@ const Setting = () => {
           className={`${inputStyle}`}
           {...register("late")}
           id="late"
-          type="text"
+          type="number"
         />
         <label
           className={`font-geologica text-sm font-semibold`}
           htmlFor="late"
         >
-          m(s)
+          min(s)
         </label>
 
         {/* Absent */}
@@ -90,18 +102,18 @@ const Setting = () => {
           className={`${inputStyle}`}
           {...register("absent")}
           id="absent"
-          type="text"
+          type="number"
         />
         <label
           className={`font-geologica text-sm font-semibold`}
           htmlFor="absent"
         >
-          m(s)
+          min(s)
         </label>
 
         {/* Geolocation */}
         <label className={`${labelStyle}`} htmlFor="location">
-          Geolocation
+          Location
         </label>
         <input
           {...register("location")}
@@ -110,16 +122,23 @@ const Setting = () => {
           id="location"
         />
         <button
-          onClick={(e) => e.preventDefault()}
-          className="font-geologica text-sm font-semibold p-1 bg-gray-200 rounded-md col-span-2 w-[80%] hover:bg-gray-300"
+          onClick={(e) => {
+            e.preventDefault();
+            getLocation();
+          }}
+          disabled={!watch("location")}
+          className="font-geologica text-sm font-semibold p-1 bg-gray-200 rounded-md col-span-2 w-[80%] hover:bg-gray-300 disabled:text-gray-400"
         >
           Locate
         </button>
+
+        {/* Latitude & Longitude */}
 
         <div className="col-span-4 w-full flex items-center justify-center">
           <button
             onClick={(e) => {
               e.preventDefault();
+              handleSave();
             }}
             style={{
               boxShadow: "rgba(0, 0, 0, .1) 0 2px 4px 0",
