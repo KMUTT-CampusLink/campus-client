@@ -16,6 +16,7 @@ const schema = z.object({
     .nonempty({ message: "Announcement detail is required" }),
   eventDate: z.string().nonempty({ message: "Event date is required" }),
   eventTimeFrom: z.string().nonempty({ message: "Event time is required" }),
+  eventTimeTo: z.string().nonempty({ message: "Event time is required" }),
   eventPlace: z.string().nonempty({ message: "Event place is required" }),
 });
 
@@ -30,54 +31,26 @@ function CreateAnnouncement() {
   });
 
   const navigate = useNavigate(); // Hook to navigate between routes
-
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  //   // Navigate to the desired route after submitting the form
-  //   navigate("/clubs/club-home"); // Change this to your desired route
-  // };
-  // const onSubmit = async (data) => {
-  //   const formData = new formData();
-
-  //     formData.append("announcementTitle", data.announcementDescription);
-  //     formData.append("announcementContent", data.announcementDetail);
-  //     formData.append("eventDate", data.eventDate);
-  //     formData.append("eventTime", data.eventTime);
-  //     formData.append("eventPlace", data.eventPlace);
-  //     // announcementTitle: data.announcementDescription,
-  //     // announcementContent: data.announcementDetail,
-  //     // eventDate: new Date(`${data.eventDate}T${data.eventTime}`), // Combine date and time
-  //     // eventPlace: data.eventPlace,
-    
-  
-  //   try {
-  //     const response = await axiosInstance.post(`/clubs/admin/announcements/${clubId}`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-  //     if (response.data.success) {
-  //       alert("Announcement created successfully");
-  //       navigate(`/clubs/club-home/${clubId}`);
-  //     } else {
-  //       console.error("Failed to create announcement:", response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating announcement:", error);
-  //   }
-  // };
   const onSubmit = async (data) => {
     const formData = new FormData();
   
+    // formData.append("announcementTitle", data.announcementDescription);
+    // formData.append("announcementContent", data.announcementDetail);
+    // formData.append("eventDateTime", `${data.eventDate}T${data.eventTime}:00`); // Ensure ISO-8601 format
+    // formData.append("eventPlace", data.eventPlace);
     formData.append("announcementTitle", data.announcementDescription);
     formData.append("announcementContent", data.announcementDetail);
-    formData.append("eventDateTime", `${data.eventDate}T${data.eventTime}:00`); // Ensure ISO-8601 format
+    formData.append("eventDate", data.eventDate);
+    formData.append("eventTimeFrom", data.eventTimeFrom);
+    formData.append("eventTimeTo", data.eventTimeTo);
     formData.append("eventPlace", data.eventPlace);
   
     console.log("Form Data:", {
       announcementTitle: data.announcementDescription,
       announcementContent: data.announcementDetail,
-      eventDateTime: `${data.eventDate}T${data.eventTime}:00`,
+      eventDate: data.eventDate,
+      eventTimeFrom: data.eventTimeFrom,
+      eventTimeTo: data.eventTimeTo,
       eventPlace: data.eventPlace,
     });
 
@@ -89,19 +62,16 @@ function CreateAnnouncement() {
       });
   
       if (response.data.success) {
-        alert("Announcement created successfully");
+        alert("Event created successfully");
         navigate(`/clubs/club-home/${clubId}`);
       } else {
-        console.error("Failed to create announcement:", response.data.message);
+        console.error("Failed to create event:", response.data.message);
       }
     } catch (error) {
-      console.error("Error creating announcement:", error);
+      console.error("Error creating event:", error);
     }
   };
   
-  
-  
-
   return (
     <div className="mt-14">
       <form
@@ -156,13 +126,13 @@ function CreateAnnouncement() {
           <label className="block text-xl font-semibold">Event Time (From) <span className="text-red-500">*</span></label>
           <input
             type="time"
-            {...register("eventTime")}
+            {...register("eventTimeFrom")}
             className={`border p-2 w-full rounded-md shadow-sm ${
-              errors.eventTime ? "border-red-500" : "border-gray-300"
+              errors.eventTimeFrom ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.eventTime && (
-            <p className="text-red-500">{errors.eventTime.message}</p>
+          {errors.eventTimeFrom && (
+            <p className="text-red-500">{errors.eventTimeFrom.message}</p>
           )}
         </div>
 
@@ -170,13 +140,13 @@ function CreateAnnouncement() {
           <label className="block text-xl font-semibold">Event Time (To) <span className="text-red-500">*</span></label>
           <input
             type="time"
-            {...register("eventTime")}
+            {...register("eventTimeTo")}
             className={`border p-2 w-full rounded-md shadow-sm ${
-              errors.eventTime ? "border-red-500" : "border-gray-300"
+              errors.eventTimeTo ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.eventTime && (
-            <p className="text-red-500">{errors.eventTime.message}</p>
+          {errors.eventTimeTo && (
+            <p className="text-red-500">{errors.eventTimeTo.message}</p>
           )}
         </div>
 
