@@ -31,7 +31,7 @@ const PartialSelect = ({ setShowPartialSelect }) => {
           <>
             <h2 className="h3 mb-6 text-center">Select Installment Count</h2>
             <div className="flex flex-col space-y-4 ">
-              {["One Time", "Two Times", "Three Times"].map((option, index) => (
+              {[ "Two Times", "Three Times"].map((option, index) => (
                 <div
                   key={index}
                   className={`flex items-center p-4 border rounded-lg cursor-pointer  ${
