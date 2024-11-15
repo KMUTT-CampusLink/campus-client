@@ -1,135 +1,72 @@
-// import { useState, useEffect } from "react";
-
-// const ClubHomePostEditModal = ({ isOpen, onClose, data }) => {
-//   if (!isOpen) return null;
-
-//   const [title, setTitle] = useState("");
-//   const [content, setContent] = useState("");
-//   const [location, setLocation] = useState("");
-//   const [date, setDate] = useState("");
-//   const [time, setTime] = useState("");
-
-//   const [newTitle, setNewTitle] = useState(title);
-//   const [newContent, setNewContent] = useState(content);
-//   const [newLocation, setNewLocation] = useState(location);
-//   const [newDate, setNewDate] = useState(date);
-//   const [newTime, setNewTime] = useState(time);
-
-//   useEffect(() => {
-//     if (data) {
-//       setTitle(data.title || ""); //if it doesn't exist, empty string
-//       setContent(data.content || "");
-//       setNewTitle(data.title || "");
-//       setNewContent(data.content || "");
-//       setNewLocation(data.location || null);
-//       setNewDate(data.date || null);
-//       setNewTime(data.time || null);
-//     }
-//   }, [data]);
-
-//   const handlePost = () => {
-//     setTitle(newTitle);
-//     setContent(newContent);
-//     setLocation(newLocation);
-//     setDate(newDate);
-//     setTime(newTime);
-//     onClose();
-//   };
-
-//   return (
-//     <div className="modal modal-open">
-//       <div className="modal-box relative bg-[#505050] p-8">
-//         <button
-//           className=" absolute right-2 top-2 bg-[#505050]"
-//           onClick={onClose}
-//         >
-//           ✕
-//         </button>
-//         <input
-//           value={newTitle}
-//           onChange={(e) => setNewTitle(e.target.value)}
-//           className="w-full h-[7vh] md:h-[5vh] p-4 bg-[#505050] text-white text-base rounded-md overflow-auto"
-//         />
-//         <textarea
-//           value={newContent}
-//           onChange={(e) => setNewContent(e.target.value)}
-//           className="w-full h-[12vh] md:h-[10vh] p-4 bg-[#505050] text-white text-base rounded-md"
-//         ></textarea>
-//         {newLocation != null && (
-//           <textarea
-//             value={newLocation}
-//             onChange={(e) => setNewLocation(e.target.value)}
-//             className="w-full h-[7vh] md:h-[5vh] p-4 bg-[#505050] text-white text-base rounded-md overflow-auto"
-//           ></textarea>
-//         )}
-//         {newDate != null && (
-//           <input
-//             value={newDate}
-//             onChange={(e) => setNewDate(e.target.value)}
-//             className="w-full h-[7vh] md:h-[5vh] p-4 bg-[#505050] text-white text-base rounded-md overflow-auto"
-//           />
-//         )}
-//         {newTime != null && (
-//           <input
-//             value={newTime}
-//             onChange={(e) => setNewTime(e.target.value)}
-//             className="w-full h-[7vh] md:h-[5vh] p-4 bg-[#505050] text-white text-base rounded-md overflow-auto"
-//           />
-//         )}
-
-//         <button
-//           onClick={handlePost}
-//           className=" flex bg-[#EC5A51] mt-4 ml-auto text-white px-4 md:px-8 py-2 rounded-lg"
-//         >
-//           Post
-//         </button>
-//         {/* Add more content as needed */}
-//       </div>
-//     </div>
-//   );
-// };
-// export default ClubHomePostEditModal;
-
 import { useState, useEffect } from "react";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
-const ClubHomePostEditModal = ({ isOpen, onClose, data }) => {
+const ClubHomePostEditModal = ({ isOpen, onClose, data, onUpdate }) => {
   if (!isOpen) return null;
 
   // State for the post fields (title, content, location, date, time)
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  // const [title, setTitle] = useState("");
+  // const [content, setContent] = useState("");
+  // const [location, setLocation] = useState("");
+  // const [date, setDate] = useState("");
+  // const [time, setTime] = useState("");
 
   // Local state for the form inputs
-  const [newTitle, setNewTitle] = useState(title);
-  const [newContent, setNewContent] = useState(content);
-  const [newLocation, setNewLocation] = useState(location);
-  const [newDate, setNewDate] = useState(date);
-  const [newTime, setNewTime] = useState(time);
+  // const [newTitle, setNewTitle] = useState(title);
+  // const [newContent, setNewContent] = useState(content);
+  // const [newLocation, setNewLocation] = useState(location);
+  // const [newDate, setNewDate] = useState(date);
+  // const [newTime, setNewTime] = useState(time);
+  const [newTitle, setNewTitle] = useState("");
+  const [newContent, setNewContent] = useState("");
+  const [newLocation, setNewLocation] = useState("");
+  const [newDate, setNewDate] = useState("");
+  const [newStartTime, setNewStartTime] = useState("");
+  const [newEndTime, setNewEndTime] = useState("");
 
   // UseEffect to pre-fill the modal fields with post data
   useEffect(() => {
     if (data) {
-      setTitle(data.title || "");
-      setContent(data.content || "");
       setNewTitle(data.title || "");
       setNewContent(data.content || "");
       setNewLocation(data.location || "");
-      setNewDate(data.date || "");
-      setNewTime(data.time || "");
+      setNewDate(data.date ? data.date.split("T")[0] : "");
+      setNewStartTime(data.start_time ? data.start_time.split("T")[1].slice(0, 5) : "");
+      setNewEndTime(data.end_time ? data.end_time.split("T")[1].slice(0, 5) : "");
     }
   }, [data]);
 
   // Function to handle updating the post
-  const handlePostUpdate = () => {
-    setTitle(newTitle);
-    setContent(newContent);
-    setLocation(newLocation);
-    setDate(newDate);
-    setTime(newTime);
-    onClose(); // Close the modal after update
+  // const handlePostUpdate = () => {
+  //   setTitle(newTitle);
+  //   setContent(newContent);
+  //   setLocation(newLocation);
+  //   setDate(newDate);
+  //   setTime(newTime);
+  //   onClose(); // Close the modal after update
+  // };
+  const handlePostUpdate = async() => {
+    const updatedData = {
+      title: newTitle,
+      content: newContent,
+      location: newLocation,
+      date: newDate,
+      start_time: newStartTime || "00:00",
+      end_time: newEndTime || "00:00",
+    };
+    console.log("Updated Data:", updatedData);
+    try {
+      const response = await axiosInstance.put(`/clubs/announcements/${data.id}`, updatedData);
+      console.log("Updated Event Data:", response.data.data);
+      if (typeof onUpdate === "function") {
+        onUpdate(response.data.data);
+      }
+      alert("Event updated successfully!");
+      onClose(); // Close the modal after update
+    }catch(err){
+      console.error("Error updating event:", err);
+      alert("Failed to update event. Please try again!");
+    }
   };
 
   return (
@@ -188,13 +125,25 @@ const ClubHomePostEditModal = ({ isOpen, onClose, data }) => {
         )}
 
         {/* Time Field */}
-        {newTime !== "" && (
+        {newStartTime !== "" && (
           <div className="flex flex-col space-y-1">
-            <label className="font-medium text-gray-700">Time</label>
+            <label className="font-medium text-gray-700">Start Time</label>
             <input
               type="time"
-              value={newTime}
-              onChange={(e) => setNewTime(e.target.value)}
+              value={newStartTime}
+              onChange={(e) => setNewStartTime(e.target.value)}
+              className="border p-2 w-full rounded-md shadow-sm border-gray-300 text-sm"
+            />
+          </div>
+        )}
+
+        {newEndTime !== "" && (
+          <div className="flex flex-col space-y-1">
+            <label className="font-medium text-gray-700">Start Time</label>
+            <input
+              type="time"
+              value={newEndTime}
+              onChange={(e) => setNewEndTime(e.target.value)}
               className="border p-2 w-full rounded-md shadow-sm border-gray-300 text-sm"
             />
           </div>
