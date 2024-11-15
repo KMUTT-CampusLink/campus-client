@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import EmployeeCard from "../components/EmployeeCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import DeletePopUp from "../components/DeletePopUp";
-import axios from "axios";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const calculateAge = (dob) => {
   const today = new Date();
@@ -32,13 +32,10 @@ const EmployeeDetail = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const result = await fetch(
-          "http://localhost:3000/api/employ/getEmp/" + id
-        );
-        const jsonResult = await result.json();
-        setEmployee(jsonResult);
+        const result = await axiosInstance.get(`employ/getEmp/${id}`);
+        setEmployee(result.data);
 
-        if (!jsonResult.faculty) {
+        if (!result.data.faculty) {
           console.error("Faculty data missing. Redirecting to main page.");
           navigate(`/employ`);
         }
@@ -72,11 +69,11 @@ const EmployeeDetail = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`employ/deleteEmp/${id}`);
+      const response = await axiosInstance.delete(`employ/deleteEmp/${id}`);
       console.log("Delete successful");
       setDeleteSuccess(true);
       setShowPopup(false);
-      navigate(`/employ/employee`); // Redirect to employee list or desired page
+      navigate(`/employ/employee`);
     } catch (error) {
       console.error("Error deleting employee:", error);
     }
@@ -131,7 +128,7 @@ const EmployeeDetail = () => {
                 </div>
                 <div>
                   <p className="font-opensans text-[8px] md:text-[12px] text-[#1A4F6E]">
-                    Job-title
+                    Role
                   </p>
                   <p className="text-[15px] md:text-[20px] font-georama">
                     {employee.job_title}
@@ -194,7 +191,9 @@ const EmployeeDetail = () => {
                     Address
                   </p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                    {employee.address}
+                    {employee.address.address} {employee.address.sub_district}{" "}
+                    {employee.address.district} {employee.address.province}{" "}
+                    {employee.address.postal_code}
                   </p>
                 </div>
               </div>
