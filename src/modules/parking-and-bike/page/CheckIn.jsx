@@ -4,28 +4,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import QRCode from 'react-qr-code';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
-import image from "../img/Receiptimage.png"
+import image from "../img/Receiptimage.png";
 
 function CheckIn() {
     const navigate = useNavigate();
     const location = useLocation();
     const resData = location.state;
 
-    if(!resData){
+    if (!resData) {
         return (
             <>
-            <NavBar/>
+                <NavBar />
             </>
-        )
+        );
     }
 
     const resEncrypt = JSON.stringify({
         qr: resData.QRCode,
         rid: resData.reservation_id,
     });
-    
+
     console.log(resEncrypt);
-    
 
     const [countdown, setCountdown] = useState('');
     const [isQrCodeValid, setIsQrCodeValid] = useState(true);
@@ -60,7 +59,6 @@ function CheckIn() {
     const qrCodeUrl = `${window.location.origin}/parking/scanned/${encodeURIComponent(resEncrypt)}`;
 
     console.log(qrCodeUrl);
-    
 
     return (
         <>
@@ -74,11 +72,11 @@ function CheckIn() {
                 />
             </div>
 
-            <div className="relative flex flex-col justify-center items-center min-h-screen pt-20 z-10">
+            <div className="relative flex flex-col justify-center items-center min-h-screen pt-20 z-10 p-4">
                 <FontAwesomeIcon className="absolute top-24 w-20 h-20 text-green-500" icon={faCircleCheck} />
                 <div className="flex flex-col justify-center items-center pt-20">
-                    <h1 className="text-2xl font-bold text-black">BOOKING SUCCESSFUL!</h1>
-                    <p className="text-red-600 mt-5 text-xs">QR Expires in: {countdown}</p>
+                    <h1 className="text-2xl font-bold text-black text-center">BOOKING SUCCESSFUL!</h1>
+                    <p className="text-red-600 mt-5 text-xs text-center">QR Expires in: {countdown}</p>
                     <div className="border-4 border-yellow-500 mt-5 p-1 rounded-md bg-gray-400">
                         {isQrCodeValid ? (
                             <QRCode
@@ -89,13 +87,13 @@ function CheckIn() {
                             <p className="text-red-600 text-center">QR Code has expired.</p>
                         )}
                     </div>
-                    <div className="flex flex-col text-sm justify-center mt-10 items-center gap-5 font-semibold text-black">
+                    <div className="flex flex-col text-sm justify-center mt-10 items-center gap-5 font-semibold text-black text-center">
                         <p>FLOOR - {resData.floor_name}</p>
                         <p>POSITION - {resData.slot_name}</p>
                         <p>EXPIRE DATE - {expireTime.toLocaleDateString()}</p>
                         <p>EXPIRE TIME - {expireTime.toLocaleTimeString()}</p>
                     </div>
-                    <div className="text-3xl font-bold text-orange-400 mt-10 gap-4 flex flex-col items-center">
+                    <div className="text-3xl font-bold text-orange-400 mt-10 gap-4 flex flex-col items-center text-center">
                         <h1>License Number</h1>
                         <h1>{resData.license_no}</h1>
                     </div>
@@ -109,7 +107,6 @@ function CheckIn() {
                 </button>
             </div>
         </>
-
     );
 }
 

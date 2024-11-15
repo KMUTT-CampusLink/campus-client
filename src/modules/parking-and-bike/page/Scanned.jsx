@@ -8,19 +8,24 @@ function Scanned() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [reservationData, setReservationData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
+      // Decode the data from the URL parameter
       const decodedData = JSON.parse(decodeURIComponent(id));
       setReservationData(decodedData);
+      setLoading(false);
     } catch (error) {
       console.error('Error decoding reservation data:', error);
+      setLoading(false);
     }
   }, [id]);
 
   const handleCheckin = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    if (!reservationData) return;
 
+    // Prepare the request data with current time for check-in
     const requestData = {
       reservation_id: reservationData.rid,
       checkin_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
@@ -32,6 +37,10 @@ function Scanned() {
       const res = await postCheckin(requestData);
       if (res.message === "QR Checkout created successfully!") {
         alert("Checkin successful!");
+        // Navigate to checkout page with reservationData
+        navigate('/parking/checkout', { state: res });
+        console.log(res);
+        
       }
     } catch (error) {
       if (error.response) {
@@ -42,18 +51,25 @@ function Scanned() {
     }
   };
 
+  useEffect(() => {
+    // Delay to simulate a loading time before automatic check-in
+    if (reservationData) {
+      const checkinTimeout = setTimeout(() => {
+        handleCheckin();
+      }, 1500);
+      
+      return () => clearTimeout(checkinTimeout);
+    }
+  }, [reservationData]);
+
   const handleClick = () => {
     navigate('/parking');
   };
 
-  if (!reservationData) {
+  if (loading) {
     return <div>Loading...</div>;
-  } else {
-    setTimeout(() => {
-      handleCheckin();
-    }, 1500);
   }
-
+  
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg">
