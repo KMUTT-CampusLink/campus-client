@@ -17,6 +17,7 @@ export default function StudentHomePage() {
 
   const getExams = async () => {
     const res = await getStudentExamsById(sectionId);
+    console.log(res )
     setExams(res.data.data);
   }
 
@@ -27,6 +28,7 @@ export default function StudentHomePage() {
 
   const getHistoryExams = async () => {
     const res = await getHistoryStudentExams(sectionId);
+    console.log(res)
     setHistoryExams(res.data.data);
   }
 
