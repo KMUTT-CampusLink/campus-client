@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "../components/NavBarComponents/NavBar";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { fetchUserBookings, fetchTripData } from "../services/api";
 import { format } from "date-fns";
 
@@ -10,7 +10,7 @@ const NavigationPage = () => {
 
   useEffect(() => {
     fetchTripData(1).then((data) => {
-      console.log(data);
+      // console.log(data);
     });
   });
 
@@ -18,14 +18,13 @@ const NavigationPage = () => {
   useEffect(() => {
     fetchUserBookings().then((data) => {
       setUserBookings(data.bookings);
-      console.log(data.bookings);
+      // console.log(data.bookings);
     });
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-orange-100">
       <NavBar />
-
       <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
         {/* Dashboard Header */}
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">

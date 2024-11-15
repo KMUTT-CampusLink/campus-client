@@ -21,7 +21,7 @@ function HomePage() {
   //fetch routes connecting the selected stops
   const handleRouteSearch = () => {
     fetchRoutesConnectingStops(startStop.id, endStop.id).then((data) => {
-      console.log(data.routes);
+      // console.log(data.routes);
       setRoutes(data.routes);
     });
   };

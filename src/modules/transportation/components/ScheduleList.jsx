@@ -1,9 +1,28 @@
-import React from "react";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
 import { FaUser, FaBus, FaCalendarAlt, FaClock } from "react-icons/fa"; // Updated to include bus icon
+import { axiosInstance } from "../../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import popToast from "../../../utils/popToast";
 
 const TripList = ({ trips }) => {
+  const navigate = useNavigate();
+  const handleBooking = async (tripID) => {
+    try {
+      const data = await axiosInstance
+        .post("/transport/user/book", { tripID })
+        .then((res) => res.data);
+      if (data) {
+        popToast(
+          data.message,
+          data.message === "Booking successful" ? "success" : "info"
+        );
+        navigate(`/transport/booking/${data.booking.trip_id}`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="w-full p-4">
       {/* Show a message 'No routes available' if there are no routes */}
@@ -61,11 +80,20 @@ const TripList = ({ trips }) => {
 
             {/* Centered button to book the trip */}
             <div className="flex justify-center mt-4">
-              <Link to={`/transport/booking/${trip.id}`}>
+              {/* <Link to={`/transport/booking/${trip.id}`}>
                 <button className="py-1 px-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition duration-200">
                   Book Now
                 </button>
-              </Link>
+              </Link> */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBooking(trip.id);
+                }}
+                className="py-1 px-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition duration-200"
+              >
+                Book Now
+              </button>
             </div>
           </div>
         ))
