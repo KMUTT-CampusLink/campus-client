@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import ExamCard from "../../components/professor/HomePage/ExamCard";
@@ -12,7 +12,7 @@ import { getExams } from "../../services/apis/professerApi";
 export default function ProfessorHomePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location)
+  const { sectionId } = useParams();
   const [exams, setExams] = useState([]);
 
   const [alertVisible, setAlertVisible] = useState(false);
@@ -20,19 +20,13 @@ export default function ProfessorHomePage() {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const getAllExams = async () => {
-    const res = await getExams();
+    const res = await getExams(sectionId);
     setExams(res.data);
-  }
+  };
 
   const handleRefresh = () => {
     window.location.reload();
   };
-
-  useEffect(() => {
-    getAllExams();
-    
-  }
-  , []);
 
   useEffect(() => {
     if (location.state?.isSettingSubmit) {
@@ -40,13 +34,18 @@ export default function ProfessorHomePage() {
       setAlertMessage(location.state.alertMessage);
       setIsSubmit(location.state.isSettingSubmit);
 
+      // Clear the state to prevent re-triggering when navigating
       navigate(location.pathname, { replace: true });
 
-      // Optionally hide the alert after a few seconds
-      const timer = setTimeout(() => setAlertVisible(false), 3000);
-      return () => clearTimeout(timer);
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 3000);
     }
   }, [location.state, navigate]);
+  
+  useEffect(() => {
+    getAllExams();
+  }, []);
   return (
     <div className="w-auto">
       <NavBar />
@@ -59,20 +58,35 @@ export default function ProfessorHomePage() {
           <h3 className="font-bold text-[22px] xl:text-[30px]">Examination</h3>
           <button
             className="btn bg-[#7F483C] hover:bg-[#6f4036] text-white rounded-lg"
-            onClick={() => { 
-              navigate(`/exams/professor/create/${1}`) 
+            onClick={() => {
+              navigate(`/exams/professor/create/${sectionId}`);
             }}
           >
             Create Exam <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
-        <div className="grid gap-4 py-[20px]">
-          {exams.map((examName) => (
-            <ExamCard examName={examName.title} examId={examName.id} refresh={handleRefresh}></ExamCard>
-          ))}
+        <div
+          className={`grid gap-4 py-[20px] ${
+            exams && exams.length === 0 ? "hidden" : "block"
+          }`}
+        >
+          {exams &&
+            exams.map((examName) => (
+              <ExamCard
+                examName={examName.title}
+                examId={examName.id}
+                refresh={handleRefresh}
+              ></ExamCard>
+            ))}
+        </div>
+        <div
+          className={`${
+            exams && exams.length === 0 ? "flex" : "hidden"
+          } h-[20vh] w-auto justify-center items-center`}
+        >
+          <h1 className="text-[18px]">No Exam</h1>
         </div>
       </div>
-      
       {alertVisible && (
         <div className="toast toast-center">
           <div
@@ -82,8 +96,6 @@ export default function ProfessorHomePage() {
           </div>
         </div>
       )}
-
-      {/* The rest of your professor page content */}
     </div>
   );
 }

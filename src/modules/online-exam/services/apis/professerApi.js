@@ -1,9 +1,10 @@
 import { axiosInstance } from "../../../../utils/axiosInstance";
 
-export const createNewExam = async (exam) => {
+export const createNewExam = async (exam, sectionId) => {
   try {
     const response = await axiosInstance.post("/exams/professor/createExam", {
       exam: exam,
+      sectionId: sectionId,
     });
     return response;
   } catch (error) {
@@ -11,10 +12,9 @@ export const createNewExam = async (exam) => {
   }
 };
 
-export const getExams = async () => {
+export const getExams = async (sectionid) => {
   try {
-    const response = await axiosInstance.get("/exams/professor/getExams");
-    console.log(response);
+    const response = await axiosInstance.get(`/exams/professor/getExams?sectionid=${sectionid}`);
     return response;
   } catch (error) {
     return error.response.data;

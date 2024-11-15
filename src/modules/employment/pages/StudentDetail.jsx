@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import StudentCard from "../components/StudentCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import SDeletePopUp from "../components/SDeletePopUp";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const calculateAge = (dob) => {
   const today = new Date();
@@ -29,23 +30,19 @@ const StudentDetail = () => {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   useEffect(() => {
-    const fetchEmployee = async () => {
+    const fetchStudent = async () => {
       try {
-        const result = await fetch(
-          "http://localhost:3000/api/employ/getStu/" + id
-        );
-        const jsonResult = await result.json();
-        setStudents(jsonResult);
-
-        if (!jsonResult.uni_batch) {
+        const result = await axiosInstance.get(`employ/getStu/${id}`);
+        setStudents(result.data);
+        if (!result.data.uni_batch) {
           console.error("Faculty data missing. Redirecting to main page.");
           navigate(`/employ/student`);
         }
       } catch (error) {
-        console.error("Error fetching employee data:", error);
+        console.error("Error fetching student data:", error);
       }
     };
-    fetchEmployee();
+    fetchStudent();
   }, [id, navigate]);
 
   console.log(student);
@@ -67,6 +64,18 @@ const StudentDetail = () => {
   };
   const handleClosePopup = () => {
     setShowPopup(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`employ/deleteStu/${id}`);
+      console.log("Delete successful");
+      setDeleteSuccess(true);
+      setShowPopup(false);
+      navigate(`/employ/student`);
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
   };
 
   return (
@@ -173,7 +182,9 @@ const StudentDetail = () => {
                     Address
                   </p>
                   <p className="text-[15px] md:text-[20px] font-georama">
-                    {student.address}
+                    {student.address.address} {student.address.sub_district}{" "}
+                    {student.address.district} {student.address.province}{" "}
+                    {student.address.postal_code}
                   </p>
                 </div>
               </div>
@@ -198,7 +209,13 @@ const StudentDetail = () => {
         </div>
       </main>
 
-      {showPopup && <SDeletePopUp onClose={handleClosePopup} />}
+      {showPopup && (
+        <SDeletePopUp
+          a={() => handleDelete(student.id)}
+          onClose={handleClosePopup}
+        />
+      )}
+      {deleteSuccess && <p>Student deleted successfully.</p>}
     </div>
   );
 };

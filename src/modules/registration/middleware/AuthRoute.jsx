@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import LoadingPage from "../../dev/pages/LoadingPage";
 import { Navigate, Outlet } from "react-router-dom";
-import authConfig from "../auth/authConfig";
 import popToast from "../../../utils/popToast";
+import authConfig from "../auth/authConfig";
+import { useEffect, useState } from "react";
 
 const AuthRoute = ({ children, allowed_roles }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,9 +50,7 @@ const AuthRoute = ({ children, allowed_roles }) => {
   }, [isAuthenticated, isAllowed, isLoading, error]);
 
   // If still loading, show loading state
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return <LoadingPage message="verifying" />;
 
   // Show error message if there's an issue with authentication
   if (error) {

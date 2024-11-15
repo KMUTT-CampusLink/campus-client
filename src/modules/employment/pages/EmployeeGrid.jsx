@@ -7,6 +7,7 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 import { faLessThan } from "@fortawesome/free-solid-svg-icons";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -70,10 +71,13 @@ const EmployeeGrid = () => {
     <div className="w-full min-h-screen mb-7 md:mb-10">
       <NavBar />
       <main className="pt-16 md:pt-20 px-5 md:px-20 mb-2">
-
         <div className="border-none flex justify-between mb-2 md:mb-4 px-1 md:px-2">
           <div className="w-1/2 md:space-x-6 space-x-2 flex flex-row items-center">
-            <FontAwesomeIcon icon={faArrowLeft} className="hover:shadow-sm md:h-7 " onClick={handleClickback} />
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              className="hover:shadow-sm md:h-7 "
+              onClick={handleClickback}
+            />
             <input
               className="bg-[#F2F2F2] outline-none transition hover:shadow-md w-3/5 md:w-3/4 text-[12px] md:text-[16px] font-georama  md:h-10 h-7 rounded-lg pl-3 "
               type="text"
@@ -102,23 +106,26 @@ const EmployeeGrid = () => {
         </div>
 
         <div className="flex justify-center items-center mt-6">
-          <button 
-            onClick={handlePrevPage} 
-            disabled={currentPage === 1} 
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
             className="  rounded-full w-6 h-7 transition hover:shadow-xl shadow-sm"
           >
             {currentPage > 1 && <FontAwesomeIcon icon={faLessThan} />}
           </button>
-          <span className="px-4 py-2 md:text-lg ">{currentPage} of {totalPages}</span>
-          <button 
-            onClick={handleNextPage} 
-            disabled={currentPage === totalPages} 
+          <span className="px-4 py-2 md:text-lg ">
+            {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
             className=" rounded-full w-6 h-7 transition hover:shadow-xl shadow-sm"
           >
-            {currentPage < totalPages && <FontAwesomeIcon icon={faGreaterThan} />}
+            {currentPage < totalPages && (
+              <FontAwesomeIcon icon={faGreaterThan} />
+            )}
           </button>
         </div>
-
       </main>
     </div>
   );
