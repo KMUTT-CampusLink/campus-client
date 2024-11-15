@@ -5,7 +5,6 @@ import { transactions } from "../components/Transaction";
 import PartialSelect from "../components/partialSelect.jsx";
 import InvoiceImage from "../asset/invoice.svg";
 import ArrowLeft from "../asset/arrowL.svg";
-import { dotenv } from "dotenv";
 import "../style/typography.css";
 
 const PaymentInvoice = () => {
