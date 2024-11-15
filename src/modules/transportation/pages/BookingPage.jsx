@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { format, set } from "date-fns";
 import { fetchTripData, bookTrip, isBooked } from "../services/api";
 import { useParams } from "react-router-dom";
+import QRCodePage from "./QRCodePage";
 
 function BookingPage() {
   const [bookingDetails, setBookingDetails] = useState(null);
   const { tripID } = useParams(); // Extract tripID from URL parameters
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [booking, setBooking] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,6 +17,8 @@ function BookingPage() {
       const trip = tripData.trip;
       const isBookedResponse = await isBooked(tripID);
       if (isBookedResponse.isBooked) {
+        console.log(isBookedResponse.booking);
+        setBooking(isBookedResponse.booking);
         setIsConfirmed(true);
       }
 
@@ -104,10 +108,7 @@ function BookingPage() {
                   Booking Confirmed!
                 </h2>
                 <div className="mt-4 flex flex-col items-center">
-                  <p className="text-md text-gray-600">Your QR Code:</p>
-                  <div className="w-26 h-26 border border-gray-300 rounded-md flex items-center justify-center bg-white shadow">
-                    <span className="text-gray-400">[Generate Qr]</span>
-                  </div>
+                  <QRCodePage tripID={tripID} />
                 </div>
               </div>
             )}

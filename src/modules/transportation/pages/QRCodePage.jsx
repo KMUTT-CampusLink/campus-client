@@ -1,95 +1,54 @@
-// src/pages/QRCodePage.js
-
 import React, { useState } from "react";
-import QRCodeGenerator from "../components/QRCodeGenerator";
+import { QRCodeSVG } from "qrcode.react"; // Import QRCode component to generate QR codes
 
-const QRCodePage = () => {
-  const [id, setId] = useState(""); // State for the ID input
-  const [qrValue, setQrValue] = useState(""); // State for the QR code URL
-  const [number, setNumber] = useState(""); // State for the number fetched from the database
-  const [message, setMessage] = useState(""); // State for success/failure message
+const QRCodePage = ({ tripID }) => {
+  const [id, setId] = useState(""); // State to hold the entered ID
+  const [qrCode, setQrCode] = useState(""); // State to hold the generated QR code
+  const [error, setError] = useState(""); // State to hold error message
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Set the QR code URL with the id parameter
-    const qrUrl = `https://your-website.com/scan?id=${id}`;
-    setQrValue(qrUrl);
-
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/check-id/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      // Handle the response from the backend
-      if (data.isValid) {
-        setNumber(data.number); // Display the number from the database
-        setMessage("ID is valid! Here’s the number associated with it:");
-      } else {
-        setMessage("ID is not valid. Please try again.");
-        setNumber("");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("An error occurred. Please try again.");
-    }
+  // Handle input change for ID
+  const handleInputChange = (e) => {
+    setId(e.target.value);
   };
 
-  return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1 style={{ margin: "30px 0", color: "#333" }}>
-        Scan QR to check people in the car
-      </h1>
+  // Generate the QR Code
+  const handleGenerateQR = () => {
+    if (!id) {
+      setError("Please enter a valid ID");
+      return;
+    }
+    setQrCode(id); // Set QR code data to be the ID entered by the user
+    setError(""); // Clear previous error
+  };
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="Enter ID"
-          required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "4px",
-            border: "1px solid #ddd",
-            marginRight: "10px",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#ff5722",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-          }}
-        >
-          Check ID
-        </button>
-      </form>
+  // return (
+  //   <div className="qr-page-container">
+  //     <h1>Generate QR Code</h1>
 
-      {message && <p style={{ fontSize: "18px", color: "#333" }}>{message}</p>}
-      {number && (
-        <p style={{ fontSize: "20px", fontWeight: "bold", color: "#333" }}>
-          Number: {number}
-        </p>
-      )}
+  //     {/* Input to enter ID */}
+  //     <div className="input-container">
+  //       <input
+  //         type="text"
+  //         placeholder="Enter ID"
+  //         value={id}
+  //         onChange={handleInputChange}
+  //       />
+  //       <button onClick={handleGenerateQR}>Generate QR Code</button>
+  //     </div>
 
-      {/* QR Code Component */}
-      <QRCodeGenerator qrValue={qrValue} />
-    </div>
-  );
+  //     {/* Display QR Code */}
+  //     {qrCode && (
+  //       <div className="qr-code-container">
+  //         <QRCode value={qrCode} size={256} />
+  //       </div>
+  //     )}
+
+  //     {/* Display Error */}
+  //     {error && <p className="error-message">{error}</p>}
+  //   </div>
+  // );
+
+  return <QRCodeSVG value={tripID} size={150} />;
 };
 
 export default QRCodePage;
