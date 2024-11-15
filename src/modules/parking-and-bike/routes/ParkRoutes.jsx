@@ -1,6 +1,6 @@
 import MainPage from "../page/MainPage"
 import Reserfailed from "../page/Reserfailed"
-import Receipt from "../page/Receipt"
+import CheckIn from "../page/CheckIn"
 import Help from "../page/Help";
 import Parkingslot from "../page/Parkingslot";
 import Scanned from "../page/Scanned";
@@ -17,8 +17,8 @@ export default function ParkRoutes() {
       element:<Parkingslot/>,
     },
     {
-      path:"receipt/",
-      element:<Receipt/>
+      path:"checkin/",
+      element:<CheckIn/>
     },
     {
       path:"help/",

@@ -5,7 +5,7 @@ function ReceiptButton() {
     const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/parking/receipt');
+    navigate('/parking/checkin');
   };
     return (
         <>

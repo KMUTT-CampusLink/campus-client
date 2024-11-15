@@ -77,7 +77,7 @@ function ResPop({ id, img, name, onClose }) {
                     reserveTime: reservationTime
                 });
                 alert("Reservation successful!");
-                navigate('/parking/receipt', {
+                navigate('/parking/checkin', {
                     state: {
                         ...resData,
                         qrCodeData: qrData,

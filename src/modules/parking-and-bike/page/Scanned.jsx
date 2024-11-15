@@ -1,25 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function Scanned() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [reservationData, setReservationData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
+      // Decode the data from the URL parameter
       const decodedData = JSON.parse(decodeURIComponent(id));
       setReservationData(decodedData);
-
+      setLoading(false);
     } catch (error) {
       console.error('Error decoding reservation data:', error);
+      setLoading(false);
     }
   }, [id]);
 
-  const handleSubmit = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+  const handleCheckin = async () => {
+    if (!reservationData) return;
 
+    // Prepare the request data with current time for check-in
     const requestData = {
       reservation_id: reservationData.rid,
       checkin_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
@@ -29,7 +35,13 @@ function Scanned() {
 
     try {
       const res = await axios.post(`http://localhost:3000/api/parking/postCheckin`, requestData);
-      console.log("Response:", res.data);
+      if (res.data.message === "QR Checkout created successfully!") {
+        alert("Checkin successful!");
+        // Navigate to checkout page with reservationData
+        navigate('/parking/checkout', { state: res.data });
+        console.log(res.data);
+        
+      }
     } catch (error) {
       if (error.response) {
         alert(error.response.data.error);
@@ -39,29 +51,43 @@ function Scanned() {
     }
   };
 
+  useEffect(() => {
+    // Delay to simulate a loading time before automatic check-in
+    if (reservationData) {
+      const checkinTimeout = setTimeout(() => {
+        handleCheckin();
+      }, 1500);
+      
+      return () => clearTimeout(checkinTimeout);
+    }
+  }, [reservationData]);
 
-  if (!reservationData) {
+  const handleClick = () => {
+    navigate('/parking');
+  };
+
+  if (loading) {
     return <div>Loading...</div>;
   }
 
+  console.log(reservationData);
+  
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-2xl font-semibold">Reservation</h2>
+        <div className="flex justify-center px-5 py-10 border-b border-gray-200">
+          <h2 className="text-2xl font-semibold">Parking CheckIn</h2>
         </div>
-        <div className="px-6 py-4">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+        <div className="flex flex-col px-5 py-10 gap-2 justify-center items-center">
+          <FontAwesomeIcon className='w-14 h-14 text-yellow-500 animate-spin' icon={faSpinner} />
+          <button onClick={handleClick}
+            className="bg-red-500 text-white px-10 py-1 mt-10 rounded-lg hover:bg-red-600 transition z-10"
           >
-            Continue
+            BACK
           </button>
         </div>
       </div>
     </div>
-
   );
 }
 

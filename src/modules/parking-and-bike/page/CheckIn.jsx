@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import image from "../img/Receiptimage.png"
 
-function Receipt() {
+function CheckIn() {
     const navigate = useNavigate();
     const location = useLocation();
     const resData = location.state;
@@ -113,4 +113,4 @@ function Receipt() {
     );
 }
 
-export default Receipt;
+export default CheckIn;
