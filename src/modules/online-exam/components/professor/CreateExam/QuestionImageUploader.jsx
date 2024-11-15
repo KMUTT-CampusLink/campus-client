@@ -25,7 +25,7 @@ export default function QuestionImageUploader({ setImage }) {
             <div className="flex items-center gap-2">
                 <button onClick={handleClick} className="text-[20px] flex align-middle">
                     <FontAwesomeIcon icon={faImage} />
-                    <p className='text-[16px] pl-[10px]'>Add Question Picture</p>
+                    <p className='text-[16px] pl-[10px] hover:underline hover:underline-offset-2'>Add Question Picture</p>
                 </button>
                 <input
                     type="file"

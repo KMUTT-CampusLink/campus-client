@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ClubCard = ({ clubName, imageSrc }) => {
+const ClubCard = ({ clubName, imageSrc, clubId }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     // Navigate to the club's specific page when clicked
-    //-->>const clubUrl = `/clubs/${clubName.toLowerCase().replace(/\s+/g, '-')}`; "Club takhu chin si khal yin lote ya nmhr"
-    navigate("/clubs/club-detail"); //Currently will send to club detail page br page pl nate"
+    const clubUrl = `/clubs/${clubId}`; //"Club takhu chin si khal yin lote ya nmhr"
+    navigate(clubUrl); //Currently will send to club detail page br page pl nate"
   };
 
   return (

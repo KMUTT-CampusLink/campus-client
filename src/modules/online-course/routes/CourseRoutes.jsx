@@ -5,10 +5,13 @@ import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
 import TrTasks from "../pages/Teacher/TrTasks";
 import TrDiscussion from "../pages/Teacher/TrDiscussion";
 import StDashboard from "../pages/Students/StDashboard";
+import StAllCourses from "../pages/Students/StAllCourses"
 import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
+import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
+import Comment from "../components/Comment";
 
 export default function CourseRoutes() {
   return [
@@ -29,11 +32,20 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
-          element: <TrTasks />, 
+          children: [
+            {
+              path: "",
+              element: <TrTasks />,
+            },
+            {
+              path: "submission",
+              element: <TrTaskSubmission />,
+            },
+          ],
         },
         {
           path: "discussion",
-          element: <TrDiscussion />, 
+          element: <TrDiscussion />,
         },
         // {
         //   path: "online_exam",
@@ -50,7 +62,16 @@ export default function CourseRoutes() {
       children: [
         {
           path: "",
-          element: <StDashboard />,
+          children: [
+            {
+              path: "",
+              element: <StDashboard />,
+            },
+            {
+              path: "all_courses",
+              element: <StAllCourses />,
+            },
+          ],
         },
         {
           path: "course_description",
@@ -62,11 +83,20 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
-          element: <StTasks />, 
+          element: <StTasks />,
         },
         {
           path: "discussion",
-          element: <StDiscussion />,
+          children: [
+            {
+              path: "",
+              element: <StDiscussion />,
+            },
+            {
+              path: "comment",
+              element: <Comment/>,
+            }
+          ],
         },
         // {
         //   path: "online_exam",
@@ -74,10 +104,9 @@ export default function CourseRoutes() {
         // },
         // {
         //   path: "attendance",
-        //   element: <StAttendance />, 
+        //   element: <StAttendance />,
         // },
       ],
     },
   ];
 }
-

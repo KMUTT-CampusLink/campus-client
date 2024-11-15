@@ -1,21 +1,146 @@
-import axios from "axios";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
-export const getStudentExams = async () => {
+export const getStudentExamsById = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getAllExam?sectionid=${sectionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getHistoryStudentExams = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getHistoryExams?sectionid=${sectionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const verifyExamPassword = async (examId, password) => {
+  try {
+    const response = await axiosInstance.post("/exams/student/verifyPassword", {
+      examId,
+      password,
+    });
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getExamDataById = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getExamDataById?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const submitExam = async (examId, studentAnswers, studentId) => {
+  try {
+    const response = await axiosInstance.post("/exams/student/submitExam", {
+      examId,
+      studentAnswers,
+      studentId,
+    });
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const toggleExamStatus = async (examId, studentId) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/student/toggleExamStatus",
+      { examId, studentId }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getExamTitle = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getExamTitle?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getInprogressExam = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getInprogressExam?sectionid=${sectionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentAnswerById = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getStudentAnswer?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const toggleAnswer = async (examId) => {
+  try {
+    const response = await axiosInstance.put(
+      `/exams/student/toggleAnswer?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentReview = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getStudentReview?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentStatus = async (examId) => {
     try {
-        const response = await axios.get("http://localhost:3000/api/exams/student/getAllExam");
+        const response = await axiosInstance.get(
+        `/exams/student/getStudentStatus?examId=${examId}`
+        );
         return response;
     } catch (error) {
         return error.response.data;
     }
 }
 
-export const getHistoryStudentExams = async () => {
-
-}
-
-export const verifyExamPassword = async (examId, password) => {
+export const getRemainingTime = async (examId) => {
     try {
-        const response = await axios.post("http://localhost:3000/api/exams/student/verifyPassword", { examId, password });
+        const response = await axiosInstance.get(
+        `/exams/student/getExamTime?examId=${examId}`
+        );
         return response;
     } catch (error) {
         return error.response.data;

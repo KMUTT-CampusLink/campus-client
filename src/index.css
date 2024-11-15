@@ -13,3 +13,7 @@
     scrollbar-width: thin;
   }
 }
+
+.toast-custom-font {
+  font-family: "Open Sans";
+}
