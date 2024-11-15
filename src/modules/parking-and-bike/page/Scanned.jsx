@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { postCheckin } from '../services/api.js';
 
 function Scanned() {
   const { id } = useParams();
@@ -34,8 +34,8 @@ function Scanned() {
     console.log("Request Data:", requestData);
 
     try {
-      const res = await axios.post(`http://localhost:3000/api/parking/postCheckin`, requestData);
-      if (res.data.message === "QR Checkout created successfully!") {
+      const res = await postCheckin(requestData);
+      if (res.message === "QR Checkout created successfully!") {
         alert("Checkin successful!");
         // Navigate to checkout page with reservationData
         navigate('/parking/checkout', { state: res.data });

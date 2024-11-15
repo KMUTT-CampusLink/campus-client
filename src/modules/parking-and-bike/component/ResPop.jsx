@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import { getBuildingById, postReservation } from '../services/api.js';
 
 function ResPop({ id, img, name, onClose }) {
     const [parking, setParking] = useState([]);
@@ -20,11 +20,11 @@ function ResPop({ id, img, name, onClose }) {
 
     const getParking = async () => {
         try {
-            const res = await Axios.get(`http://localhost:3000/api/parking/getBuildingById/${id}`);
-            setParking(res.data);
+            const res = await getBuildingById(id);
+            setParking(res);
 
-            if (res.data && res.data.length > 0 && res.data[0].floors.length > 0) {
-                setSelectedFloor(res.data[0].floors[0].floor_id);
+            if (res && res.length > 0 && res[0].floors.length > 0) {
+                setSelectedFloor(res[0].floors[0].floor_id);
             }
         } catch (error) {
             console.error("Error fetching parking data:", error);
@@ -67,9 +67,9 @@ function ResPop({ id, img, name, onClose }) {
         };
 
         try {
-            const res = await Axios.post('http://localhost:3000/api/parking/postReservation', requestData);
-            if (res.data.message === 'Reservation created successfully!') {
-                const resData = res.data;
+            const res = await postReservation(requestData);
+            if (res.message === 'Reservation created successfully!') {
+                const resData = res;
                 const qrData = JSON.stringify({
                     reservationId: resData.reservation_id,
                     floorName: currentFloor.floor_name,
