@@ -42,6 +42,7 @@ export default function StudentExamPage() {
   const getExamData = async () => {
     try {
       const res = await getExamDataById(examId);
+      console.log("hi");
       const examData = res.data.data.exam;
       const isShuffled = res.data.data.exam.is_shuffle;
       const examQuestion = res.data.data.questions;
