@@ -4,23 +4,23 @@ import ParkingButton from '../component/Main/Menu/ParkingButton';
 import HelpButton from '../component/Main/Menu/HelpButton';
 import uniImg from '../img/kmutt-cover.png';
 import { useState, useEffect } from 'react';
-import Axios from "axios";
-import Search from "../component/Search/Search"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { getParkingData } from '../services/api';
+import Search from "../component/Search/Search";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../../registration/components/NavBarComponents/NavBar';
 import Searchresultlist from "../component/Search/Searchresultlist";
 
 function MainPage() {
-    const [building, setBuilding] = useState([]); /* */
+    const [building, setBuilding] = useState([]);
 
     const getBuilding = async () => {
-        const res = await Axios.get("http://localhost:3000/api/parking/getParking");
-        setBuilding(res.data);
-    }
+        const res = await getParkingData();
+        setBuilding(res);
+    };
 
     useEffect(() => {
-        getBuilding()
+        getBuilding();
     }, []);
 
     const [results, setResults] = useState([]);
@@ -45,7 +45,6 @@ function MainPage() {
                 <ReceiptButton />
                 <ParkingButton />
                 <HelpButton />
-
             </div>
             <br />
             <br />
@@ -59,8 +58,6 @@ function MainPage() {
                         </button>
                     </div>
                 </div>
-
-
                 {building.map((key) => (
                     <Building
                         key={key.id}
@@ -72,7 +69,6 @@ function MainPage() {
                     />
                 ))}
             </div>
-
         </>
     );
 }
