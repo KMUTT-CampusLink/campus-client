@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Participant({
@@ -8,7 +8,6 @@ export default function Participant({
   passMark,
 }) {
   const navigate = useNavigate();
-  console.log(participants);
   return (
     <div className="flex flex-col gap-[10px]">
       {participants.map((participant) => (

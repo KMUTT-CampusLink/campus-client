@@ -3,7 +3,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 export const getStudentExamsById = async (sectionId) => {
   try {
     const response = await axiosInstance.get(
-      `/exams/student/getAllExam?&sectionId=${sectionId}`
+      `/exams/student/getAllExam?sectionid=${sectionId}`
     );
     return response;
   } catch (error) {
@@ -11,10 +11,10 @@ export const getStudentExamsById = async (sectionId) => {
   }
 };
 
-export const getHistoryStudentExams = async (studentId) => {
+export const getHistoryStudentExams = async (sectionId) => {
   try {
     const response = await axiosInstance.get(
-      `/exams/student/getHistoryExams?studentId=${studentId}`
+      `/exams/student/getHistoryExams?sectionid=${sectionId}`
     );
     return response;
   } catch (error) {
@@ -81,10 +81,10 @@ export const getExamTitle = async (examId) => {
   }
 };
 
-export const getInprogressExam = async (studentId) => {
+export const getInprogressExam = async (sectionId) => {
   try {
     const response = await axiosInstance.get(
-      `/exams/student/getInprogressExam?studentId=${studentId}`
+      `/exams/student/getInprogressExam?sectionid=${sectionId}`
     );
     return response;
   } catch (error) {
@@ -103,10 +103,10 @@ export const getStudentAnswerById = async (examId) => {
   }
 };
 
-export const getToggleAnswer = async (examId) => {
+export const toggleAnswer = async (examId) => {
   try {
     const response = await axiosInstance.put(
-      `/exams/student/getToggleAnswer?examId=${examId}`
+      `/exams/student/toggleAnswer?examId=${examId}`
     );
     return response;
   } catch (error) {

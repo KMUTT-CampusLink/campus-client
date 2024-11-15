@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Chip from "../../components/professor/Scoring/Chip";
-import Question from "../../components/professor/Scoring/Question";
 import StudentQuestion from "../../components/professor/Scoring/StudentQuestion";
 
 import {
@@ -222,7 +221,7 @@ export default function ProfessorScoringPage() {
         </div>
         <div className="w-full flex justify-end">
           <button
-          disabled={studentExamData.is_checked}
+            disabled={studentExamData.is_checked}
             className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
             onClick={() => document.getElementById("confirmModal").showModal()}
           >
