@@ -6,7 +6,7 @@ export default function Navigation({ hours, minutes, seconds, questionNo, studen
         {/* Timer */}
         <div className="text-[20px] border border-[#BEBEBE] rounded-lg p-[10px] flex flex-col items-center">
           <h2>Time Left</h2>
-          <div className={`${minutes < 5 ? "text-red-500" : "text-black"} ${isNaN(hours) || isNaN(minutes) || isNaN(seconds) ? "hidden" : "flex"}`}>
+          <div className={`${minutes < 5 && hours === 0 ? "text-red-500" : "text-black"} ${isNaN(hours) || isNaN(minutes) || isNaN(seconds) ? "hidden" : "flex"}`}>
             <h2 className={`${hours === 0 ? "hidden" : "block"}`}>{hours}</h2>
             <div className={`${hours === 0 ? "hidden" : "block"}`}>:</div>
             <h2>{minutes >= 10 ? "" : "0"}{minutes}</h2>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import ExamCard from "../../components/student/HomePage/ExamCard";
@@ -6,12 +7,13 @@ import InProgressCard from "../../components/student/HomePage/InProgressCard";
 import HistoryCard from "../../components/student/HomePage/HistoryCard";
 
 import { getStudentExamsById, getHistoryStudentExams, getInprogressExam } from "../../services/apis/studentApi";
+import { faChessKing } from "@fortawesome/free-solid-svg-icons";
 
 export default function StudentHomePage() {
+  const { sectionId } = useParams();
   const [exams, setExams] = useState([]);
   const [historyExams, setHistoryExams] = useState([]);
   const [inProgress, setInProgress] = useState([]);
-  const sectionId = 1001;
 
   const getExams = async () => {
     const res = await getStudentExamsById(sectionId);
@@ -19,12 +21,12 @@ export default function StudentHomePage() {
   }
 
   const getInprogressExams = async () => {
-    const res = await getInprogressExam();
+    const res = await getInprogressExam(sectionId);
     setInProgress(res.data.data);
   }
 
   const getHistoryExams = async () => {
-    const res = await getHistoryStudentExams();
+    const res = await getHistoryStudentExams(sectionId);
     setHistoryExams(res.data.data);
   }
 

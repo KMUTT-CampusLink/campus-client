@@ -14,7 +14,6 @@ import {
 } from "../../services/apis/professerApi";
 
 export default function ProfessorExamSettingPage() {
-  const { Id } = 1;
   const { examId } = useParams();
   const navigate = useNavigate();
   const [exam, setExam] = useState({
@@ -29,6 +28,32 @@ export default function ProfessorExamSettingPage() {
     title: "",
     is_publish_immediately: false,
   });
+  
+  const getAllExamData = async () => {
+    try {
+      const res = await getExamDataById(examId);
+      const fullMarkRes = await getFullMark(examId);
+      const examData = res.data.data.exam;
+      setExam({
+        start_date: formatDateForInput(examData.start_date),
+        end_date: formatDateForInput(examData.end_date),
+        publish_status: examData.publish_status,
+        view_history: examData.view_history,
+        is_shuffle: examData.is_shuffle,
+        pass_mark: examData.pass_mark,
+        full_mark: fullMarkRes.data.fullMark,
+        pin: res.data.data.pin,
+        title: examData.title,
+        is_publish_immediately: examData.is_publish_immediately,
+      });
+    } catch (error) {
+      console.error("Failed to fetch exam data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllExamData();
+  }, []);
   //convert ISO date to input format
   const formatDateForInput = (isoDate) => {
     if (isoDate === null) return "";
@@ -39,28 +64,6 @@ export default function ProfessorExamSettingPage() {
     }
   };
 
-  const getAllExamData = async () => {
-    try {
-      const res = await getExamDataById(examId);
-      const fullMarkRes = await getFullMark(examId);
-      const examData = res.data.data.exam;
-      console.log(examData);
-      setExam({
-        start_date: formatDateForInput(examData.start_date),
-        end_date: formatDateForInput(examData.end_date),
-        publish_status: examData.publish_status,
-        view_history: examData.view_history,
-        is_shuffle: examData.is_shuffle,
-        pass_mark: examData.pass_mark,
-        full_mark: fullMarkRes.data.fullMark,
-        pin: examData.pin,
-        title: examData.title,
-        is_publish_immediately: examData.is_publish_immediately,
-      });
-    } catch (error) {
-      console.error("Failed to fetch exam data:", error);
-    }
-  };
 
   const handleStartDatetimeChange = (event) => {
     setExam({ ...exam, start_date: event.target.value });
@@ -113,7 +116,6 @@ export default function ProfessorExamSettingPage() {
   const [isSubmit, setIsSubmit] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     // Reset alert and submit status before validation
     setAlertVisible(false);
     setIsSubmit(false);
@@ -148,7 +150,7 @@ export default function ProfessorExamSettingPage() {
       try {
         // Call API to update exam settings
         const response = await updateExamSettings(examId, examData);
-        navigate(`/exams/professor/1`, {
+        navigate(`/exams/professor/${response.data.data}`, {
           state: {
             isSettingSubmit: true,
             alertMessage: "Your changes have been saved successfully",
@@ -166,9 +168,6 @@ export default function ProfessorExamSettingPage() {
       setAlertVisible(false);
     }, 3000);
   };
-  useEffect(() => {
-    getAllExamData();
-  }, []);
 
   const [isCopied, setIsCopied] = useState(false);
   const handleCopyToClipboard = () => {
@@ -190,9 +189,8 @@ export default function ProfessorExamSettingPage() {
         <div className="flex justify-between pb-[35px] pt-[25px] items-center">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Exam Setting</p>
-            <p className="text-[20px] font-bold">Exam: {exam.title}</p>
+            <p className="text-[20px] font-bold">{exam.title}</p>
           </div>
-
           <button
             className="btn text-white bg-[#864E41] hover:bg-[#6e4339]"
             onClick={() => navigate(`/exams/professor/edit/${examId}`)}
