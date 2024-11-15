@@ -1,5 +1,4 @@
 import BookingPage from "../pages/BookingPage";
-import ConfirmBookingPage from "../pages/ConfirmBookingPage";
 import HomePage from "../pages/HomePage";
 import React, { useState, useEffect } from "react";
 import TestPage from "../pages/TestPage";
@@ -11,8 +10,7 @@ export default function TransRoutes() {
     { path: "", element: <NavigationPage /> },
     { path: "home", element: <HomePage /> },
     { path: "booking/:tripID", element: <BookingPage /> },
-    { path: "confirm", element: <ConfirmBookingPage /> },
     { path: "test", element: <TestPage /> },
-    {path : "QRCodePage" , element: <QRCodePage/>},
+    { path: "QRCodePage", element: <QRCodePage /> },
   ];
 }

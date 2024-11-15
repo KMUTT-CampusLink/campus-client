@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "../components/NavBarComponents/NavBar";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { fetchUserBookings, fetchDriverTrips } from "../services/api";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const NavigationPage = () => {
   const [userBookings, setUserBookings] = useState([]);
   const [driverTrips, setDriverTrips] = useState([]);
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
-  console.log(driverTrips);
+  const navigate = useNavigate();
+  // console.log(driverTrips);
+
+  const handleBookingClick = (trip_id) => {
+    navigate(`/transport/booking/${trip_id}`);
+  };
 
   // Fetch user's bookings if they are authenticated
   useEffect(() => {
@@ -21,7 +27,6 @@ const NavigationPage = () => {
       case "Student":
         fetchUserBookings().then((data) => {
           setUserBookings(data.bookings);
-          console.log(data.bookings);
         });
         break;
       default:
@@ -30,7 +35,7 @@ const NavigationPage = () => {
   }, [userRole]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-orange-100">
+    <div className="min-h-screen bg-white font-geologica">
       <NavBar />
       <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
         {/* Dashboard Header */}
@@ -47,7 +52,6 @@ const NavigationPage = () => {
             Search for Routes
           </Link>
         </div>
-        {userRole ? <p>signed in as {userRole}</p> : <p>not signed in</p>}
         {userRole === "Student" ? (
           <>
             <h3 className="text-2xl font-semibold text-gray-700 mb-4">
@@ -57,6 +61,7 @@ const NavigationPage = () => {
             <div className="space-y-4">
               {userBookings.map((booking, index) => (
                 <div
+                  onClick={() => handleBookingClick(booking.trip_id)}
                   key={index}
                   className="bg-white shadow-md rounded-md p-4 border-l-4 border-orange-400"
                 >

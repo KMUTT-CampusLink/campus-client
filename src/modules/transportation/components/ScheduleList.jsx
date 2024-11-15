@@ -24,7 +24,7 @@ const TripList = ({ trips }) => {
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 font-geologica">
       {/* Show a message 'No routes available' if there are no routes */}
       {trips.length === 0 ? (
         <div className="text-3xl text-center text-gray-500">
@@ -34,7 +34,7 @@ const TripList = ({ trips }) => {
         trips.map((trip, index) => (
           <div
             key={index}
-            className="flex flex-col bg-white shadow-md rounded-lg p-6 w-full mb-4 transition-transform transform hover:scale-105"
+            className="flex flex-col bg-white shadow-md rounded-lg p-6 w-full mb-4 transition-transform transform hover:scale-[1.01]"
           >
             <div className="flex justify-between mb-4">
               <div className="flex flex-col items-start">
@@ -80,11 +80,6 @@ const TripList = ({ trips }) => {
 
             {/* Centered button to book the trip */}
             <div className="flex justify-center mt-4">
-              {/* <Link to={`/transport/booking/${trip.id}`}>
-                <button className="py-1 px-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition duration-200">
-                  Book Now
-                </button>
-              </Link> */}
               <button
                 onClick={(e) => {
                   e.preventDefault();
