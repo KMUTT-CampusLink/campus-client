@@ -3,15 +3,17 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
 import AllTransactions from "../components/AllTransactions";
 import ReceiptImage from "../asset/receipt.svg";
-import { transactions } from "../components/Transaction";
+//import { transactions } from "../components/Transaction";
 import "../style/typography.css";
 import Money1 from "../asset/money1.png";
 import Money2 from "../asset/money2.png";
 import Money3 from "../asset/money3.png";
 
-// at line 6 please comment that and line 14 uncomment that to use backend data
+// at line 6 please comment that and line 16 uncomment that to use backend data 
+// update day 15 nov : now stuff probably use real database dont comment more stuff
+
 const InvoiceCenter = () => {
-  //const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [filterRecent, setFilterRecent] = useState("All");
   const [filterAll, setFilterAll] = useState("All");
   const [showAll, setShowAll] = useState(false);
