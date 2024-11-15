@@ -356,7 +356,7 @@ export default function ProfessorExamSettingPage() {
 
               <div>
                 {hasEssayQuestion && (
-                  <p className="text-[12px] text-[red]">
+                  <p className="text-[12px] text-[red] text-right">
                     not allow when has essay question
                   </p>
                 )}
