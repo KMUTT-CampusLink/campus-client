@@ -19,7 +19,8 @@ export default function StudentQuestion({
   const [maxScore, setMaxScore] = useState(0);
   const [studentScore, setStudentScore] = useState(0);
   const [haveScore, setHaveScore] = useState(false);
-  const setEssatScore = (e) => {
+  
+  const setStudentEssayScore = (e) => {
     const score = e.target.value;
     if (score >= 0 && score <= maxScore) {
       setEssayScore((prevEssayScore) => {
@@ -129,7 +130,7 @@ export default function StudentQuestion({
                       (item) => item.question_id === questionid
                     )?.score || ""
                   }
-                  onChange={setEssatScore}
+                  onChange={setStudentEssayScore}
                 />
                 <h2 className="text-[16px] pl-[5px]">{haveScore ? studentScore : null}/{maxScore}</h2>
               </div>

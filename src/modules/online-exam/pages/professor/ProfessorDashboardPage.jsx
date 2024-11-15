@@ -53,7 +53,7 @@ export default function ProfessorDashboardPage() {
         ) : (
           <div className=" my-10 flex flex-col gap-[50px]">
             <div className="mx-[50px]">
-              <p>Total participant : {participant}/30</p>
+              <p>Total participant : {participant}</p>
               <p>Min : {min}</p>
               <p>Max : {max}</p>
               <p>Average : {avg}</p>

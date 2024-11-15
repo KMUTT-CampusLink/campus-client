@@ -38,27 +38,27 @@ export default function ProfessorEditExamPage() {
       const mappedQuestions =
         examQuestion && Array.isArray(examQuestion)
           ? examQuestion.map((question) => {
-              const questionChoices = allChoices.filter(
-                (choice) => choice.question_id === question.id
-              );
-              return {
-                questionId: question.id || null,
-                questionText: question.title || "",
-                type: question.type
-                  ? question.type.replace("_", " ")
-                  : "Multiple Choice",
-                options: questionChoices.map((choice) => ({
-                  choiceText: choice.choice_text || "",
-                  choiceImg: choice.choice_img || null,
-                  isCorrect: choice.correct_ans || false,
-                  choiceId: choice.id || null,
-                })),
-                answer: questionChoices
-                  .filter((choice) => choice.correct_ans)
-                  .map((choice) => choice.choice_text || ""),
-                score: question.mark || null,
-              };
-            })
+            const questionChoices = allChoices.filter(
+              (choice) => choice.question_id === question.id
+            );
+            return {
+              questionId: question.id || null,
+              questionText: question.title || "",
+              type: question.type
+                ? question.type.replace("_", " ")
+                : "Multiple Choice",
+              options: questionChoices.map((choice) => ({
+                choiceText: choice.choice_text || "",
+                choiceImg: choice.choice_img || null,
+                isCorrect: choice.correct_ans || false,
+                choiceId: choice.id || null,
+              })),
+              answer: questionChoices
+                .filter((choice) => choice.correct_ans)
+                .map((choice) => choice.choice_text || ""),
+              score: question.type === 'Checklist' ? question.mark * questionChoices.length : question.mark || null,
+            };
+          })
           : [];
       setExam({
         ...exam,
@@ -152,7 +152,6 @@ export default function ProfessorEditExamPage() {
     if (res.status === 200) {
       navigate(`/exams/professor/setting/${examId}`);
     }
-    // console.log(finalExam)
   };
 
   return (
@@ -272,7 +271,7 @@ export default function ProfessorEditExamPage() {
         </div>
         <div className={`${viewAsStudent ? "block" : "hidden"}`}>
           <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center">
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">
+            <h1 className="text-[24px] xl:text-[30px] font-extrabold text-[#D4A015]">
               {exam.title || ""}
             </h1>
             <button
