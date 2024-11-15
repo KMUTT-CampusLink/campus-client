@@ -6,8 +6,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetSetting } from "../../services/queries";
 import popToast from "../../../../utils/popToast";
 import geoLocation from "../../utils/geoLocation";
-import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
@@ -21,7 +22,8 @@ const labelStyle = "font-geologica text-sm font-semibold";
 const inputStyle =
   "w-[100%] h-[2rem] border-2 px-2 text-black font-geologica text-sm font-semibold outline-none col-span-2";
 
-const Setting = ({ section_id }) => {
+const SettingPage = () => {
+  const { section_id } = useParams();
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
   const [error, setError] = useState(null);
@@ -62,17 +64,15 @@ const Setting = ({ section_id }) => {
       form_data = {
         ...form_data,
         location: form_data.location,
-        lat: lat,
-        long: long,
+        lat: form_data.location ? lat : 0,
+        long: form_data.location ? long : 0,
         id: data?.data?.id,
       };
       mutate(form_data);
     }
   });
 
-  if (isLoading) {
-    return <SmallLoading message="fetching" />;
-  }
+  if (isLoading) return <SmallLoading message="fetching" />;
   if (settingError) console.error(settingError.message);
 
   return (
@@ -200,7 +200,8 @@ const Setting = ({ section_id }) => {
             style={{
               boxShadow: "rgba(0, 0, 0, .1) 0 2px 4px 0",
             }}
-            className="font-geologica text-sm font-semibold tracking-widest bg-[#13aa52] rounded-none border-[1px] border-solid border-[#13aa52] text-white cursor-pointer outline-none text-center py-[8px] px-[35px]"
+            disabled={isPending || isSubmitting}
+            className="disabled:pointer-events-none font-geologica text-sm font-semibold tracking-widest bg-[#13aa52] hover:bg-[#128341] transition-colors rounded-none text-white cursor-pointer outline-none text-center py-[8px] px-[35px]"
           >
             SAVE
           </button>
@@ -210,4 +211,4 @@ const Setting = ({ section_id }) => {
   );
 };
 
-export default Setting;
+export default SettingPage;
