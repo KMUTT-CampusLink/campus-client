@@ -16,6 +16,7 @@ import {
 export default function ProfessorExamSettingPage() {
   const { examId } = useParams();
   const navigate = useNavigate();
+  const [hasEssayQuestion, setHasEssayQuestion] = useState(false);
   const [exam, setExam] = useState({
     start_date: null,
     end_date: null,
@@ -27,13 +28,18 @@ export default function ProfessorExamSettingPage() {
     pin: "",
     title: "",
     is_publish_immediately: false,
+    publish_score_status: false,
   });
-  
+
   const getAllExamData = async () => {
     try {
-      const res = await getExamDataById(examId);
+      const res = await getExamDataById(examId)
       const fullMarkRes = await getFullMark(examId);
       const examData = res.data.data.exam;
+      const examQuestion = res.data.data.questions;
+      const essayQuestion = examQuestion.some(
+        (question) => question.type === "Essay"
+      );
       setExam({
         start_date: formatDateForInput(examData.start_date),
         end_date: formatDateForInput(examData.end_date),
@@ -45,7 +51,9 @@ export default function ProfessorExamSettingPage() {
         pin: res.data.data.pin,
         title: examData.title,
         is_publish_immediately: examData.is_publish_immediately,
+        publish_score_status: examData.publish_score_status,
       });
+      setHasEssayQuestion(essayQuestion); // Store this state for the checkbox
     } catch (error) {
       console.error("Failed to fetch exam data:", error);
     }
@@ -63,7 +71,6 @@ export default function ProfessorExamSettingPage() {
       return formattedDate;
     }
   };
-
 
   const handleStartDatetimeChange = (event) => {
     setExam({ ...exam, start_date: event.target.value });
@@ -112,7 +119,6 @@ export default function ProfessorExamSettingPage() {
   //alert for submit
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
   const [isSubmit, setIsSubmit] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -145,6 +151,7 @@ export default function ProfessorExamSettingPage() {
         pin: exam.pin,
         title: exam.title,
         is_publish_immediately: exam.is_publish_immediately,
+        publish_score_status: exam.is_publish_immediately,
       };
 
       try {
@@ -334,16 +341,26 @@ export default function ProfessorExamSettingPage() {
                 Automatically display scores to participants when the exam ends.
               </p>
             </div>
+
             <div className="form-control">
-              <label className="label cursor-pointer">
+              <label className="label cursor-pointer k flex justify-end">
                 <input
                   type="checkbox"
                   className="toggle"
                   checked={exam.is_publish_immediately}
                   onChange={handlePublishedImmediately}
+                  disabled={hasEssayQuestion} // Disable checkbox if there's an "Essay" type question
                 />
                 <span className="label-text ml-[10px]">Allow</span>
               </label>
+
+              <div>
+                {hasEssayQuestion && (
+                  <p className="text-[12px] text-[red]">
+                    not allow when has essay question
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
