@@ -18,7 +18,11 @@ function MainPage() {
     const getBuilding = async () => {
         const res = await getParkingData();
         setBuilding(res);
+        console.log(res);
     };
+
+    
+    
 
     useEffect(() => {
         getBuilding();
@@ -78,7 +82,7 @@ function MainPage() {
                         </button>
                     </div>
                 </div>
-                {building.map((key) => (
+                {building && building.map((key) => (
                     <Building
                         key={key.id}
                         bdid={key.id}

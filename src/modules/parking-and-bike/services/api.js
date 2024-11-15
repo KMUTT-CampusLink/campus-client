@@ -7,21 +7,26 @@ export const axiosInstance = axios.create({
 });
 
 export const getParkingData = async () => {
-    const response = await axios.get('http://localhost:3000/api/parking/getParking');
+    const response = await axiosInstance.get('/parking/getParking');
     return response.data;
 };
 
 export const getBuildingById = async (id) => {
-    const response = await axiosInstance.get(`http://localhost:3000/api/parking/getBuildingById/${id}`);
+    const response = await axiosInstance.get(`/parking/getBuildingById/${id}`);
     return response.data;
 };
 
 export const postCheckin = async (requestData) => {
-    const response = await axiosInstance.post('http://localhost:3000/api/parking/postCheckin', requestData);
+    const response = await axiosInstance.post('/parking/postCheckin', requestData);
     return response.data;
 };
 
 export const postReservation = async (requestData) => {
-    const response = await axiosInstance.post('http://localhost:3000/api/parking/postReservation', requestData);
+    const response = await axiosInstance.post('/parking/postReservation', requestData);
+    return response.data;
+};
+
+export const postRegisterCar = async (requestData) => {
+    const response = await axiosInstance.post('/parking/postRegisterCar', requestData);
     return response.data;
 };
