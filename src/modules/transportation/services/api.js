@@ -29,6 +29,10 @@ const post = async (url, payload) => {
 
 // API calls
 
+export const fetchDriverTrips = () => get("/transport/driver/trips");
+export const fetchBookingsForTrip = (tripID) =>
+  get(`/transport/driver/tripBookings/${tripID}`);
+
 export const bookTrip = (tripID) => post(`/transport/user/book`, { tripID });
 export const fetchUserBookings = () => get("/transport/user/bookings");
 export const fetchAllStops = () => get("/transport/user/queryAllStops");
