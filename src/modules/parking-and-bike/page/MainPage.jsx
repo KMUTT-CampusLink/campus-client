@@ -1,7 +1,7 @@
 import Building from '../component/Main/Building';
 import ReceiptButton from '../component/Main/Menu/ReceiptButton';
 import ParkingButton from '../component/Main/Menu/ParkingButton';
-import HelpButton from '../component/Main/Menu/HelpButton';
+import RegisButton from '../component/Main/Menu/RegisButton';
 import { useState, useEffect } from 'react';
 import { getParkingData } from '../services/api';
 import Search from "../component/Search/Search";
@@ -64,7 +64,7 @@ function MainPage() {
             <div className="flex flex-row gap-20 justify-center">
                 <ReceiptButton />
                 <ParkingButton />
-                <HelpButton />
+                <RegisButton />
             </div>
             <br />
             <br />

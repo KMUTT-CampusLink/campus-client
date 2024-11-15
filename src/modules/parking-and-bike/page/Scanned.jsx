@@ -38,8 +38,8 @@ function Scanned() {
       if (res.message === "QR Checkout created successfully!") {
         alert("Checkin successful!");
         // Navigate to checkout page with reservationData
-        navigate('/parking/checkout', { state: res.data });
-        console.log(res.data);
+        navigate('/parking/checkout', { state: res });
+        console.log(res);
         
       }
     } catch (error) {
@@ -69,8 +69,6 @@ function Scanned() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log(reservationData);
   
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

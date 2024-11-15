@@ -1,7 +1,7 @@
 import MainPage from "../page/MainPage"
 import Reserfailed from "../page/Reserfailed"
 import CheckIn from "../page/CheckIn"
-import Help from "../page/Help";
+import RegisCar from "../page/RegisCar";
 import Parkingslot from "../page/Parkingslot";
 import Scanned from "../page/Scanned";
 import CheckOut from "../page/CheckOut";
@@ -21,8 +21,8 @@ export default function ParkRoutes() {
       element:<CheckIn/>
     },
     {
-      path:"help/",
-      element:<Help/>
+      path:"regis/",
+      element:<RegisCar/>
     },
     {
       path:"failed/",

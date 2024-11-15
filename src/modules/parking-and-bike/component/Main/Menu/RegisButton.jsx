@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-function HelpButton() {
+function RegisButton() {
     const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/parking/help');
+    navigate('/parking/regis');
   };
     return (
         <>
@@ -13,9 +13,9 @@ function HelpButton() {
                 <button
                 onClick={handleClick}
                  className="bg-red-500 text-white p-5 rounded-full">
-                    <FontAwesomeIcon className="w-9 h-8" icon={faQuestion} />
+                    <FontAwesomeIcon className="w-9 h-8" icon={faUser} />
                 </button>
-                <h1>Help</h1>
+                <h1>Register</h1>
             </div>
 
 
@@ -23,4 +23,4 @@ function HelpButton() {
     )
 }
 
-export default HelpButton;
+export default RegisButton;
