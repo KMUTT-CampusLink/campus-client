@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function MaintenanceList() {
   const [requests, setRequests] = useState([]); // State to hold fetched data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
+  const navigate = useNavigate(); // For navigation
 
   // Fetch maintenance requests from the backend API
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function MaintenanceList() {
     }
   };
 
-  // Page styles including responsive adjustments
+  // Page styles
   const pageStyles = {
     container: {
       maxWidth: "1000px",
@@ -106,14 +108,7 @@ export default function MaintenanceList() {
       justifyContent: "center",
       cursor: "pointer",
       color: "#fff",
-      fontSize: "36px",
       boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
-    },
-    icon: {
-      cursor: "pointer",
-      color: "#8b5b34",
-      fontSize: "18px",
-      marginLeft: "10px",
     },
   };
 
@@ -121,7 +116,6 @@ export default function MaintenanceList() {
     <div style={pageStyles.container}>
       <h1 style={pageStyles.header}>Maintenance Request List</h1>
 
-      {/* Loading Indicator */}
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -153,12 +147,25 @@ export default function MaintenanceList() {
       )}
 
       {/* Floating Add Button */}
-      <div
+      <button
         style={pageStyles.floatingButton}
-        onClick={() => console.log("Add new request")}
+        onClick={() => navigate("/security/administrator/request")}
       >
-        +
-      </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6 text-white"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </button>
     </div>
   );
 }
