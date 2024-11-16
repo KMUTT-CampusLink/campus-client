@@ -131,7 +131,7 @@ function ResPop({ id, img, name, onClose }) {
             </div>
           </div>
 
-          <div className="flex flex-col items-start w-full md:w-auto items-center">
+          <div className="flex flex-col items-start w-full md:w-auto justify-center">
             <div className="text-center md:text-left">
               <div className="text-xl md:text-2xl font-bold">{name}</div>
               <div className="font-medium mt-2">Located beside the library</div>
