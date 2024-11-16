@@ -20,12 +20,12 @@ const NotFound = () => {
           </p>
           <button
             onClick={() => {
-              navigate("/", { replace: true });
+              history.back();
             }}
-            className="rounded-xl border-2 border-dashed border-black p-2 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-none hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-none active:shadow-none"
+            className="rounded-xl border-2 border-dashed border-black py-2 px-[1.5rem] transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-none hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-none active:shadow-none"
           >
             <span className="font-opensans bg-clip-text text-transparent bg-gradient-to-r from-[#870000] to-[#480048] text-sm font-bold">
-              BACK TO HOME
+              BACK TO SAFETY
             </span>
           </button>
         </div>

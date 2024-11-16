@@ -64,7 +64,7 @@ const AuthRoute = ({ children, allowed_roles }) => {
 
   // Redirect to unauthorized page if not allowed
   if (!isAllowed) {
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/404" replace />;
   }
 
   // Render children or outlet if authenticated
