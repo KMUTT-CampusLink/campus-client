@@ -6,6 +6,8 @@ const RecordPage = () => {
   const { section_id } = useParams();
   const { data, isLoading, error: codeError } = useGetRecordCode(section_id);
   if (isLoading) return <SmallLoading message="fetching" />;
+  if (codeError) console.error(codeError.message);
+
   return (
     <div className="font-geologica w-full h-fit flex items-center justify-center p-[1rem] mt-2">
       <div className="w-fit h-fit flex flex-col items-center justify-center">

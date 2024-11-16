@@ -11,7 +11,7 @@ export const useGetSetting = (section_id) => {
 
 export const useGetRecordCode = (section_id) => {
   return useQuery({
-    queryFn: ["record", "code", `${section_id}`],
+    queryKey: ["record", "code", `${section_id}`],
     queryFn: () => getRecordCode(section_id),
     refetchOnWindowFocus: false,
   });
