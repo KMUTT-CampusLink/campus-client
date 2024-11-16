@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { postCheckin } from '../services/api.js';
 
-function Scanned() {
+function ScannedCheckIn() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [reservationData, setReservationData] = useState(null);
@@ -89,4 +89,4 @@ function Scanned() {
   );
 }
 
-export default Scanned;
+export default ScannedCheckIn;

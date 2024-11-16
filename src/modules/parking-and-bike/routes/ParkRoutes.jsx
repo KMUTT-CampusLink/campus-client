@@ -3,7 +3,7 @@ import Reserfailed from "../page/Reserfailed"
 import CheckIn from "../page/CheckIn"
 import RegisCar from "../page/RegisCar";
 import Parkingslot from "../page/Parkingslot";
-import Scanned from "../page/Scanned";
+import Scanned from "../page/ScannedCheckIn";
 import CheckOut from "../page/CheckOut";
 
 export default function ParkRoutes() {
