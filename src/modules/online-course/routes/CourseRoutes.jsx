@@ -12,11 +12,28 @@ import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
+import RedirectPage from "../pages/RedirectPage";
 
 // const role = "Professor";
 const role = localStorage.getItem("userRole");
 
 export default function CourseRoutes() {
+  // return [
+  //   {
+  //     path: "",
+  //     element: <RedirectPage />,
+  //   },
+  //   {
+  //     path: "st",
+  //     element: <StDashboard />,
+  //   },
+  //   {
+  //     path: "tr",
+  //     element: <TrDashboard/>
+  //   }
+  // ];
+
+  
   return [
     {
       path: "",
@@ -124,3 +141,4 @@ export default function CourseRoutes() {
     },
   ];
 }
+
