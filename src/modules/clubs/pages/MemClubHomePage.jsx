@@ -12,6 +12,7 @@ const MemClubHomePage = () => {
 
   const toggleVisiblity = () => {
     setIsVisible(!isVisible);
+    setIsViewMembersActive(!isViewMembersActive);
   };
 
   return (

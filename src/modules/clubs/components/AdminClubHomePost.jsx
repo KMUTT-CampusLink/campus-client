@@ -185,7 +185,7 @@ const ClubHomePost = (props) => {
             activeButton === "announcement" ? "bg-orange-600" : "bg-[#864E41]"
           } text-white px-3 md:px-10 py-1 md:py-2 rounded-lg`}
         >
-          View Announcement
+          View Event
         </button>
       </div>
       {itemsToDisplay.length === 0 ? (
