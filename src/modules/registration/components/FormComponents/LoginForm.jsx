@@ -5,6 +5,7 @@ import { logIn } from "../../services/api";
 import FormInput from "./FormInput";
 import { formHead, formBg, button } from "../../styles/styles";
 import SmallNavText from "./SmallNavText";
+import popToast from "../../../../utils/popToast";
 
 function LoginForm() {
   const [campus_email, setCampusEmail] = useState("");
@@ -17,14 +18,17 @@ function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: logIn,
     onSuccess: (data) => {
-      const { id, role, studentId } = data;
+      const { id, role, studentId, empId } = data;
       localStorage.setItem("userId", id);
       localStorage.setItem("userRole", role);
       localStorage.setItem("studentId", studentId);
+      localStorage.setItem("empId", empId);
+      popToast("Login Successful", "success");
       navigate("/regis");
     },
     onError: (error) => {
       console.error("Login failed:", error);
+      popToast("Login Failed", "error");
       setErrorMessage("Invalid email or password. Please try again.");
     },
   });

@@ -21,9 +21,10 @@ const Sidebar = ({ closeSidebar, sideOpen }) => {
         
     }, [sideOpen, closeSidebar]);
 
-    return (
+  return (
+      
       <div
-        className={`text-lg fixed top-0 left-0 w-64 h-full bg-[#cc6c3f] text-black p-4 transform transition-transform duration-300 ${
+        className={`max-sm:text-md max-sm:w-20 text-lg fixed top-0 left-0 w-64 h-full bg-[#cc6c3f] text-black p-4 transform transition-transform duration-300 ${
           sideOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

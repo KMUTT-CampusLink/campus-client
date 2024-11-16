@@ -2,7 +2,6 @@ import React from "react";
 import ProfileButton from "../../registration/components/NavBarComponents/ProfileButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faUser, faBars } from "@fortawesome/free-solid-svg-icons";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import SideForIndvCourse from "./SideForIndvCourse";
 
@@ -32,7 +31,7 @@ const NavForIndvCourse = ({page}) => {
           color="white"
         />
       </button>
-      <div className="flex items-center pr-6 max-md:pr-4">
+      <div className="flex items-center pr-6 max-sm:pr-0 max-md:pr-4">
         <ProfileButton />
       </div>
       <SideForIndvCourse

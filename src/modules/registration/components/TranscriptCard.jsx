@@ -1,18 +1,12 @@
 import { useGPAXBySemesterId } from "../services/queries";
 import { CardErrorSkeleton } from "../styles/Skeletons";
 
-function LoadingSpinner() {
-  return <div className="spinner">Loading...</div>;
-}
-
 function TranscriptCard({ semester, courses, studentId, semesterId }) {
   const {
     data: semesterGrades,
-    isLoading,
     isError,
   } = useGPAXBySemesterId(studentId, semesterId);
 
-  if (isLoading) return <LoadingSpinner />;
   if (isError) return <CardErrorSkeleton data="Transcript" />;
 
   return (
@@ -37,7 +31,7 @@ function TranscriptCard({ semester, courses, studentId, semesterId }) {
             </tr>
           </thead>
           <tbody>
-            {courses.map(
+            {courses?.map(
               ({ course_code, course_name, grade_letter, credits }, index) => (
                 <tr key={index} className="odd:bg-white even:bg-gray-100">
                   <td className="p-2">{course_code}</td>

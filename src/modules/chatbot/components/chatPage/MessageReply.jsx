@@ -9,7 +9,7 @@ const MessageReply = ({answer, profilePic}) => {
         </div>
         {/* reply message display */}
         <div className='max-w-[20rem] sm:max-w-[25rem] md:max-w-[30rem] lg:max-w-[45rem] p-1'>
-            {answer}
+            <pre className='font-opensans'>{answer}</pre>
         </div>
     </>
   )
