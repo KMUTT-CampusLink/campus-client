@@ -1,27 +1,26 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import axios from 'axios';
+import { getParkingData } from '../../services/api.js';
 
 function Search({ setResults }) {
   const [input, setInput] = useState("");
 
-  const fetchData = (value) => {
-    axios.get("http://localhost:3000/api/parking/getParking")
-    .then((response) => {
-        const results = response.data.filter((user) => {
-          return (
-            value &&
-            user &&
-            user.name &&
-            user.name.toLowerCase().includes(value.toLowerCase())
-          );
-        });
-        setResults(results);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+  const fetchData = async (value) => {
+    try {
+      const response = await getParkingData();
+      const results = response.filter((user) => {
+        return (
+          value &&
+          user &&
+          user.name &&
+          user.name.toLowerCase().includes(value.toLowerCase())
+        );
       });
+      setResults(results);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const handleChange = (value) => {
