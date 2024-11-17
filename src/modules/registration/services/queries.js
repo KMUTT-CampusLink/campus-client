@@ -13,6 +13,8 @@ import {
   fetchActiveCoursesByStudentId,
   fetchEnrollmentHead,
   fetchPaymentStatus,
+  fetchAllSemesters,
+  fetchStudentProfileById,
 } from "./api";
 
 // Custom hook for authentication
@@ -53,6 +55,17 @@ export const useStudentData = (studentId) => {
   });
 };
 
+export const useStudentProfileData = (studentId) => {
+  return useQuery({
+    queryKey: ["studentProfile", studentId],
+    queryFn: () => fetchStudentProfileById(studentId),
+    enabled: !!studentId,
+    onError: (error) => {
+      console.error("Error fetching student data:", error);
+    },
+  });
+};
+
 // Custom hook for searching courses
 export const useCourseBySearch = (searchTerm) => {
   return useQuery({
@@ -66,11 +79,11 @@ export const useCourseBySearch = (searchTerm) => {
 };
 
 // Custom hook for fetching sections by course code
-export const useSectionByCourseCode = (courseCode) => {
+export const useSectionByCourseCode = (courseCode, semesterId) => {
   return useQuery({
-    queryKey: ["sections", courseCode],
-    queryFn: () => fetchSectionByCourseCode(courseCode),
-    enabled: !!courseCode,
+    queryKey: ["sections", courseCode, semesterId],
+    queryFn: () => fetchSectionByCourseCode(courseCode, semesterId),
+    enabled: !!courseCode && !!semesterId,
     onError: (error) => {
       console.error("Error fetching sections:", error);
     },
@@ -83,6 +96,16 @@ export const useSemestersByStudentId = (studentId) => {
     queryKey: ["semesters", studentId],
     queryFn: () => fetchSemestersByStudentId(studentId),
     enabled: !!studentId,
+    onError: (error) => {
+      console.error("Error fetching semesters:", error);
+    },
+  });
+};
+
+export const useAllSemesters = () => {
+  return useQuery({
+    queryKey: ["semesters"],
+    queryFn: () => fetchAllSemesters(),
     onError: (error) => {
       console.error("Error fetching semesters:", error);
     },

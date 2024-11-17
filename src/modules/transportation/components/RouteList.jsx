@@ -7,9 +7,9 @@ const RouteList = ({ routes, selectedRoute, setSelectedRoute }) => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full font-geologica">
       {routes.length === 0 ? (
-        <div className="text-3xl text-center text-gray-500">
+        <div className="text-xl text-center text-gray-500">
           No routes available.
         </div>
       ) : (

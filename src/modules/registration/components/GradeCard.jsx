@@ -65,7 +65,7 @@ const GradeCard = ({ semester, semesterId, studentId }) => {
               key={course.id || index}
               className="py-3 flex justify-between items-center"
             >
-              <div>
+              <div className="pr-2">
                 <p className="text-sm font-bold text-[#DC5A52]">
                   {course.course_code}
                 </p>

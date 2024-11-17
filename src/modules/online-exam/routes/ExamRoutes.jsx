@@ -12,20 +12,17 @@ import ProfessorExamSettingPage from "../pages/professor/ProfessorExamSettingPag
 import ProfessorDashboardPage from "../pages/professor/ProfessorDashboardPage";
 import ProfessorScoringPage from "../pages/professor/ProfessorScoringPage";
 import ProfessorOverallScoringPage from "../pages/professor/ProfessorOverallScoringPage";
-import Redirecting from "../services/redirecting";
+import App from "../App.jsx";
+
 
 export default function ExamRoutes() {
   return [
-    //Student Routes
-    {
-      path: "",
-      element: <Redirecting/>,
-    },
     {
       path: "student/",
+      element: <App/>,
       children: [
         {
-          path: ":id",
+          path: ":sectionId",
           element: <StudentHomePage />,
         },
         {
@@ -46,13 +43,14 @@ export default function ExamRoutes() {
     //Professor Routes
     {
       path: "professor/",
+      element: <App/>,
       children: [
         {
-          path: ":id",
+          path: ":sectionId",
           element: <ProfessorHomePage />,
         },
         {
-          path: "create/:courseId",
+          path: "create/:sectionId",
           element: <ProfessorCreateExamPage />,
         },
         {

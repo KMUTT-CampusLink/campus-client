@@ -78,14 +78,17 @@ export default function Question({
   };
 
   //set image for each choice
-  const setChoiceImage = (choiceIndex, file) => {
-    const updatedQuestions = [...exam.questions];
-    if (!updatedQuestions[index].choiceImages) {
-      updatedQuestions[index].choiceImages = {};
-    }
-    updatedQuestions[index].choiceImages[choiceIndex] = file;
-    setExam({ ...exam, questions: updatedQuestions });
-  };
+  // const setChoiceImage = (questionIndex, choiceIndex, file) => {
+  //   setFileUploads((prevUploads) => ({
+  //     ...prevUploads,
+  //     [`${questionIndex}-${choiceIndex}`]: file, // Store file by question and choice index
+  //   }));
+  
+  //   // Update the choiceImg property in the exam state for preview purposes
+  //   const updatedQuestions = [...exam.questions];
+  //   updatedQuestions[questionIndex].options[choiceIndex].choiceImg = URL.createObjectURL(file);
+  //   setExam({ ...exam, questions: updatedQuestions });
+  // };
 
   return (
     <div className="grid gap-[10px]">
@@ -158,21 +161,21 @@ export default function Question({
                   {option.choiceText ? option.choiceText : option}
                 </div>
                 <div className="flex items-center">
-                  <ChoiceImageUploader
+                  {/* <ChoiceImageUploader
                     setChoiceImage={(file) => setChoiceImage(i, file)}
-                  />
+                  /> */}
                   <button onClick={() => deleteChoice(option)} className="ml-[30px]">
                     <FontAwesomeIcon icon={faMinus} className="text-[20px]" />
                   </button>
                 </div>
               </div>
-              {question.choiceImages && question.choiceImages[i] && (
+              {/* {question.choiceImages && question.choiceImages[i] && (
                 <img
                   src={URL.createObjectURL(question.choiceImages[i])}
                   alt="Choice Image"
                   className="w-[300px] h-auto mt-2"
                 />
-              )}
+              )} */}
             </div>
           ))}
           <Choice onAddChoice={addChoice} />
@@ -194,21 +197,21 @@ export default function Question({
                   {option.choiceText ? option.choiceText : option}
                 </div>
                 <div className="flex items-center">
-                  <ChoiceImageUploader
+                  {/* <ChoiceImageUploader
                     setChoiceImage={(file) => setChoiceImage(i, file)}
-                  />
+                  /> */}
                   <button onClick={() => deleteChoice(option)} className="ml-[30px]">
                     <FontAwesomeIcon icon={faMinus} className="text-[20px]" />
                   </button>
                 </div>
               </div>
-              {question.choiceImages && question.choiceImages[i] && (
+              {/* {question.choiceImages && question.choiceImages[i] && (
                 <img
                   src={URL.createObjectURL(question.choiceImages[i])}
                   alt="Choice Image"
                   className="w-[300px] h-auto mt-2"
                 />
-              )}
+              )} */}
             </div>
           ))}
           <Choice onAddChoice={addChoice} />

@@ -9,11 +9,11 @@ const StopSelector = ({ stops, stop, setStop, placeholder }) => {
   };
 
   return (
-    <div>
+    <div className="font-geologica">
       <select
         value={stop.id || ""}
         onChange={handleSelectStartStop}
-        className="w-full py-2 pl-10 pr-4 border rounded-full shadow-sm focus:border-orange-400"
+        className="w-full py-2 pl-10 pr-4 rounded-lg outline-none border shadow-sm focus:border-orange-400"
       >
         <option value="" disabled>
           {placeholder}

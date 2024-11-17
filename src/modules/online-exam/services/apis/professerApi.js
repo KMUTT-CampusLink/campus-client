@@ -1,9 +1,10 @@
 import { axiosInstance } from "../../../../utils/axiosInstance";
 
-export const createNewExam = async (exam) => {
+export const createNewExam = async (exam, sectionId) => {
   try {
     const response = await axiosInstance.post("/exams/professor/createExam", {
       exam: exam,
+      sectionId: sectionId,
     });
     return response;
   } catch (error) {
@@ -11,9 +12,9 @@ export const createNewExam = async (exam) => {
   }
 };
 
-export const getExams = async () => {
+export const getExams = async (sectionid) => {
   try {
-    const response = await axiosInstance.get("/exams/professor/getExams");
+    const response = await axiosInstance.get(`/exams/professor/getExams?sectionid=${sectionid}`);
     return response;
   } catch (error) {
     return error.response.data;
@@ -180,3 +181,29 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
     return error.response.data;
   }
 };
+
+ export const updateExamAnnouncement = async (examId, isAnnounced) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/professor/updateExamAnnouncement",
+      {
+        examId: examId,
+        publicScoreStatus: isAnnounced,
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
+export const uploadFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axiosInstance.post("/exams/professor/uploadFile", file);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}

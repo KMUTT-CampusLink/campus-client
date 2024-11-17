@@ -16,9 +16,9 @@ import RegisRoutes from "./modules/registration/routes/RegisRoutes";
 import TransRoutes from "./modules/transportation/routes/TransRoutes";
 
 // dev lead pages
-import HomePage from "./pages/HomePage";
-import NotFound from "./pages/NotFound";
-import UnAuthorized from "./pages/UnAuthorized";
+import HomePage from "./modules/dev/pages/HomePage";
+import NotFound from "./modules/dev/pages/NotFound";
+import UnAuthorized from "./modules/dev/pages/UnAuthorized";
 
 const main_router = [
   {
