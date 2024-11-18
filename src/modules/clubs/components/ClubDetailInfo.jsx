@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -5,6 +6,7 @@ import { axiosInstance } from "../../../utils/axiosInstance";
 
 function ClubDetailInfo() {
   const {clubId } = useParams();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -17,11 +19,16 @@ function ClubDetailInfo() {
     const fetchClubDetails = async () => {
     try{
       const response = await axiosInstance.get(`/clubs/${clubId}`);
-      setTitle(response.data.data.name);
-      setDescription(response.data.data.description);
-      setContent(response.data.data.content);
+      if (response.data.data) {
+        setTitle(response.data.data.name);
+        setDescription(response.data.data.description);
+        setContent(response.data.data.content);
+      } else {
+        navigate("/clubs"); // Navigate to clubs list if club is not found
+      }  
     }catch(err){
       console.error("Error fetching club details:", err);
+      navigate("/clubs");
     }
   };
     fetchClubDetails();
@@ -50,6 +57,21 @@ function ClubDetailInfo() {
     }
     catch(err){
       console.error("Error updating description:", err);
+    }
+  };
+
+  // Function to delete club
+  const handleDelete = async () => {
+    const confirmed = window.confirm("Are you sure you want to delete this club?");
+    if (!confirmed) return;
+
+    try {
+      await axiosInstance.delete(`/clubs/${clubId}`);
+      alert("Club deleted successfully.");
+      navigate("/clubs"); // Redirect to clubs list or homepage after deletion
+    } catch (err) {
+      console.error("Error deleting club:", err);
+      alert("Failed to delete club.");
     }
   };
 
@@ -82,7 +104,10 @@ function ClubDetailInfo() {
         >
           Edit Description
         </button>
-        <button className="bg-[#864E41] text-white px-3 md:px-14 py-1 shadow-xl rounded-lg md:rounded-full md:text-xl mt-3 md:mt-5 md:ml-6">
+        <button 
+          className="bg-[#864E41] text-white px-3 md:px-14 py-1 shadow-xl rounded-lg md:rounded-full md:text-xl mt-3 md:mt-5 md:ml-6"
+          onClick={handleDelete} // Attach handleDelete function
+        >
           Delete Club
         </button>
       </div>

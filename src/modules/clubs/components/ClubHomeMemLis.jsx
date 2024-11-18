@@ -26,7 +26,8 @@ const ClubHomeMemLis = (props) => {
   const members = clubMembers.filter(
     (members) => members.status === "Accepted" && !members.is_admin
   );
-  console.log(admins, members);
+  //console.log(admins, members);
+
   const handleClick = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
@@ -46,9 +47,12 @@ const ClubHomeMemLis = (props) => {
     }
 
     if (members.employee) {
-      return `${members.employee.firstname || ""} ${
-        members.employee.midname || ""
-      } ${members.employee.lastname || ""}`;
+      return (
+        "Prof. " +
+        `${members.employee.firstname || ""} ${
+          members.employee.midname || ""
+        } ${members.employee.lastname || ""}`
+      );
     }
     return "Unknown";
   };
@@ -102,48 +106,61 @@ const ClubHomeMemLis = (props) => {
 
       {isModalOpen && selectedItem && (
         <div
+          className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex items-center justify-center"
           onClick={closeModal}
-          className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex items-center justify-center text-left text-white"
         >
-          <div className="bg-[#505050] px-[8%] md:px-[5%] py-[3%] rounded-xl shadow-lg aspect-[4/3] w-[85%] md:w-[30%] ">
-            <h2 className="text-lg mb-2"></h2>
-            {selectedItem.student && (
-              <div className="">
-                <img
-                  className="w-[20%] aspect-square rounded-full m-auto"
-                  src="https://i.imgur.com/xKf7cjo.png"
-                  alt="avatar"
-                />
-                <p>
-                  <h2>StudentID: {selectedItem.student.id}</h2>
-                </p>
-                <p>
-                  <h2>
-                    Name: {selectedItem.student.firstname}{" "}
-                    {selectedItem.student.lastname}{" "}
-                  </h2>
-                </p>
-              </div>
-            )}
-            {selectedItem.employee && (
-              <div className="">
-                <img
-                  className="w-[20%] aspect-square rounded-full m-auto"
-                  src="https://i.imgur.com/xKf7cjo.png"
-                  alt="avatar"
-                />
-                <p>
-                  <h2>Employee ID: {selectedItem.employee.id}</h2>
-                </p>
-                <p>
-                  <h2>
-                    Name: {selectedItem.employee.firstname}{" "}
-                    {selectedItem.employee.midname}{" "}
-                    {selectedItem.student.lastname}{" "}
-                  </h2>
-                </p>
-              </div>
-            )}
+          <div
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+            style={{
+              background: "rgba(255, 255, 255, 0.9)",
+              backdropFilter: "blur(8px)",
+            }}
+            className="px-[8%] md:px-[5%] py-[3%] rounded-xl shadow-lg w-[85%] md:w-[30%]"
+          >
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 text-xl font-bold text-gray-700 hover:text-gray-900"
+            >
+              ×
+            </button>
+            <div className="text-left">
+              {selectedItem.student && (
+                <div>
+                  <img
+                    className="w-[25%] aspect-square rounded-full m-auto"
+                    src="https://i.imgur.com/xKf7cjo.png"
+                    alt="avatar"
+                  />
+                  <h2 className="text-center text-xl font-bold mt-3">Student Details</h2>
+                  <p><strong>ID: </strong>{selectedItem.student.id}</p>
+                  <p>
+                    <strong>Name: </strong>{selectedItem.student.firstname}{" "}
+                    {selectedItem.student.lastname}
+                  </p>
+                  <p className="mb-2">
+                    <strong>Line ID:</strong>{" "}
+                    {selectedItem.student.line_id || "Not provided"}
+                  </p>
+                </div>
+              )}
+              {selectedItem.employee && (
+                <div className="text-center border-t-2 border-gray-300 pt-4">
+                  <img
+                    className="w-[20%] aspect-square rounded-full m-auto"
+                    src="https://i.imgur.com/xKf7cjo.png"
+                    alt="avatar"
+                  />
+                  <h2 className="text-xl font-bold mt-3">Professor Details</h2>
+                  <p>Employee ID: {selectedItem.employee.id}</p>
+                  <p>
+                    Name: Prof. {selectedItem.employee.firstname}{" "}
+                    {selectedItem.employee.lastname}
+                  </p>
+                  <p>Department: Add department info here</p>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       )}
