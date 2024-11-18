@@ -101,7 +101,7 @@ const MemClubHomePost = (props) => {
       // Payload for the API
       const payload = {
         clubAnnouncementId,
-        userId: "d65ccd3d-4948-416a-9ace-2978cbc8c24b", // Replace with actual user ID
+        userId: "e2aaa131-24a1-4e4b-a32a-d6096753c711", // Replace with actual user ID
       };
   
       // Send API request
