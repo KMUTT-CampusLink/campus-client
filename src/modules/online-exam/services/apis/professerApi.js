@@ -1,22 +1,20 @@
-import axios from "axios";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
-export const createNewExam = async (exam) => {
+export const createNewExam = async (exam, sectionId) => {
   try {
-    const response = await axios.post(
-      "http://localhost:3000/api/exams/professor/createExam",
-      { exam: exam }
-    );
+    const response = await axiosInstance.post("/exams/professor/createExam", {
+      exam: exam,
+      sectionId: sectionId,
+    });
     return response;
   } catch (error) {
     return error.response.data;
   }
 };
 
-export const getExams = async () => {
+export const getExams = async (sectionid) => {
   try {
-    const response = await axios.get(
-      "http://localhost:3000/api/exams/professor/getExams"
-    );
+    const response = await axiosInstance.get(`/exams/professor/getExams?sectionid=${sectionid}`);
     return response;
   } catch (error) {
     return error.response.data;
@@ -25,8 +23,8 @@ export const getExams = async () => {
 
 export const getExamById = async (examId) => {
   try {
-    const response = await axios.get(
-      `http://localhost:3000/api/exams/professor/getExamById?examId=${examId}`
+    const response = await axiosInstance.get(
+      `/exams/professor/getExamById?examId=${examId}`
     );
     return response;
   } catch (error) {
@@ -36,8 +34,8 @@ export const getExamById = async (examId) => {
 
 export const deleteExamById = async (examId) => {
   try {
-    const response = await axios.delete(
-      `http://localhost:3000/api/exams/professor/deleteExamById?examId=${examId}`
+    const response = await axiosInstance.delete(
+      `/exams/professor/deleteExamById?examId=${examId}`
     );
     return response;
   } catch (error) {
@@ -47,8 +45,8 @@ export const deleteExamById = async (examId) => {
 
 export const getExamDataById = async (examId) => {
   try {
-    const response = await axios.get(
-      `http://localhost:3000/api/exams/professor/getExamDataById?examId=${examId}`
+    const response = await axiosInstance.get(
+      `/exams/professor/getExamDataById?examId=${examId}`
     );
     return response;
   } catch (error) {
@@ -56,10 +54,33 @@ export const getExamDataById = async (examId) => {
   }
 };
 
+export const updateExam = async (exam) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/professor/updateExam",
+      exam
+    );
+    return response;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
 export const getFullMark = async (examId) => {
   try {
-    const response = await axios.get(
-      `http://localhost:3000/api/exams/professor/getFullMark?examId=${examId}`
+    const response = await axiosInstance.get(
+      `/exams/professor/getFullMark?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const dashboard = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getDashboardData?examId=${examId}`
     );
     return response;
   } catch (error) {
@@ -68,10 +89,9 @@ export const getFullMark = async (examId) => {
 };
 
 export const updateExamSettings = async (examId, exam) => {
-  console.log(examId, exam);
   try {
-    const response = await axios.put(
-      `http://localhost:3000/api/exams/professor/updateExamSettings`,
+    const response = await axiosInstance.put(
+      `/exams/professor/updateExamSettings`,
       { examId: examId, exam: exam }
     );
     return response;
@@ -79,3 +99,111 @@ export const updateExamSettings = async (examId, exam) => {
     return error.response.data;
   }
 };
+
+export const getExamParticipants = async (examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getExamParticipants?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentAnswers = async (examId, studentId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getStudentAnswers?examId=${examId}&studentId=${studentId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentScore = async (studentExamId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getStudentScore?id=${studentExamId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentExam = async (studentExamId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getStudentData?id=${studentExamId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getQuestionScore = async (questionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getQuestionScore?id=${questionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentScoreById = async (questionId, studentId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/professor/getStudentScoreById?id=${questionId}&studentId=${studentId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const updateStudentScore = async (finalEssayScore, studentExamId, studentId) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/professor/updateStudentScore",
+      {
+        studentId: studentId,
+        studentExamId: studentExamId,
+        finalEssayScore: finalEssayScore,
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+ export const updateExamAnnouncement = async (examId, isAnnounced) => {
+  try {
+    const response = await axiosInstance.put(
+      "/exams/professor/updateExamAnnouncement",
+      {
+        examId: examId,
+        publicScoreStatus: isAnnounced,
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
+export const uploadFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axiosInstance.post("/exams/professor/uploadFile", file);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}

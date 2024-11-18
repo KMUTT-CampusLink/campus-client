@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "../style/typography.css";
 
 const RecentTransactions = ({
   transactions,
@@ -36,14 +37,13 @@ const RecentTransactions = ({
   };
 
   return (
-    <div className="w-full lg:w-1/2 mt-10 lg:mt-32 mb-auto lg:h-[80vh] overflow-scroll">
-      <h2 className="text-xl lg:text-2xl h-max py-4 lg:py-8 font-semibold">
-        Recent Transactions
-      </h2>
+    <div className="w-full lg:w-1/2 mb-auto">
+      <h2 className=" h2 py-4 lg:py-8">Recent Transactions</h2>
 
-      <div className="flex flex-col lg:flex-row p-0 h-min justify-between mb-4">
+      <div className="flex flex-row p-0 h-min justify-between mb-4 items-center space-x-2">
+        {/* Filters */}
         <div className="dropdown">
-          <label tabIndex={0} className="btn btn-outline">
+          <label tabIndex={0} className="btn btn-outline body-1">
             Filter By: {filterRecent}
           </label>
           <ul
@@ -51,44 +51,69 @@ const RecentTransactions = ({
             className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a onClick={() => setFilterRecent("All")}>All</a>
+              <a className="small-label" onClick={() => setFilterRecent("All")}>
+                All
+              </a>
             </li>
             <li>
-              <a onClick={() => setFilterRecent("Paid")}>Paid</a>
+              <a
+                className="small-label"
+                onClick={() => setFilterRecent("Paid")}
+              >
+                Paid
+              </a>
             </li>
             <li>
-              <a onClick={() => setFilterRecent("Unpaid")}>Unpaid</a>
+              <a
+                className="small-label"
+                onClick={() => setFilterRecent("Unpaid")}
+              >
+                Unpaid
+              </a>
             </li>
             <li>
-              <a onClick={() => setFilterRecent("Canceled")}>Canceled</a>
+              <a
+                className="small-label"
+                onClick={() => setFilterRecent("Canceled")}
+              >
+                Canceled
+              </a>
+            </li>
+            <li>
+              <a
+                className="small-label"
+                onClick={() => setFilterRecent("Paid in Installment")}
+              >
+                Paid in Installment
+              </a>
             </li>
           </ul>
         </div>
 
         {/* See All Button */}
         <button
-          className="btn btn-primary bg-orange-600 mt-4 lg:mt-0"
+          className="btn bg-payment-red hover:bg-red-400 text-white w-fit body-1"
           onClick={() => setShowAll(true)}
         >
           See All
         </button>
       </div>
 
-      <div className={`space-y-4 h-min overflow-scroll`}>
+      <div className="space-y-4 h-min">
         {recentTransactions.map((transaction, index) => (
           <div
             key={index}
             className="bg-white p-4 rounded-lg shadow-md flex items-center"
           >
             <div>
-              <h3 className="text-lg font-bold">{transaction.title}</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="big-label">{transaction.title}</h3>
+              <p className="small-label text-gray-500">
                 Due on {formatDate(transaction.due_date)}
               </p>
             </div>
             <div className="text-right flex flex-col items-end justify-center ml-auto mr-2">
               <p
-                className={`text-lg font-semibold ${
+                className={`big-label ${
                   transaction.status === "Paid"
                     ? "text-green-500"
                     : transaction.status === "Canceled"
@@ -99,7 +124,7 @@ const RecentTransactions = ({
                 {`${transaction.amount} BAHT`}
               </p>
               <p
-                className={`text-sm ${
+                className={`bold-small ${
                   transaction.status === "Paid"
                     ? "text-green-600"
                     : transaction.status === "Canceled"
@@ -111,11 +136,11 @@ const RecentTransactions = ({
               </p>
             </div>
 
-            {/* Add Arrow for Unpaid Transactions */}
+            {/* Arrow for Unpaid Transactions */}
             {transaction.status === "Unpaid" && (
-              <div className="ml-2">
+              <div className="ml-2 ">
                 <button
-                  className="btn btn-sm btn-circle bg-red-500 hover:bg-red-600 text-white ml-2"
+                  className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
                   onClick={() => handleArrowClick(transaction)}
                   aria-label="Pay Now"
                 >

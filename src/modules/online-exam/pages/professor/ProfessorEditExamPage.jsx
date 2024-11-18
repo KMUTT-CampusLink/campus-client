@@ -1,53 +1,70 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import Navbar from '../../../registration/components/NavBarComponents/NavBar';
-import Question from '../../components/professor/EditedExam/Question';
+import Navbar from "../../../registration/components/NavBarComponents/NavBar";
+import Question from "../../components/professor/EditedExam/Question";
+import StudentQuestion from "../../components/professor/EditedExam/StudentQuestion";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPlus,
+  faChevronLeft,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { getExamDataById } from '../../services/apis/professerApi';
+import { getExamDataById, updateExam, uploadFile } from '../../services/apis/professerApi';
 
 export default function ProfessorEditExamPage() {
   const { examId } = useParams();
   const navigate = useNavigate();
+  const [viewAsStudent, setViewAsStudent] = useState(false);
 
   //exam data all stored in here
   const [exam, setExam] = useState({
-    title: '',
-    description: '',
+    examId: examId,
+    title: "",
+    description: "",
     questions: [],
   });
+
+  //get exam data by exam id
   const getExamData = async () => {
     try {
       const res = await getExamDataById(examId);
       const examData = res.data.data.exam;
       const examQuestion = res.data.data.questions;
       const allChoices = res.data.data.choices;
-      const mappedQuestions = examQuestion && Array.isArray(examQuestion)
-        ? examQuestion.map(question => {
-          const questionChoices = allChoices.filter(choice => choice.question_id === question.id);
-          return {
-            questionText: question.title || '',
-            type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
-            options: questionChoices.map(choice => ({
-              choiceText: choice.choice_text || '',
-              choiceImg: choice.choice_img || null,
-              isCorrect: choice.correct_ans || false
-            })),
-            answer: questionChoices
-              .filter(choice => choice.correct_ans)
-              .map(choice => choice.choice_text || ''),
-            score: question.mark || null
-          };
-        })
-        : [];
+      const mappedQuestions =
+        examQuestion && Array.isArray(examQuestion)
+          ? examQuestion.map((question) => {
+            const questionChoices = allChoices.filter(
+              (choice) => choice.question_id === question.id
+            );
+            return {
+              questionId: question.id || null,
+              questionText: question.title || "",
+              type: question.type
+                ? question.type.replace("_", " ")
+                : "Multiple Choice",
+              options: questionChoices.map((choice) => ({
+                choiceText: choice.choice_text || "",
+                choiceImg: choice.choice_img || null,
+                isCorrect: choice.correct_ans || false,
+                choiceId: choice.id || null,
+              })),
+              answer: questionChoices
+                .filter((choice) => choice.correct_ans)
+                .map((choice) => choice.choice_text || ""),
+              score: question.type === 'Checklist' ? question.mark * questionChoices.length : question.mark || null,
+            };
+          })
+          : [];
       setExam({
         ...exam,
-        title: examData.title || 'Untitled Exam',
-        description: examData.description || 'No description',
-        questions: mappedQuestions
+        title: examData.title || "Untitled Exam",
+        description: examData.description || "No description",
+        questions: mappedQuestions,
       });
     } catch (error) {
       console.error("Failed to fetch exam data:", error);
@@ -73,8 +90,11 @@ export default function ProfessorEditExamPage() {
 
   // set default score for all questions function
   const handleDefaultScoreChange = (e) => {
-    const score = parseInt(e.target.value) || 0;
-    if (score < 0) return;
+    const score = parseInt(e.target.value);
+    if (score <= 0) {
+      setDefaultScore(1);
+      return;
+    }
     setDefaultScore(score);
     const updatedQuestions = exam.questions.map((question) => ({
       ...question,
@@ -91,10 +111,10 @@ export default function ProfessorEditExamPage() {
       questions: [
         ...exam.questions,
         {
-          questionText: '',
-          type: 'multipleChoice',
+          questionText: "",
+          type: "Multiple Choice",
           options: [],
-          answer: '',
+          answer: "",
           score: null,
         },
       ],
@@ -103,104 +123,183 @@ export default function ProfessorEditExamPage() {
 
   // delete question function
   const deleteQuestion = (index) => {
-    const updatedQuestions = exam.questions.filter((_, i) => i !== index);
+    const updatedQuestions = exam.questions.filter(
+      (question, i) => question.questionId !== index
+    );
     setExam({ ...exam, questions: updatedQuestions });
   };
 
-  // submit exam function
+  // Submit exam function
   const handleSubmit = async () => {
     const finalExam = {
       ...exam,
       questions: exam.questions.map((question) => ({
         ...question,
         score: question.score || defaultScore,
+        options: question.options.map((option) => ({
+          choiceText: option.choiceText,
+          // choiceImg: option.choiceImg,
+          isCorrect: option.isCorrect,
+          choiceId: option.choiceId,
+        })),
       })),
     };
+    // const results = await Promise.all(finalExam.questions.map(async (question) => {
+    //   console.log(question.image);
+    //   // const uploadImage = await uploadFile(question.image);
+    // }));
+    const res = await updateExam(finalExam);
+    if (res.status === 200) {
+      navigate(`/exams/professor/setting/${examId}`);
+    }
   };
 
-  // console.log(exam)
-
   return (
-    <div className='w-auto'>
+    <div className="w-auto">
       <Navbar />
-      <div className='mx-[35px] xl:mx-[100px] pb-[30px] pt-20'>
-        <div className='flex flex-col justify-between gap-[20px]'>
-          <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">Edit Exam</h1>
-            {/* view as student button */}
-            <button className="btn"><FontAwesomeIcon icon={faEye} /> View as student</button>
-          </div>
-          {/* exam details */}
-          <h4>Exam Name</h4>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Exam Name Here"
-            value={exam.title}
-            onChange={handleExamNameChange}
-          />
-          <h4>Description</h4>
-          <textarea
-            className="textarea textarea-bordered w-full h-[100px]"
-            placeholder="Description Here"
-            value={exam.description}
-            onChange={handleDescriptionChange}
-          ></textarea>
-          {/* set default score for all questions */}
-          <div className='flex gap-[10px] items-center'>
-            <h4>Set Default Score: </h4>
-            <input
-              type="number"
-              className="input input-bordered w-[100px] h-[40px]"
-              value={defaultScore}
-              onChange={handleDefaultScoreChange}
-            />
-          </div>
-          {/* Map question */}
-          {exam && exam.questions.map((question, index) => (
-            <>
-              <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
-              <Question
-                key={index}
-                question={question}
-                index={index}
-                setExam={setExam}
-                exam={exam}
-                onDeleteQuestion={deleteQuestion}
-                defaultScore={defaultScore}
-              />
-            </>
-          ))}
-          {/* Add question button */}
-          <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white' onClick={addQuestion}><FontAwesomeIcon icon={faPlus} /> Add Question</button>
-        </div>
-        <hr className='mt-[30px] border' />
-        {/* subnit exam button */}
-        <div className='flex justify-end pt-[30px]'>
-          <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Submit Exam
-          </button>
-          <dialog id="confirmModal" className="p-[30px] rounded-xl">
-            <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
-            <p className="py-4">You can submit the exam only once.</p>
-            <div className="modal-action">
-              <form method="dialog" className="flex flex-row gap-[20px]">
-                <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
-                  Close
-                </button>
+      <div className="mx-[35px] xl:mx-[100px] pb-[30px] pt-20">
+        <div className={`${viewAsStudent ? "hidden" : "block"}`}>
+          <div className="flex flex-col justify-between gap-[20px]">
+            <div className="flex flex-col xl:flex-row xl:justify-between  xl:items-center">
+              <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">
+                Edit Exam
+              </h1>
+              {/* view as student button */}
+              <div className="flex gap-2">
                 <button
-                  className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+                  className="btn mt-[10px]"
                   onClick={() => {
-                    handleSubmit();
-                    navigate(`/exams/professor/setting/${1}`);
+                    setViewAsStudent(true);
                   }}
                 >
-                  Confirm
+                  <FontAwesomeIcon icon={faEye} /> View as student
                 </button>
-              </form>
+                <button
+                  className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
+                  onClick={() => {
+                    navigate(`/exams/professor/setting/${examId}`);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCog} /> Exam setting
+                </button>
+              </div>
             </div>
-          </dialog>
+            {/* exam details */}
+            <h4>Exam Name</h4>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Exam Name Here"
+              value={exam.title}
+              onChange={handleExamNameChange}
+            />
+            <h4>Description</h4>
+            <textarea
+              className="textarea textarea-bordered w-full h-[200px]"
+              placeholder="Description Here"
+              value={exam.description}
+              onChange={handleDescriptionChange}
+            ></textarea>
+            {/* set default score for all questions */}
+            <div className="flex gap-[10px] items-center">
+              <h4>Set Default Score: </h4>
+              <input
+                type="number"
+                className="input input-bordered w-[100px] h-[40px]"
+                value={defaultScore}
+                onChange={handleDefaultScoreChange}
+              />
+            </div>
+            {/* Map question */}
+            {exam &&
+              exam.questions.map((question, index) => (
+                <>
+                  <hr className="mt-[20px] border-[1px] bg-[#BEBEBE]" />
+                  <Question
+                    key={index}
+                    question={question}
+                    index={index}
+                    setExam={setExam}
+                    exam={exam}
+                    onDeleteQuestion={deleteQuestion}
+                    defaultScore={defaultScore}
+                  />
+                </>
+              ))}
+            {/* Add question button */}
+            <button
+              className="btn bg-[#864E41] hover:bg-[#6e4339] text-white"
+              onClick={addQuestion}
+            >
+              <FontAwesomeIcon icon={faPlus} /> Add Question
+            </button>
+          </div>
+          <hr className="mt-[30px] border" />
+          {/* subnit exam button */}
+          <div className="flex justify-end pt-[30px]">
+            <button
+              className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+              onClick={() =>
+                document.getElementById("confirmModal").showModal()
+              }
+            >
+              Confirm Edited Exam
+            </button>
+            <dialog id="confirmModal" className="p-[30px] rounded-xl">
+              <h3 className="font-bold text-lg">Confirm Edited the Exam?</h3>
+              <p className="py-4">
+                Review and confirm your edited exam before publishing in the
+                system.
+              </p>
+              <div className="modal-action">
+                <form method="dialog" className="flex flex-row gap-[20px]">
+                  <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
+                    Close
+                  </button>
+                  <button
+                    className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Confirm
+                  </button>
+                </form>
+              </div>
+            </dialog>
+          </div>
+        </div>
+        <div className={`${viewAsStudent ? "block" : "hidden"}`}>
+          <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center">
+            <h1 className="text-[24px] xl:text-[30px] font-extrabold text-[#D4A015]">
+              {exam.title || ""}
+            </h1>
+            <button
+              className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
+              onClick={() => {
+                setViewAsStudent(false);
+              }}
+            >
+              {" "}
+              <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam
+            </button>
+          </div>
+          <div className="my-[20px] flex flex-col gap-[20px]">
+            {exam.questions.map((question, index) => (
+              <>
+                <StudentQuestion
+                  key={index}
+                  questionid={question.question_id}
+                  questionNo={index}
+                  question={question.questionText}
+                  choice={question.options}
+                  type={question.type}
+                />
+              </>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

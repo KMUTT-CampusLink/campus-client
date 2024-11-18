@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-function ClubDetailInfo() {
+function ClubDetailInfo( { isAdmin, isMember, memberId } ) {
   const {clubId } = useParams();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +32,7 @@ function ClubDetailInfo() {
     }
   };
     fetchClubDetails();
-  }, [clubId]);
+  }, [clubId, navigate]);
   // Function to handle modal open/close
   const openModal = () => {
     setIsModalOpen(true);
@@ -91,7 +91,8 @@ function ClubDetailInfo() {
         <p className="text-lg text-gray-600 whitespace-pre-wrap p-4">{content}</p>
       </div>
 
-      <div className="flex flex-wrap justify-end md:mt-12 mt-6">
+      {isAdmin && (
+        <div className="flex flex-wrap justify-end md:mt-12 mt-6">
         <Link
           to={`/clubs/club-home/${clubId}`}
           className="bg-[#F69800] text-white px-2 md:px-14 py-2 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 md:ml-6 block"
@@ -111,6 +112,16 @@ function ClubDetailInfo() {
           Delete Club
         </button>
       </div>
+      )}
+
+      {isMember && !isAdmin && (
+        <Link
+          to={`/clubs/member/${memberId}/club-home/${clubId}`}
+          className="bg-[#F69800] text-white px-4 py-2 rounded-md"
+        >
+          Announcements
+        </Link>
+      )}
 
       {/* Modal */}
       {isModalOpen && (

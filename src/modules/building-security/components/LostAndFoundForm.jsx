@@ -1,210 +1,300 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LostAndFoundForm() {
+  const navigate = useNavigate();
+  const [buildingData, setBuildingData] = useState([]);
+  const [floorData, setFloorData] = useState([]);
+  const [roomData, setRoomData] = useState([]);
   const [building, setBuilding] = useState("");
-  const [room, setRoom] = useState("");
   const [floor, setFloor] = useState("");
-  const [request, setRequest] = useState("");
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [room, setRoom] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Lost"); // Default status
+  const [error, setError] = useState(null);
 
-  // Listen to window resize to change the form styles accordingly
+  // Temporary user_id
+  const reporterId = "2dbd2251-6dcf-4aab-914c-2ecdda5eadd7";
+  const name = "Linda"; // Temporary name for the reporter
+
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const fetchBuildingData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/security/buildings"
+        );
+        if (!response.ok) throw new Error("Failed to fetch building data");
+        const data = await response.json();
+        setBuildingData(data.sort((a, b) => a.name.localeCompare(b.name)));
+      } catch (error) {
+        console.error("Error fetching building data:", error);
+        setError("Failed to load building data.");
+      }
+    };
+
+    fetchBuildingData();
   }, []);
 
-  
+  const handleBuildingChange = async (event) => {
+    const selectedBuildingId = event.target.value;
+    setBuilding(selectedBuildingId);
+    setFloor("");
+    setRoom("");
+    setFloorData([]);
+    setRoomData([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent form refresh on submit
-    console.log({ building, room, floor, request });
-    // You can add further logic to handle form data submission (API calls, etc.)
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/security/floors/${selectedBuildingId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch floors");
+      const data = await response.json();
+      setFloorData(data.sort((a, b) => a.name.localeCompare(b.name)));
+    } catch (error) {
+      console.error("Error fetching floors:", error);
+      setError("Failed to load floor data.");
+    }
   };
 
-  const isMobile = windowWidth <= 768;
-  const isLaptop = windowWidth > 768 && windowWidth <= 1199;
+  const handleFloorChange = async (event) => {
+    const selectedFloorId = event.target.value;
+    setFloor(selectedFloorId);
+    setRoom("");
 
-  // Inline style object with responsive design
-  const formStyles = {
-    container: {
-      maxWidth: isMobile ? "90%" : isLaptop ? "70%" : "900px", // Adjust width based on screen size
-      margin: "100px 0 100px 22%",//***Chang the box on the middle on this */ */
-      padding: isMobile ? "20px" : "40px", // Adjust padding for mobile
-      backgroundColor: "#ffffff",
-      borderRadius: "20px",
-      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
-      textAlign: "center",
-      position: "relative",
-    },
-    header: {
-      fontSize: isMobile ? "28px" : isLaptop ? "32px" : "36px", // Responsive font size
-      fontWeight: "bold",
-      color: "#000",
-      marginBottom: "10px",
-      textAlign: "left",
-    },
-    formGroup: {
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row", // Stack inputs vertically on mobile
-      justifyContent: "space-between",
-      flexWrap: "wrap",
-      marginBottom: "30px",
-    },
-    formItemFullWidth: {
-      width: "100%",
-      marginBottom: "20px",
-    },
-    formItemHalfWidth: {
-      width: isMobile ? "100%" : "48%", // Full width for mobile, half for larger screens
-      marginBottom: "20px",
-    },
-    select: {
-      width: "100%",
-      padding: isMobile ? "15px" : "20px", // Adjust padding for mobile
-      fontSize: isMobile ? "16px" : "18px", // Adjust font size for mobile
-      borderRadius: "30px",
-      border: "1px solid #ccc",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-      appearance: "none",
-      background:
-        "#f5f5f5 url(\"data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4z'/></svg>\") no-repeat right 20px center",
-      backgroundSize: "16px 16px",
-      outline: "none",
-    },
-    textarea: {
-      width: "100%",
-      padding: isMobile ? "15px" : "20px",
-      fontSize: isMobile ? "16px" : "18px",
-      borderRadius: "15px",
-      border: "1px solid #ccc",
-      backgroundColor: "#f9f9f9",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-      marginBottom: "30px",
-      outline: "none",
-      boxSizing: "border-box",
-    },
-    submitBtn: {
-      backgroundColor: "#8b5b34",
-      color: "white",
-      padding: isMobile ? "15px 40px" : "20px 60px", // Adjust button size for mobile
-      borderRadius: "40px",
-      border: "none",
-      cursor: "pointer",
-      fontSize: isMobile ? "18px" : "20px", // Smaller font for mobile
-      boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
-      marginTop: "20px",
-    },
-    listButton: {
-      position: "absolute",
-      top: "20px",
-      right: "20px",
-      width: "60px",
-      height: "60px",
-      borderRadius: "50%",
-      backgroundColor: "#8b5b34",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      cursor: "pointer",
-      color: "#fff",
-      boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
-    },
-    icon: {
-      width: "30px",
-      height: "30px",
-    },
-    label: {
-      fontWeight: "bold",
-      fontSize: "18px",
-      color: "#333",
-      textAlign: "left", // Ensures the text is aligned to the left
-      display: "block",
-      marginBottom: "10px",
-      width: "100%", // Takes up full width of the container
-    },
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/security/rooms/${selectedFloorId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch rooms");
+      const data = await response.json();
+      setRoomData(data.sort((a, b) => a.name.localeCompare(b.name)));
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+      setError("Failed to load room data.");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const currentTime = new Date();
+    const offset = currentTime.getTimezoneOffset() + 420; // Adjust to UTC+7
+    const localTime = new Date(currentTime.getTime() + offset * 60000);
+    const formattedTimestamp =
+      localTime.toISOString().replace("T", " ").split(".")[0] + ".0000000";
+
+    const lostAndFoundData = {
+      reporter_id: reporterId,
+      name,
+      description,
+      found_location: room,
+      status,
+      created_at: formattedTimestamp,
+      updated_at: formattedTimestamp,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/security/addLostAndFoundList",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lostAndFoundData),
+        }
+      );
+
+      if (!response.ok)
+        throw new Error("Failed to submit Lost and Found request");
+      alert("Lost and Found request submitted successfully!");
+      navigate("/security/administrator/lostandfoundlist");
+    } catch (error) {
+      console.error("Error submitting Lost and Found request:", error);
+      setError("Failed to submit the request.");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={formStyles.container}>
-      {/* List Button */}
-      <div
-        style={formStyles.listButton}
-        onClick={() => console.log("Menu clicked")}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          style={formStyles.icon}
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md relative"
+    >
+      {/* Navigation Icons */}
+      <div className="flex justify-between items-center mb-4">
+        <button
+          className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+          onClick={() => navigate("/security/administrator")}
+          type="button"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 text-[#864E41]"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+            />
+          </svg>
+        </button>
+
+        <h1 className="text-2xl font-bold">Lost And Found</h1>
+
+        <button
+          className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+          onClick={() => navigate("/security/administrator/lostandfoundlist")}
+          type="button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 text-[#864E41]"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 6h12M6 12h12m-6 6h6"
+            />
+          </svg>
+        </button>
       </div>
 
-      <h1 style={formStyles.header}>Lost And Found</h1>
-      <hr />
-      <br />
+      {error && <p className="text-red-500 mb-4">{error}</p>}
 
-      {/* Building Field on Full Width */}
-      <div style={{ ...formStyles.formGroup, ...formStyles.formItemFullWidth }}>
+      {/* Building and Floor on the same line */}
+      <div className="flex space-x-4 mb-4">
+        <div className="form-control w-1/2">
+          <label className="label" htmlFor="building">
+            Building
+          </label>
+          <select
+            id="building"
+            value={building}
+            onChange={handleBuildingChange}
+            className="select select-bordered"
+            required
+          >
+            <option value="" disabled>
+              Select Building
+            </option>
+            {buildingData.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-control w-1/2">
+          <label className="label" htmlFor="floor">
+            Floor
+          </label>
+          <select
+            id="floor"
+            value={floor}
+            onChange={handleFloorChange}
+            className="select select-bordered"
+            disabled={!building}
+            required
+          >
+            <option value="" disabled>
+              Select Floor
+            </option>
+            {floorData.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="form-control mb-4">
+        <label className="label" htmlFor="room">
+          Room
+        </label>
         <select
-          value={building}
-          onChange={(e) => setBuilding(e.target.value)}
-          style={formStyles.select}
+          id="room"
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
+          className="select select-bordered"
+          disabled={!floor}
+          required
         >
-          <option value="">Building</option>
-          <option value="Building 1">Building 1</option>
-          <option value="Building 2">Building 2</option>
+          <option value="" disabled>
+            Select Room
+          </option>
+          {roomData.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.name}
+            </option>
+          ))}
         </select>
       </div>
 
-      {/* Room No. and Floor Fields on New Line */}
-      <div style={formStyles.formGroup}>
-        <div style={formStyles.formItemHalfWidth}>
-          <select
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            style={formStyles.select}
-          >
-            <option value="">Room No.</option>
-            <option value="Room 101">Room 101</option>
-            <option value="Room 102">Room 102</option>
-          </select>
-        </div>
-
-        <div style={formStyles.formItemHalfWidth}>
-          <select
-            value={floor}
-            onChange={(e) => setFloor(e.target.value)}
-            style={formStyles.select}
-          >
-            <option value="">Status</option>
-            <option value="Found">Found</option>
-            <option value="Searching">Searching</option>
-          </select>
+      <div className="form-control mb-4">
+        <label className="label">Status</label>
+        <div className="flex space-x-4">
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="status"
+              value="Lost"
+              checked={status === "Lost"}
+              onChange={(e) => setStatus(e.target.value)}
+              className="radio"
+            />
+            <span>Lost</span>
+          </label>
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="status"
+              value="Found"
+              checked={status === "Found"}
+              onChange={(e) => setStatus(e.target.value)}
+              className="radio"
+            />
+            <span>Found</span>
+          </label>
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="status"
+              value="Returned"
+              checked={status === "Returned"}
+              onChange={(e) => setStatus(e.target.value)}
+              className="radio"
+            />
+            <span>Returned</span>
+          </label>
         </div>
       </div>
 
-      {/* Textarea for Request */}
-      <div>
-        <label style={formStyles.label}>Details :</label>
+      <div className="form-control mb-4">
+        <label className="label" htmlFor="description">
+          Description
+        </label>
         <textarea
-          value={request}
-          onChange={(e) => setRequest(e.target.value)}
-          placeholder="Type something..."
-          style={formStyles.textarea}
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="textarea textarea-bordered"
+          placeholder="Provide details about the lost or found item"
+          required
         ></textarea>
       </div>
 
-      {/* Submit Button */}
-      <button type="submit" style={formStyles.submitBtn}>
+      <button
+        type="submit"
+        className="btn w-full bg-[#864E41] hover:bg-[#6e3f35] text-white"
+      >
         Submit
       </button>
     </form>

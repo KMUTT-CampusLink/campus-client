@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import LoadingPage from "../../dev/pages/LoadingPage";
 import { Navigate, Outlet } from "react-router-dom";
+import popToast from "../../../utils/popToast";
 import authConfig from "../auth/authConfig";
+import { useEffect, useState } from "react";
 
 const AuthRoute = ({ children, allowed_roles }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -15,14 +17,12 @@ const AuthRoute = ({ children, allowed_roles }) => {
         setIsAuthenticated(!!authStatus); // Authenticated if authStatus is true
 
         // role-based access control
-        if (allowed_roles) {
+        if (authStatus && allowed_roles) {
           const user_role = localStorage.getItem("userRole");
-          setIsAllowed((prev) =>
-            allowed_roles.filter(
+          setIsAllowed(
+            allowed_roles.some(
               (role) => role.toLowerCase() === user_role.toLowerCase()
-            ).length > 0
-              ? true
-              : false
+            )
           );
         }
       } catch (err) {
@@ -34,12 +34,23 @@ const AuthRoute = ({ children, allowed_roles }) => {
     };
 
     checkAuth();
-  }, []);
+  }, [allowed_roles]);
+
+  useEffect(() => {
+    // Show popToast when user is redirected, but only once
+    if (isLoading || error) return; // Do nothing if loading or error exists
+
+    if (!isAuthenticated) {
+      popToast("Please Login First", "warning");
+    }
+
+    if (!isAllowed) {
+      popToast("Access not Allowed", "warning");
+    }
+  }, [isAuthenticated, isAllowed, isLoading, error]);
 
   // If still loading, show loading state
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return <LoadingPage message="verifying" />;
 
   // Show error message if there's an issue with authentication
   if (error) {
@@ -53,7 +64,7 @@ const AuthRoute = ({ children, allowed_roles }) => {
 
   // Redirect to unauthorized page if not allowed
   if (!isAllowed) {
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/404" replace />;
   }
 
   // Render children or outlet if authenticated

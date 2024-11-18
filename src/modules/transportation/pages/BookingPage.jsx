@@ -1,119 +1,133 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { format, set } from "date-fns";
+import { fetchTripData, bookTrip, isBooked } from "../services/api";
+import { useParams } from "react-router-dom";
+import QRCodePage from "./QRCodePage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faUserCircle,
-  faBus,
-} from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { faSquareCheck } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
 
-const BookingPage = () => {
+function BookingPage() {
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const { tripID } = useParams(); // Extract tripID from URL parameters
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [booking, setBooking] = useState({});
+  const [bookedData, setBookedData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripData = await fetchTripData(tripID); // Use tripID from URL parameters
+      await bookTrip(tripID).then((res) => {
+        setBookedData(res.data);
+      });
+      const trip = tripData.trip;
+      const isBookedResponse = await isBooked(tripID);
+      if (isBookedResponse.isBooked) {
+        setBooking(isBookedResponse.booking);
+        setIsConfirmed(true);
+      }
+
+      const bookingDetails = {
+        startTime: format(new Date(trip.trip_schedule.start_time), "HH:mm"),
+        endTime: format(new Date(trip.trip_schedule.end_time), "HH:mm"),
+        date: format(new Date(trip.trip_date), "yyyy-MM-dd"),
+        driverName: `${trip.driver.employee.firstname} ${trip.driver.employee.midname} ${trip.driver.employee.lastname}`,
+        vehicleLicenseNumber: trip.vehicle.registration_no,
+      };
+
+      setBookingDetails(bookingDetails);
+      setIsLoading(false); // Set isLoading to false after fetching data
+    };
+
+    fetchData();
+  }, [tripID]);
+
+  const handleBooking = () => {
+    bookTrip(tripID)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("Trip booked successfully");
+          setIsConfirmed(true);
+        } else {
+          console.error("Failed to book trip");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header Section */}
-      <header className="hidden min-[900px]:block text-white bg-gradient-to-r from-[#c2544d] to-[#f09107] h-16 w-full shadow-lg mb-10">
-        <div className="flex items-center text-white ml-4">
-          <Link to="/">
-            <FontAwesomeIcon icon={faArrowLeft} className="mr-2 text-2xl" />
-          </Link>
-          <FontAwesomeIcon icon={faUserCircle} className="text-3xl" />
-        </div>
-      </header>
+    <div className="w-full h-screen font-geologica">
+      <NavBar />
+      <div className="flex flex-col items-center justify-center bg-gray-100 pt-[4.5rem]">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+            Your Booking
+          </h1>
 
-      <div className="flex container mx-auto px-4">
-        {/* New Schedule Section */}
-        <div className="w-1/2 bg-white p-6 rounded-lg shadow-lg mr-4">
-          <h2 className="text-2xl font-semibold mb-4">Schedule</h2>
-          <div className="space-y-6">
-            {/* Example Schedule Box 1 */}
-            <div className="flex items-center bg-gray-100 p-4 rounded-md">
-              <FontAwesomeIcon
-                icon={faBus}
-                className="text-orange-600 text-3xl mr-4"
-              />
-              <div>
-                <h3 className="font-bold text-orange-600">
-                  Bangmod - Bang Khun Tien (Bus)
-                </h3>
-                <p className="text-gray-700">Date: 2024-10-25</p>
-                <p className="text-gray-700">Departure: 08:30 AM</p>
-                <p className="text-gray-700">Arrival: 09:15 AM</p>
+          {isLoading ? (
+            <p className="text-center text-orange-600 text-lg font-semibold">
+              Loading booking details...
+            </p>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {bookingDetails &&
+                  Object.entries(bookingDetails).map(([key, value]) => (
+                    <div key={key} className="mb-4">
+                      <label className="block text-md font-medium text-gray-700 mb-2">
+                        {key.slice(0, 1).toUpperCase() +
+                          key
+                            .slice(1)
+                            .split(/(?=[A-Z])/)
+                            .join(" ")}
+                      </label>
+                      <p className="mt-1 p-3 border border-gray-300 rounded-md bg-gray-100 text-lg text-gray-700">
+                        {value}
+                      </p>
+                    </div>
+                  ))}
               </div>
-            </div>
 
-            {/* Example Schedule Box 2 */}
-            <div className="flex items-center bg-gray-100 p-4 rounded-md">
-              <FontAwesomeIcon
-                icon={faBus}
-                className="text-orange-600 text-3xl mr-4"
-              />
-              <div>
-                <h3 className="font-bold text-orange-600">
-                  Bang Khun Tien - Bangmod (Bus)
-                </h3>
-                <p className="text-gray-700">Date: 2024-10-25</p>
-                <p className="text-gray-700">Departure: 10:00 AM</p>
-                <p className="text-gray-700">Arrival: 10:45 AM</p>
-              </div>
-            </div>
-          </div>
-        </div>
+              {!isConfirmed && (
+                <div className="flex justify-center mt-6">
+                  <button
+                    onClick={handleBooking}
+                    className="w-full max-w-xs bg-orange-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-orange-600 transition duration-200 ease-in-out transform hover:scale-105"
+                  >
+                    Confirm Booking
+                  </button>
+                </div>
+              )}
 
-        {/* Right Side - Booking Form */}
-        <div className="w-1/2 bg-white p-6 rounded-lg shadow-lg flex flex-col">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold mb-4">Book Your Ride</h2>
-
-            {/* Grouped Date, Time, From, To Fields in the Same Box */}
-            <div className="bg-gray-100 p-6 rounded-md space-y-4">
-              <label className="block">
-                <span className="text-gray-700 font-medium">From</span>
-                <input
-                  type="text"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter starting location"
-                />
-              </label>
-
-              <label className="block">
-                <span className="text-gray-700 font-medium">To</span>
-                <input
-                  type="text"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter destination"
-                />
-              </label>
-
-              <label className="block">
-                <span className="text-gray-700 font-medium">Date</span>
-                <input
-                  type="date"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </label>
-
-              <label className="block">
-                <span className="text-gray-700 font-medium">Time</span>
-                <input
-                  type="time"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Confirm Button */}
-          <div className="flex justify-center mt-5">
-            <Link to="/transport/confirm">
-              <button className="bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300">
-                BOOK NOW!
-              </button>
-            </Link>
-          </div>
+              {isConfirmed && (
+                <div className="mt-6 p-4 border border-green-500 bg-green-100 rounded-md text-center shadow-md">
+                  <div className="flex justify-center mb-4">
+                    <FontAwesomeIcon
+                      className="text-green-500 w-[2.5rem] h-[2.5rem]"
+                      icon={faSquareCheck}
+                    />
+                  </div>
+                  <h2 className="text-xl font-semibold text-green-700">
+                    Booking Confirmed!
+                  </h2>
+                  {bookedData?.booking && (
+                    <div className="mt-4 flex flex-col items-center">
+                      <QRCodePage
+                        tripID={bookedData?.booking.trip_id}
+                        userID={bookedData?.booking?.user_id}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
   );
-};
-
+}
 export default BookingPage;
