@@ -67,8 +67,11 @@ const ClubHomeMemLis = (props) => {
         <h5 className="  pt-3 mb-3 m-auto text-center font-semibold w-4/5 border-b-2 border-black border-solid">
           Admin
         </h5>
-        {admins.map((admins) => (
-          <div className="flex ml-[7%] p-0.5 mr-auto items-center space-x-2">
+        {admins.map((admins, key) => (
+          <div
+            key={key}
+            className="flex ml-[7%] p-0.5 mr-auto items-center space-x-2"
+          >
             <img
               className="w-[10%] aspect-square rounded-full"
               src="https://i.imgur.com/xKf7cjo.png"
@@ -87,8 +90,11 @@ const ClubHomeMemLis = (props) => {
         Member
       </h5>
       <div className="overflow-y-scroll h-full">
-        {members.map((members) => (
-          <div className="ml-[7%] mr-auto p-0.5 flex items-center space-x-2">
+        {members.map((members, key) => (
+          <div
+            key={key}
+            className="ml-[7%] mr-auto p-0.5 flex items-center space-x-2"
+          >
             <img
               className=" w-[10%] aspect-square rounded-full"
               src="https://i.imgur.com/xKf7cjo.png"
@@ -131,10 +137,16 @@ const ClubHomeMemLis = (props) => {
                     src="https://i.imgur.com/xKf7cjo.png"
                     alt="avatar"
                   />
-                  <h2 className="text-center text-xl font-bold mt-3">Student Details</h2>
-                  <p><strong>ID: </strong>{selectedItem.student.id}</p>
+                  <h2 className="text-center text-xl font-bold mt-3">
+                    Student Details
+                  </h2>
                   <p>
-                    <strong>Name: </strong>{selectedItem.student.firstname}{" "}
+                    <strong>ID: </strong>
+                    {selectedItem.student.id}
+                  </p>
+                  <p>
+                    <strong>Name: </strong>
+                    {selectedItem.student.firstname}{" "}
                     {selectedItem.student.lastname}
                   </p>
                   <p className="mb-2">
@@ -160,7 +172,6 @@ const ClubHomeMemLis = (props) => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
       )}
