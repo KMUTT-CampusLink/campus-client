@@ -8,6 +8,7 @@ import "../style/typography.css";
 import Money1 from "../asset/money1.png";
 import Money2 from "../asset/money2.png";
 import Money3 from "../asset/money3.png";
+import { getInvoice } from "../services/api";
 
 // at line 6 please comment that and line 16 uncomment that to use backend data 
 // update day 15 nov : now stuff probably use real database dont comment more stuff
@@ -21,24 +22,12 @@ const InvoiceCenter = () => {
   const [showMoney, setShowMoney] = useState(false);
   const [isTilting, setIsTilting] = useState(false);
 
+  const getData = async() => {
+    const response = await getInvoice();
+    setTransactions(response.data);
+  }
   useEffect(() => {
-    // Fetch transactions from the API
-    const fetchTransactions = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/payment/invoice"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch transactions");
-        }
-        const data = await response.json();
-        setTransactions(data);
-      } catch (error) {
-        console.error("Error fetching transactions:", error);
-      }
-    };
-
-    fetchTransactions();
+    getData();
   }, []);
 
   const handleImageClick = () => {

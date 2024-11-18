@@ -17,10 +17,12 @@ const RecentTransactions = ({
           (transaction) => transaction.status === filterRecent
         );
 
-  const sortedTransactions = filteredRecentTransactions.sort(
+  const sortedTransactions = filteredRecentTransactions && filteredRecentTransactions.sort(
     (a, b) => new Date(b.issue_date) - new Date(a.issue_date)
   );
-  const recentTransactions = sortedTransactions.slice(0, 5);
+  const recentTransactions = sortedTransactions && sortedTransactions.slice(0, 5);
+  // console.log(RecentTransactions);
+  
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -100,7 +102,7 @@ const RecentTransactions = ({
       </div>
 
       <div className="space-y-4 h-min">
-        {recentTransactions.map((transaction, index) => (
+        {recentTransactions && recentTransactions.map((transaction, index) => (
           <div
             key={index}
             className="bg-white p-4 rounded-lg shadow-md flex items-center"
