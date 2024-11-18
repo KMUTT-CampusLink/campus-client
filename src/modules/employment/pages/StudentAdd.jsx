@@ -109,6 +109,7 @@ const StudentAdd = () => {
       }
     } catch (error) {
       console.error("Cannot create user:", error);
+      console.log(employeeData);
     }
   };
 
