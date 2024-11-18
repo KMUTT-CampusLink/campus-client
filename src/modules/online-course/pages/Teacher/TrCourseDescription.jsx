@@ -3,14 +3,16 @@ import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
+import { useCourseHeaderBySectionID } from "../../services/queries";
 
 const TrCourseDescription = ({ sideOpen }) => {
+  
   const { state } = useLocation();
-  const { sec_id, course_code, course_name } = state || {};
+  const { sec_id } = state || {};
+  const { data: details } = useCourseHeaderBySectionID(1);
+  console.log(details);
   const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState(
-    "Computer systems, processor, memory and input/output modules, interconnections among these major components, central processing unit, control unit, registers, arithmetic and logic unit, and instruction unit, data representation, Boolean algebra, digital logic, architectural issues, instruction-set design, organizational issues, pipelining, parallel organization, multiple processors and vector processing organizations, performance measurements."
-  );
+  const [description, setDescription] = useState("");
   const [tempDescription, setTempDescription] = useState(description);
 
   const handleEditClick = () => {
@@ -40,12 +42,12 @@ const TrCourseDescription = ({ sideOpen }) => {
     >
       {/* <NavBarForIndv/> */}
       <NavForIndvCourse page={"description"} />
-      <div>
+      {/* <div>
         <h1>Course Description</h1>
         <p>Section ID: {sec_id}</p>
         <p>Course Code: {course_code}</p>
         <p>Course Name: {course_name}</p>
-      </div>
+      </div> */}
       <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 ">
         <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">

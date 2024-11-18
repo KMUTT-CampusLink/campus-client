@@ -12,7 +12,6 @@ import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
-import RedirectPage from "../pages/RedirectPage";
 
 // const role = "Professor";
 const role = localStorage.getItem("userRole");
@@ -45,7 +44,7 @@ export default function CourseRoutes() {
         ),
     },
     {
-      path: "tr",
+      path: "/courses/tr",
       element: role === "Professor" ? null : <Navigate to="/courses/st" />,
       children: [
         {
@@ -88,7 +87,7 @@ export default function CourseRoutes() {
       ],
     },
     {
-      path: "st",
+      path: "/courses/st",
       element: role === "Student" ? null : <Navigate to="/courses/tr" />,
       children: [
         {
@@ -141,4 +140,3 @@ export default function CourseRoutes() {
     },
   ];
 }
-

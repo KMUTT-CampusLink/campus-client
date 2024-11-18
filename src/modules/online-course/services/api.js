@@ -16,3 +16,4 @@ export const fetchAllCoursesByStudentID = (studentID) =>
   get(`/courses/${studentID}/all`);
 export const fetchAllCoursesByProfessorID = (professorID) =>
   get(`/courses/${professorID}/teach`);
+export const fetchCourseHeaderBySectionID = (sectionID) => get(`/courses/course/${sectionID}`);
