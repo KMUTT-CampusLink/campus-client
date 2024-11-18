@@ -27,6 +27,7 @@ const ClubHomeMemLis = (props) => {
     (members) => members.status === "Accepted" && !members.is_admin
   );
   //console.log(admins, members);
+
   const handleClick = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
@@ -159,6 +160,7 @@ const ClubHomeMemLis = (props) => {
                 </div>
               )}
             </div>
+
           </div>
         </div>
       )}
