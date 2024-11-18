@@ -9,22 +9,31 @@ import image from "../img/Receiptimage.png";
 function CheckIn() {
     const navigate = useNavigate();
     const location = useLocation();
-    const resData = location.state;
+    
+    // Retrieve `resData` from either `location.state` or local storage
+    const resData = location.state || JSON.parse(localStorage.getItem('reservationData'));
 
+    // Display error message if no `resData` is available
     if (!resData) {
         return (
             <>
                 <NavBar />
+                <p>Data not available</p>
             </>
         );
     }
+
+    // Save `resData` to local storage upon component load
+    useEffect(() => {
+        if (resData) {
+            localStorage.setItem('reservationData', JSON.stringify(resData));
+        }
+    }, [resData]);
 
     const resEncrypt = JSON.stringify({
         qr: resData.QRCode,
         rid: resData.reservation_id,
     });
-
-    console.log(resEncrypt);
 
     const [countdown, setCountdown] = useState('');
     const [isQrCodeValid, setIsQrCodeValid] = useState(true);
@@ -53,13 +62,12 @@ function CheckIn() {
     }, [expireTime]);
 
     const handleClick = () => {
-        navigate('/parking');
+        navigate('/parking');  // No localStorage removal here
     };
 
-    const qrCodeUrl = `${window.location.origin}/parking/scanned/${encodeURIComponent(resEncrypt)}`;
-
+    const qrCodeUrl = `${window.location.origin}/parking/scannedcheckin/${encodeURIComponent(resEncrypt)}`;
     console.log(qrCodeUrl);
-
+    
     return (
         <>
             <NavBar />

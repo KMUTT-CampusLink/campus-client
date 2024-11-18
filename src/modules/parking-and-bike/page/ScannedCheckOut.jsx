@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { postCheckin } from '../services/api.js';
+import { postCheckout } from '../services/api.js';
 
 function ScannedCheckOut() {
   const { id } = useParams();
@@ -28,17 +28,17 @@ function ScannedCheckOut() {
     // Prepare the request data with current time for check-in
     const requestData = {
       reservation_id: reservationData.rid,
-      checkin_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+      checkout_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     };
 
     console.log("Request Data:", requestData);
 
     try {
-      const res = await postCheckin(requestData);
-      if (res.message === "QR Checkout created successfully!") {
-        alert("Checkin successful!");
+      const res = await postCheckout(requestData);
+      if (res.message === "Checkout and Invoice completed successfully!") {
+        alert("Checkout Successful! Your Invoice Has Been Created!");
         // Navigate to checkout page with reservationData
-        navigate('/parking/checkout', { state: res });
+        navigate('/parking', { state: res });
         console.log(res);
         
       }
@@ -54,11 +54,11 @@ function ScannedCheckOut() {
   useEffect(() => {
     // Delay to simulate a loading time before automatic check-in
     if (reservationData) {
-      const checkinTimeout = setTimeout(() => {
+      const checkoutTimeout = setTimeout(() => {
         handleCheckin();
       }, 1500);
       
-      return () => clearTimeout(checkinTimeout);
+      return () => clearTimeout(checkoutTimeout);
     }
   }, [reservationData]);
 

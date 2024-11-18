@@ -3,14 +3,19 @@ import Reserfailed from "../page/Reserfailed"
 import CheckIn from "../page/CheckIn"
 import RegisCar from "../page/RegisCar";
 import Parkingslot from "../page/Parkingslot";
-import Scanned from "../page/ScannedCheckIn";
+import ScannedCheckIn from "../page/ScannedCheckIn";
 import CheckOut from "../page/CheckOut";
-
+import ScannedCheckOut from "../page/ScannedCheckOut";
+import AuthRoute from "../../registration/middleware/AuthRoute"; 
 export default function ParkRoutes() {
   return [
     {
-      path:"",
-      element:<MainPage/>,
+      path: "",
+      element: (
+        <AuthRoute>
+          <MainPage />
+        </AuthRoute>
+      ),
     },
     {
       path:"parkingslot/",
@@ -29,8 +34,12 @@ export default function ParkRoutes() {
       element:<Reserfailed/>,
     },
     {
-      path:"scanned/:id",
-      element:<Scanned/>,
+      path:"scannedcheckin/:id",
+      element:<ScannedCheckIn/>,
+    },
+    {
+      path:"scannedcheckout/:id",
+      element:<ScannedCheckOut/>,
     },
     {
       path:"checkout",
