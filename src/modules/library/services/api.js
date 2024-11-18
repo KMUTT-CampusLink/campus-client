@@ -170,3 +170,27 @@ export const fetchAllStudents = async () => {
     return null; // Return null in case of an error
   }
 };
+
+// Function to fetch event reservations
+export const fetchEventReservations = async () => {
+  try {
+    const response = await axiosInstance.get("/library/eventReservation");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching event reservations:", error);
+    return null;
+  }
+};
+
+// Function to reserve a seat for an event
+export const reserveEventSeat = async (libraryEventId) => {
+  try {
+    const response = await axiosInstance.post("/library/event/reserve", {
+      library_event_id: libraryEventId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error reserving event seat:", error);
+    throw error;
+  }
+};
