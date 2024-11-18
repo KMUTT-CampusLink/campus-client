@@ -22,9 +22,10 @@ const StAllCourses = () => {
   }, [courses]);
 
   const searchFunction = () => {
-    const results = courses?.filter((course) =>
-      course.course_name.toLowerCase().includes(search.toLowerCase()) ||
-      course.code.toLowerCase().includes(search.toLowerCase())
+    const results = courses?.filter(
+      (course) =>
+        course.course_name.toLowerCase().includes(search.toLowerCase()) ||
+        course.code.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredCourses(results);
   };
@@ -64,16 +65,9 @@ const StAllCourses = () => {
             className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
             justify-items-center mx-auto max-w-7xl"
           >
-            {filteredCourses &&  filteredCourses.length > 0 ? (
+            {filteredCourses && filteredCourses.length > 0 ? (
               filteredCourses.map((course) => (
-                <CourseCard
-                  key={course.code}
-                  imageURL={course.imageUrl}
-                  code={course.code}
-                  title={course.course_name}
-                  semester={course.semester}
-                  route={"course_description"}
-                />
+                <CourseCard key={course.sec_id} course={course} />
               ))
             ) : (
               <p className="col-span-3 text-center text-gray-500">

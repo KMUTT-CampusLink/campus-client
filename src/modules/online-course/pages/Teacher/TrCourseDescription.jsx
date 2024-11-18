@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -6,62 +6,52 @@ import { useLocation } from "react-router-dom";
 import { useCourseHeaderBySectionID } from "../../services/queries";
 
 const TrCourseDescription = ({ sideOpen }) => {
-  
-  const { state } = useLocation();
-  const { sec_id } = state || {};
-  const { data: details } = useCourseHeaderBySectionID(1);
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const sec_id = queryParams.get("sec_id");
+
+  const { data: details } = useCourseHeaderBySectionID(sec_id);
   console.log(details);
-  const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState("");
-  const [tempDescription, setTempDescription] = useState(description);
+  const description = details?.description;
+  // const [isEditing, setIsEditing] = useState(false);
+  // const [description, setDescription] = useState(details?.description);
+  // const [tempDescription, setTempDescription] = useState(description);
 
-  const handleEditClick = () => {
-    setTempDescription(description);
-    setIsEditing(true);
-  };
+  // const handleEditClick = () => {
+  //   setTempDescription(description);
+  //   setIsEditing(true);
+  // };
 
-  const handleSaveClick = () => {
-    setDescription(tempDescription);
-    setIsEditing(false);
-  };
+  // const handleSaveClick = () => {
+  //   setDescription(tempDescription);
+  //   setIsEditing(false);
+  // };
 
-  const handleCancelClick = () => {
-    setIsEditing(false);
-  };
+  // const handleCancelClick = () => {
+  //   setIsEditing(false);
+  // };
 
-  const handleDescriptionChange = (event) => {
-    setTempDescription(event.target.value);
-  };
+  // const handleDescriptionChange = (event) => {
+  //   setTempDescription(event.target.value);
+  // };
 
   return (
-    <div
-      // className={`bg-white transition-all duration-300 ${
-      //   sideOpen ? "ml-64" : ""
-      // }`}
-      className="w-full min-h-screen overflow-x-hidden"
-    >
-      {/* <NavBarForIndv/> */}
+    <div className="w-full min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"description"} />
-      {/* <div>
-        <h1>Course Description</h1>
-        <p>Section ID: {sec_id}</p>
-        <p>Course Code: {course_code}</p>
-        <p>Course Name: {course_name}</p>
-      </div> */}
       <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 ">
         <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
           </div>
           <div className="text-gray-800">
-            <span className="font-semibold">Course:</span> CSC-230 Computer
-            Architecture & Design
+            <span className="font-semibold">Course: </span>
+            {`${details?.course_code} ${details?.course_name}`}
           </div>
           <div className="text-gray-800">
-            <span className="font-semibold">Lecturer:</span> Arjan
+            <span className="font-semibold">Lecturer:</span> Arjan {`${details?.lecturer}`}
           </div>
           <div className="text-gray-800">
-            <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
+            <span className="font-semibold">Time:</span> {`${details?.time}`}
             (Thursday)
           </div>
         </div>
@@ -72,7 +62,7 @@ const TrCourseDescription = ({ sideOpen }) => {
           <div className="text-2xl font-bold text-[#ecb45e]">
             Course Description
           </div>
-          {isEditing ? (
+          {/* {isEditing ? (
             <div className="flex gap-2">
               <button
                 className="bg-[#4caf50] text-white py-2 px-4 rounded hover:bg-[#3e8e41] transition duration-200"
@@ -95,10 +85,10 @@ const TrCourseDescription = ({ sideOpen }) => {
               <FontAwesomeIcon icon={faPenToSquare} className="mr-2" />
               Edit
             </button>
-          )}
+          )} */}
         </div>
         <div className="max-md:w-full max-md:px-2 w-3/4 mx-auto text-gray-700 leading-relaxed">
-          {isEditing ? (
+          {/* {isEditing ? (
             <textarea
               className="w-full border border-gray-300 rounded p-2 h-20"
               value={tempDescription}
@@ -106,7 +96,8 @@ const TrCourseDescription = ({ sideOpen }) => {
             />
           ) : (
             <p>{description}</p>
-          )}
+          )} */}
+          <p>{description}</p>
         </div>
       </div>
 

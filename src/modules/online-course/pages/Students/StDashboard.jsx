@@ -8,10 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAllCourses, useCoursesByStudentID } from "../../services/queries.js";
+import {
+  useAllCourses,
+  useCoursesByStudentID,
+} from "../../services/queries.js";
 
 const StDashboard = () => {
-  
   const studentId = localStorage.getItem("studentId");
   const semesterId = 1010;
   const navigate = useNavigate();
@@ -57,14 +59,7 @@ const StDashboard = () => {
             justify-items-center mx-auto w-3/4"
         >
           {courses?.map((course) => (
-            <CourseCard
-              key={course.code}
-              code={course.code}
-              imageURL={course.imageUrl}
-              title={course.course_name}
-              semester={course.description}
-              route={"course_description"}
-            />
+            <CourseCard key={course.sec_id} course={course} />
           ))}
         </div>
       </div>
