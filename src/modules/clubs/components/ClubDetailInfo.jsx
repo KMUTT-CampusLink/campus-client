@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-function ClubDetailInfo( {isAdmin} ) {
+function ClubDetailInfo( { isAdmin, isMember, memberId } ) {
   const {clubId } = useParams();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,12 +93,12 @@ function ClubDetailInfo( {isAdmin} ) {
 
       {isAdmin && (
         <div className="flex flex-wrap justify-end md:mt-12 mt-6">
-        {/* <Link
+        <Link
           to={`/clubs/club-home/${clubId}`}
           className="bg-[#F69800] text-white px-2 md:px-14 py-2 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 md:ml-6 block"
         >
           Announcements
-        </Link> */}
+        </Link>
         <button
           className="bg-[#EC5A51] text-white px-2 md:px-14 py-1 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 ml-4 md:ml-6"
           onClick={openModal}
@@ -112,6 +112,15 @@ function ClubDetailInfo( {isAdmin} ) {
           Delete Club
         </button>
       </div>
+      )}
+
+      {isMember && !isAdmin && (
+        <Link
+          to={`/clubs/member/${memberId}/club-home/${clubId}`}
+          className="bg-[#F69800] text-white px-4 py-2 rounded-md"
+        >
+          Announcements
+        </Link>
       )}
 
       {/* Modal */}

@@ -6,8 +6,7 @@ function ClubDetailCard({ isAdmin, isMember }) {
   const [clubName, setClubName] = useState("");
   const [buildiingLocation, setBuildingLocation] = useState("");
   const { clubId } = useParams(); // club ID from the backend
-
-  const [ memberCount, setMemberCount] = useState(0);
+  const [memberCount, setMemberCount] = useState(0);
 
   useEffect(() => {
     const fetchClubName = async () => {
@@ -15,24 +14,31 @@ function ClubDetailCard({ isAdmin, isMember }) {
         const response = await axiosInstance.get(`/clubs/${clubId}`);
         const clubData = response.data.data;
         setClubName(clubData.name);
-        setBuildingLocation(clubData.building ? clubData.building.name: "Not located!");
-        const members = clubData.club_member.filter((member) => member.status === "Accepted");
+        setBuildingLocation(
+          clubData.building ? clubData.building.name : "Not located!"
+        );
+        const members = clubData.club_member.filter(
+          (member) => member.status === "Accepted"
+        );
         setMemberCount(members.length - 1);
-
       } catch (err) {
         console.error("Error fetching club details:", err);
       }
     };
     fetchClubName();
-  },[clubId]);
+  }, [clubId]);
 
   const handleJoinRequest = async () => {
     try {
-      const response = await axiosInstance.post(`/clubs/${clubId}/join-request`);
+      const response = await axiosInstance.post(
+        `/clubs/${clubId}/join-request`
+      );
       alert(response.data.message);
     } catch (err) {
       console.error("Error sending join request:", err);
-      alert("Failed to send join request. Already a member or pending request!");
+      alert(
+        "Failed to send join request. Already a member or pending request!"
+      );
     }
   };
 
@@ -49,8 +55,12 @@ function ClubDetailCard({ isAdmin, isMember }) {
       <div className="grid m-[10%] md:m-auto justify-content-start font-semibold text-[1rem] md:text-[2rem] gap-x-20">
         <h2 className="text-xl font-semibold text-gray-800">{clubName}</h2>
         {/* <h2 className="text-xl font-semibold text-gray-800"> Group Admin - {adminCount}</h2> */}
-        <h2 className="text-xl font-semibold text-gray-800">Group Member: {memberCount > 0 ? memberCount: "No members yet!"}</h2>
-        <h2 className="text-xl font-semibold text-gray-800">Location: {buildiingLocation} </h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Group Member: {memberCount > 0 ? memberCount : "No members yet!"}
+        </h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Location: {buildiingLocation}{" "}
+        </h2>
         {/* <Link to="/clubs/join-club">
           <button
             onClick={handleJoinRequest}
@@ -68,15 +78,6 @@ function ClubDetailCard({ isAdmin, isMember }) {
           >
             Join Club Now!
           </button>
-        )}
-
-        {isMember && (
-          <Link
-            to={`/clubs/club-home/${clubId}`}
-            className="bg-[#F69800] text-white px-2 md:px-14 py-2 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 block"
-          >
-            Announcements
-          </Link>
         )}
       </div>
     </div>
