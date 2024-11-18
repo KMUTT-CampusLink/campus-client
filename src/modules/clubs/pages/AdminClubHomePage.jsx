@@ -8,9 +8,11 @@ import { useParams } from "react-router-dom";
 const ClubHomePage = () => {
   const { clubId } = useParams();
   const [isVisible, setIsVisible] = useState(false);
+  const [isViewMembersActive, setIsViewMembersActive] = useState(false);
 
   const toggleVisiblity = () => {
     setIsVisible(!isVisible);
+    setIsViewMembersActive(!isViewMembersActive);
   };
 
   return (
@@ -40,9 +42,11 @@ const ClubHomePage = () => {
           </div>
           <button
             onClick={toggleVisiblity}
-            className="flex ml-auto mt-6 md:hidden underlined bg-[#864E41] text-white px-3 py-1 rounded-lg mb-4"
+            className={`flex ml-auto mt-6 md:hidden underlined px-3 py-1 rounded-lg mb-4 ${
+              isViewMembersActive ? "bg-orange-600 text-white" : "bg-[#864E41] text-white"
+            }`}
           >
-            See group members
+            View Members
           </button>
           <div className="grid grid-cols-1 overflow-scroll md:grid-cols-[75%_25%] w-full rounded-lg">
             <ClubHomePost toggleLeft={!isVisible} />

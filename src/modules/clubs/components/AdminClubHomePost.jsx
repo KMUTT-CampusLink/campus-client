@@ -39,6 +39,20 @@ const ClubHomePost = (props) => {
     }
   };
 
+  const updateAnnouncement = (updatedData) => {
+    setClubAnnouncement((prevAnnouncements) =>
+      prevAnnouncements.map((announcement) =>
+        announcement.id === updatedData.id ? updatedData : announcement
+      )
+    );
+  };
+
+  const updatePost = (updatedData) => {
+    setClubPost((prevPosts) =>
+      prevPosts.map((post) => (post.id === updatedData.id ? updatedData : post))
+    );
+  };
+
   useEffect(() => {
     fetchClubPost();
   }, [clubId]);
@@ -87,18 +101,23 @@ const ClubHomePost = (props) => {
   };
 
   // Format date
-  function getFormattedDate(dateTime) {
-    if (!dateTime) return "N/A"; // Return a default value if dateTime is undefined
-    const [date] = dateTime.split(" ");
-    const [year, month, day] = date.split("-");
+  function getFormattedDate(date) {
+    if (!date) return "N/A"; // Return a default value if dateTime is undefined
+    const parseDate = new Date(date);
+    const day = String(parseDate.getDate()).padStart(2, "0");
+    const month = String(parseDate.getMonth() + 1).padStart(2, "0");
+    const year = parseDate.getFullYear();
     return `${day}/${month}/${year}`;
   }
 
   // Format time
-  function getFormattedTime(dateTime) {
-    if (!dateTime) return "N/A"; // Return a default value if dateTime is undefined
-    const [, time] = dateTime.split(" ");
-    return time;
+  function getFormattedTime(time) {
+    if (!time) return "N/A"; // Return a default value if dateTime is undefined
+    const parseTime = new Date(time);
+    if(isNaN(parseTime)) return "Invalid Time";
+    const hours = String(parseTime.getUTCHours()).padStart(2, "0");
+    const minutes = String(parseTime.getUTCMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
   }
 
   // Toggle between posts and announcements
@@ -166,7 +185,7 @@ const ClubHomePost = (props) => {
             activeButton === "announcement" ? "bg-orange-600" : "bg-[#864E41]"
           } text-white px-3 md:px-10 py-1 md:py-2 rounded-lg`}
         >
-          View Announcement
+          View Event
         </button>
       </div>
       {itemsToDisplay.length === 0 ? (
@@ -212,9 +231,9 @@ const ClubHomePost = (props) => {
             </div>
             {toggleVisiblity && (
               <div className="mt-3 mb-3">
-                <p>{item.location}</p>
-                <p>{getFormattedDate(item.date)}</p>
-                <p>{getFormattedTime(item.time)}</p>
+                <p>Date: {getFormattedDate(item.date)}</p>
+                <p>Time: {getFormattedTime(item.start_time)} - {getFormattedTime(item.end_time)}</p>
+                <p>Location: {item.location}</p>
               </div>
             )}
             <div className="flex items-end w-max ml-auto">
@@ -237,6 +256,7 @@ const ClubHomePost = (props) => {
         isOpen={isModalOpen}
         onClose={closeModal}
         data={modalData}
+        onUpdate = {toggleVisiblity ? updateAnnouncement : updatePost}
       />
     </div>
   );

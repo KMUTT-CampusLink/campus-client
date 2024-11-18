@@ -18,6 +18,19 @@ const schema = z.object({
   eventTimeFrom: z.string().nonempty({ message: "Event time is required" }),
   eventTimeTo: z.string().nonempty({ message: "Event time is required" }),
   eventPlace: z.string().nonempty({ message: "Event place is required" }),
+  seats: z
+    .number({ invalid_type_error: "Seats must be a number" })
+    .positive({ message: "Seats must be a positive number" }),
+  accountName: z
+    .string()
+    .nonempty({ message: "Account name is required" }),
+  accountNumber: z
+    .string()
+    .regex(/^\d+$/, { message: "Account number must be numeric" })
+    .nonempty({ message: "Account number is required" }),
+  ticketAmount: z
+    .number({ invalid_type_error: "Amount must be a number" })
+    .positive({ message: "Amount must be a positive number" }),
 });
 
 function CreateAnnouncement() {
@@ -34,16 +47,16 @@ function CreateAnnouncement() {
   const onSubmit = async (data) => {
     const formData = new FormData();
   
-    // formData.append("announcementTitle", data.announcementDescription);
-    // formData.append("announcementContent", data.announcementDetail);
-    // formData.append("eventDateTime", `${data.eventDate}T${data.eventTime}:00`); // Ensure ISO-8601 format
-    // formData.append("eventPlace", data.eventPlace);
     formData.append("announcementTitle", data.announcementDescription);
     formData.append("announcementContent", data.announcementDetail);
     formData.append("eventDate", data.eventDate);
     formData.append("eventTimeFrom", data.eventTimeFrom);
     formData.append("eventTimeTo", data.eventTimeTo);
     formData.append("eventPlace", data.eventPlace);
+    formData.append("seats", data.seats);
+    formData.append("accountName", data.accountName);
+    formData.append("accountNumber", data.accountNumber);
+    formData.append("ticketAmount", data.ticketAmount);
   
     console.log("Form Data:", {
       announcementTitle: data.announcementDescription,
@@ -52,6 +65,10 @@ function CreateAnnouncement() {
       eventTimeFrom: data.eventTimeFrom,
       eventTimeTo: data.eventTimeTo,
       eventPlace: data.eventPlace,
+      seats: data.seats,
+      accountName: data.accountName,
+      accountNumber: data.accountNumber,
+      ticketAmount: data.ticketAmount,
     });
 
     try {
@@ -162,6 +179,65 @@ function CreateAnnouncement() {
           {errors.eventPlace && (
             <p className="text-red-500">{errors.eventPlace.message}</p>
           )}
+        </div>
+
+        {/* Seats */}
+        <div>
+          <label className="block text-xl font-semibold">
+            Seats <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="number"
+            {...register("seats", { valueAsNumber: true })}
+            className={`border p-2 w-full rounded-md shadow-sm ${
+              errors.seats ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          {errors.seats && <p className="text-red-500">{errors.seats.message}</p>}
+        </div>
+
+        {/* Account Name */}
+        <div>
+          <label className="block text-xl font-semibold">
+            Account Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("accountName")}
+            className={`border p-2 w-full rounded-md shadow-sm ${
+              errors.accountName ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          {errors.accountName && <p className="text-red-500">{errors.accountName.message}</p>}
+        </div>
+
+        {/* Account Number */}
+        <div>
+          <label className="block text-xl font-semibold">
+            Account Number <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            {...register("accountNumber")}
+            className={`border p-2 w-full rounded-md shadow-sm ${
+              errors.accountNumber ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          {errors.accountNumber && <p className="text-red-500">{errors.accountNumber.message}</p>}
+        </div>
+
+        {/* Ticket Amount */}
+        <div>
+          <label className="block text-xl font-semibold">
+            Ticket Amount (Baht) <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="number"
+            {...register("ticketAmount", { valueAsNumber: true })}
+            className={`border p-2 w-full rounded-md shadow-sm ${
+              errors.ticketAmount ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          {errors.ticketAmount && <p className="text-red-500">{errors.ticketAmount.message}</p>}
         </div>
 
         {/* Submit Button */}

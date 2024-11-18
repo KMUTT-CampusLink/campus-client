@@ -19,7 +19,7 @@ function ClubDetailCard() {
         setClubName(clubData.name);
         setBuildingLocation(clubData.building ? clubData.building.name: "Not located!");
         const members = clubData.club_member.filter((member) => member.status === "Accepted");
-        setMemberCount(members.length);
+        setMemberCount(members.length - 1);
 
         const admins = clubData.club_member.filter((member) => member.is_admin);
         setAdminCount(admins.length);
@@ -52,7 +52,7 @@ function ClubDetailCard() {
 
       <div className="grid m-[10%] md:m-auto justify-content-start font-semibold text-[1rem] md:text-[2rem] gap-x-20">
         <h2 className="text-xl font-semibold text-gray-800">{clubName}</h2>
-        <h2 className="text-xl font-semibold text-gray-800"> Group Admin - {adminCount}</h2>
+        {/* <h2 className="text-xl font-semibold text-gray-800"> Group Admin - {adminCount}</h2> */}
         <h2 className="text-xl font-semibold text-gray-800">Group Member: {memberCount > 0 ? memberCount: "No members yet!"}</h2>
         <h2 className="text-xl font-semibold text-gray-800">Location: {buildiingLocation} </h2>
         <Link to="/clubs/join-club">
