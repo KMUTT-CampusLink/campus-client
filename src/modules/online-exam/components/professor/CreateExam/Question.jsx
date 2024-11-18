@@ -140,9 +140,9 @@ export default function Question({
                     className="radio checked:bg-[#C76650]"
                     type="radio"
                     name={`question-${index}`}
-                    value={option.choiceText}
-                    checked={question.answer == option.choiceText}
-                    onChange={() => handleAnswerChange(option.choiceText)}
+                    value={option}
+                    checked={question.answer == option}
+                    onChange={() => handleAnswerChange(option)}
                   />
                   {option}
                 </div>
@@ -177,8 +177,8 @@ export default function Question({
                   <input
                     className="checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]"
                     type="checkbox"
-                    checked={question.answer.includes(option.choiceText)} // Use choiceText
-                    onChange={() => handleChecklistAnswerChange(option.choiceText)} // Pass choiceText
+                    checked={question.answer.includes(option)}
+                    onChange={() => handleChecklistAnswerChange(option)} // Pass choiceText
                   />
                   {option}
                 </div>

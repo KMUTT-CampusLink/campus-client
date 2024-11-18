@@ -16,6 +16,7 @@ function GPAXCard({ studentId }) {
     gpax: null,
     creditsEarned: null,
     creditsUsedInCalGPA: null,
+    creditsPrescribed: null,
   });
 
   useEffect(() => {
@@ -24,11 +25,11 @@ function GPAXCard({ studentId }) {
         gpax: overallGPAXData.gpa,
         creditsEarned: overallGPAXData.totalCreditsRegistered,
         creditsUsedInCalGPA: overallGPAXData.totalCredits,
+        creditsPrescribed: overallGPAXData.creditsPrescribed,
       });
     }
   }, [overallGPAXData]);
 
-  const creditsPrescribed = 134;
   const navigate = useNavigate();
 
   if (isError) return <CardErrorSkeleton data="gpax" />;
@@ -48,7 +49,7 @@ function GPAXCard({ studentId }) {
         <div className="text-sm">
           <p>
             Credits Prescribed:{" "}
-            <span className="font-bold">{creditsPrescribed}</span>
+            <span className="font-bold">{gpaDetails.creditsPrescribed}</span>
           </p>
           <p>
             Credits Used in GPA Calculation:{" "}

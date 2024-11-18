@@ -4,6 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import DeleteExam from "../../components/professor/ExamSetting/DeleteExamButton";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy, faFileLines } from "@fortawesome/free-solid-svg-icons";
+
 import {
   getFullMark,
   updateExamSettings,
@@ -12,6 +15,8 @@ import {
 
 export default function ProfessorExamSettingPage() {
   const { examId } = useParams();
+  const navigate = useNavigate();
+  const [hasEssayQuestion, setHasEssayQuestion] = useState(false);
   const [exam, setExam] = useState({
     start_date: null,
     end_date: null,
@@ -20,22 +25,21 @@ export default function ProfessorExamSettingPage() {
     is_shuffle: false,
     pass_mark: "",
     full_mark: 0,
+    pin: "",
+    title: "",
+    is_publish_immediately: false,
+    publish_score_status: false,
   });
-  //convert ISO date to input format
-  const formatDateForInput = (isoDate) => {
-    if (isoDate === null) return "";
-    else {
-      const date = new Date(isoDate);
-      const formattedDate = date.toISOString().slice(0, 16); // Removes the 'Z' and milliseconds
-      return formattedDate;
-    }
-  };
 
   const getAllExamData = async () => {
     try {
-      const res = await getExamDataById(examId);
+      const res = await getExamDataById(examId)
       const fullMarkRes = await getFullMark(examId);
       const examData = res.data.data.exam;
+      const examQuestion = res.data.data.questions;
+      const essayQuestion = examQuestion.some(
+        (question) => question.type === "Essay"
+      );
       setExam({
         start_date: formatDateForInput(examData.start_date),
         end_date: formatDateForInput(examData.end_date),
@@ -44,9 +48,27 @@ export default function ProfessorExamSettingPage() {
         is_shuffle: examData.is_shuffle,
         pass_mark: examData.pass_mark,
         full_mark: fullMarkRes.data.fullMark,
+        pin: res.data.data.pin,
+        title: examData.title,
+        is_publish_immediately: examData.is_publish_immediately,
+        publish_score_status: examData.publish_score_status,
       });
+      setHasEssayQuestion(essayQuestion); // Store this state for the checkbox
     } catch (error) {
       console.error("Failed to fetch exam data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllExamData();
+  }, []);
+  //convert ISO date to input format
+  const formatDateForInput = (isoDate) => {
+    if (isoDate === null) return "";
+    else {
+      const date = new Date(isoDate);
+      const formattedDate = date.toISOString().slice(0, 16); // Removes the 'Z' and milliseconds
+      return formattedDate;
     }
   };
 
@@ -65,21 +87,41 @@ export default function ProfessorExamSettingPage() {
   const handleShuffleToggleChange = () => {
     setExam({ ...exam, is_shuffle: !exam.is_shuffle });
   };
+  const handlePinChange = (event) => {
+    setExam({ ...exam, pin: event.target.value });
+  };
+  const handlePublishedImmediately = () => {
+    setExam({ ...exam, is_publish_immediately: !exam.is_publish_immediately });
+  };
   // Publsih exam modal
   const [showModal, setShowModal] = useState(false);
   const handlePublishedConfirm = () => {
-    setExam({ ...exam, publish_status: !exam.publish_status });
-    setShowModal(false);
+    if (
+      exam.start_date === "" ||
+      exam.end_date === "" ||
+      exam.pass_mark === null ||
+      exam.pin === null
+    ) {
+      setAlertMessage(
+        "Error: Please complete Exam Password, Duration, and Passing Marks, then click Submit Changes before publish."
+      );
+      setAlertVisible(true);
+      setShowModal(false);
+    } else {
+      setExam({ ...exam, publish_status: !exam.publish_status });
+      setShowModal(false);
+    }
+    setTimeout(() => {
+      setAlertVisible(false);
+    }, 5000);
   };
 
   //alert for submit
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
   const [isSubmit, setIsSubmit] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     // Reset alert and submit status before validation
     setAlertVisible(false);
     setIsSubmit(false);
@@ -87,7 +129,7 @@ export default function ProfessorExamSettingPage() {
     if (exam.end_date < exam.start_date) {
       setAlertMessage("Error: End time cannot be less than start time.");
       setAlertVisible(true);
-    } else if (exam.start_date === null || exam.end_date === null) {
+    } else if (exam.start_date === "" || exam.end_date === "") {
       setAlertMessage("Error: Start time and end time cannot be empty.");
       setAlertVisible(true);
     } else if (exam.pass_mark === null) {
@@ -97,11 +139,6 @@ export default function ProfessorExamSettingPage() {
       setAlertMessage("Error: Passing marks cannot be greater than full mark.");
       setAlertVisible(true);
     } else {
-      // If validation is successful, set the submit status to true
-      setIsSubmit(true);
-      setAlertMessage("Your changes have been saved successfully");
-      setAlertVisible(true);
-
       // Create the examData object
       const examData = {
         ...exam,
@@ -111,11 +148,21 @@ export default function ProfessorExamSettingPage() {
         view_history: exam.view_history,
         is_shuffle: exam.is_shuffle,
         pass_mark: exam.pass_mark,
+        pin: exam.pin,
+        title: exam.title,
+        is_publish_immediately: exam.is_publish_immediately,
+        publish_score_status: exam.is_publish_immediately,
       };
 
       try {
         // Call API to update exam settings
         const response = await updateExamSettings(examId, examData);
+        navigate(`/exams/professor/${response.data.data}`, {
+          state: {
+            isSettingSubmit: true,
+            alertMessage: "Your changes have been saved successfully",
+          },
+        });
       } catch (error) {
         console.error("Error updating exam settings:", error);
         setIsSubmit(false);
@@ -128,30 +175,63 @@ export default function ProfessorExamSettingPage() {
       setAlertVisible(false);
     }, 3000);
   };
-  useEffect(() => {
-    getAllExamData();
-  }, []);
+
+  const [isCopied, setIsCopied] = useState(false);
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(exam.pin).then(() => {
+      setAlertMessage("Pin copied to clipboard!");
+      setAlertVisible(true);
+      setIsCopied(true);
+    });
+    setTimeout(() => {
+      setAlertVisible(false);
+    }, 2000);
+  };
 
   return (
     <>
       <NavBar />
       {/* Heading */}
-      <div className=" px-[26px]  lg:px-[200px] pt-20">
-        <div className="flex justify-between py-[35px] ">
+      <div className=" px-[35px]  lg:px-[100px] pt-20">
+        <div className="flex justify-between pb-[35px] pt-[25px] items-center">
           <div>
-            <p className="font-bold text-[#D4A015] text-[30px]">Setting</p>
-            <p className="text-[16px]">Linear Algebra Exam</p>
+            <p className="font-bold text-[#D4A015] text-[30px]">Exam Setting</p>
+            <p className="text-[20px] font-bold">{exam.title}</p>
           </div>
-          <div className="flex flex-col items-center">
-            <p className="">Exam Password</p>{" "}
-            <button className="bg-[#7F483C] p-[10px] px-[20px] text-center text-[white] text-[18px] rounded-2xl">
-              DF1E22
-            </button>
-          </div>
+          <button
+            className="btn text-white bg-[#864E41] hover:bg-[#6e4339]"
+            onClick={() => navigate(`/exams/professor/edit/${examId}`)}
+          >
+            <FontAwesomeIcon icon={faFileLines} /> Edit Exam Question
+          </button>
         </div>
         <hr className="border-t border-[#798184]" />
         {/* Content */}
+
         <div className="flex flex-col py-[35px]">
+          <div className="flex gap-[10px] items-center pb-[20px]">
+            <label
+              className="pr-[9px] text-[black] text-[18px] font-bold"
+              for="meeting-time"
+            >
+              Exam password
+            </label>
+            <input
+              className="border-2 border-[#798184] rounded-xl  px-[10px] py-[7px] text-center w-[210px] appearance-none"
+              name=""
+              id=""
+              value={exam.pin}
+              onChange={handlePinChange}
+            />
+            <button>
+              <FontAwesomeIcon
+                icon={faCopy}
+                className="text-[#798184]  text-xl"
+                onClick={handleCopyToClipboard}
+              />
+            </button>
+          </div>
+
           {/* start & end date time input */}
           <div className="flex flex-col gap-[10px] sm:items-center pb-[20px] sm:flex-row">
             <label
@@ -250,6 +330,39 @@ export default function ProfessorExamSettingPage() {
               </label>
             </div>
           </div>
+
+          {/* publihsed immediately */}
+          <div className="flex items-center pb-[20px] justify-between">
+            <div className="">
+              <p className="pr-[15px] text-[black] text-[18px] font-bold">
+                Publish score immediately
+              </p>
+              <p className="text-[16px]">
+                Automatically display scores to participants when the exam ends.
+              </p>
+            </div>
+
+            <div className="form-control">
+              <label className="label cursor-pointer k flex justify-end">
+                <input
+                  type="checkbox"
+                  className="toggle"
+                  checked={exam.is_publish_immediately}
+                  onChange={handlePublishedImmediately}
+                  disabled={hasEssayQuestion} // Disable checkbox if there's an "Essay" type question
+                />
+                <span className="label-text ml-[10px]">Allow</span>
+              </label>
+
+              <div>
+                {hasEssayQuestion && (
+                  <p className="text-[12px] text-[red] text-right">
+                    not allow when has essay question
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
         <hr className="border-t border-[#798184]" />
         {/* Publish exam */}
@@ -320,7 +433,7 @@ export default function ProfessorExamSettingPage() {
         </div>
         {/* Delete exam button*/}
         <div className="flex justify-center mb-[60px] gap-[10px] px-[100]">
-          <DeleteExam />
+          <DeleteExam examId={examId} />
           {/* Submit change button */}
           <form>
             <button
@@ -337,7 +450,7 @@ export default function ProfessorExamSettingPage() {
             <div className="toast toast-center">
               <div
                 className={`alert ${
-                  isSubmit ? "alert-success" : "alert-error"
+                  isCopied ? "alert-success" : "alert-error"
                 }`}
               >
                 <span className="text-white">{alertMessage}</span>
