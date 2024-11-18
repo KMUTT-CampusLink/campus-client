@@ -5,6 +5,7 @@ import TranscriptCard from "../components/TranscriptCard";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import { useTranscriptByStudentId } from "../services/queries";
 import { ErrorSkeleton } from "../styles/Skeletons";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function TranscriptPage() {
   const studentId = localStorage.getItem("studentId");
@@ -13,7 +14,7 @@ function TranscriptPage() {
     isLoading,
     isError,
   } = useTranscriptByStudentId(studentId);
-
+  if (isLoading) return <LoadingPage />;
   if (isError) return <ErrorSkeleton />;
 
   return (
@@ -25,31 +26,23 @@ function TranscriptPage() {
         <div className="bg-white p-6 shadow-md rounded-md">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <GPAXCard studentId={studentId} />
-            {isLoading ? (
-              <div className="col-span-2 grid grid-cols-1 gap-4 animate-pulse">
-                <div className="h-64 pt-4 text-center bg-gray-200 rounded">
-                  Loading Transcript Data
+            <div className="col-span-2 grid grid-cols-1 gap-4">
+              {transcripts?.length === 0 ? (
+                <div className="text-center text-gray-500">
+                  No transcript data available.
                 </div>
-              </div>
-            ) : (
-              <div className="col-span-2 grid grid-cols-1 gap-4">
-                {transcripts?.length === 0 ? (
-                  <div className="text-center text-gray-500">
-                    No transcript data available.
-                  </div>
-                ) : (
-                  transcripts.map((semester, index) => (
-                    <TranscriptCard
-                      key={index}
-                      semester={semester.semester_name}
-                      courses={semester.courses}
-                      studentId={studentId}
-                      semesterId={semester.semester_id}
-                    />
-                  ))
-                )}
-              </div>
-            )}
+              ) : (
+                transcripts?.map((semester, index) => (
+                  <TranscriptCard
+                    key={index}
+                    semester={semester.semester_name}
+                    courses={semester.courses}
+                    studentId={studentId}
+                    semesterId={semester.semester_id}
+                  />
+                ))
+              )}
+            </div>
           </div>
         </div>
       </main>

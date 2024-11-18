@@ -2,7 +2,6 @@ import React from "react";
 import ProfileButton from "../../registration/components/NavBarComponents/ProfileButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faUser, faBars } from "@fortawesome/free-solid-svg-icons";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import SideForIndvCourse from "./SideForIndvCourse";
 

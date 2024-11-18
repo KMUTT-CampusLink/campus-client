@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import bookingData from "./booking_list.json";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import CenteredBox from "../../components/CenteredBox";
 
 export default function AdministratorMyBookingList() {
-  const [bookings, setBookings] = useState([]);
+  const [booked, setBooked] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
-    setBookings(bookingData.bookings);
+    const fetchBooked = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/security/getBooked"
+        );
+        if (!response.ok) throw new Error("Failed to fetch bookings");
+
+        const data = await response.json();
+        setBooked(data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBooked();
   }, []);
 
   const handleDeleteClick = (booking) => {
@@ -23,9 +36,32 @@ export default function AdministratorMyBookingList() {
     setSelectedBooking(null);
   };
 
-  const handleConfirmDelete = () => {
-    setBookings(bookings.filter((b) => b !== selectedBooking));
-    handleCloseDialog();
+  const handleConfirmDelete = async () => {
+    if (!selectedBooking) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/security/bookings/${selectedBooking.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete booking");
+      }
+
+      // Remove the deleted booking from the state
+      setBooked(booked.filter((b) => b.id !== selectedBooking.id));
+      console.log(
+        `Booking with ID ${selectedBooking.id} deleted successfully.`
+      );
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+    } finally {
+      handleCloseDialog();
+    }
   };
 
   const navigate = useNavigate();
@@ -34,9 +70,11 @@ export default function AdministratorMyBookingList() {
     <>
       <NavBar />
       <CenteredBox>
-        <div className="relative flex flex-col items-center justify-center w-full h-full p-6">
+        <div className="relative flex flex-col items-center w-full h-full p-6">
+          <br />
+          <br />
           <button
-            className="absolute top-4 right-4 text-primary bg-white p-2 rounded-full shadow hover:bg-gray-100"
+            className="absolute p-2 bg-white rounded-full shadow top-4 right-4 text-primary hover:bg-gray-100"
             onClick={() => navigate("/security/administrator/mybooking")}
           >
             <svg
@@ -45,7 +83,7 @@ export default function AdministratorMyBookingList() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 text-[#864E41]" // Apply custom color
+              className="w-6 h-6 text-[#864E41]"
             >
               <path
                 strokeLinecap="round"
@@ -55,13 +93,14 @@ export default function AdministratorMyBookingList() {
             </svg>
           </button>
 
-          {/* Move heading and description below the button */}
-          <h1 className="absolute top-5 text-2xl font-bold mb-1">My Booking List</h1>
-          <p className="absolute top-12 text-sm">List of all your bookings</p>
+          <h1 className="absolute mb-1 text-2xl font-bold top-5">
+            Booking List
+          </h1>
+          <p className="absolute text-sm top-12">List of all bookings</p>
           <hr className="w-full my-3" />
 
           {/* Table Headers */}
-          <div className="flex justify-between w-full p-3 bg-gray-100 rounded-lg mb-2 font-bold">
+          <div className="flex justify-between w-full p-3 mb-2 font-bold bg-gray-100 rounded-lg">
             <span className="flex-1">Room</span>
             <span className="flex-1">Date</span>
             <span className="flex-1">Time</span>
@@ -69,16 +108,34 @@ export default function AdministratorMyBookingList() {
           </div>
 
           {/* Table Content */}
-          <div className="w-full max-h-96 overflow-y-auto">
-            {bookings.length > 0 ? (
-              bookings.map((booking, index) => (
+          <div className="w-full overflow-y-auto max-h-96">
+            {booked.length > 0 ? (
+              booked.map((booking) => (
                 <div
-                  key={index}
-                  className="flex justify-between items-center bg-white p-3 mb-2 rounded-lg shadow"
+                  key={booking.id}
+                  className="flex items-center justify-between p-3 mb-2 bg-white rounded-lg shadow"
                 >
-                  <span className="flex-1">{booking.room}</span>
-                  <span className="flex-1">{booking.date}</span>
-                  <span className="flex-1">{booking.time}</span>
+                  <span className="flex-1">
+                    {booking.room?.name || "Unknown"}
+                  </span>
+                  <span className="flex-1">
+                    {new Date(booking.booking_date).toISOString().split("T")[0]}
+                  </span>
+                  <span className="flex-1">
+                    {`${new Date(
+                      new Date(booking.start_time).getTime() -
+                        7 * 60 * 60 * 1000
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })} to ${new Date(
+                      new Date(booking.end_time).getTime() - 7 * 60 * 60 * 1000
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}`}
+                  </span>
+
                   <button
                     onClick={() => handleDeleteClick(booking)}
                     className="text-red-600 hover:text-red-800"
@@ -109,15 +166,35 @@ export default function AdministratorMyBookingList() {
 
       {/* Dialog for confirming deletion */}
       {openDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-sm w-full text-center shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-sm p-6 text-center bg-white rounded-lg shadow-lg">
             <div className="mb-4">
               {selectedBooking && (
                 <>
-                  <div className="flex justify-between bg-gray-100 p-3 rounded-lg mb-4">
-                    <span className="flex-1">{selectedBooking.room}</span>
-                    <span className="flex-1">{selectedBooking.date}</span>
-                    <span className="flex-1">{selectedBooking.time}</span>
+                  <div className="flex justify-between p-3 mb-4 bg-gray-100 rounded-lg">
+                    <span className="flex-1">
+                      Room: {selectedBooking.room?.name || "Unknown"}
+                    </span>
+                    <span className="flex-1">
+                      {
+                        new Date(selectedBooking.booking_date)
+                          .toISOString()
+                          .split("T")[0]
+                      }
+                    </span>
+                    <span className="flex-1">
+                      {`${new Date(
+                        selectedBooking.start_time
+                      ).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })} to ${new Date(
+                        selectedBooking.end_time
+                      ).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}`}
+                    </span>
                   </div>
                   <p className="font-bold">
                     Are you sure you want to cancel this booking?

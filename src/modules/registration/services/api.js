@@ -1,11 +1,4 @@
-import axios from "axios";
-
-// Create an Axios instance
-export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  timeout: 5000,
-  withCredentials: true,
-});
+import { axiosInstance } from "../../../utils/axiosInstance.js";
 
 // Centralized error handling
 const handleApiError = (error) => {
@@ -40,25 +33,34 @@ export const activateAccount = (activationData) =>
   post("/users/activate", activationData);
 export const logIn = (credentials) => post("/users/login", credentials);
 
-export const fetchStudentById = (studentId) => get(`/regis/student/${studentId}`);
+export const fetchStudentById = (studentId) =>
+  get(`/regis/student/${studentId}`);
+export const fetchStudentProfileById = (studentId) =>
+  get(`/regis/student/${studentId}/profile`);
+
 export const fetchCourseBySearchTerm = async (searchTerm) => {
   if (!searchTerm.trim()) throw new Error("Search term cannot be empty.");
   return get(`/regis/course/search?query=${searchTerm}`);
 };
-export const fetchSectionByCourseCode = (courseCode) =>
-  get(`/regis/course/${courseCode}/section`);
+export const fetchSectionByCourseCode = (courseCode, semesterId) =>
+  get(`/regis/course/${courseCode}/section/${semesterId}`);
+export const fetchActiveCoursesByStudentId = (studentId) =>
+  get(`/regis/course/${studentId}/active`);
+
 export const fetchSemestersByStudentId = (studentId) =>
-  get(`/regis/enroll/semesters/${studentId}`);
+  get(`/regis/semesters/${studentId}`);
+export const fetchAllSemesters = () =>
+  get(`/regis/semesters/all`);
+
 export const fetchTranscriptBySemesterId = (studentId, semesterId) =>
   get(`/regis/transcript/${studentId}/${semesterId}`);
 export const fetchTranscriptByStudentId = (studentId) =>
   get(`/regis/transcript/${studentId}`);
+
 export const fetchGPAXBySemesterId = (studentId, semesterId) =>
   get(`/regis/gpax/${studentId}/${semesterId}`);
 export const fetchGPAXByStudentId = (studentId) =>
   get(`/regis/gpax/${studentId}`);
-export const fetchActiveCoursesByStudentId = (studentId) =>
-  get(`/regis/course/${studentId}/active`);
 
 export const fetchEnrollmentHead = (enrollment) =>
   post("/regis/enroll/head", enrollment);

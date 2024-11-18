@@ -43,7 +43,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
 
   return (
     <div
-      className={`max-sm:w-40 text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
+      className={`z-10 max-sm:w-40 text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
         sideOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -60,78 +60,99 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
           <ul className="max-sm:text-sm mr-5 mt-24 flex-grow">
             {/* Description Link */}
             <li
-              onClick={() => handleNavigation("course_description")}
-              className={`mb-4 p-2 border-b-2 ${
-                currentPage !== "description"
-                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
-                  : "text-black"
-              }`}
+              onClick={() => handleNavigation("description")}
+              className="mb-4 p-2 border-b-2"
             >
-              Description
+              <span
+                className={`${
+                  currentPage !== "description"
+                    ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
+                    : "text-black"
+                }`}
+              >
+                Description
+              </span>
             </li>
             {/* Materials Link */}
             <li
-              onClick={() => handleNavigation("course_material")}
-              className={`mb-4 p-2 border-b-2 ${
-                currentPage !== "materials"
-                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
-                  : "text-black"
-              }`}
+              onClick={() => handleNavigation("materials")}
+              className="mb-4 p-2 border-b-2"
             >
-              Materials
+              <span
+                className={`${
+                  currentPage !== "materials"
+                    ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
+                    : "text-black"
+                }`}
+              >
+                Materials
+              </span>
             </li>
             {/* Tasks Link */}
             <li
               onClick={() => handleNavigation("tasks")}
-              className={`mb-4 p-2 border-b-2 ${
-                currentPage !== "tasks"
-                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
-                  : "text-black"
-              }`}
+              className="mb-4 p-2 border-b-2"
             >
-              Tasks
+              <span
+                className={`${
+                  currentPage !== "tasks"
+                    ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
+                    : "text-black"
+                }`}
+              >
+                Tasks
+              </span>
             </li>
             {/* Discussion Link */}
             <li
               onClick={() => handleNavigation("discussion")}
-              className={`mb-4 p-2 border-b-2 ${
-                currentPage !== "discussion"
-                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
-                  : "text-black"
-              }`}
+              className="mb-4 p-2 border-b-2"
             >
-              Discussion
+              <span
+                className={`${
+                  currentPage !== "discussion"
+                    ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
+                    : "text-black"
+                }`}
+              >
+                Discussion
+              </span>
             </li>
             {/* Online Exam Link */}
             <li
               // onClick={() => handleNavigation("online_exam")}
-              className={`mb-4 p-2 border-b-2 ${
-                currentPage !== "online_exam"
-                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
-                  : "text-black"
-              }`}
+              className="mb-4 p-2 border-b-2"
             >
-              Online Exam
+              <span
+                className={`${
+                  currentPage !== "online_exam"
+                    ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
+                    : "text-black"
+                }`}
+              >
+                Online Exam
+              </span>
             </li>
 
             {/* Attendance Link */}
             <li
               // onClick={() => handleNavigation("attendance")}
-              className={`mb-4 p-2 border-b-2 ${
-                currentPage !== "attendance"
-                  ? "text-white hover:scale-110 hover:cursor-pointer transition-transform duration-2000"
-                  : "text-black"
-              }`}
+              className="mb-4 p-2 border-b-2"
             >
-              Attendance
+              <span
+                className={`${
+                  currentPage !== "attendance"
+                    ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
+                    : "text-black"
+                }`}
+              >
+                Attendance
+              </span>
             </li>
           </ul>
         </div>
         <div className="w-full p-5 border-t-2">
-          <button
-            className="flex items-center gap-4 hover:scale-110 "
-            onClick={backToDashboard}
-          >
+          <button className="flex items-center gap-4" onClick={backToDashboard}>
             <span className="mr-2">
               <FontAwesomeIcon
                 icon={faCircleArrowLeft}
