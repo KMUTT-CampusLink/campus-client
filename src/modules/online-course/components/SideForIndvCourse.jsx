@@ -60,12 +60,12 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
           <ul className="max-sm:text-sm mr-5 mt-24 flex-grow">
             {/* Description Link */}
             <li
-              onClick={() => handleNavigation("course_description")}
+              onClick={() => handleNavigation("description")}
               className="mb-4 p-2 border-b-2"
             >
               <span
                 className={`${
-                  currentPage !== "course_description"
+                  currentPage !== "description"
                     ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
                     : "text-black"
                 }`}
@@ -75,12 +75,12 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             </li>
             {/* Materials Link */}
             <li
-              onClick={() => handleNavigation("course_material")}
+              onClick={() => handleNavigation("materials")}
               className="mb-4 p-2 border-b-2"
             >
               <span
                 className={`${
-                  currentPage !== "course_material"
+                  currentPage !== "materials"
                     ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
                     : "text-black"
                 }`}

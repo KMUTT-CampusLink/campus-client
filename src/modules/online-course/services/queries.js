@@ -1,19 +1,46 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllCourses, fetchCoursesByStudentID } from "./api";
+import {
+  fetchAllCourses,
+  fetchAllCoursesByStudentID,
+    fetchCoursesByStudentID,
+  fetchAllCoursesByProfessorID,
+} from "./api";
 export const useAllCourses = () => {
-    return useQuery({
-        queryKey: ["courses"],
-        queryFn: fetchAllCourses,
-    });
-}
+  return useQuery({
+    queryKey: ["courses"],
+    queryFn: fetchAllCourses,
+  });
+};
 
 export const useCoursesByStudentID = (studentID) => {
+  return useQuery({
+    queryKey: ["courses", studentID],
+    queryFn: () => fetchCoursesByStudentID(studentID),
+    enabled: !!studentID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useAllCoursesByStudentID = (studentID) => {
+  return useQuery({
+    queryKey: ["courses", studentID],
+    queryFn: () => fetchAllCoursesByStudentID(studentID),
+    enabled: !!studentID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useAllCoursesByProfessorID = (professorID) => {
     return useQuery({
-        queryKey: ["courses", studentID],
-        queryFn: () => fetchCoursesByStudentID(studentID),
-        enabled: !!studentID,
-        onError: (error) => {
-            console.log(error);
-        }
+      queryKey: ["courses", professorID],
+      queryFn: () => fetchAllCoursesByProfessorID(professorID),
+      enabled: !!professorID,
+      onError: (error) => {
+        console.log(error);
+      },
     });
 }

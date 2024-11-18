@@ -13,9 +13,9 @@ const StudentCard = ({ student}) => {
         <img src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg" alt={student.id} className="object-cover rounded-lg shadow-lg md:w-[230px] md:h-[140px] w-[180px] h-[130px] " />
       </div>
       <div className=" mt-3 ">
-        <h1 className="text-left font-geologica font-bold text-[17px] md:text-[20px]">{student.firstname} {student.midname} {student.lastname}</h1>
-        <p className="font-geologica text-[10px] md:text-[12px] text-left">{student.id}</p>
-        <p className="font-geologica text-[10px] md:text-[12px] text-left">{'batch'} {student.uni_batch.batch_no}</p>
+        <h1 className="text-left font-geologica font-bold text-[16px] md:text-[20px]">{student.firstname} {student.midname} {student.lastname}</h1>
+        <p className="font-geologica text-[9px] md:text-[12px] text-left">{student.id}</p>
+        <p className="font-geologica text-[9px] md:text-[12px] text-left">{student.degree.name}</p>
       </div>
     </div>
   );

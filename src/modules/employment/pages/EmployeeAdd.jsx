@@ -274,40 +274,6 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                {/* Faculty dropdown */}
-
-                {/* <div className="mb-4">
-                  <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Faculty
-                  </label>
-                  <select
-                    name="faculty_id"
-                    value={formData.faculty_id}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                  >
-                    <option value="" disabled>
-                      Select Faculty
-                    </option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Information_Technology">
-                      Information Technology
-                    </option>
-                    <option value="Science">Science</option>
-                    <option value="Architecture">Architecture</option>
-                    <option value="Liberal Art">Liberal Art</option>
-                    <option value="Business">Business</option>
-                    <option value="Environmental">Environmental</option>
-                    <option value="Education">Education</option>
-                  </select>
-                  {validationErrors.faculty_id && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.faculty_id}
-                    </p>
-                  )}
-                </div> */}
-
-                {/* up to here  */}
 
                 {/* 1 */}
                 <div className="mb-4">
@@ -406,6 +372,29 @@ const EmployeeAdd = () => {
                 </div>
 
                 <div className="mb-4">
+                  <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Identification_no
+                  </label>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="identification_no"
+                      value={formData.identification_no}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                    />
+                  </div>
+                  {validationErrors.identification_no && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.identification_no}
+                    </p>
+                  )}
+                </div>                
+              </div>
+
+              {/* Right side form inputs */}
+              <div className="w-full">
+                <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Gender
                   </label>
@@ -437,10 +426,7 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-              </div>
 
-              {/* Right side form inputs */}
-              <div className="w-full">
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Date_of_birth
@@ -461,27 +447,7 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                <div className="mb-4">
-                  <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Identification_no
-                  </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="identification_no"
-                      value={formData.identification_no}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
-                  {validationErrors.identification_no && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.identification_no}
-                    </p>
-                  )}
-                </div>
-
-                <div className="mb-9">
+                <div className="mb-8">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Phone_no
                   </label>
@@ -501,7 +467,7 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                <div className="border border-orange-300 rounded-md px-9 ">
+                <div className="border rounded-md px-9 ">
                   <div className="mb-4 mt-4">
                     <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                       Address
@@ -562,7 +528,7 @@ const EmployeeAdd = () => {
                     </div>
                   </div>
 
-                  <div className="mb-4">
+                  <div className="mb-6">
                     <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                       Postal Code
                     </label>
@@ -577,6 +543,7 @@ const EmployeeAdd = () => {
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
 

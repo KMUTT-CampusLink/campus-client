@@ -1,9 +1,10 @@
-
 import MainPage from "../page/MainPage"
 import Reserfailed from "../page/Reserfailed"
-import Receipt from "../page/Receipt"
-import Help from "../page/Help";
+import CheckIn from "../page/CheckIn"
+import RegisCar from "../page/RegisCar";
 import Parkingslot from "../page/Parkingslot";
+import Scanned from "../page/Scanned";
+import CheckOut from "../page/CheckOut";
 
 export default function ParkRoutes() {
   return [
@@ -16,16 +17,24 @@ export default function ParkRoutes() {
       element:<Parkingslot/>,
     },
     {
-      path:"receipt/",
-      element:<Receipt/>
+      path:"checkin/",
+      element:<CheckIn/>
     },
     {
-      path:"help/",
-      element:<Help/>
+      path:"regis/",
+      element:<RegisCar/>
     },
     {
       path:"failed/",
       element:<Reserfailed/>,
     },
+    {
+      path:"scanned/:id",
+      element:<Scanned/>,
+    },
+    {
+      path:"checkout",
+      element:<CheckOut/>
+    }
   ];
 }
