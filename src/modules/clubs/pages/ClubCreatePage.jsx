@@ -15,19 +15,26 @@ const schema = z.object({
   members: z
     .array(z.string())
     .min(3, { message: "At least 3 members are required" }),
-  clubImage: z.instanceof(File).optional(),
-  // clubImage: z
-  //   .any()
-  //   .refine((file) => file?.length !== 0, "File is required")
-  //   .refine(
-  //     (file) => file[0]?.size < 5 * 1024 * 1024,
-  //     "Poster file at most 5MB"
-  //   )
-  //   .refine((file) => {
-  //     const fileType = file[0]?.type.split("/").pop();
-  //     const allowedExtension = /^(jpeg?|png|gif|webp|avif)$/; //regexfunction which will validate according to user input
-  //     return allowedExtension.test(fileType); //only return ture or false
-  //   }, "Invalid file type"),
+  //clubImage: z.instanceof(File).optional(),
+  clubImage: z
+    .instanceof(File)
+    .refine((file) => file?.length !== 0, "File is required")
+    .refine((file) => file?.size < 5 * 1024 * 1024, "Poster file at most 5MB")
+    // .refine((file) => {
+    //   const fileType = file[0]?.type.split("/").pop();
+    //   const allowedExtension = /^(jpe?g|png|gif|webp|avif)$/; //regexfunction which will validate according to user input
+    //   return allowedExtension.test(fileType); //only return ture or false
+    // }, "Invalid file type"),
+    .refine((file) => {
+      const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/avif",
+      ];
+      return allowedMimeTypes.includes(file.type); // Match MIME type
+    }, "Invalid file type. Allowed types: JPEG, PNG, GIF, WebP, AVIF."),
 });
 
 function ClubCreatePage() {
@@ -129,9 +136,17 @@ function ClubCreatePage() {
     setAddedMembers(updatedMembers);
   };
 
+  // const onFileChange = (e) => {
+  //   setSelectedFile(e.target.files[0] || null);
+  //   setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" }));
+  // };
   const onFileChange = (e) => {
-    setSelectedFile(e.target.files[0] || null);
-    setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" }));
+    const file = e.target.files[0];
+    setSelectedFile(file || null); // Set to null if no file is selected
+    if (file) {
+      console.log("File selected:", file); // Debugging info
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" })); // Clear errors
   };
 
   const validateAndSubmit = async () => {
@@ -141,6 +156,7 @@ function ClubCreatePage() {
       clubDetails,
       buildingId,
       members: addedMembers,
+      clubImage: selectedFile,
     };
 
     try {

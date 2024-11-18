@@ -68,7 +68,10 @@ function ClubLandingPage() {
               <ClubCard
                 key={club.id} // Use a unique key (id)
                 clubName={club.name}
-                imageSrc={club.club_img}
+                imageSrc={`${
+                  import.meta.env.VITE_MINIO_URL +
+                  import.meta.env.VITE_MINIO_BUCKET_NAME
+                }/${club.club_img}`}
                 clubId={club.id} // Pass the club id for dynamic URL generation
               />
             ))}
