@@ -33,3 +33,11 @@ export const postRegisterCar = async (requestData) => {
   );
   return response.data;
 };
+
+export const postCheckout = async (requestData) => {
+  const response = await axiosInstance.post(
+    "/parking/postCheckout",
+    requestData
+  );
+  return response.data;
+};
