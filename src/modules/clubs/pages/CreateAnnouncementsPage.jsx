@@ -21,13 +21,6 @@ const schema = z.object({
   seats: z
     .number({ invalid_type_error: "Seats must be a number" })
     .positive({ message: "Seats must be a positive number" }),
-  accountName: z
-    .string()
-    .nonempty({ message: "Account name is required" }),
-  accountNumber: z
-    .string()
-    .regex(/^\d+$/, { message: "Account number must be numeric" })
-    .nonempty({ message: "Account number is required" }),
   ticketAmount: z
     .number({ invalid_type_error: "Amount must be a number" })
     .positive({ message: "Amount must be a positive number" }),
@@ -45,20 +38,8 @@ function CreateAnnouncement() {
 
   const navigate = useNavigate(); // Hook to navigate between routes
   const onSubmit = async (data) => {
-    const formData = new FormData();
-  
-    formData.append("announcementTitle", data.announcementDescription);
-    formData.append("announcementContent", data.announcementDetail);
-    formData.append("eventDate", data.eventDate);
-    formData.append("eventTimeFrom", data.eventTimeFrom);
-    formData.append("eventTimeTo", data.eventTimeTo);
-    formData.append("eventPlace", data.eventPlace);
-    formData.append("seats", data.seats);
-    formData.append("accountName", data.accountName);
-    formData.append("accountNumber", data.accountNumber);
-    formData.append("ticketAmount", data.ticketAmount);
-  
-    console.log("Form Data:", {
+    
+    const jsonData = {
       announcementTitle: data.announcementDescription,
       announcementContent: data.announcementDetail,
       eventDate: data.eventDate,
@@ -66,15 +47,13 @@ function CreateAnnouncement() {
       eventTimeTo: data.eventTimeTo,
       eventPlace: data.eventPlace,
       seats: data.seats,
-      accountName: data.accountName,
-      accountNumber: data.accountNumber,
       ticketAmount: data.ticketAmount,
-    });
-
+    };
+    
     try {
-      const response = await axiosInstance.post(`/clubs/admin/announcements/${clubId}`, formData, {
+      const response = await axiosInstance.post(`/clubs/admin/announcements/${clubId}`, jsonData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
   
@@ -194,35 +173,6 @@ function CreateAnnouncement() {
             }`}
           />
           {errors.seats && <p className="text-red-500">{errors.seats.message}</p>}
-        </div>
-
-        {/* Account Name */}
-        <div>
-          <label className="block text-xl font-semibold">
-            Account Name <span className="text-red-500">*</span>
-          </label>
-          <input
-            {...register("accountName")}
-            className={`border p-2 w-full rounded-md shadow-sm ${
-              errors.accountName ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          {errors.accountName && <p className="text-red-500">{errors.accountName.message}</p>}
-        </div>
-
-        {/* Account Number */}
-        <div>
-          <label className="block text-xl font-semibold">
-            Account Number <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            {...register("accountNumber")}
-            className={`border p-2 w-full rounded-md shadow-sm ${
-              errors.accountNumber ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          {errors.accountNumber && <p className="text-red-500">{errors.accountNumber.message}</p>}
         </div>
 
         {/* Ticket Amount */}
