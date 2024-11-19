@@ -24,18 +24,46 @@ function CreatePost() {
   const [photo, setPhoto] = useState(null);
 
   // Handle file change event
+  // const handlePhotoChange = (e) => {
+  //   setPhoto(e.target.files[0]);
+  // };
+
   const handlePhotoChange = (e) => {
-    setPhoto(e.target.files[0]);
+    const file = e.target.files[0];
+
+    if (file) {
+      const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/avif",
+      ];
+      if (!allowedMimeTypes.includes(file.type)) {
+        alert("Invalid file type. Allowed types: JPEG, PNG, GIF, WebP, AVIF.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size must be less than 5MB.");
+        return;
+      }
+    }
+
+    setPhoto(file || null); // Set to null if no file is selected
   };
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append("postTitle", data.title);
-    formData.append("postContent", data.content);
-    if (photo) {
-      formData.append("photo", photo);
+    if (!photo) {
+      alert("Please upload a valid photo.");
+      return; // Stop form submission if no photo is selected
     }
-  
+    const formData = new FormData();
+    formData.append("postTitle", data.title); // Must match backend expectation
+    formData.append("postContent", data.content); // Must match backend expectation
+    if (photo) {
+      formData.append("photo", photo); // Must match the key the backend expects
+    }
+
     try {
       const response = await axiosInstance.post(
         `/clubs/admin/post/${clubId}`,
@@ -46,7 +74,7 @@ function CreatePost() {
           },
         }
       );
-  
+
       alert("Post created successfully");
       navigate(`/clubs/club-home/${clubId}`); // Optional: navigate to another page
     } catch (error) {
@@ -60,11 +88,13 @@ function CreatePost() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col space-y-4 sm:w-4/5 md:w-3/5 lg:w-2/5 mx-auto px-4"
-        encType="multipart/form-data"
+        //encType="multipart/form-data"
       >
         {/* Post Title */}
         <div>
-          <label className="block text-xl font-semibold">Post Title <span className="text-red-500">*</span></label>
+          <label className="block text-xl font-semibold">
+            Post Title <span className="text-red-500">*</span>
+          </label>
           <input
             {...register("title")}
             className={`border p-2 w-full rounded-md shadow-sm ${
@@ -78,7 +108,9 @@ function CreatePost() {
 
         {/* Post Content */}
         <div>
-          <label className="block text-xl font-semibold">Post Content <span className="text-red-500">*</span></label>
+          <label className="block text-xl font-semibold">
+            Post Content <span className="text-red-500">*</span>
+          </label>
           <textarea
             {...register("content")}
             className={`border p-2 w-full rounded-md shadow-sm ${

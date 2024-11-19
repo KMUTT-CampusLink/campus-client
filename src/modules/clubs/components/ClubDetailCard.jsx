@@ -7,6 +7,7 @@ function ClubDetailCard({ isAdmin, isMember }) {
   const [buildiingLocation, setBuildingLocation] = useState("");
   const { clubId } = useParams(); // club ID from the backend
   const [memberCount, setMemberCount] = useState(0);
+  const [clubImg, setClubImg] = useState("");
 
   useEffect(() => {
     const fetchClubName = async () => {
@@ -21,6 +22,12 @@ function ClubDetailCard({ isAdmin, isMember }) {
           (member) => member.status === "Accepted"
         );
         setMemberCount(members.length - 1);
+        setClubImg(
+          `${
+            import.meta.env.VITE_MINIO_URL +
+            import.meta.env.VITE_MINIO_BUCKET_NAME
+          }/${clubData.club_img}`
+        );
       } catch (err) {
         console.error("Error fetching club details:", err);
       }
@@ -46,7 +53,7 @@ function ClubDetailCard({ isAdmin, isMember }) {
     <div className="grid grid-cols-1 md:grid-cols-2 md:mb-8">
       <div>
         <img
-          src="https://i.imgur.com/iPUUzwh.jpg"
+          src={clubImg}
           className=" w-[90%] md:w-[70%] h-auto m-auto rounded-xl"
           alt={clubName}
         />
