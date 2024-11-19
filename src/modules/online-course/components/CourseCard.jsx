@@ -8,9 +8,9 @@ const CourseCard = ({ course }) => {
   const location = useLocation();
   const handleClick = () => {
     if (location.pathname.includes("/courses/st")) {
-      navigate(`/courses/st/course_description`, { state: course });
+      navigate(`/courses/st/course_description`, { state: course});
     } else {
-      navigate(`/courses/tr/course_description?sec_id=${course?.sec_id}`);
+      navigate(`/courses/tr/course_description`, {state: course});
     }
   };
 
