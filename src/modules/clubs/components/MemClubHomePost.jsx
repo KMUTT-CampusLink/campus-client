@@ -98,10 +98,13 @@ const MemClubHomePost = (props) => {
   // };
   const reserveSeat = async (clubAnnouncementId) => {
     try {
+      const userId = localStorage.getItem("userId");
+      console.log("userId", userId);
       // Payload for the API
       const payload = {
         clubAnnouncementId,
-        userId: "e2aaa131-24a1-4e4b-a32a-d6096753c711", // Replace with actual user ID
+        userId,
+        //userId: "e2aaa131-24a1-4e4b-a32a-d6096753c711", // Replace with actual user ID
       };
   
       // Send API request
@@ -165,62 +168,6 @@ const MemClubHomePost = (props) => {
           There are no {toggleVisiblity ? "announcements" : "posts"} available.
         </p>
       ) : (
-        //   itemsToDisplay.map((item) => (
-        //     <div
-        //       key={item.id}
-        //       className="m-4 p-4 pt-0 md:p-6 border-solid border-[2px] border-black rounded-lg h-max text-base"
-        //     >
-        //       <div className="relative">
-        //         <button
-        //           className="absolute top-2 right-2"
-        //           onClick={() =>
-        //             togglePin(item.id, toggleVisiblity ? "announcement" : "post")
-        //           }
-        //         >
-        //           <FontAwesomeIcon
-        //             icon={faThumbtack}
-        //             className={`text-2xl ${
-        //               item.is_pinned ? "text-orange-600" : "text-gray-400"
-        //             }`}
-        //           />
-        //         </button>
-        //         <div className="text-left mr-2 text-lg md:text-xl mt-3 font-semibold mb-4">
-        //           {item.title}
-        //         </div>
-        //       </div>
-        //       <div className="flex flex-col md:flex-row text-left md:w-3/5">
-        //         {!toggleVisiblity && (
-        //           <img
-        //             src={item.img_url}
-        //             alt="Post image"
-        //             className="sm:grid-flow-col"
-        //           />
-        //         )}
-        //         <div className="inline-flex items-start mt-3 mb-4">
-        //           <span className="mx-2">•</span>
-        //           <p>{item.content}</p>
-        //         </div>
-        //       </div>
-        //       {toggleVisiblity && (
-        //         <div className="mt-3 mb-3">
-        //           <p>Date: {getFormattedDate(item.date)}</p>
-        //           <p>Time: {getFormattedTime(item.start_time)} - {getFormattedTime(item.end_time)}</p>
-        //           <p>Location: {item.location}</p>
-        //           <p>Available Seats: {availableSeats}</p>
-        //         </div>
-        //       )}
-        //       {toggleVisiblity && ( <div className="flex items-end w-max ml-auto">
-        //         <button
-        //           onClick={() => reserveSeat(item.id)}
-        //           className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg mr-3 md:mr-8"
-        //         >
-        //           Reserve
-        //         </button>
-        //       </div>
-        //       )}
-        //     </div>
-        //   ))
-        // )}
 
         itemsToDisplay.map((item) => {
           const availableSeats =
