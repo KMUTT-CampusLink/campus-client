@@ -109,11 +109,11 @@ export default function ProfessorOverallScoringPage() {
       } // Disable if already announced
     >
       <FontAwesomeIcon icon={faBullhorn} />
-      {isAnnounced ? "Scores Published" : "Publish Scores"}
+      {isAnnounced ? "Scores Annouced" : "Annouce Scores"}
     </button>
     {isAnnounced && (
       <p className="text-red-600 text-[12px] md:text-[14px] pt-1">
-        Exam has already been published
+        Score has already been announced
       </p>
     )}
   </div>
