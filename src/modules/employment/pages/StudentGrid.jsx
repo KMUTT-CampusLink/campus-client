@@ -64,8 +64,7 @@ const StudentGrid = () => {
       setStudents(result.data);
     };
     fetchData();
-  }, []);
-console.log(students)  
+  }, []); 
 
   useEffect(() => {
     const fetchPrograms = async () => {
