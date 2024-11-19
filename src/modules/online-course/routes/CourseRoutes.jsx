@@ -12,6 +12,7 @@ import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
+import HR from "../pages/Teacher/HR";
 
 // const role = "Professor";
 const role = localStorage.getItem("userRole");
@@ -32,8 +33,11 @@ export default function CourseRoutes() {
   //   }
   // ];
 
-  
   return [
+    {
+      path: "hr",
+      element: <HR />,
+    },
     {
       path: "",
       element:
