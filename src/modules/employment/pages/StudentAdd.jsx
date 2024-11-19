@@ -75,7 +75,7 @@ const StudentAdd = () => {
     // Debugging: Check if this logs
     setShowPopup(false);
 
-    const employeeData = {
+    const studentData = {
       firstname: formData.firstname,
       midname: formData.midname,
       lastname: formData.lastname,
@@ -93,10 +93,7 @@ const StudentAdd = () => {
     };
 
     try {
-      const response = await axiosInstance.post(
-        "/employ/postStu",
-        employeeData
-      );
+      const response = await axiosInstance.post("/employ/postStu", studentData);
 
       if (response.status === 200) {
         console.log("Student added successfully");
@@ -107,7 +104,7 @@ const StudentAdd = () => {
       }
     } catch (error) {
       console.error("Cannot create user:", error);
-      console.log(employeeData);
+      console.log(studentData);
     }
   };
 

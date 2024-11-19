@@ -16,7 +16,6 @@ const StudentGrid = () => {
   const [programs, setPrograms] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState();
   const navigate = useNavigate();
-
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const filteredStudents = students.filter((student) => {
@@ -65,7 +64,7 @@ const StudentGrid = () => {
     };
     fetchData();
   }, []);
-console.log(students)  
+  console.log(students);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -127,11 +126,11 @@ console.log(students)
           <div className="w-1/2">
             <select
               name="faculty"
-              value={selectedProgram ? selectedProgram : ""} 
+              value={selectedProgram ? selectedProgram : ""}
               onChange={handleProgramChange}
               className="w-full border-b border-black focus:outline-none font-geologica text-[12px] md:text-[16px] text-center"
             >
-              <option value="" >All Programs</option>
+              <option value="">All Programs</option>
               {programs.map((program) => (
                 <option key={program.id} value={program.id}>
                   {program.name}
