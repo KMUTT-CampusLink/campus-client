@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import ClubCard from "../components/ClubCard"; // Assuming you have a ClubCard component
+import { useNavigate } from "react-router-dom";
 
 function ClubLandingPage() {
   // State to hold the search input and clubs data
   const [searchTerm, setSearchTerm] = useState("");
   const [clubs, setClubs] = useState([]); // Initialize clubs as an empty array
-
+  const navigate = useNavigate();
   // Fetch clubs data from backend
+
+  const isLoggedIn = true; // ???Do we need??
+
   useEffect(() => {
     const fetchClubs = async () => {
       try {
@@ -32,10 +36,10 @@ function ClubLandingPage() {
   return (
     <>
       <div className="mx-auto w-full pt-10 pb-6 bg-white flex flex-col items-center justify-center">
-        {/* Search Bar */}
-        <div className="flex items-center justify-center w-[65%]">
-          <div className="relative">
-            <span className="absolute left-[0.8rem] -top-[0.5rem]">
+        <div className="flex items-center justify-between w-[65%] mb-4">
+          {/* Search Bar */}
+          <div className="relative flex-grow">
+            <span className="absolute left-[0.8rem] top-1/2 transform -translate-y-1/2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-gray-500"
@@ -51,14 +55,24 @@ function ClubLandingPage() {
                 />
               </svg>
             </span>
+            <input
+              type="text"
+              placeholder="Search"
+              className="input input-bordered w-full pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search"
-            className="input input-bordered w-full pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+
+          {/* Create Club Button */}
+          {isLoggedIn && (
+            <button
+              className="ml-4 bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600"
+              onClick={() => navigate("/clubs/admin/club-create")}
+            >
+              Create Club
+            </button>
+          )}
         </div>
 
         {/* Displaying filtered clubs */}
