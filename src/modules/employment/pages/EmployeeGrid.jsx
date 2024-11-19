@@ -62,10 +62,8 @@ const EmployeeGrid = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch("http://localhost:3000/api/employ/getEmp");
-      const jsonResult = await result.json();
-      // console.log(jsonResult)
-      setEmployees(jsonResult);
+      const result = await axiosInstance.get(`employ/getEmp`);
+      setEmployees(result.data);
     };
 
     fetchData();
