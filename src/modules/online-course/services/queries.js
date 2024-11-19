@@ -6,11 +6,19 @@ import {
   fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
   fetchCourseHeaderBySectionID,
+  fetchAllVideos,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
     queryKey: ["courses"],
     queryFn: fetchAllCourses,
+  });
+};
+
+export const useAllVideos = () => {
+  return useQuery({
+    queryKey: ["videos"],
+    queryFn: fetchAllVideos,
   });
 };
 
