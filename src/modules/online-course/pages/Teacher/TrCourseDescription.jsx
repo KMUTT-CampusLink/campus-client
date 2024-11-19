@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { useLocation } from "react-router-dom";
 import { useCourseHeaderBySectionID } from "../../services/queries";
+import CourseHeader from "../../components/CourseHeader";
 
 const TrCourseDescription = ({ sideOpen }) => {
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const sec_id = queryParams.get("sec_id");
+  const {state } = useLocation();
 
-  const { data: details } = useCourseHeaderBySectionID(sec_id);
+  const [sec_id, setSec_id] = useState(() => {
+    return state?.sec_id || localStorage.getItem("sec_id");
+  });
+
+  useEffect(() => {
+    if (sec_id) {
+      localStorage.setItem("sec_id", sec_id);
+    }
+  }, [sec_id]);
+  
+  const { data: details } =
+    useCourseHeaderBySectionID(sec_id);
   console.log(details);
-  const description = details?.description;
+  // const description = details?.description;
   // const [isEditing, setIsEditing] = useState(false);
   // const [description, setDescription] = useState(details?.description);
   // const [tempDescription, setTempDescription] = useState(description);
@@ -36,7 +46,7 @@ const TrCourseDescription = ({ sideOpen }) => {
   return (
     <div className="w-full min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"description"} />
-      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 ">
+      {/* <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 ">
         <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
@@ -53,7 +63,13 @@ const TrCourseDescription = ({ sideOpen }) => {
             (Thursday)
           </div>
         </div>
-      </div>
+      </div> */}
+      <CourseHeader 
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
 
       <div className="py-8 w-full max-md:text-xs">
         <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto flex max-md:gap-3 gap-10 items-center mb-4">
@@ -95,7 +111,7 @@ const TrCourseDescription = ({ sideOpen }) => {
           ) : (
             <p>{description}</p>
           )} */}
-          <p>{description}</p>
+          <p>{details?.description}</p>
         </div>
       </div>
 

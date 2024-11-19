@@ -5,8 +5,16 @@ import profile from "../../assets/profile-circle.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import CommentPopup from "../../components/CommentPopup";
+import { useCourseHeaderBySectionID } from "../../services/queries";
+import CourseHeader from "../../components/CourseHeader";
 
 const TrDiscussion = () => {
+  
+  const sec_id = localStorage.getItem("sec_id");
+
+  const { data: details } = useCourseHeaderBySectionID(sec_id);
+  console.log(details);
+
   const [discussions] = useState([
     {
       no: 1,
@@ -41,7 +49,7 @@ const TrDiscussion = () => {
     <div className="min-h-screen bg-white overflow-auto">
       <NavForIndvCourse page={"discussion"} />
 
-      <div className="border-b">
+      {/* <div className="border-b">
         <div className="py-12 px-4 border-gray-300 w-full lg:w-3/4 mx-auto">
           <h2 className="text-2xl font-bold text-[#ecb45e] mb-4">
             About Classroom
@@ -60,7 +68,13 @@ const TrDiscussion = () => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
+      <CourseHeader
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
 
       {!isPopupOpen && (
         <div className="py-8 w-full px-4">
