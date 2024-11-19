@@ -4,6 +4,7 @@ import {
   fetchAllCoursesByStudentID,
     fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
+  fetchCourseHeaderBySectionID
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -43,4 +44,15 @@ export const useAllCoursesByProfessorID = (professorID) => {
         console.log(error);
       },
     });
+}
+
+export const useCourseHeaderBySectionID = (sectionID) => {
+  return useQuery({
+    queryKey: ["section", sectionID],
+    queryFn: () => fetchCourseHeaderBySectionID(sectionID),
+    enabled: !!sectionID,
+    onError: (error) => {
+      console.log(error)
+    }
+  })
 }

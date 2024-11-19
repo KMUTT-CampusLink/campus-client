@@ -11,7 +11,7 @@ import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
 import { useNavigate, useLocation } from "react-router-dom";
 
 
-const TrTasks = () => {
+const TrTasks = () => { 
 
   const navigate = useNavigate();
 
