@@ -1,50 +1,73 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
-import { transactions } from "../components/Transaction";
 import PartialSelect from "../components/partialSelect.jsx";
 import InvoiceImage from "../asset/invoice.svg";
 import ArrowLeft from "../asset/arrowL.svg";
 import "../style/typography.css";
+import { getTransactionDetails, payInvoice } from "../services/api.js"; // Import API functions
 
 const PaymentInvoice = () => {
   const { id } = useParams();
   const [invoice, setInvoice] = useState({});
+  const [installments, setInstallments] = useState([]);
   const [showPartialSelect, setShowPartialSelect] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Route ID:", id);
-    const foundInvoice = transactions.find(
-      (transaction) => transaction.id === id
-    );
-    console.log("Found Invoice:", foundInvoice);
-    if (foundInvoice) {
-      setInvoice(foundInvoice);
-    }
+
+    const fetchInvoiceDetails = async () => {
+      try {
+        // Fetch transaction details from the API
+        const response = await getTransactionDetails(id);
+
+        if (response?.data) {
+          const { invoice, installment_details } = response.data;
+
+          // Update state with invoice and installment details
+          setInvoice(invoice);
+          setInstallments(installment_details || []);
+        } else {
+          console.error("No data returned from API.");
+        }
+      } catch (error) {
+        console.error("Error fetching transaction details:", error);
+      }
+    };
+
+    fetchInvoiceDetails();
   }, [id]);
 
-  // ฟังก์ชันสำหรับเรียก API ไปที่ backend เพื่อสร้าง Checkout Session กับ Stripe
-  const handlePayment = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/payment/pay`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ inv: invoice.id }), // ส่ง invoiceId ไปที่ backend
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // เปลี่ยนเส้นทางผู้ใช้ไปยัง Stripe Checkout
-        console.log(data);
-        if (data.url) {
-          window.location.href = data.url;
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+  const handlePayment = async () => {
+    try {
+      const response = await payInvoice({ inv: invoice.id });
+      console.log(response);
+
+      if (response.data?.url) {
+        window.location.href = response.data.url; // Redirect to payment URL
+      } else {
+        console.error("Payment URL not found in response.");
+      }
+    } catch (error) {
+      console.error("Error during full payment:", error);
+    }
+  };
+
+  const handlePartialPay = async (installmentId) => {
+    try {
+      const response = await payInvoice({ ins: installmentId });
+      console.log(response);
+
+      if (response.data?.url) {
+        window.location.href = response.data.url; // Redirect to payment URL
+      } else {
+        console.error("Payment URL not found in response.");
+      }
+    } catch (error) {
+      console.error("Error during partial payment:", error);
+    }
   };
 
   return (
@@ -66,8 +89,8 @@ const PaymentInvoice = () => {
             <div className="flex flex-col border-r border-gray-300 ">
               <span className="big-label">Issued</span>
               <span className="body-2">
-                {invoice.issue_date
-                  ? new Date(invoice.issue_date).toLocaleDateString()
+                {invoice.issued_date
+                  ? new Date(invoice.issued_date).toLocaleDateString()
                   : "N/A"}
               </span>
               <span className="big-label mt-4">Due</span>
@@ -106,21 +129,64 @@ const PaymentInvoice = () => {
               </tr>
             </tbody>
           </table>
+          {installments.length > 0 ? (
+            <div className="mt-8">
+              <h2 className="h3 mb-4">Installment Payments</h2>
+              <div className="flex flex-col space-y-4">
+                {installments.map((installment, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-4 border rounded-lg shadow-md justify-between"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div>
+                        <h3 className="big-label">{`Installment ${index + 1}`}</h3>
+                        <p className="body-2 block text-gray-500">
+                          Due on{" "}
+                          {new Date(installment.due_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right flex items-center space-x-4">
+                      <div className="flex flex-col items-end">
+                        <p className="big-label text-payment-red">
+                          {installment.amount} BAHT
+                        </p>
+                        <p className="body-1 text-yellow-500">
+                          {installment.status.toUpperCase()}
+                        </p>
+                      </div>
+                      <button
+                        className="btn bg-payment-red hover:bg-red-500 text-white px-4 py-2 rounded-md shadow-md body-1"
+                        onClick={() => handlePartialPay(installment.id)}
+                      >
+                        Pay
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="body-2 text-gray-500 mt-4">No installment payments found.</p>
+          )}
         </div>
-        <div className="flex justify-end w-full md:w-4/5 mx-auto">
-          <button
-            className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 mr-2 rounded-md shadow-md body-1"
-            onClick={() => setShowPartialSelect(true)} //this send to partialSelect component
-          >
-            PARTIAL PAY
-          </button>
-          <button
-            className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 rounded-md shadow-md body-1"
-            onClick={handlePayment} // เมื่อกดปุ่มจะเรียกฟังก์ชัน handlePayment
-          >
-            PAY
-          </button>
-        </div>
+        {invoice.status === "Unpaid" && (
+          <div className="flex justify-end w-full md:w-4/5 mx-auto">
+            <button
+              className="btn bg-payment-red hover:bg-red-500 text-white lg:px-10 py-2 mr-2 rounded-md shadow-md body-1"
+              onClick={() => setShowPartialSelect(true)}
+            >
+              Installment Plan
+            </button>
+            <button
+              className="btn bg-payment-red hover:bg-red-500 text-white lg:px-10 py-2 rounded-md shadow-md body-1"
+              onClick={handlePayment}
+            >
+              Full Pay
+            </button>
+          </div>
+        )}
       </div>
       <img
         src={InvoiceImage}

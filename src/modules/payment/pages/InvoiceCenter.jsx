@@ -3,7 +3,6 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
 import AllTransactions from "../components/AllTransactions";
 import ReceiptImage from "../asset/receipt.svg";
-//import { transactions } from "../components/Transaction";
 import "../style/typography.css";
 import Money1 from "../asset/money1.png";
 import Money2 from "../asset/money2.png";
@@ -44,7 +43,7 @@ const InvoiceCenter = () => {
       <NavBar />
       <main className="mx-auto max-w-full lg:max-w-7xl pt-10 lg:pt-20 w-full px-4 lg:px-0 ">
         <div className="flex flex-col lg:flex-row h-auto ">
-          {/*Head UX/UI special request. i hope that she someday stub her pinky toe so hard🤗🤗🤗*/}
+          {/*Head UX/UI spcecial request. i hope that she someday stub her pinky toe so hard🤗🤗🤗*/}
           <div className="relative w-full lg:h-screen lg:w-1/2 flex items-center justify-center lg:pb-40 lg:mt-0 lg:mb-0 ">
             <img
               src={ReceiptImage}

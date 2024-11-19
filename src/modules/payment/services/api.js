@@ -8,7 +8,17 @@ export const getInvoice = async () => {
       return error.response.data;
     }
 };
-  
+
+// arrow button in Recent and All transaction 
+export const getTransactionDetails = async (transactionId) => {
+  try {
+      const response = await axiosInstance.get(`/payment/invoiceInfo/${transactionId}`);
+      return response;
+  } catch (error) {
+      return error.response.data;
+  }
+};
+
 export const viewInstallment = async (invoiceId) => {
     try {
       const response = await axiosInstance.get(`/payment/viewInstallment/${invoiceId}`);;
@@ -45,9 +55,9 @@ export const getVerifyStripe = async (sessionId) => {
     }
 };
 
-export const payInvoice = async (inv, ins) => {
+export const payInvoice = async (data) => {
     try {
-      const response = await axiosInstance.post(`/payment/pay`, { inv,ins });
+      const response = await axiosInstance.post(`/payment/pay`, data);
       return response;
     } catch (error) {
       return error.response.data;

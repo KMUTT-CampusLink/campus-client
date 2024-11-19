@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { getTransactionDetails } from "../services/api";
 import "../style/typography.css";
 
 const AllTransactions = ({
@@ -10,8 +10,6 @@ const AllTransactions = ({
   setIsAscending,
   setShowAll,
 }) => {
-  const navigate = useNavigate();
-
   const filteredAllTransactions =
     filterAll === "All"
       ? transactions
@@ -31,11 +29,14 @@ const AllTransactions = ({
     return `${day}/${month}/${year}`;
   };
 
-  const handleArrowClick = (transaction) => {
-    if (transaction.status === "Unpaid") {
-      navigate(`/payment/payment-invoice/${transaction.id}`);
+  const handleArrowClick = async (transaction) => {
+    const response = await getTransactionDetails(transaction.id);
+    if (response && response.data) {
+        window.location.href = `/payment/payment-invoice/${transaction.id}`;
+    } else {
+        console.error("Failed to fetch transaction details");
     }
-  };
+};
 
   return (
     <div className="fixed right-0 top-0 z-50 bg-white h-screen w-full max-w-full p-4 lg:max-w-md lg:p-8 overflow-y-auto transition-transform duration-500 ease-in-out">
@@ -95,9 +96,9 @@ const AllTransactions = ({
             <li>
               <a
                 className="small-label"
-                onClick={() => setFilterRecent("Paid in Installment")}
+                onClick={() => setFilterAll("Pay_by_Installments")}
               >
-                Paid in Installment
+                Pay by Installments
               </a>
             </li>
           </ul>
@@ -148,11 +149,12 @@ const AllTransactions = ({
               </p>
             </div>
 
-            {/* Add Arrow for Unpaid Transactions */}
-            {transaction.status === "Unpaid" && (
+            {/* Add Arrow for Unpaid or Pay by Installments Transactions */}
+            {(transaction.status === "Unpaid" ||
+              transaction.status === "Pay_by_Installments") && (
               <div className="ml-2">
                 <button
-                  className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500  text-white ml-2"
+                  className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
                   onClick={() => handleArrowClick(transaction)}
                   aria-label="Pay Now"
                 >

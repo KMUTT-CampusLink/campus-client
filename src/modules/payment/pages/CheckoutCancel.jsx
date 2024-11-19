@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import CancelImage from "../asset/cancel.svg";
 
 const CheckoutCancel = () => {
   const [countdown, setCountdown] = useState(8);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (countdown === 0) {
-      navigate("/payment");
+      window.location.href = "/payment";
     }
 
     const timer = setInterval(() => {
@@ -17,7 +15,7 @@ const CheckoutCancel = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [countdown, navigate]);
+  }, [countdown]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -26,8 +24,7 @@ const CheckoutCancel = () => {
         <h1 className="h2 mb-6 text-left md:ml-32">Payment Cancelled</h1>
         <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-4/5 mx-auto">
           <p className="body-1">
-            Your payment has been cancelled. Please go to Payment Center to try
-            again.
+            Your payment has been cancelled. Please go to Payment Center to try again.
           </p>
           <p className="body-1 mt-4">
             You will be redirected back in {countdown} seconds.
