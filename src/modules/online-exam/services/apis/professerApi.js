@@ -208,3 +208,12 @@ export const uploadFile = async (file) => {
     return error.response.data;
   }
 }
+
+export const getAllStudentInSection = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(`/exams/professor/getAllStudentInSection?sectionid=${sectionId}`);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}

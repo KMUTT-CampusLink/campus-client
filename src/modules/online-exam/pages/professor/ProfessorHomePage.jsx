@@ -76,6 +76,7 @@ export default function ProfessorHomePage() {
                 examName={examName.title}
                 examId={examName.id}
                 refresh={handleRefresh}
+                sectionId={sectionId}
               ></ExamCard>
             ))}
         </div>
