@@ -1,10 +1,8 @@
-import ClubDetailMain from "../components/clubdetailmain";
+import ClubDetailMain from "../components/ClubDetailMain";
 
 const ClubDetailPage = () => {
   return (
-    <div
-      className="grid min-h-screen"
-    >
+    <div className="grid min-h-screen">
       <main className="bg-white rounded-t-[35px]">
         <ClubDetailMain />
       </main>

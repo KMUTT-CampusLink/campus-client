@@ -14,12 +14,19 @@ const ClubHomePost = (props) => {
 
   const [clubPost, setClubPost] = useState([]);
   const [clubAnnouncement, setClubAnnouncement] = useState([]);
+  const [postImg, setPostImg] = useState("");
 
   // Fetch posts
   const fetchClubPost = async () => {
     try {
       const response = await axiosInstance.get(`/clubs/posts/${clubId}`);
       setClubPost(response.data.data);
+      setPostImg(
+        `${
+          import.meta.env.VITE_MINIO_URL +
+          import.meta.env.VITE_MINIO_BUCKET_NAME
+        }/${clubPost.post_img}`
+      );
     } catch (err) {
       console.error("Error fetching club post:", err);
       setClubPost([]);
@@ -114,7 +121,7 @@ const ClubHomePost = (props) => {
   function getFormattedTime(time) {
     if (!time) return "N/A"; // Return a default value if dateTime is undefined
     const parseTime = new Date(time);
-    if(isNaN(parseTime)) return "Invalid Time";
+    if (isNaN(parseTime)) return "Invalid Time";
     const hours = String(parseTime.getUTCHours()).padStart(2, "0");
     const minutes = String(parseTime.getUTCMinutes()).padStart(2, "0");
     return `${hours}:${minutes}`;
@@ -142,7 +149,9 @@ const ClubHomePost = (props) => {
 
   const deleteItem = async (id) => {
     try {
-      const endpoint = toggleVisiblity ? `/clubs/announcements/${id}` : `/clubs/posts/${id}`;
+      const endpoint = toggleVisiblity
+        ? `/clubs/announcements/${id}`
+        : `/clubs/posts/${id}`;
       await axiosInstance.delete(endpoint);
 
       if (toggleVisiblity) {
@@ -150,15 +159,16 @@ const ClubHomePost = (props) => {
           prevAnnouncements.filter((announcement) => announcement.id !== id)
         );
       } else {
-        setClubPost((prevPosts) =>
-          prevPosts.filter((post) => post.id !== id)
-        );
+        setClubPost((prevPosts) => prevPosts.filter((post) => post.id !== id));
       }
     } catch (error) {
-      console.error(`Error deleting ${toggleVisiblity ? "announcement" : "post"}:`, error);
+      console.error(
+        `Error deleting ${toggleVisiblity ? "announcement" : "post"}:`,
+        error
+      );
     }
   };
-  
+
   return (
     <div
       className={` ${
@@ -219,7 +229,7 @@ const ClubHomePost = (props) => {
             <div className="flex flex-col md:flex-row text-left md:w-3/5">
               {!toggleVisiblity && (
                 <img
-                  src={item.img_url}
+                  src={postImg}
                   alt="Post image"
                   className="sm:grid-flow-col"
                 />
@@ -232,7 +242,10 @@ const ClubHomePost = (props) => {
             {toggleVisiblity && (
               <div className="mt-3 mb-3">
                 <p>Date: {getFormattedDate(item.date)}</p>
-                <p>Time: {getFormattedTime(item.start_time)} - {getFormattedTime(item.end_time)}</p>
+                <p>
+                  Time: {getFormattedTime(item.start_time)} -{" "}
+                  {getFormattedTime(item.end_time)}
+                </p>
                 <p>Location: {item.location}</p>
               </div>
             )}
@@ -243,9 +256,10 @@ const ClubHomePost = (props) => {
               >
                 Edit
               </button>
-              <button 
+              <button
                 onClick={() => deleteItem(item.id)}
-                className="bg-[#EC5A51] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg">
+                className="bg-[#EC5A51] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+              >
                 Delete
               </button>
             </div>
@@ -256,7 +270,7 @@ const ClubHomePost = (props) => {
         isOpen={isModalOpen}
         onClose={closeModal}
         data={modalData}
-        onUpdate = {toggleVisiblity ? updateAnnouncement : updatePost}
+        onUpdate={toggleVisiblity ? updateAnnouncement : updatePost}
       />
     </div>
   );
