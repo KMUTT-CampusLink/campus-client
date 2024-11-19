@@ -166,7 +166,7 @@ export const getStudentScoreById = async (questionId, studentId) => {
   }
 };
 
-export const updateStudentScore = async (finalEssayScore, studentExamId, studentId) => {
+export const updateStudentScore = async (finalEssayScore, finalComment, studentExamId, studentId) => {
   try {
     const response = await axiosInstance.put(
       "/exams/professor/updateStudentScore",
@@ -174,6 +174,7 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
         studentId: studentId,
         studentExamId: studentExamId,
         finalEssayScore: finalEssayScore,
+        finalComment: finalComment,
       }
     );
     return response;

@@ -39,6 +39,12 @@ export default function ProfessorScoringPage() {
     scoring: [],
   });
 
+  const [essayComment, setEssayComment] = useState({
+    studentId: studentId,
+    examId: examId,
+    comment: [],
+  });
+
   const getParticipants = async () => {
     try {
       const response = await getExamParticipants(examId);
@@ -47,6 +53,15 @@ export default function ProfessorScoringPage() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const checkCompleteFillEssayScore = () => {
+    const essayQuestions = exam.questions.filter(
+      (question) => question.type === "Essay"
+    );
+    const isEssayScoringComplete =
+      essayQuestions.length === essayScore.scoring.length;
+    return isEssayScoringComplete;
   };
 
   const getExamData = async () => {
@@ -93,6 +108,7 @@ export default function ProfessorScoringPage() {
   };
 
   const getScore = async () => {
+    //total score
     try {
       const response = await getStudentScore(studentExamId);
       setStudentScore(response.data.data.total_score);
@@ -104,6 +120,7 @@ export default function ProfessorScoringPage() {
   const getAnswer = async () => {
     try {
       const response = await getStudentAnswers(examId, studentId);
+      console.log(response);
       setStudentAnswer(response.data.data);
     } catch (error) {
       console.log(error);
@@ -113,7 +130,6 @@ export default function ProfessorScoringPage() {
   const getStudentExamData = async () => {
     try {
       const response = await getStudentExam(studentExamId);
-
       setStudentExamData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -127,7 +143,7 @@ export default function ProfessorScoringPage() {
     getStudentExamData();
     getParticipants();
   }, []);
-
+  
   const handleSubmit = async () => {
     try {
       const finalEssayScore = {
@@ -137,7 +153,19 @@ export default function ProfessorScoringPage() {
           score: parseFloat(item.score),
         })),
       };
-      const res = await updateStudentScore(finalEssayScore, studentExamId, studentId);
+      const finalComment = {
+        ...essayComment,
+        comment: essayComment.comment.map((item) => ({
+          ...item,
+          comment: item.comment,
+        })),
+      };
+      const res = await updateStudentScore(
+        finalEssayScore,
+        finalComment,
+        studentExamId,
+        studentId
+      );
       if (res.status === 200) {
         navigate(`/exams/professor/overallScoring/${examId}`);
       }
@@ -209,6 +237,7 @@ export default function ProfessorScoringPage() {
                 studentId={studentId}
                 essayScore={essayScore}
                 setEssayScore={setEssayScore}
+                setEssayComment={setEssayComment}
                 studentAnswer={studentAnswer}
                 questionid={filteredItem.question_id}
                 questionNo={index}
@@ -220,7 +249,9 @@ export default function ProfessorScoringPage() {
         </div>
         <div className="w-full flex justify-end">
           <button
-            disabled={studentExamData.is_checked}
+            disabled={
+              studentExamData.is_checked || !checkCompleteFillEssayScore()
+            }
             className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
             onClick={() => document.getElementById("confirmModal").showModal()}
           >
