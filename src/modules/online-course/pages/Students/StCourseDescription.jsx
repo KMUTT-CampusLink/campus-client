@@ -9,7 +9,7 @@ const StCourseDescription = ({ sideOpen }) => {
     "Computer systems, processor, memory and input/output modules, interconnections among these major components, central processing unit, control unit, registers, arithmetic and logic unit, and instruction unit, data representation, Boolean algebra, digital logic, architectural issues, instruction-set design, organizational issues, pipelining, parallel organization, multiple processors and vector processing organizations, performance measurements."
   );
   
-
+  
   return (
     <div
       // className={`bg-white transition-all duration-300 ${
