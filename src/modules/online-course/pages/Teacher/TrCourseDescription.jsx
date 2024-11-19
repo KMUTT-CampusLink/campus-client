@@ -1,7 +1,5 @@
 import { useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 import { useCourseHeaderBySectionID } from "../../services/queries";
 
