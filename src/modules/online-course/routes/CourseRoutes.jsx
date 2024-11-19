@@ -107,6 +107,7 @@ export default function CourseRoutes() {
           path: "course_description",
           element: <StCourseDescription />,
         },
+
         {
           path: "course_material",
           element: <StCourseMaterials />,
