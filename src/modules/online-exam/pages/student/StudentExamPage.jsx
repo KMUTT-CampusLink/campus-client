@@ -11,7 +11,7 @@ import Question from "../../components/student/ExamPage/Question";
 import Navigation from "../../components/student/ExamPage/Navigation";
 
 import useIsTabActive from "../../services/activeTab";
-import { getExamDataById, toggleExamStatus, submitExam, getStudentStatus, getRemainingTime, getToggleAnswer } from "../../services/apis/studentApi";
+import { getExamDataById, toggleExamStatus, submitExam, getStudentStatus, getRemainingTime, toggleAnswer } from "../../services/apis/studentApi";
 
 export default function StudentExamPage() {
   const { examId } = useParams();
@@ -20,9 +20,9 @@ export default function StudentExamPage() {
   const [timeLeft, setTimeLeft] = useState("00:00:00");
   const navigate = useNavigate();
   
-  if (!useIsTabActive()) {
-    navigate("/exams/student/exam");
-  }
+  // if (!useIsTabActive()) {
+  //   navigate("/exams/student/exam");
+  // }
 
   const [exam, setExam] = useState({
     title: '',
@@ -42,6 +42,7 @@ export default function StudentExamPage() {
   const getExamData = async () => {
     try {
       const res = await getExamDataById(examId);
+      console.log("hi");
       const examData = res.data.data.exam;
       const isShuffled = res.data.data.exam.is_shuffle;
       const examQuestion = res.data.data.questions;
@@ -151,9 +152,9 @@ export default function StudentExamPage() {
     const res = await submitExam(examId, studentAnswers);
     if (res.status === 200) {
       const status = await toggleExamStatus(examId);
-      const status2 = await getToggleAnswer(examId);
+      const status2 = await toggleAnswer(examId);
       if (status.status === 200 && status2.status === 200) {
-        navigate("/exams/student/exam");
+        navigate(`/exams/student/${status.data.data[0].section_id}`);
       }
     }
   };
