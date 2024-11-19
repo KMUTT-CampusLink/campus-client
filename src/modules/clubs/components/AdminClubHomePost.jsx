@@ -21,12 +21,6 @@ const ClubHomePost = (props) => {
     try {
       const response = await axiosInstance.get(`/clubs/posts/${clubId}`);
       setClubPost(response.data.data);
-      setPostImg(
-        `${
-          import.meta.env.VITE_MINIO_URL +
-          import.meta.env.VITE_MINIO_BUCKET_NAME
-        }/${clubPost.post_img}`
-      );
     } catch (err) {
       console.error("Error fetching club post:", err);
       setClubPost([]);
@@ -229,9 +223,11 @@ const ClubHomePost = (props) => {
             <div className="flex flex-col md:flex-row text-left md:w-3/5">
               {!toggleVisiblity && (
                 <img
-                  src={postImg}
+                  src={`${import.meta.env.VITE_MINIO_URL}${
+                    import.meta.env.VITE_MINIO_BUCKET_NAME
+                  }/${item.post_img}`}
                   alt="Post image"
-                  className="sm:grid-flow-col"
+                  className="sm:grid-flow-col w-[60%] h-[60%]"
                 />
               )}
               <div className="inline-flex items-start mt-3 mb-4">
