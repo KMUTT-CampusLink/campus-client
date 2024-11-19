@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CourseHeader from "../../components/CourseHeader"
+import { useCourseHeaderBySectionIDForStudent } from "../../services/queries";
 import {
   faPenToSquare,
   faTrash,
@@ -11,6 +13,8 @@ import UploadPopup from "../../components/Upload_Popup";
 import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
 
 const StCourseMaterials = () => {
+  const sec_id = localStorage.getItem("sec_id");
+  const {data: details} = useCourseHeaderBySectionIDForStudent(sec_id);
   const [materials, setMaterials] = useState([
     {
       title: "Lecture 1 - Introduction",
@@ -116,24 +120,12 @@ const StCourseMaterials = () => {
     <div className="min-h-screen overflow-x-hidden bg-gray-100">
       <NavForIndvCourse page={"materials"} />
 
-      <div className="max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
-          <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
-            About Classroom
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Course:</span> CSC-230 Computer
-            Architecture & Design
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Lecturer:</span> Arjan
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
-            (Thursday)
-          </div>
-        </div>
-      </div>
+      <CourseHeader
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
 
       <div className="py-8 w-full">
         <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center">

@@ -1,11 +1,21 @@
 import NavForIndvCourse from "../../components/NavForIndvCourse";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCourseHeaderBySectionIDForStudent } from "../../services/queries";
+import CourseHeader from "../../components/CourseHeader";
 
 const StCourseDescription = () => {
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const sec_id = queryParams.get("sec_id");
+  const {state } = useLocation();
+
+  const [sec_id, setSec_id] = useState(() => {
+    return state?.sec_id || localStorage.getItem("sec_id");
+  });
+
+  useEffect(() => {
+    if (sec_id) {
+      localStorage.setItem("sec_id", sec_id);
+    }
+  }, [sec_id]);
 
   const { data: details } = useCourseHeaderBySectionIDForStudent(sec_id);
   console.log(details);
@@ -17,26 +27,12 @@ const StCourseDescription = () => {
       <NavForIndvCourse page={"description"} />
 
       {/* About Classroom Section */}
-      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 ">
-        <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto">
-          <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
-            About Classroom
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Course: </span>
-            {`${details?.course_code} ${details?.course_name}`}
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Lecturer: </span>
-            Arjan {`${details?.lecturer}`}
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Time: </span>
-            {`${details?.time}`} (Thursday)
-          </div>
-        </div>
-      </div>
-
+     <CourseHeader 
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
       {/* Course Description Section */}
       <div className="py-8 w-full max-md:text-xs">
         <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto flex max-md:gap-3 gap-10 items-center mb-4">
