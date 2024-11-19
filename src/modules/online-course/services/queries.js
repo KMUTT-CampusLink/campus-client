@@ -4,7 +4,7 @@ import {
   fetchAllCoursesByStudentID,
     fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
-  fetchCourseHeaderBySectionID
+  fetchCourseHeaderBySectionID,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -56,3 +56,4 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     }
   })
 }
+
