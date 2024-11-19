@@ -1,15 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
+
 import {
   fetchAllCourses,
   fetchAllCoursesByStudentID,
-    fetchCoursesByStudentID,
+  fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
   fetchCourseHeaderBySectionID,
+<<<<<<< HEAD
+=======
+  fetchAllVideos,
+>>>>>>> 5c86225bafc317df03bc3c7aa9e8eb47f0def564
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
     queryKey: ["courses"],
     queryFn: fetchAllCourses,
+  });
+};
+
+export const useAllVideos = () => {
+  return useQuery({
+    queryKey: ["videos"],
+    queryFn: fetchAllVideos,
   });
 };
 
@@ -36,15 +48,15 @@ export const useAllCoursesByStudentID = (studentID) => {
 };
 
 export const useAllCoursesByProfessorID = (professorID) => {
-    return useQuery({
-      queryKey: ["courses", professorID],
-      queryFn: () => fetchAllCoursesByProfessorID(professorID),
-      enabled: !!professorID,
-      onError: (error) => {
-        console.log(error);
-      },
-    });
-}
+  return useQuery({
+    queryKey: ["courses", professorID],
+    queryFn: () => fetchAllCoursesByProfessorID(professorID),
+    enabled: !!professorID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
 
 export const useCourseHeaderBySectionID = (sectionID) => {
   return useQuery({
@@ -52,8 +64,15 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
+<<<<<<< HEAD
       console.log(error)
     }
   })
 }
 
+=======
+      console.log(error);
+    },
+  });
+};
+>>>>>>> 5c86225bafc317df03bc3c7aa9e8eb47f0def564
