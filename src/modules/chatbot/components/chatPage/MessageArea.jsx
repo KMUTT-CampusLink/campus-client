@@ -18,9 +18,13 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
             <MessageContainer question ={question} />
           </div>
           <br />
-          <div className='flex flex-row gap-6'>
-            <MessageReply dummyAns = {dummyAns} questions = {questions} answer = {dummyAns[i]} profilePic = {profilePic} />
-          </div>
+          {
+            dummyAns[i] ? 
+            <div className='flex flex-row gap-6'>
+              <MessageReply dummyAns = {dummyAns} questions = {questions} answer = {dummyAns[i]} profilePic = {profilePic} />
+            </div>
+            : <></>
+          }
           <br/>
           <div ref={messageendref} />
         </div>
