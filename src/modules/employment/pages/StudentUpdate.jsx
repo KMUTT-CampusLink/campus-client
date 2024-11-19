@@ -146,7 +146,7 @@ const StudentUpdate = () => {
             />
           </div>
           <form className=" text-[#7F483C]">
-            <div className="md:flex md:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
+            <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
               <div className="w-full">
                 <div className="mb-4 ">
@@ -254,6 +254,21 @@ const StudentUpdate = () => {
                     />
                   </div>
                 </div>
+
+                <div className="mb-4">
+                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Phone_no
+                  </label>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Right side form inputs */}
@@ -286,7 +301,7 @@ const StudentUpdate = () => {
                   </div>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-8">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Date_of_birth
                   </label>
@@ -305,22 +320,7 @@ const StudentUpdate = () => {
                   </div>
                 </div>
 
-                <div className="mb-9">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Phone_no
-                  </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
-                </div>
-
-                <div className="border border-orange-300 rounded-md px-9 ">
+                <div className="border rounded-md px-9 ">
                   <div className="mb-4 mt-4">
                     <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                       Address
@@ -381,7 +381,7 @@ const StudentUpdate = () => {
                     </div>
                   </div>
 
-                  <div className="mb-4">
+                  <div className="mb-6">
                     <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                       Postal Code
                     </label>

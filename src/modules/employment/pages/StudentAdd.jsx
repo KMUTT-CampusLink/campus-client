@@ -50,7 +50,6 @@ const StudentAdd = () => {
       try {
         const result = await axiosInstance.get(`employ/getProgramName`);
         setPrograms(result.data);
-        console.log(result.data);
       } catch (error) {
         console.error("Error fetching programs:", error);
       }
@@ -60,7 +59,6 @@ const StudentAdd = () => {
       try {
         const respond = await axiosInstance.get(`employ/getSemester`);
         setSemesters(respond.data);
-        console.log(respond.data);
       } catch (error) {
         console.error("Error fetching semesters:", error);
       }
@@ -211,7 +209,7 @@ const StudentAdd = () => {
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                   >
                     <option value="" disabled>
-                      Select Program
+                      Select Semester
                     </option>
                     {semesters.map((semester) => (
                       <option key={semester.id} value={semester.id}>
@@ -231,6 +229,21 @@ const StudentAdd = () => {
                       type="text"
                       name="identification_no"
                       value={formData.identification_no}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Phone_no
+                  </label>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="phone"
+                      value={formData.phone}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
@@ -268,7 +281,7 @@ const StudentAdd = () => {
                   </div>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-8">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Date_of_birth
                   </label>
@@ -283,22 +296,7 @@ const StudentAdd = () => {
                   </div>
                 </div>
 
-                <div className="mb-9">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Phone_no
-                  </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
-                </div>
-
-                <div className="border border-orange-300 rounded-md px-9 ">
+                <div className="border rounded-md px-9 ">
                   <div className="mb-4 mt-4">
                     <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                       Address
@@ -359,7 +357,7 @@ const StudentAdd = () => {
                     </div>
                   </div>
 
-                  <div className="mb-4">
+                  <div className="mb-6">
                     <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                       Postal Code
                     </label>

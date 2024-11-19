@@ -13,6 +13,8 @@ const ITEMS_PER_PAGE = 12;
 const StudentGrid = () => {
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [programs, setPrograms] = useState([]);
+  const [selectedProgram, setSelectedProgram] = useState();
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,10 +24,6 @@ const StudentGrid = () => {
       .trim()
       .replace(/\s+/g, " ")
       .toLowerCase();
-
-    if (searchQueryNormalized === "") {
-      return true;
-    }
 
     const searchWords = searchQueryNormalized.split(" ");
 
@@ -39,7 +37,11 @@ const StudentGrid = () => {
       (word) => student.id && student.id.toLowerCase().includes(word)
     );
 
-    return nameMatches || idMatches;
+    const programMatches = selectedProgram
+      ? student.degree_id === selectedProgram
+      : true;
+
+    return (nameMatches || idMatches) && programMatches;
   });
 
   const selectedStudents = filteredStudents.slice(
@@ -63,6 +65,25 @@ const StudentGrid = () => {
     };
     fetchData();
   }, []);
+console.log(students)  
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const result = await axiosInstance.get(`employ/getProgramName`);
+        setPrograms(result.data);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
+  const handleProgramChange = (e) => {
+    const faculty = parseInt(e.target.value);
+    setSelectedProgram(faculty);
+  };
 
   const handleClick = () => {
     navigate(`/employ/studentAdd`);
@@ -100,6 +121,24 @@ const StudentGrid = () => {
             <FontAwesomeIcon icon={faPlus} className="mx-1 md:h-5 " />
             New Student
           </button>
+        </div>
+
+        <div className="flex justify-center">
+          <div className="w-1/2">
+            <select
+              name="faculty"
+              value={selectedProgram ? selectedProgram : ""} 
+              onChange={handleProgramChange}
+              className="w-full border-b border-black focus:outline-none font-geologica text-[12px] md:text-[16px] text-center"
+            >
+              <option value="" >All Programs</option>
+              {programs.map((program) => (
+                <option key={program.id} value={program.id}>
+                  {program.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="flex justify-center flex-wrap gap-x-7 gap-y-4 sm:gap-7 pt-4 md:pt-6 ">
