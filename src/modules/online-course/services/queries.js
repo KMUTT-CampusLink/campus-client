@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+
 import {
   fetchAllCourses,
   fetchAllCoursesByStudentID,
-    fetchCoursesByStudentID,
+  fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
-  fetchCourseHeaderBySectionID
+  fetchCourseHeaderBySectionID,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -36,15 +37,15 @@ export const useAllCoursesByStudentID = (studentID) => {
 };
 
 export const useAllCoursesByProfessorID = (professorID) => {
-    return useQuery({
-      queryKey: ["courses", professorID],
-      queryFn: () => fetchAllCoursesByProfessorID(professorID),
-      enabled: !!professorID,
-      onError: (error) => {
-        console.log(error);
-      },
-    });
-}
+  return useQuery({
+    queryKey: ["courses", professorID],
+    queryFn: () => fetchAllCoursesByProfessorID(professorID),
+    enabled: !!professorID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
 
 export const useCourseHeaderBySectionID = (sectionID) => {
   return useQuery({
@@ -52,7 +53,7 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
-      console.log(error)
-    }
-  })
-}
+      console.log(error);
+    },
+  });
+};
