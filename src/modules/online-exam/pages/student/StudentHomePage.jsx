@@ -14,11 +14,12 @@ export default function StudentHomePage() {
   const [exams, setExams] = useState([]);
   const [historyExams, setHistoryExams] = useState([]);
   const [inProgress, setInProgress] = useState([]);
+  const [courseTitle, setCourseTitle] = useState("");
 
   const getExams = async () => {
     const res = await getStudentExamsById(sectionId);
-    console.log(res )
-    setExams(res.data.data);
+    setExams(res.data.exam);
+    setCourseTitle(res.data.courseTitle[0].name);
   }
 
   const getInprogressExams = async () => {
@@ -28,7 +29,6 @@ export default function StudentHomePage() {
 
   const getHistoryExams = async () => {
     const res = await getHistoryStudentExams(sectionId);
-    console.log(res)
     setHistoryExams(res.data.data);
   }
 
@@ -43,7 +43,7 @@ export default function StudentHomePage() {
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
-          Linear Algebra
+          {courseTitle}
         </h2>
         <div className={`${inProgress.length > 0 ? "block" : "hidden"}`}>
           <hr className="mt-[20px] bg-[#798184] flex justify-center" />
