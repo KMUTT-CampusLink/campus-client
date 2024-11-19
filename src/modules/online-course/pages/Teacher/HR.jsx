@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { z } from "zod";
-
+import popToast from "../../../../utils/popToast";
 const sec_id = localStorage.getItem("sec_id") || 10001;
 const schema = z.object({
   title: z.string().min(1, { message: "Video Title is required" }),
@@ -26,7 +26,6 @@ const schema = z.object({
 function HR() {
   const [title, setTitle] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [addedMembers, setAddedMembers] = useState([]);
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -78,10 +77,10 @@ function HR() {
         }
       );
 
-      if (response.status === 201) {
-        alert("Video Uploaded successfully!");
+      if (response.status === 200) {
         setTitle("");
         setSelectedFile(null);
+        popToast("Video Uploaded successfully!", "success");
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -93,7 +92,7 @@ function HR() {
         setErrors(formErrors); // Set errors state with validation messages
       } else {
         console.error("Error creating video:", error);
-        alert("An error occurred while creating the video.");
+        popToast("An error occurred while creating the video.", "error");
       }
     }
   };
