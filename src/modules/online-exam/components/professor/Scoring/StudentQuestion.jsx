@@ -70,7 +70,6 @@ export default function StudentQuestion({
       }
     };
 
-    console.log(essayScore)
     useEffect(() => {
       getScore();
       getMaxScore();

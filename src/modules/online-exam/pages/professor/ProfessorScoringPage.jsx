@@ -88,7 +88,6 @@ export default function ProfessorScoringPage() {
         questions: mappedQuestions,
       });
     } catch (error) {
-      navigate("/exams/student/1");
       console.error("Failed to fetch exam data:", error);
     }
   };
