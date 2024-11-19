@@ -21,7 +21,7 @@ function HomePage() {
   //fetch routes connecting the selected stops
   const handleRouteSearch = () => {
     fetchRoutesConnectingStops(startStop.id, endStop.id).then((data) => {
-      console.log(data.routes);
+      // console.log(data.routes);
       setRoutes(data.routes);
     });
   };
@@ -51,18 +51,18 @@ function HomePage() {
   }, [selectedRoute]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen font-geologica">
       <NavBar />
 
       <main className="mx-auto max-w-7xl pt-20 pb-6 w-4/5">
         <div className="flex flex-col justify-center items-center space-y-6">
           {/* Heading and Route Selection Input Fields */}
-          <h1 className="text-2xl font-bold text-gray-800 text-center">
+          <h1 className="text-xl font-semibold text-gray-800 text-center">
             Search Routes
           </h1>
 
           {/* Route Selection Dropdowns */}
-          <div className="w-full max-w-4xl p-2 shadow-md border rounded">
+          <div className="w-full max-w-4xl">
             <div className="grid grid-cols-2 gap-4 w-full">
               <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-500" />
@@ -88,7 +88,7 @@ function HomePage() {
           </div>
 
           {/* Route List */}
-          <div className="w-full max-w-4xl mt-6 max-h-72 overflow-y-auto shadow-md p-4 border rounded">
+          <div className="w-full max-w-4xl mt-6 max-h-[25rem] overflow-y-auto p-4 border-[2px] rounded">
             <RouteList
               routes={routes}
               selectedRoute={selectedRoute}
@@ -98,7 +98,7 @@ function HomePage() {
 
           {/* Trip List for selected route */}
           {selectedRoute.id && (
-            <div className="w-full max-w-4xl mt-6 max-h-72 overflow-y-auto shadow-md p-4 border rounded">
+            <div className="w-full max-w-4xl mt-6 max-h-[25rem] overflow-y-auto p-4 border-[2px] rounded">
               <h2 className="text-xl font-semibold mb-4">
                 Trips for Route: {selectedRoute.name}
               </h2>

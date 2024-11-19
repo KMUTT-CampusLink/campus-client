@@ -22,7 +22,7 @@ const ProfileButton = () => {
     <div className="relative flex-shrink-0 mr-2" ref={profileRef}>
       <button
         onClick={() => setIsProfileOpen((prev) => !prev)}
-        className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+        className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:ring-2 hover:ring-white hover:ring-offset-2"
       >
         <img
           alt="Profile"

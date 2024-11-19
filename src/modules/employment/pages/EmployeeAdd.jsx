@@ -1,24 +1,15 @@
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
-import { useState } from "react";
-import axiosInstance from "../utils/axiosInstance.js";
+import { useState, useEffect } from "react";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
-// Map faculty names to numbers
-const facultyMapping = {
-  "Engineering": 1001,
-  "Information_Technology": 1002,
-  "Science": 1003,
-  "Architecture": 1004,
-  "Liberal Art": 1005,
-  "Management": 1006,
-  "Environmental": 1007,
-  "Education": 1008,
-};
+const jobTitles = ["Professor", "Management", "Staff", "Driver"];
 
 const EmployeeAdd = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [faculties, setFaculties] = useState([]);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -33,6 +24,10 @@ const EmployeeAdd = () => {
     identification_no: "",
     phone: "",
     address: "",
+    sub_district: "",
+    district: "",
+    province: "",
+    postal_code: "",
   });
 
   const [validationErrors, setValidationErrors] = useState({});
@@ -44,6 +39,20 @@ const EmployeeAdd = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      try {
+        const result = await axiosInstance.get(`employ/getFaculty`);
+        setFaculties(result.data);
+        console.log(result.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+
+    fetchFaculties();
+  }, []);
 
   const validateForm = () => {
     const errors = {};
@@ -66,8 +75,8 @@ const EmployeeAdd = () => {
     }
 
     // Validate faculty
-    if (!formData.faculty_id || !facultyMapping[formData.faculty_id]) {
-      errors.faculty_id = "Please select a valid faculty.";
+    if (!formData.faculty_id) {
+      errors.faculty_id = "Please select a faculty.";
     }
 
     // Validate job title
@@ -119,11 +128,6 @@ const EmployeeAdd = () => {
         "Phone number is required and should contain 10-15 digits.";
     }
 
-    // Validate address
-    if (!formData.address) {
-      errors.address = "Address is required.";
-    }
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -145,21 +149,21 @@ const EmployeeAdd = () => {
   };
 
   const handleSumbit = async (e) => {
- 
     e.preventDefault();
- 
+
     console.log("Submit button clicked");
     // Debugging: Check if this logs
     setShowPopup(false);
- 
-    const facultyNumber = facultyMapping[formData.faculty_id];
-    console.log(facultyNumber)
- 
+
+    //const facultyNumber = facultyMapping[formData.faculty_id];
+    // console.log(facultyNumber);
+    console.log(formData.faculty_id);
+
     const employeeData = {
       firstname: formData.firstname,
       midname: formData.midname,
       lastname: formData.lastname,
-      faculty_id: facultyNumber,
+      faculty_id: formData.faculty_id,
       job_title: formData.job_title,
       position: formData.position,
       salary: formData.salary,
@@ -167,24 +171,29 @@ const EmployeeAdd = () => {
       date_of_birth: formData.date_of_birth,
       identification_no: formData.identification_no,
       phone: formData.phone,
-      address: formData.address
+      address: formData.address,
+      sub_district: formData.sub_district,
+      province: formData.province,
+      district: formData.district,
+      postal_code: formData.postal_code,
     };
- 
+
     try {
-      const response = await axiosInstance.post("/post", employeeData);
- 
+      const response = await axiosInstance.post(
+        "/employ/postEmp",
+        employeeData
+      );
+
       if (response.status === 200) {
-        console.log('Employee added successfully');
+        console.log("Employee added successfully");
         setShowPopup(false);
-        navigate("/employ");
+        navigate("/employ/employee");
       } else {
-        console.error('Error adding employee:', response.data);
+        console.error("Error adding employee:", response.data);
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Cannot create user:", error);
     }
- 
   };
 
   return (
@@ -202,7 +211,7 @@ const EmployeeAdd = () => {
             />
           </div>
           <form className=" text-[#7F483C]">
-            <div className="md:flex md:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
+            <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
               <div className="w-full">
                 <div className="mb-4 ">
@@ -265,7 +274,8 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                {/* Faculty dropdown */}
+
+                {/* 1 */}
                 <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Faculty
@@ -279,16 +289,11 @@ const EmployeeAdd = () => {
                     <option value="" disabled>
                       Select Faculty
                     </option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Information_Technology">
-                      Information Technology
-                    </option>
-                    <option value="Science">Science</option>
-                    <option value="Architecture">Architecture</option>
-                    <option value="Liberal Art">Liberal Art</option>
-                    <option value="Management">Management</option>
-                    <option value="Environmental">Environmental</option>
-                    <option value="Education">Education</option>
+                    {faculties.map((faculty) => (
+                      <option key={faculty.id} value={faculty.id}>
+                        {faculty.name}
+                      </option>
+                    ))}
                   </select>
                   {validationErrors.faculty_id && (
                     <p className="text-red-500 text-xs">
@@ -296,10 +301,11 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
+                {/* 2 */}
 
                 <div className="mb-4 ">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Job-title
+                    Role
                   </label>
                   <div className="flex items-center">
                     <select
@@ -308,12 +314,14 @@ const EmployeeAdd = () => {
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     >
-                      <option value="">Select Job-title</option>
-                      <option value="Student">Student</option>
-                      <option value="Professor">Professor</option>
-                      <option value="Management">Management</option>
-                      <option value="Staff">Staff</option>
-                      <option value="Driver">Driver</option>
+                      <option value="" disabled>
+                        Select Role
+                      </option>
+                      {jobTitles.map((title) => (
+                        <option key={title} value={title}>
+                          {title}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   {validationErrors.job_title && (
@@ -342,10 +350,7 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-              </div>
 
-              {/* Right side form inputs */}
-              <div className="w-full">
                 <div className="mb-4 ">
                   <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Salary
@@ -366,6 +371,29 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
+                <div className="mb-4">
+                  <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                    Identification_no
+                  </label>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="identification_no"
+                      value={formData.identification_no}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                    />
+                  </div>
+                  {validationErrors.identification_no && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.identification_no}
+                    </p>
+                  )}
+                </div>                
+              </div>
+
+              {/* Right side form inputs */}
+              <div className="w-full">
                 <div className="mb-4">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Gender
@@ -419,27 +447,7 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                <div className="mb-4">
-                  <label className="  font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Identification_no
-                  </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="identification_no"
-                      value={formData.identification_no}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
-                  </div>
-                  {validationErrors.identification_no && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.identification_no}
-                    </p>
-                  )}
-                </div>
-
-                <div className="mb-4">
+                <div className="mb-8">
                   <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Phone_no
                   </label>
@@ -459,32 +467,101 @@ const EmployeeAdd = () => {
                   )}
                 </div>
 
-                <div className="mb-4">
-                  <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
-                    Address
-                  </label>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
-                    />
+                <div className="border rounded-md px-9 ">
+                  <div className="mb-4 mt-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Address
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
+                    </div>
                   </div>
-                  {validationErrors.address && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.address}
-                    </p>
-                  )}
+
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Sub-district
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="sub_district"
+                        value={formData.sub_district}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      District
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="district"
+                        value={formData.district}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Province
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="province"
+                        value={formData.province}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-6">
+                    <label className=" font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
+                      Postal Code
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="postal_code"
+                        value={formData.postal_code}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
+                      />
+                    </div>
+                  </div>
                 </div>
+
               </div>
             </div>
 
             {/* Buttons Section */}
             <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
-              <button onClick={handleClickback} className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Cancel</button>
-              <button type="button" onClick={handleAddClick} className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm">Add</button>
+              <button
+                onClick={handleClickback}
+                className="bg-[#D9D9D9] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleAddClick}
+                className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm"
+              >
+                Add
+              </button>
             </div>
           </form>
         </div>

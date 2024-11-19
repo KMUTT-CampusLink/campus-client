@@ -11,7 +11,7 @@ import { faEye, faPlus, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { createNewExam } from '../../services/apis/professerApi';
 
 export default function ProfessorCreateExamPage() {
-  const { courseId } = useParams();
+  const { sectionId } = useParams();
   const navigate = useNavigate();
   const [viewAsStudent, setViewAsStudent] = useState(false);
   
@@ -83,10 +83,14 @@ export default function ProfessorCreateExamPage() {
         score: question.score || defaultScore,
       })),
     };
-    const res = await createNewExam(finalExam);
-    const id = res.data.data;
-    if (res.status === 200) {
-      navigate(`/exams/professor/setting/${id}`);
+    try {
+      const res = await createNewExam(finalExam, sectionId);
+      const id = res.data.data;
+      if (res.status === 200) {
+        navigate(`/exams/professor/setting/${id}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

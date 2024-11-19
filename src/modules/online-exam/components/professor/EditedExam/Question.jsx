@@ -89,7 +89,6 @@ export default function Question({
   //   updatedQuestions[questionIndex].options[choiceIndex].choiceImg = URL.createObjectURL(file);
   //   setExam({ ...exam, questions: updatedQuestions });
   // };
-  
 
   return (
     <div className="grid gap-[10px]">

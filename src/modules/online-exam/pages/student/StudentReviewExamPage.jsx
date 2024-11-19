@@ -32,7 +32,7 @@ export default function StudentReviewExamPage() {
             Exam 1
           </p>
           <div className="flex flex-col items-end">
-            {/* <Chip /> */}
+            <Chip />
             <div className="flex gap-1">
               <p className="text-[22px] lg:text-[30px]">100/100</p>
               {/* <p className="text-[30px]">/</p>

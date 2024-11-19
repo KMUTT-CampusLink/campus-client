@@ -14,7 +14,7 @@ function ParkingButton() {
                 <button 
                  onClick={handleClick}
                 className="bg-red-500 text-white font-extrabold p-5 rounded-full">
-                    <FontAwesomeIcon className="w-6 h-6" icon={faP} />
+                    <FontAwesomeIcon className="w-9 h-8" icon={faP} />
                 </button>
                 <h1>Parking</h1>
             </div>

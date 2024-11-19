@@ -15,7 +15,7 @@ function Building({ bdid , bdimg, bdname, avaslot,maxslot }) {
 
     return (
         <>
-            <div className="flex items-center min-w-96 min-h-44 bg-white rounded-lg shadow-gray shadow-xl p-0 my-10">
+            <div className="flex items-center min-w-96 min-h-44 bg-white rounded-lg shadow-gray shadow-xl p-0 my-10" onClick={toggleComponent}>
                 <img src={bdimg} className="w-60 h-44 mr-3 rounded-lg" />
 
                 <div className="flex flex-row w-full justify-between rounded-lg">
@@ -24,8 +24,7 @@ function Building({ bdid , bdimg, bdname, avaslot,maxslot }) {
                         <p className="text-green-600 font-semibold">Available Slot: {maxslot-avaslot}</p>
                     </div>
                     <button
-                        className="flex bg-red-500 text-white w-10 h-10 mr-2 rounded-full justify-center"
-                        onClick={toggleComponent}
+                        className="bg-white flex md:bg-red-500 text-white w-10 h-10 mr-2 rounded-full justify-center"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
