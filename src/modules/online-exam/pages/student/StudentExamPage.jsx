@@ -77,7 +77,6 @@ export default function StudentExamPage() {
         questions: shuffledQuestions
       });
     } catch (error) {
-      navigate("/exams/student/1");
       console.error("Failed to fetch exam data:", error);
     }
   };
@@ -85,7 +84,7 @@ export default function StudentExamPage() {
   const getStatus = async () => {
     const res = await getStudentStatus(examId);
     if (res.status === 200 && res.data.data) {
-      navigate("/exams/student/1");
+      navigate(`/exams/student/1`);
     }
   }
 
