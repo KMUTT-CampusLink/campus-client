@@ -111,9 +111,12 @@ function AnnouncementPage() {
                     key={announcement.id}
                     title={announcement.title}
                     description={announcement.description}
-                    date={announcement.updated_at}
+                    updated={announcement.updated_at}
+                    date={announcement.date}
                     location={announcement.location}
                     image={announcement.image}
+                    source={announcement.source}
+                    duration={announcement.duration}
                     announcement={announcement}
                   />
                 ))}

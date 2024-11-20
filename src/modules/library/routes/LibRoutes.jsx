@@ -10,6 +10,7 @@ import MyBookPage from "../Pages/MyBookPage";
 import BrowseBookPage from "../Pages/BrowseBookPage";
 import BookSearchPage from "../Pages/BookSearchPage";
 import ViewallBookPage from "../Pages/ViewallBookPage";
+import QRScannerDemo from "../Pages/QRScannerDemo";
 export default function LibRoutes() {
   return [
     {
@@ -56,6 +57,10 @@ export default function LibRoutes() {
     {
       path: "/library/viewall/:category",
       element: <ViewallBookPage />,
+    },
+    {
+      path: "/library/qr",
+      element: <QRScannerDemo />,
     },
   ];
 }

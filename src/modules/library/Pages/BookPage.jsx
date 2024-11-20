@@ -167,9 +167,12 @@ function BookPage() {
         </div>
 
         <div className="container mx-auto p-6 flex flex-col gap-6 items-center rounded-2xl">
-          <h2 className="text-2xl font-semibold mt-6 mb-3 text-center">
-            Related Books
+          <h2 className="text-2xl font-semibold mt-6 text-center ">
+            Similar Books
           </h2>
+          <p className="text-neutral-500">
+            Why not take a look at these books?
+          </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             {data
               .filter(

@@ -90,15 +90,9 @@ const NavBar = () => {
 
   return (
     <nav
-<<<<<<< HEAD
-      className={`w-full fixed font-georama z-50 transition-transform duration-300 ${
-        isNavVisible ? "transform translate-y-0" : "transform -translate-y-full"
-      } ${isOpen && "overflow-y-auto h-full z-[100]"}`}
-=======
       className={`w-full fixed font-georama z-[100] transition-transform duration-300 ${
         isNavVisible ? "transform translate-y-0" : "transform -translate-y-full"
       } ${isOpen && " overflow-y-auto h-full"}`}
->>>>>>> main
     >
       {/* Desktop Nav Bar */}
       <div

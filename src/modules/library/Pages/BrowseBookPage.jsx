@@ -111,7 +111,7 @@ function BrowseBookPage() {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <main className="pt-20 pb-6 mx-auto -z-10">
+      <main className="pt-20 pb-6 mx-auto -z-10 font-nunito">
         <MainNavbar />
         {/* SearchBar */}
         <div className="bg-neutral-100 flex flex-col items-center justify-center h-[20rem] px-4">
