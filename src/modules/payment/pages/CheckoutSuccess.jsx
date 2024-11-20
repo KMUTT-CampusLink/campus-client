@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import loadingImage from "../asset/verify.svg";
 import SuccessImage from "../asset/success.svg";
@@ -6,8 +7,9 @@ import { getVerifyStripe } from "../services/api"; // Import API function
 
 const CheckoutSuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
-  const [countdown, setCountdown] = useState(8);
+  const [countdown, setCountdown] = useState(4);
   const sessionId = new URLSearchParams(window.location.search).get("session_id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verifyPayment = async () => {
@@ -16,6 +18,16 @@ const CheckoutSuccess = () => {
           const response = await getVerifyStripe(sessionId); // Call the API function
           if (response?.data?.status === "succeeded") {
             setPaymentStatus("Payment succeeded!");
+            const invoiceId = response.data.invoice_id || response.data.installment?.invoice_id;
+            if (response.data.type === "installment" && invoiceId) {
+              setTimeout(() => {
+                window.location.href = `/payment/payment-invoice/${invoiceId}`;
+              }, 8000);
+            } else {
+              setTimeout(() => {
+                window.location.href = `/payment`;
+              }, 8000);
+            }
           } else {
             setPaymentStatus("Payment not completed.");
           }
@@ -27,12 +39,16 @@ const CheckoutSuccess = () => {
     };
 
     verifyPayment();
-  }, [sessionId]);
+  }, [sessionId, navigate]);
 
   useEffect(() => {
     if (paymentStatus) {
       if (countdown === 0) {
-        window.location.href = "/payment";
+        if (paymentStatus === "Payment succeeded!") {
+          // Redirect handled by the verifyPayment useEffect
+        } else {
+          window.location.href = "/payment";
+        }
       }
 
       const timer = setInterval(() => {

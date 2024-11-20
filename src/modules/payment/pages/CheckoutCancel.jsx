@@ -3,7 +3,7 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import CancelImage from "../asset/cancel.svg";
 
 const CheckoutCancel = () => {
-  const [countdown, setCountdown] = useState(8);
+  const [countdown, setCountdown] = useState(4);
 
   useEffect(() => {
     if (countdown === 0) {

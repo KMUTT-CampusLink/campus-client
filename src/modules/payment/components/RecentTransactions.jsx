@@ -12,8 +12,8 @@ const RecentTransactions = ({
     filterRecent === "All"
       ? transactions
       : transactions.filter(
-          (transaction) => transaction.status === filterRecent
-        );
+        (transaction) => transaction.status === filterRecent
+      );
 
   const sortedTransactions =
     filteredRecentTransactions &&
@@ -31,14 +31,18 @@ const RecentTransactions = ({
     return `${day}/${month}/${year}`;
   };
 
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   const handleArrowClick = async (transaction) => {
     const response = await getTransactionDetails(transaction.id);
     if (response && response.data) {
-        window.location.href = `/payment/payment-invoice/${transaction.id}`;
+      window.location.href = `/payment/payment-invoice/${transaction.id}`;
     } else {
-        console.error("Failed to fetch transaction details");
+      console.error("Failed to fetch transaction details");
     }
-};
+  };
 
 
   return (
@@ -79,9 +83,9 @@ const RecentTransactions = ({
             <li>
               <a
                 className="small-label"
-                onClick={() => setFilterRecent("Canceled")}
+                onClick={() => setFilterRecent("Cancelled")}
               >
-                Canceled
+                Cancelled
               </a>
             </li>
             <li>
@@ -119,42 +123,44 @@ const RecentTransactions = ({
               </div>
               <div className="text-right flex flex-col items-end justify-center ml-auto mr-2">
                 <p
-                  className={`big-label ${
-                    transaction.status === "Paid"
+                  className={`big-label ${transaction.status === "Paid"
                       ? "text-green-500"
-                      : transaction.status === "Canceled"
-                      ? "text-red-500"
-                      : "text-yellow-500"
-                  }`}
+                      : transaction.status === "Cancelled"
+                        ? "text-red-500"
+                        : "text-yellow-500"
+                    }`}
                 >
-                  {`${transaction.amount} BAHT`}
+                  {formatNumberWithCommas(transaction.amount)} BAHT
                 </p>
                 <p
-                  className={`bold-small ${
-                    transaction.status === "Paid"
-                      ? "text-green-600"
-                      : transaction.status === "Canceled"
+                  className={`bold-small ${transaction.status === "Paid"
+                    ? "text-green-600"
+                    : transaction.status === "Cancelled"
                       ? "text-red-600"
-                      : "text-yellow-600"
-                  }`}
+                      : transaction.status === "Pay_by_Installments"
+                        ? "text-yellow-600"
+                        : transaction.status === "Cancelled"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                    }`}
                 >
-                  {transaction.status.toUpperCase()}
+                  {transaction.status === 'Pay_by_Installments' ? 'Pay by Installments' : transaction.status.toUpperCase()}
                 </p>
               </div>
 
               {/* Arrow for Unpaid or Pay by Installments Transactions */}
               {(transaction.status === "Unpaid" ||
                 transaction.status === "Pay_by_Installments") && (
-                <div className="ml-2">
-                  <button
-                    className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
-                    onClick={() => handleArrowClick(transaction)}
-                    aria-label="Pay Now"
-                  >
-                    ➔
-                  </button>
-                </div>
-              )}
+                  <div className="ml-2">
+                    <button
+                      className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
+                      onClick={() => handleArrowClick(transaction)}
+                      aria-label="Pay Now"
+                    >
+                      ➔
+                    </button>
+                  </div>
+                )}
             </div>
           ))}
       </div>

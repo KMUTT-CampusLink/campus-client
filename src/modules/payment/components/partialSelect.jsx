@@ -2,24 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import cautionIMG from "../asset/caution.svg";
 import "../style/typography.css";
-import { previewInstallment } from "../services/api";
+import { previewInstallment, createInstallment } from "../services/api";
 
 const PartialSelect = ({ setShowPartialSelect }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [installmentsPreview, setInstallmentsPreview] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
-  const navigate = useNavigate();
   const { id: invoiceId } = useParams(); // Get invoiceId from route parameters
 
-  // เรียก API เพื่อดึงข้อมูลการแบ่งชำระ
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  // Fetch installment preview from API
   useEffect(() => {
     const fetchPreview = async () => {
       if (selectedOption) {
-        const numInstallments = selectedOption === "Two Times" ? 2 : 3; // กำหนดจำนวนงวด
+        const numInstallments = selectedOption === "Two Times" ? 2 : 3; // Set number of installments
         try {
           const response = await previewInstallment(invoiceId, numInstallments);
-          setInstallmentsPreview(response.data || []); // เก็บข้อมูลใน state
+          setInstallmentsPreview(response.data.installment_preview || []); // Store data in state
         } catch (error) {
           console.error("Error fetching installment preview:", error);
         }
@@ -34,8 +37,17 @@ const PartialSelect = ({ setShowPartialSelect }) => {
     }
   };
 
-  const handleConfirmClick = () => {
-    window.location.reload();
+  const handleConfirmClick = async () => {
+    if (selectedOption) {
+      const numInstallments = selectedOption === "Two Times" ? 2 : 3;
+      try {
+        const response = await createInstallment(invoiceId, numInstallments);
+        console.log("Installment created:", response);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error creating installment:", error);
+      }
+    }
   };
 
   const handleGoBackClick = () => {
@@ -76,11 +88,10 @@ const PartialSelect = ({ setShowPartialSelect }) => {
               {["Two Times", "Three Times"].map((option, index) => (
                 <div
                   key={index}
-                  className={`flex items-center p-4 border rounded-lg cursor-pointer ${
-                    selectedOption === option
+                  className={`flex items-center p-4 border rounded-lg cursor-pointer ${selectedOption === option
                       ? "border-payment-red bg-gray-100"
                       : "border-gray-300"
-                  }`}
+                    }`}
                   onClick={() => setSelectedOption(option)}
                 >
                   <input
@@ -104,18 +115,24 @@ const PartialSelect = ({ setShowPartialSelect }) => {
           <>
             <h2 className="h3 mb-6 text-center">Installment Preview</h2>
             <div className="flex flex-col space-y-4">
-              {installmentsPreview.map((installment) => (
-                <div
-                  key={installment.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
-                >
-                  <span className="body-1">Installment {installment.id}</span>
-                  <div className="text-right">
-                    <p className="body-1">Due on: {installment.dueDate}</p>
-                    <p className="body-1">Amount: {installment.amount}</p>
+              {Array.isArray(installmentsPreview) && installmentsPreview.length > 0 ? (
+                installmentsPreview.map((installment, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
+                    <span className="body-1">Installment {index + 1}</span>
+                    <div className="text-right">
+                      <p className="body-1">
+                        Due on: {new Date(installment.due_date).toLocaleDateString()}
+                      </p>
+                      <p className="body-1">Amount: {formatNumberWithCommas(installment.amount)} BAHT</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p>No installment preview available</p>
+              )}
             </div>
             <button
               className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 rounded-md shadow-md body-1 mt-6 w-full"

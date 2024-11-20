@@ -15,6 +15,10 @@ const PaymentInvoice = () => {
 
   const navigate = useNavigate();
 
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   useEffect(() => {
     console.log("Route ID:", id);
 
@@ -124,7 +128,7 @@ const PaymentInvoice = () => {
               <tr>
                 <td className="py-2 service-label">{invoice.title || "N/A"}</td>
                 <td className="py-2 service-label">
-                  {invoice.amount ? `${invoice.amount} BAHT` : "N/A"}
+                  {invoice.amount ? `${formatNumberWithCommas(invoice.amount)} BAHT` : "N/A"}
                 </td>
               </tr>
             </tbody>
@@ -150,15 +154,31 @@ const PaymentInvoice = () => {
                     <div className="text-right flex items-center space-x-4">
                       <div className="flex flex-col items-end">
                         <p className="big-label text-payment-red">
-                          {installment.amount} BAHT
+                          {formatNumberWithCommas(installment.amount)} BAHT
                         </p>
-                        <p className="body-1 text-yellow-500">
+                        <p className={`body-1 ${installment.status === 'Unpaid' ? 'text-yellow-500' : 'text-green-600'}`}>
                           {installment.status.toUpperCase()}
                         </p>
+
                       </div>
                       <button
-                        className="btn bg-payment-red hover:bg-red-500 text-white px-4 py-2 rounded-md shadow-md body-1"
-                        onClick={() => handlePartialPay(installment.id)}
+                        className={`btn px-4 py-2 rounded-md shadow-md body-1 ${installment.status === 'Paid' ||
+                          !installments.slice(0, index).every(inst => inst.status === 'Paid')
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          : 'bg-payment-red hover:bg-red-500 text-white'
+                          }`}
+                        onClick={() => {
+                          if (
+                            installments.slice(0, index).every(inst => inst.status === 'Paid') &&
+                            installment.status !== 'Paid'
+                          ) {
+                            handlePartialPay(installment.id);
+                          }
+                        }}
+                        disabled={
+                          installment.status === 'Paid' ||
+                          !installments.slice(0, index).every(inst => inst.status === 'Paid')
+                        }
                       >
                         Pay
                       </button>
