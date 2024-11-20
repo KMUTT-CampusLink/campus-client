@@ -176,19 +176,20 @@ const TrCourseMaterials = () => {
         c_time={details?.time}
       />
       <div className="w-full px-28">
-        <div className="my-2 md:ml-4 flex items-center space-x-4">
+        <div className="my-2 md:pl-4 flex items-center space-x-4 mb-4">
           <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
           <button
             onClick={handleEditClick}
-            className={`p-4 rounded-md font-semibold ${
+            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${
               isEditing ? "bg-red-500" : "bg-blue-500"
             } text-white`}
           >
-            <FontAwesomeIcon
-              icon={isEditing ? faX : faUpload}
-              className="mr-2"
-            />
-            {isEditing ? "Cancel Upload" : "Upload New Video"}
+            <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="" />
+            {isEditing ? (
+              <span>Cancel Upload</span>
+            ) : (
+              <span>Upload New Video</span>
+            )}
           </button>
         </div>
       </div>
@@ -269,10 +270,10 @@ const TrCourseMaterials = () => {
           </div>
         </div>
       )}
-      <div className="px-28 grid grid-cols-7 mb-12">
-        <div className="col-span-5">
+      <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+        <div className="sm:col-span-5">
           {videoDetails.videoURL && (
-            <div className="w-full m-4">
+            <div className="w-full">
               <video
                 controls
                 className="max-w-full max-h-[400px] object-cover rounded-lg"
@@ -281,8 +282,8 @@ const TrCourseMaterials = () => {
             </div>
           )}{" "}
         </div>
-        <div className="col-span-2">
-          <div className="mx-auto mt-4 mb-6 md:ml-6">
+        <div className="sm:col-span-2">
+          <div className="mx-auto mt-4 mb-6 sm:ml-6">
             <label className="block mb-2 font-semibold font-georama">
               Select Lecture Title
             </label>
@@ -299,7 +300,7 @@ const TrCourseMaterials = () => {
               ))}
             </select>
           </div>
-          <h3 className="p-2 font-bold text-xl">Class Materials</h3>
+          <h3 className="p-4 font-bold text-xl">Class Materials</h3>
           <div className="">
             {videoDetails.attachments?.length > 0 ? (
               <ul className="px-5 w-full">
