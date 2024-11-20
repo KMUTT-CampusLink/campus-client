@@ -9,6 +9,7 @@ const StudentAdd = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [programs, setPrograms] = useState([]);
   const [semesters, setSemesters] = useState([]);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -27,6 +28,82 @@ const StudentAdd = () => {
     postal_code: "",
   });
 
+  const validateForm = () => {
+    const errors = {};
+    const namePattern = /^[a-zA-Z\s'-]+$/;
+    const phonePattern = /^[0-9]{10,15}$/;
+    const idPattern = /^[a-zA-Z0-9]+$/;
+    const postalCodePattern = /^[0-9]{5}$/;
+
+    // Validate name fields
+    if (!formData.firstname || !namePattern.test(formData.firstname)) {
+      errors.firstname =
+        "First name is required and should contain only letters.";
+    }
+    if (formData.midname && !namePattern.test(formData.midname)) {
+      errors.midname = "Middle name should contain only letters.";
+    }
+    if (!formData.lastname || !namePattern.test(formData.lastname)) {
+      errors.lastname =
+        "Last name is required and should contain only letters.";
+    }
+
+    // Validate program and semester selection
+    if (!formData.degree_id) {
+      errors.degree_id = "Please select a program.";
+    }
+    if (!formData.semester_id) {
+      errors.semester_id = "Please select a semester.";
+    }
+
+    // Validate gender
+    if (!formData.gender || !["Male", "Female"].includes(formData.gender)) {
+      errors.gender = "Gender must be selected.";
+    }
+
+    // Validate date of birth
+    if (!formData.date_of_birth) {
+      errors.date_of_birth = "Date of birth is required.";
+    } else {
+      const dob = new Date(formData.date_of_birth);
+      const today = new Date();
+      if (dob > today) {
+        errors.date_of_birth = "Date of birth cannot be in the future.";
+      }
+    }
+
+    // Validate identification number
+    if (
+      !formData.identification_no ||
+      !idPattern.test(formData.identification_no)
+    ) {
+      errors.identification_no =
+        "Identification number is required and should be alphanumeric.";
+    }
+
+    // Validate phone number
+    if (!formData.phone || !phonePattern.test(formData.phone)) {
+      errors.phone =
+        "Phone number is required and should contain 10-15 digits.";
+    }
+
+    // Validate address fields
+    if (!formData.address) errors.address = "Address is required.";
+    if (!formData.sub_district)
+      errors.sub_district = "Sub-district is required.";
+    if (!formData.district) errors.district = "District is required.";
+    if (!formData.province) errors.province = "Province is required.";
+    if (
+      !formData.postal_code ||
+      !postalCodePattern.test(formData.postal_code)
+    ) {
+      errors.postal_code = "Postal Code is required and must be 5 digits.";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -38,8 +115,11 @@ const StudentAdd = () => {
   const handleClickback = () => {
     navigate(`/employ/student`);
   };
-  const handleAddClick = () => {
-    setShowPopup(true);
+  const handleAddClick = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setShowPopup(true); // Only show popup if the form is valid
+    }
   };
   const handleClosePopup = () => {
     setShowPopup(false);
@@ -71,11 +151,11 @@ const StudentAdd = () => {
   const handleSumbit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit button clicked");
+   // console.log("Submit button clicked");
     // Debugging: Check if this logs
     setShowPopup(false);
 
-    const employeeData = {
+    const studentData = {
       firstname: formData.firstname,
       midname: formData.midname,
       lastname: formData.lastname,
@@ -93,13 +173,10 @@ const StudentAdd = () => {
     };
 
     try {
-      const response = await axiosInstance.post(
-        "/employ/postStu",
-        employeeData
-      );
+      const response = await axiosInstance.post("/employ/postStu", studentData);
 
       if (response.status === 200) {
-        console.log("Student added successfully");
+      //  console.log("Student added successfully");
         setShowPopup(false);
         navigate("/employ/student");
       } else {
@@ -107,6 +184,7 @@ const StudentAdd = () => {
       }
     } catch (error) {
       console.error("Cannot create user:", error);
+     // console.log(studentData);
     }
   };
 
@@ -141,6 +219,11 @@ const StudentAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px] "
                     />
                   </div>
+                  {validationErrors.firstname && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.firstname}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mb-4 ">
@@ -156,6 +239,11 @@ const StudentAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
+                  {validationErrors.midname && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.midname}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mb-4 ">
@@ -171,6 +259,11 @@ const StudentAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
+                  {validationErrors.lastname && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.lastname}
+                    </p>
+                  )}
                 </div>
 
                 {/* 1 */}
@@ -193,7 +286,13 @@ const StudentAdd = () => {
                       </option>
                     ))}
                   </select>
+                  {validationErrors.degree_id && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.degree_id}
+                    </p>
+                  )}
                 </div>
+                
                 {/* 2 */}
 
                 {/* 1 */}
@@ -216,7 +315,13 @@ const StudentAdd = () => {
                       </option>
                     ))}
                   </select>
+                  {validationErrors.semester_id && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.semester_id}
+                    </p>
+                  )}
                 </div>
+                
                 {/* 2 */}
 
                 <div className="mb-4">
@@ -232,6 +337,11 @@ const StudentAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
+                  {validationErrors.identification_no && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.identification_no}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mb-4">
@@ -247,6 +357,11 @@ const StudentAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
+                  {validationErrors.phone && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.phone}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -278,6 +393,11 @@ const StudentAdd = () => {
                       className=" ml-1 mr-5"
                     ></input>
                   </div>
+                  {validationErrors.gender && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.gender}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mb-8">
@@ -293,6 +413,11 @@ const StudentAdd = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                     />
                   </div>
+                  {validationErrors.date_of_birth && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.date_of_birth}
+                    </p>
+                  )}
                 </div>
 
                 <div className="border rounded-md px-9 ">
@@ -309,6 +434,11 @@ const StudentAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.address && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.address}
+                    </p>
+                  )}
                   </div>
 
                   <div className="mb-4">
@@ -324,6 +454,11 @@ const StudentAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.sub_district && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.sub_district}
+                    </p>
+                  )}
                   </div>
 
                   <div className="mb-4">
@@ -339,6 +474,11 @@ const StudentAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.district && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.district}
+                    </p>
+                  )}
                   </div>
 
                   <div className="mb-4">
@@ -354,6 +494,11 @@ const StudentAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.province && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.province}
+                    </p>
+                  )}
                   </div>
 
                   <div className="mb-6">
@@ -369,6 +514,11 @@ const StudentAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.postal_code && (
+                    <p className="text-red-500 text-xs">
+                      {validationErrors.postal_code}
+                    </p>
+                  )}
                   </div>
                 </div>
               </div>

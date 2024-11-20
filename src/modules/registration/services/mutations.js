@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addEnrollmentDetail, deleteEnrollmentDetail } from "./api";
+import { addEnrollmentDetail, deleteEnrollmentDetail, withdrawEnrollmentDetail } from "./api";
 
 export const useAddEnrollmentDetail = () => {
   const queryClient = useQueryClient();
@@ -61,6 +61,46 @@ export const useDeleteEnrollmentDetail = () => {
     },
     onSuccess: (data) => {
       console.log("Enrollment deleted successfully:", data);
+      // Invalidate and refetch
+      queryClient.invalidateQueries("enrollmentDetails");
+    },
+  });
+};
+
+export const useWithdrawEnrollmentDetail = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (enrollmentData) => withdrawEnrollmentDetail(enrollmentData),
+    onMutate: async (enrollmentData) => {
+      console.log("Withdrawing:", enrollmentData);
+
+      // Get the current enrollment details
+      await queryClient.cancelQueries("enrollmentDetails");
+
+      // Snapshot of the previous value
+      const previousData = queryClient.getQueryData("enrollmentDetails");
+
+      // Optimistically update the cache
+      queryClient.setQueryData(
+        "enrollmentDetails",
+        (
+          old = [] // Default to an empty array
+        ) => old.filter((enrollment) => enrollment.id !== enrollmentData.id) // Ensure correct filtering
+      );
+
+      // Return context with previous data for rollback
+      return { previousData };
+    },
+    onError: (error, enrollmentData, context) => {
+      console.error("Error withdrawing enrollment:", error);
+      // Rollback on error
+      if (context.previousData) {
+        queryClient.setQueryData("enrollmentDetails", context.previousData);
+      }
+    },
+    onSuccess: (data) => {
+      console.log("Enrollment withdrawn successfully:", data);
       // Invalidate and refetch
       queryClient.invalidateQueries("enrollmentDetails");
     },

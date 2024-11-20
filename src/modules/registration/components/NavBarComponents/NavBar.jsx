@@ -17,8 +17,8 @@ const NavBar = () => {
     {
       name: "Learning",
       href: "/library",
-      sublinks: ["Library", "Online Courses", "Online Exams"],
-      subhrefs: ["/library", "/courses", "/exams"],
+      sublinks: ["Library", "Online Courses"],
+      subhrefs: ["/library", "/courses"],
     },
     {
       name: "Campus Services",
@@ -29,8 +29,8 @@ const NavBar = () => {
     {
       name: "Help & Tools",
       href: "/attendance",
-      sublinks: ["Attendance", "Help Bot", "Campus Map"],
-      subhrefs: ["/attendance", "/botastra", "/map"],
+      sublinks: ["Help Bot", "Campus Map"],
+      subhrefs: ["/botastra", "/map"],
     },
     {
       name: "Registration",
@@ -51,6 +51,43 @@ const NavBar = () => {
       subhrefs: [],
     },
   ];
+
+  const role = localStorage.getItem("userRole");
+
+  // Define removal logic for each role
+  const roleBasedFilter = (link, role) => {
+    switch (role) {
+      case "Student":
+        return link.name !== "Employ";
+      case "Professor":
+        return (
+          link.name !== "Registration" &&
+          link.name !== "Grade" &&
+          link.name !== "Employ"
+        );
+      case "Management":
+        return link.name !== "Registration" && link.name !== "Grade";
+      case "Staff":
+        return (
+          link.name === "Help & Tools" ||
+          link.name === "Payment" ||
+          link.name === "Campus Services"
+        );
+      case "Driver":
+        return (
+          link.name === "Help & Tools" ||
+          link.name === "Payment" ||
+          link.name === "Campus Services"
+        );
+      default:
+        return false;
+    }
+  };
+
+  // Apply the filter
+  const filteredNavigationLinks = navigationLinks.filter((link) =>
+    roleBasedFilter(link, role)
+  );
 
   const mobileNavRef = useRef(null); // mobile nav reference
   const [isOpen, setIsOpen] = useState(false);
@@ -104,12 +141,12 @@ const NavBar = () => {
       <div
         className={`hidden min-[990px]:block text-white bg-gradient-to-r from-[#c2544d] to-[#f09107] `}
       >
-        <div className="h-16 flex py-2 mx-auto px-8 max-w-7xl justify-between items-center">
+        <div className="flex items-center justify-between h-16 px-8 py-2 mx-auto max-w-7xl">
           <Link to="/">
             <div className="text-xl font-bold">CampusLink</div>
           </Link>
-          <div className="ml-6 flex-grow flex-wrap">
-            {navigationLinks.map((link, index) => (
+          <div className="flex-wrap flex-grow ml-6">
+            {filteredNavigationLinks.map((link, index) => (
               <NavigationLink key={index} link={link} index={index} />
             ))}
           </div>
@@ -124,21 +161,21 @@ const NavBar = () => {
         }`}
         ref={mobileNavRef}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`inline-flex items-center justify-center rounded-md p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
           >
             {isOpen ? (
-              <FontAwesomeIcon icon={faTimes} className="h-6 w-6" />
+              <FontAwesomeIcon icon={faTimes} className="w-6 h-6" />
             ) : (
-              <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
+              <FontAwesomeIcon icon={faBars} className="w-6 h-6" />
             )}
           </button>
 
           {!isOpen && <ProfileButton />}
         </div>
-        {isOpen && <MobileNav navigationLinks={navigationLinks} />}
+        {isOpen && <MobileNav navigationLinks={filteredNavigationLinks} />}
       </div>
     </nav>
   );

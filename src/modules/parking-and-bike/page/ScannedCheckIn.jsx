@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { postCheckin } from '../services/api.js';
 
-function Scanned() {
+function ScannedCheckIn() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [reservationData, setReservationData] = useState(null);
@@ -12,7 +12,6 @@ function Scanned() {
 
   useEffect(() => {
     try {
-      // Decode the data from the URL parameter
       const decodedData = JSON.parse(decodeURIComponent(id));
       setReservationData(decodedData);
       setLoading(false);
@@ -25,22 +24,21 @@ function Scanned() {
   const handleCheckin = async () => {
     if (!reservationData) return;
 
-    // Prepare the request data with current time for check-in
     const requestData = {
       reservation_id: reservationData.rid,
       checkin_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     };
 
-    console.log("Request Data:", requestData);
-
     try {
       const res = await postCheckin(requestData);
       if (res.message === "QR Checkout created successfully!") {
         alert("Checkin successful!");
-        // Navigate to checkout page with reservationData
-        navigate('/parking/checkout', { state: res });
-        console.log(res);
         
+        // Store check-in response data in local storage for use in checkout
+        localStorage.setItem('checkoutData', JSON.stringify(res));
+
+        // Navigate to checkout page with the stored data
+        navigate('/parking/checkout', { state: res });
       }
     } catch (error) {
       if (error.response) {
@@ -52,7 +50,6 @@ function Scanned() {
   };
 
   useEffect(() => {
-    // Delay to simulate a loading time before automatic check-in
     if (reservationData) {
       const checkinTimeout = setTimeout(() => {
         handleCheckin();
@@ -89,4 +86,4 @@ function Scanned() {
   );
 }
 
-export default Scanned;
+export default ScannedCheckIn;
