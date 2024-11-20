@@ -84,7 +84,7 @@ export default function StudentExamPage() {
     const res = await getStudentStatus(examId);
     console.log(res);
     if (res.status === 200 && res.data.data) {
-      navigate("/exams/student/1");
+      navigate(`/exams/student/1`);
     }
   }
 

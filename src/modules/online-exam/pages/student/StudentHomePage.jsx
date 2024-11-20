@@ -43,7 +43,7 @@ export default function StudentHomePage() {
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
-          {courseTitle}
+          {courseTitle} : {sectionId}
         </h2>
         <div className={`${inProgress.length > 0 ? "block" : "hidden"}`}>
           <hr className="mt-[20px] bg-[#798184] flex justify-center" />
@@ -60,7 +60,7 @@ export default function StudentHomePage() {
         <div className=" flex justify-between pt-[20px]">
           <h3 className="font-bold text-[22px] xl:text-[30px]">Examination</h3>
         </div>
-        <div className={`${exams.length > 0 ? "block" : "hidden"}`}>
+        <div className={`${exams.length > 0 ? "block" : "hidden"}`}> 
           <div className="grid gap-4 py-[20px]">
             {exams.map((examName) => (
               <ExamCard examName={examName.title} Id={examName.id} />
