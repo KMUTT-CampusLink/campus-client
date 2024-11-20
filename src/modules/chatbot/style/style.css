@@ -1,78 +1,59 @@
-:root {
-	--duration: 1.5s;
-	--container-size: 250px;
-	--box-size: 33px;
-	--box-border-radius: 15%;
+.chat-bubble {
+	background-color:white;
+	padding:16px;
+	-webkit-border-radius: 20px;
+	-webkit-border-bottom-left-radius: 2px;
+	-moz-border-radius: 20px;
+	-moz-border-radius-bottomleft: 2px;
+	border-radius: 20px;
+	border-bottom-left-radius: 20px;
+	display:inline-block;
+  }
+  .typing {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 3rem;
+	height: 15px;
+  }
+  .typing .dot {
+	animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
+	background-color: rgba(252, 219, 165, 1) ; 
+	/* //rgba(20,105,69,.7); */
+	border-radius: 50%;
+	height: 7px;
+	margin-right: 4px;
+	vertical-align: middle;
+	width: 7px;
+	display: inline-block;
+  }
+  .typing .dot:nth-child(1) {
+	animation-delay: 200ms;
+  }
+  .typing .dot:nth-child(2) {
+	animation-delay: 300ms;
+  }
+  .typing .dot:nth-child(3) {
+	animation-delay: 400ms;
+  }
+  .typing .dot:last-child {
+	margin-right: 0;
   }
   
-  .📦 {
-	position: relative;
-	display: block;
-	transform-origin: -50% center;
+  @keyframes mercuryTypingAnimation {
+	0% {
+	  transform: translateY(0px);
+	  background-color:rgba(252, 219, 165, 1); 
+	  /* // rgba(20,105,69,.7); */
+	}
+	28% {
+	  transform: translateY(-7px);
+	  background-color:rgba(252, 219, 165, 1); 
+	  /* //rgba(20,105,69,.4); */
+	}
+	44% {
+	  transform: translateY(0px);
+	  background-color: rgba(252, 219, 165, 1); 
+	  /* //rgba(20,105,69,.2); */
+	}
   }
-  
-  .📦:after {
-	content: '';
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	right: 0;
-	background-color: lightblue;
-	border-radius: var(--box-border-radius);
-	box-shadow: 0px 0px 10px 0px rgba(28, 159, 255, 0.4);
-  }
-  
-  .📦:nth-child(1) {
-	animation: slide var(--duration) ease-in-out infinite alternate;
-  }
-  
-  .📦:nth-child(1):after {
-	animation: color-change var(--duration) ease-in-out infinite alternate;
-  }
-  
-  .📦:nth-child(2) {
-	animation: flip-1 var(--duration) ease-in-out infinite alternate;
-  }
-  
-  .📦:nth-child(2):after {
-	background-color: #1C9FFF;
-	animation: squidge-1 var(--duration) ease-in-out infinite alternate;
-  }
-  
-  .📦:nth-child(3) {
-	animation: flip-2 var(--duration) ease-in-out infinite alternate;
-  }
-  
-  .📦:nth-child(3):after {
-	background-color: #1FB1FD;
-	animation: squidge-2 var(--duration) ease-in-out infinite alternate;
-  }
-  
-  /* Repeat for nth-child(4) and nth-child(5) */
-  
-  @keyframes slide {
-	0% { background-color: #1795FF; transform: translatex(0vw); }
-	100% { background-color: #23D3FB; transform: translatex(calc(var(--container-size) - (var(--box-size) * 1.25))); }
-  }
-  
-  @keyframes color-change {
-	0% { background-color: #1795FF; }
-	100% { background-color: #23D3FB; }
-  }
-  
-  @keyframes flip-1 {
-	0%, 15% { transform: rotate(0); }
-	35%, 100% { transform: rotate(-180deg); }
-  }
-  
-  @keyframes squidge-1 {
-	5% { transform-origin: center bottom; transform: scalex(1) scaley(1); }
-	15% { transform-origin: center bottom; transform: scalex(1.3) scaley(0.7); }
-	25%, 35% { transform-origin: center bottom; transform: scalex(0.8) scaley(1.4); }
-	60%, 100% { transform-origin: center top; transform: scalex(1) scaley(1); }
-	40% { transform-origin: center top; transform: scalex(1.3) scaley(0.7); }
-  }
-  
-  /* Repeat keyframes flip-2, squidge-2, flip-3, etc. with adjusted percentages */
-  

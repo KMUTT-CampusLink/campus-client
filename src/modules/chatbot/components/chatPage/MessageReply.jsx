@@ -1,5 +1,4 @@
 import React from 'react';
-import "../../style/style.css";
 
 const MessageReply = ({dummyAns, questions, answer, profilePic}) => {
   return (

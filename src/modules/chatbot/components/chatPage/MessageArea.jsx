@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import MessageContainer from './MessageContainer';
 import MessageReply from './MessageReply';
+import "../../style/style.css";
 
 const MessageArea = ({questions, dummyAns, profilePic}) => {
 
@@ -8,7 +9,7 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
 
   useEffect(() => {
     messageendref.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [dummyAns]);
+  }, [dummyAns, questions]);
 
   return (
     <div className=' overflow-auto px-10 sm:px-4 lg:px-14 max-h-[19rem] sm:max-h-[16rem] md:max-h-[20rem] xl:max-h-[22rem]'>{
@@ -23,7 +24,19 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
             <div className='flex flex-row gap-6'>
               <MessageReply dummyAns = {dummyAns} questions = {questions} answer = {dummyAns[i]} profilePic = {profilePic} />
             </div>
-            : <></>
+            : 
+            <div className='flex flex-row gap-4 sm:gap-8'>
+              <div>
+                  <img src={profilePic} alt="astraBot" className='rounded-full w-8 h-auto' />
+              </div>
+              <div className="chat-bubble">
+                <div className="typing">
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
+              </div>
+            </div>
           }
           <br/>
           <div ref={messageendref} />
