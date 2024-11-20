@@ -85,7 +85,7 @@ function HR() {
         submitData.append("videoFile", videoFile);
       }
       materialFiles.forEach((file, index) => {
-        submitData.append(`materials[${index}]`, file);
+        submitData.append(`materialFiles`, file);
       });
 
       // Log files being sent
