@@ -6,10 +6,7 @@ import {
   fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
   fetchCourseHeaderBySectionID,
-<<<<<<< HEAD
-=======
   fetchAllVideos,
->>>>>>> 5c86225bafc317df03bc3c7aa9e8eb47f0def564
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -64,15 +61,8 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
-<<<<<<< HEAD
       console.log(error)
     }
   })
 }
 
-=======
-      console.log(error);
-    },
-  });
-};
->>>>>>> 5c86225bafc317df03bc3c7aa9e8eb47f0def564

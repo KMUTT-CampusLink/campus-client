@@ -1,23 +1,40 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useDiscussionPostBySectionID } from "../services/mutations";
 
-const PopupDiscussion = ({ closePopup, onSubmit }) => {
-  const [file, setFile] = useState(null);
+const PopupDiscussion = ({ closePopup }) => {
+  const mutation = useDiscussionPostBySectionID(); // Use the mutation here
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (title && content) {
-      console.log("Submitting:", { title, content, file });
-      onSubmit(); // Notify parent about successful submission
-    } else {
-      alert("Please provide both a title and content."); // Handle validation failure
+    if (!title || !content) {
+      alert("Please provide both a title and content.");
+      return;
+    }
+
+    const newTopic = {
+      section_id: localStorage.getItem("sec_id"), // Retrieve section ID from localStorage
+      user_id: localStorage.getItem("userId"), // Replace with actual user ID logic
+      title,
+      content,
+      discussion_img: file ? file.name : null, // Use file name for now if a file is uploaded
+    };
+
+    try {
+      mutation.mutate(newTopic);
+      alert("Discussion successfully submitted!");
+      closePopup(); // Close the popup on success
+    } catch (error) {
+      console.error("Error submitting discussion:", error);
+      alert("Failed to submit discussion. Please try again.");
     }
   };
 
@@ -105,8 +122,9 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
             <button
               type="submit"
               className="bg-[#ecb45e] text-white px-4 py-2 rounded-md hover:bg-[#d9a24b]"
+              disabled={mutation.isLoading} // Disable button while loading
             >
-              Submit
+              {mutation.isLoading ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

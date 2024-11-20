@@ -32,10 +32,5 @@ export const fetchAllCoursesByStudentID = (studentID) =>
   get(`/courses/${studentID}/all`);
 export const fetchAllCoursesByProfessorID = (professorID) =>
   get(`/courses/${professorID}/teach`);
-<<<<<<< HEAD
 export const fetchCourseHeaderBySectionID = (sectionID) => get(`/courses/${sectionID}`);
 export const fetchDiscussionPostBySectionID = (newTopic) => post(`/courses/discussion/upload`, newTopic);
-=======
-export const fetchCourseHeaderBySectionID = (sectionID) =>
-  get(`/courses/course/${sectionID}`);
->>>>>>> 5c86225bafc317df03bc3c7aa9e8eb47f0def564
