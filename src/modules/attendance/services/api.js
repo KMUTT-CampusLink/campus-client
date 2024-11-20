@@ -1,15 +1,14 @@
-import axios from "axios";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 export const generateNewQr = async (sectionId) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/api/attend/qrGen/${sectionId}`
-      );
-      return response;
-    } catch (error) {
-      return error.response.data;
-    }
-  };
+  try {
+    const response = await axiosInstance.post(`attend/qrGen/${sectionId}`);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
 // export const generateNewQr = async (sectionId) => {
 //     try {
 //       const response = await axios.post(

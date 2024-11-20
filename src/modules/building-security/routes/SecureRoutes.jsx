@@ -13,6 +13,7 @@ import AdministratorMaintenanceRequest from "../pages/administrator/Administrato
 import AdministratorMyBookingList from "../pages/administrator/AdministratorMyBookingList";
 import AdministratorMyBookingSubmit from "../pages/administrator/AdministratorMyBookingSubmit";
 import AdministratorLostAndFoundForm from "../pages/administrator/AdministratorLostAndFoundForm";
+import AuthRoute from "../../registration/middleware/AuthRoute";
 
 export default function SecureRoutes() {
   return [
@@ -22,23 +23,43 @@ export default function SecureRoutes() {
       children: [
         {
           path: "",
-          element: <StudentMainPage />,
+          element: (
+            <AuthRoute allowed_roles={["Student"]}>
+              <StudentMainPage />
+            </AuthRoute>
+          ),
         },
         {
           path: "request",
-          element: <StudentMaintenanceRequest />,
+          element: (
+            <AuthRoute allowed_roles={["Student"]}>
+              <StudentMaintenanceRequest />
+            </AuthRoute>
+          ),
         },
         {
           path: "list",
-          element: <StudentMaintenanceList />,
+          element: (
+            <AuthRoute allowed_roles={["Student"]}>
+              <StudentMaintenanceList />
+            </AuthRoute>
+          ),
         },
         {
           path: "lostandfound",
-          element: <StudentLostAndFound />,
+          element: (
+            <AuthRoute allowed_roles={["Student"]}>
+              <StudentLostAndFound />
+            </AuthRoute>
+          ),
         },
         {
           path: "myitemlist",
-          element: <StudentMyItemList />,
+          element: (
+            <AuthRoute allowed_roles={["Student"]}>
+              <StudentMyItemList />
+            </AuthRoute>
+          ),
         },
       ],
     },
@@ -49,32 +70,60 @@ export default function SecureRoutes() {
       children: [
         {
           path: "",
-          element: <AdministratorMainPage />,
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorMainPage />
+            </AuthRoute>
+          ),
         },
         {
           path: "request",
-          element: <AdministratorMaintenanceRequest />,
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorMaintenanceRequest />
+            </AuthRoute>
+          ),
         },
         {
           path: "list",
-          element: <AdministratorMaintenanceList />,
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorMaintenanceList />
+            </AuthRoute>
+          ),
         },
         {
           path: "lostandfoundlist",
-          element: <AdministratorLostAndFoundList />,
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorLostAndFoundList />
+            </AuthRoute>
+          ),
         },
         {
           path: "mybooking",
-          element: <AdministratorMyBookingSubmit />,
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorMyBookingSubmit />
+            </AuthRoute>
+          ),
         },
         {
           path: "mybookinglist",
-          element: <AdministratorMyBookingList />,
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorMyBookingList />
+            </AuthRoute>
+          ),
         },
         {
           path: "lostandfoundform",
-          element: <AdministratorLostAndFoundForm/>,
-        }
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorLostAndFoundForm />
+            </AuthRoute>
+          ),
+        },
       ],
     },
   ];

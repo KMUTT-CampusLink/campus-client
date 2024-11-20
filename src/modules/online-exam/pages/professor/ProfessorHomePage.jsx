@@ -14,6 +14,7 @@ export default function ProfessorHomePage() {
   const location = useLocation();
   const { sectionId } = useParams();
   const [exams, setExams] = useState([]);
+  const [courseTitle, setCourseTitle] = useState("");
 
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -21,7 +22,8 @@ export default function ProfessorHomePage() {
 
   const getAllExams = async () => {
     const res = await getExams(sectionId);
-    setExams(res.data);
+    setExams(res.data.exam);
+    setCourseTitle(res.data.courseTitle[0].name);
   };
 
   const handleRefresh = () => {
@@ -46,12 +48,13 @@ export default function ProfessorHomePage() {
   useEffect(() => {
     getAllExams();
   }, []);
+
   return (
     <div className="w-auto">
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
-          Linear Algebra
+          {courseTitle}
         </h2>
         <hr className="mt-[20px] bg-[#BEBEBE] flex justify-center" />
         <div className=" flex justify-between pt-[20px]">
