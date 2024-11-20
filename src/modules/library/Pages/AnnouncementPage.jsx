@@ -74,6 +74,7 @@ function AnnouncementPage() {
         <MainNavbar />
         <div className="mx-auto p-4 bg-white min-w-[530px] container">
           {/* Search and sort section */}
+          
           <div className="flex justify-between items-center mb-6">
             <input
               type="text"

@@ -1613,9 +1613,16 @@ function MyBookPage() {
                         <h3 className="text-lg font-semibold text-gray-800">
                           {book.title}
                         </h3>
-                        <p className="text-green-500 mb-1 badge border border-green-500 px-3">
+                        <p
+                          className={`mb-1 badge px-3 border ${
+                            book.reserve_status === "Reserved"
+                              ? "text-green-500 border-green-500"
+                              : "text-yellow-500 border-yellow-500"
+                          }`}
+                        >
                           {book.reserve_status}
                         </p>
+
                         <p className="text-sm text-gray-600">
                           Reservation ID: {book.duplicate_id}
                         </p>
@@ -1648,8 +1655,7 @@ function MyBookPage() {
                   You currently have no history of borrowed books.
                 </p>
               )}
-              {reservedBook.filter((book) => book.user_id).length >
-                0 && (
+              {reservedBook.filter((book) => book.user_id).length > 0 && (
                 <div className="flex items-center justify-center mt-4 gap-2">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}

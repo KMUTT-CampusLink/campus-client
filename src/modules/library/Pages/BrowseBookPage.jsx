@@ -73,17 +73,21 @@ function BrowseBookPage() {
   // Handle search term changes to update suggestions only
   useEffect(() => {
     if (searchTerm) {
+      const lowercaseSearchTerm = searchTerm.toLowerCase();
+
       const booknameSuggestions = data.filter((book) =>
-        book.title.toLowerCase().includes(searchTerm.toLowerCase())
+        book.title.toLowerCase().startsWith(lowercaseSearchTerm)
       );
+
       const authorSuggestions = data.filter((book) =>
-        book.author.toLowerCase().includes(searchTerm.toLowerCase())
+        book.author.toLowerCase().startsWith(lowercaseSearchTerm)
       );
 
       setSuggestions({
         booknames: booknameSuggestions,
         authors: authorSuggestions,
       });
+
       setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
@@ -173,7 +177,7 @@ function BrowseBookPage() {
             )}
           </div>
           <div className="flex gap-5 p-6 text-sm text-neutral-700">
-            <a
+            {/* <a
               href="#"
               className="hover:underline underline-offset-2 decoration-orange-500"
             >
@@ -184,7 +188,7 @@ function BrowseBookPage() {
               className="hover:underline underline-offset-2 decoration-orange-500"
             >
               Alphabetical Search
-            </a>
+            </a> */}
           </div>
         </div>
 

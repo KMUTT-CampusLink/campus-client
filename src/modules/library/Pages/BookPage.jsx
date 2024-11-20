@@ -4,7 +4,7 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
 import { getData, getDuplicate } from "../services/api";
-
+import AuthRoute from "../../registration/middleware/AuthRoute";
 function BookPage() {
   const [bookDuplicate, setBookDuplicate] = useState([]);
   const [totalCopies, setTotalCopies] = useState(0);
@@ -67,6 +67,7 @@ function BookPage() {
     month: "long",
     year: "numeric",
   });
+  console.log(remainingCopies);
 
   return (
     <div className="min-h-screen">
@@ -84,9 +85,11 @@ function BookPage() {
             <div className="flex items-center mt-3">
               <h1 className="font-semibold text-left">Reserve Status:</h1>
               <span
-                className={`ml-2 text-${totalCopies > 0 ? "green" : "red"}-500`}
+                className={`ml-2 text-${
+                  remainingCopies > 0 ? "green" : "red"
+                }-500`}
               >
-                {totalCopies > 0 ? "Available" : "Not Available"}
+                {remainingCopies > 0 ? "Available" : "Not Available"}
               </span>
             </div>
             <div className="p-3 mt-2 rounded-xl bg-neutral-100 flex justify-between items-center text-sm w-full max-w-[300px]">
@@ -146,11 +149,11 @@ function BookPage() {
               >
                 <button
                   className={`w-[70%] mx-auto lg:mx-0 lg:w-auto flex items-center justify-center px-5 py-1 rounded-full font-semibold border-2 transition-all duration-300 ${
-                    totalCopies > 0
+                    remainingCopies > 0
                       ? "bg-orange-100 text-orange-600 border-orange-600 hover:bg-orange-600 hover:text-white"
                       : "bg-gray-300 text-gray-600 cursor-not-allowed"
                   }`}
-                  disabled={totalCopies === 0}
+                  disabled={remainingCopies === 0}
                 >
                   Request
                 </button>
