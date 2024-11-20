@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
-import { BuildOutlined, CalendarOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLocationDot,
+  faCalendarDays,
+} from "@fortawesome/free-solid-svg-icons";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -106,11 +110,18 @@ function EventPage() {
             {/* Date and Location */}
             <div className="flex flex-col sm:flex-row sm:justify-center sm:space-x-6 text-gray-700 text-center sm:text-left mb-6">
               <div className="flex items-center gap-2 mb-2 sm:mb-0">
-                <CalendarOutlined className="text-gray-600" />
+                <FontAwesomeIcon
+                  icon={faCalendarDays}
+                  className="text-gray-600"
+                />
                 <p className="text-lg">{formattedDate}</p>
               </div>
               <div className="flex items-center gap-2">
-                <BuildOutlined className="text-gray-600" />
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className="text-gray-600"
+                />
+
                 <p className="text-lg">{event.location}</p>
               </div>
             </div>

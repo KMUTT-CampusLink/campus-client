@@ -1124,7 +1124,7 @@ import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import QrScanner from "qr-scanner";
-import { VideoCameraOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchReservedBook, returnBook } from "../services/api";
 
 function MyBookPage() {
@@ -1523,7 +1523,10 @@ function MyBookPage() {
                       {!isCameraOpen && (
                         <div className="translate-y-[3rem] absolute">
                           <div className="flex flex-col items-center text-center">
-                            <VideoCameraOutlined className="text-6xl text-gray-400 mb-4" />
+                            <FontAwesomeIcon
+                              icon="fa-solid fa-video "
+                              className="text-6xl text-gray-400 mb-4"
+                            />
                             <p className="text-gray-500 mb-4">
                               Please Turn on Camera
                             </p>

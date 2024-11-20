@@ -1,6 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BuildOutlined, CalendarOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLocationDot,
+  faCalendarDays,
+} from "@fortawesome/free-solid-svg-icons";
 import "./EventCard.css";
 // Helper functions
 const truncateDescription = (description, maxLength = 100) => {
@@ -36,13 +40,19 @@ function EventCard({ event }) {
 
           {/* Event Date and Time */}
           <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
-            <CalendarOutlined className="text-neutral-600" />
+            <FontAwesomeIcon
+              icon="faCalendarDays"
+              className="text-neutral-600"
+            />
             <span>{formatDate(event.event_date)}</span>
           </div>
 
           {/* Event Location */}
           <div className="flex items-center gap-2 text-sm text-neutral-600">
-            <BuildOutlined className="text-neutral-600" />
+            <FontAwesomeIcon
+              icon="faLocationDot"
+              className="text-neutral-600"
+            />
             <span>{event.location}</span>
           </div>
           <span className="badge badge-outline text-orange-500 outline-orange-500">

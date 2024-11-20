@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-import { ArrowRightOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+
 import "./MainWallpaper.css"; // Import custom CSS for wave animation
 import { Link } from "react-router-dom";
 
@@ -49,7 +51,7 @@ function MainWallpaper() {
             </Link>
 
             <button className="btn text-gray-700 border-none hover:bg-neutral-100 bg-white">
-              Continue Exploring <ArrowRightOutlined />
+              Continue Exploring <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
         </div>

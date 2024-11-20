@@ -67,7 +67,6 @@ function BookPage() {
     month: "long",
     year: "numeric",
   });
-  console.log(remainingCopies);
 
   return (
     <div className="min-h-screen">
