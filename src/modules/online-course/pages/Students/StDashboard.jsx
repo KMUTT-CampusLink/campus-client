@@ -10,6 +10,7 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   useAllCourses,
+  useAllCoursesByStudentID,
   useCoursesByStudentID,
 } from "../../services/queries.js";
 

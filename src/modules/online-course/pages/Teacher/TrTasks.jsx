@@ -1,116 +1,96 @@
 import React, { useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPenToSquare,
-  faTrash,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import UploadPopup from "../../components/Upload_Popup";
 import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useCourseHeaderBySectionID } from "../../services/queries";
+import { useNavigate } from "react-router-dom";
+import {
+  useCourseHeaderBySectionID,
+  useAllAssignmentsBySectionID,
+} from "../../services/queries";
+import {
+  useCreateAssignment,
+  useEditAssignment,
+  useDeleteAssignment,
+} from "../../services/mutations";
 import CourseHeader from "../../components/CourseHeader";
+import AssignmentsList from "./TrTaskCard";
 
-
-const TrTasks = () => { 
-
+const TrTasks = () => {
   const sec_id = localStorage.getItem("sec_id");
-  const { data: details } =
-    useCourseHeaderBySectionID(sec_id);
+
+  // Fetch course details and assignments
+  const { data: details } = useCourseHeaderBySectionID(sec_id);
+  const { data:  assignments = [],isLoading,error} = useAllAssignmentsBySectionID(sec_id);
+  console.log("Assignments:", assignments);
+
+  // Mutations for CRUD operations
+  const createAssignment = useCreateAssignment();
+  const editAssignment = useEditAssignment();
+  const deleteAssignment = useDeleteAssignment();
 
   const navigate = useNavigate();
 
-  const toSubmissionTr = (task) => navigate("/courses/Tr/tasks/submission", {state: {task}})
-
-
-
-  const [materials, setMaterials] = useState([
-    {
-      title: "Exercise 1.1",
-      date: "12/4/2024",
-      attachments: ["HW1-Individual-Complement"],
-    },
-    {
-      title: "Exercise 1.2(Individual)",
-      date: "12/5/2024",
-      attachments: ["HW2-Individual-2nd Complement"],
-    },
-  ]);
-
+  // State for popups
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [currentMaterial, setCurrentMaterial] = useState(null);
+  const [currentAssignment, setCurrentAssignment] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
-  const [materialToDelete, setMaterialToDelete] = useState(null);
-  const [fileToDelete, setFileToDelete] = useState(null);
+  const [assignmentToDelete, setAssignmentToDelete] = useState(null);
+  
+  const toSubmissionTr = (assignment) =>
+    navigate("/courses/Tr/tasks/submission", { state: { task: assignment } });
 
-  // Sorting materials by title in ascending order
-  const sortedMaterials = [...materials].sort((a, b) =>
-    a.title.localeCompare(b.title)
-  );
-
-  // Open the Upload popup for new material
+  // Open upload popup for new assignment
   const handleUploadClick = () => {
     setIsPopupOpen(true);
-    setCurrentMaterial(null);
+    setCurrentAssignment(null);
   };
 
-  // Close the Upload popup
+  // Close upload popup
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
 
-  // Submit or update a material
-  const handleSubmitMaterial = (newMaterial) => {
-    if (currentMaterial) {
-      // Update the existing material in the list
-      setMaterials((prevMaterials) =>
-        prevMaterials.map((material) =>
-          material === currentMaterial ? newMaterial : material
-        )
-      );
+  // Submit or edit an assignment
+  const handleSubmitAssignment = (newAssignment) => {
+    const { title, attachments } = newAssignment;
+
+    if (currentAssignment) {
+      // Edit existing assignment
+      editAssignment.mutate({
+        assignmentID: currentAssignment.id,
+        body: {
+          title,
+          description: attachments[0], // Use the file name as description
+        },
+      });
     } else {
-      // Add new material
-      setMaterials((prevMaterials) => [...prevMaterials, newMaterial]);
+      // Create new assignment
+      createAssignment.mutate({
+        section_id: sec_id,
+        title,
+        description: attachments[0], // Use the file name as description
+      });
     }
     setIsPopupOpen(false);
   };
 
-  // Open the delete confirmation popup for attachments
-  const handleDeleteAttachmentClick = (material, file) => {
-    setMaterialToDelete(material);
-    setFileToDelete(file);
+  // Open delete confirmation popup
+  const handleDeleteClick = (assignment) => {
+    setAssignmentToDelete(assignment);
     setIsDeletePopupOpen(true);
   };
 
-  // Handle deleting the selected file
-  const handleDeleteFile = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.map((material) =>
-        material === materialToDelete
-          ? {
-              ...material,
-              attachments: material.attachments.filter(
-                (file) => file !== fileToDelete
-              ),
-            }
-          : material
-      )
-    );
+  // Delete assignment
+  const handleDeleteAssignment = () => {
+    deleteAssignment.mutate(assignmentToDelete.id);
     setIsDeletePopupOpen(false);
   };
 
-  // Handle deleting the entire row
-  const handleDeleteRow = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.filter((material) => material !== materialToDelete)
-    );
-    setIsDeletePopupOpen(false);
-  };
-
-  // Handle Edit Button Click
-  const handleEditClick = (material) => {
-    setCurrentMaterial(material);
+  // Open edit popup
+  const handleEditClick = (assignment) => {
+    setCurrentAssignment(assignment);
     setIsPopupOpen(true);
   };
 
@@ -118,24 +98,6 @@ const TrTasks = () => {
     <div className="w-full min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"tasks"} />
 
-      {/* <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
-          <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
-            About Classroom
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Course:</span> CSC-230 Computer
-            Architecture & Design
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Lecturer:</span> Arjan
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
-            (Thursday)
-          </div>
-        </div>
-      </div> */}
       <CourseHeader
         c_code={details?.course_code}
         c_name={details?.course_name}
@@ -159,52 +121,31 @@ const TrTasks = () => {
       <div className="max-md:text-xs w-full border-b-2 border-gray-300">
         <div className="max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-3 gap-4 font-bold py-2 px-2">
           <div>Title</div>
-          <div>Attachments</div>
-          <div>Publish Date</div>
+          <div>Description</div>
+          <div>Actions</div>
         </div>
       </div>
 
-      <div className="max-md:text-xs max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
-        {sortedMaterials.map((material, index) => (
-          <div key={index} className="grid grid-cols-3 gap-4 py-4">
-            <div onClick={() => toSubmissionTr(material)}>{material.title}</div>
-            <div className="flex items-start gap-2 flex-col">
-              <div>{material.attachments.join(", ")}</div>
-              <div className="flex gap-2">
-                <button onClick={() => handleEditClick(material)}>
-                  <FontAwesomeIcon icon={faPenToSquare} color="red" />
-                </button>
-                {material.attachments.map((file, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleDeleteAttachmentClick(material, file)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" />
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>{material.date}</div>
-          </div>
-        ))}
-      </div>
+<AssignmentsList
+  sec_id={sec_id}
+  toSubmissionTr={toSubmissionTr}
+  handleEditClick={handleEditClick}
+  handleDeleteClick={handleDeleteClick}
+/>
 
       {isPopupOpen && (
         <UploadPopup
           onClose={handleClosePopup}
-          onSubmit={handleSubmitMaterial}
-          material={currentMaterial}
+          onSubmit={handleSubmitAssignment}
+          material={currentAssignment}
         />
       )}
 
       {isDeletePopupOpen && (
         <DeleteConfirmationPopup
           onClose={() => setIsDeletePopupOpen(false)}
-          onDeleteAction={[handleDeleteFile, handleDeleteRow]}
-          message="Would you like to delete the file or the entire task?"
-          action1Label="Delete File"
-          action2Label="Delete Entire Task"
-          showAction2={true}
+          onDeleteAction={handleDeleteAssignment}
+          message="Are you sure you want to delete this task?"
         />
       )}
     </div>

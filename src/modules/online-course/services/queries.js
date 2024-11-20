@@ -7,7 +7,8 @@ import {
   fetchAllCoursesByProfessorID,
   fetchCourseHeaderBySectionID,
   fetchAllVideos,
-  fetchCourseHeaderBySectionIDForStudent
+  fetchCourseHeaderBySectionIDForStudent,
+  fetchAllAssignmentsBySectionID
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -36,7 +37,7 @@ export const useCoursesByStudentID = (studentID) => {
 
 export const useAllCoursesByStudentID = (studentID) => {
   return useQuery({
-    queryKey: ["courses", studentID],
+    queryKey: ["allCourses", studentID],
     queryFn: () => fetchAllCoursesByStudentID(studentID),
     enabled: !!studentID,
     onError: (error) => {
@@ -77,3 +78,17 @@ export const useCourseHeaderBySectionIDForStudent = (sectionID) => {
     }
   })
 }
+
+export const useAllAssignmentsBySectionID = (sectionID) => {
+  return useQuery({
+    queryKey: ["assignments", sectionID],
+    queryFn: async () => {
+      const data = await fetchAllAssignmentsBySectionID(sectionID);
+      return data;
+    },
+    enabled: !!sectionID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};

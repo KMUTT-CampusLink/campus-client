@@ -4,7 +4,6 @@ import Searchbar from "../../components/Searchbar";
 import CourseCard from "../../components/CourseCard";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 import { useNavigate } from "react-router-dom";
 import { useAllCoursesByStudentID } from "../../services/queries.js";
