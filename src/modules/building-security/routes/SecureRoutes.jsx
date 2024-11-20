@@ -1,5 +1,3 @@
-import { Navigate } from "react-router-dom";
-import getHomePageLink from "../pages/getHomePageLink";
 //Student
 import StudentMainPage from "../pages/student/StudentMainPage";
 import StudentMaintenanceRequest from "../pages/student/StudentMaintenanceRequest";
@@ -17,11 +15,14 @@ import AdministratorMyBookingSubmit from "../pages/administrator/AdministratorMy
 import AdministratorLostAndFoundForm from "../pages/administrator/AdministratorLostAndFoundForm";
 import AuthRoute from "../../registration/middleware/AuthRoute";
 
+// redirect page
+import RedirectPage from "../pages/RedirectPage";
+
 export default function SecureRoutes() {
   return [
     {
       path: "",
-      element: <Navigate to={getHomePageLink()} />, // Redirect based on role
+      element: <RedirectPage />,
     },
     {
       //student
