@@ -23,10 +23,10 @@ function TranscriptPage() {
       <main className={mainStyles}>
         <HeadLineCard title="Transcript" link="/regis/course/detail" />
         <div className="divider"></div>
-        <div className="bg-white p-6 shadow-md rounded-md">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-6 bg-white rounded-md shadow-md">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <GPAXCard studentId={studentId} />
-            <div className="col-span-2 grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 col-span-2 gap-4">
               {transcripts?.length === 0 ? (
                 <div className="text-center text-gray-500">
                   No transcript data available.
