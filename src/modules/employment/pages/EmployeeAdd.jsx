@@ -45,7 +45,7 @@ const EmployeeAdd = () => {
       try {
         const result = await axiosInstance.get(`employ/getFaculty`);
         setFaculties(result.data);
-        console.log(result.data);
+        //console.log(result.data);
       } catch (error) {
         console.error("Error fetching faculties:", error);
       }
@@ -172,13 +172,13 @@ const EmployeeAdd = () => {
   const handleSumbit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit button clicked");
+    //console.log("Submit button clicked");
     // Debugging: Check if this logs
     setShowPopup(false);
 
     //const facultyNumber = facultyMapping[formData.faculty_id];
     // console.log(facultyNumber);
-    console.log(formData.faculty_id);
+    //console.log(formData.faculty_id);
 
     const employeeData = {
       firstname: formData.firstname,
@@ -206,7 +206,7 @@ const EmployeeAdd = () => {
       );
 
       if (response.status === 200) {
-        console.log("Employee added successfully");
+        //console.log("Employee added successfully");
         setShowPopup(false);
         navigate("/employ/employee");
       } else {

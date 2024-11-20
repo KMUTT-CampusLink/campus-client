@@ -62,18 +62,12 @@ const EmployeeGrid = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // const result = await fetch("http://localhost:3000/api/employ/getEmp");
-      // const jsonResult = await result.json();
-      // // console.log(jsonResult)
-      // setEmployees(jsonResult);
-      
       const result = await axiosInstance.get(`employ/getEmp`);
       setEmployees(result.data);
     };
 
     fetchData();
   }, []);
-
 
   useEffect(() => {
     const fetchFaculties = async () => {
@@ -133,11 +127,11 @@ const EmployeeGrid = () => {
           <div className="w-1/2">
             <select
               name="faculty"
-              value={selectedFaculty ? selectedFaculty : ""} 
+              value={selectedFaculty ? selectedFaculty : ""}
               onChange={handleFacultyChange}
               className="w-full border-b border-black focus:outline-none font-geologica text-[12px] md:text-[16px] text-center"
             >
-              <option value="" >All Faculties</option>
+              <option value="">All Faculties</option>
               {faculties.map((faculty) => (
                 <option key={faculty.id} value={faculty.id}>
                   {faculty.name}

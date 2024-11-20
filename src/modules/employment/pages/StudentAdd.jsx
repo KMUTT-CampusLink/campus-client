@@ -151,11 +151,11 @@ const StudentAdd = () => {
   const handleSumbit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit button clicked");
+   // console.log("Submit button clicked");
     // Debugging: Check if this logs
     setShowPopup(false);
 
-    const employeeData = {
+    const studentData = {
       firstname: formData.firstname,
       midname: formData.midname,
       lastname: formData.lastname,
@@ -173,13 +173,10 @@ const StudentAdd = () => {
     };
 
     try {
-      const response = await axiosInstance.post(
-        "/employ/postStu",
-        employeeData
-      );
+      const response = await axiosInstance.post("/employ/postStu", studentData);
 
       if (response.status === 200) {
-        console.log("Student added successfully");
+      //  console.log("Student added successfully");
         setShowPopup(false);
         navigate("/employ/student");
       } else {
@@ -187,6 +184,7 @@ const StudentAdd = () => {
       }
     } catch (error) {
       console.error("Cannot create user:", error);
+     // console.log(studentData);
     }
   };
 
