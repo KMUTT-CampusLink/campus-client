@@ -64,18 +64,25 @@ function PeriodPage() {
           <div className="">
             <SInfoCard />
             <div className="grid w-1/2 gap-4 mx-auto mt-8">
-              <Button
-                to="/regis/course"
-                disabled={regis === "Late Registration"}
-                icon={regis === "Late Registration"}
-                text="Register"
-              />
-              <Button
-                to="/regis/course"
-                disabled={regis === "Registration"}
-                icon={regis === "Registration"}
-                text="Late Register"
-              />
+              {regis === "Withdraw" ? (
+                <Button to="/regis/course" text="Withdraw Courses" />
+              ) : (
+                <>
+                  {" "}
+                  <Button
+                    to="/regis/course"
+                    disabled={regis === "Late Registration"}
+                    icon={regis === "Late Registration"}
+                    text="Register"
+                  />
+                  <Button
+                    to="/regis/course"
+                    disabled={regis === "Registration"}
+                    icon={regis === "Registration"}
+                    text="Late Register"
+                  />
+                </>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-center">

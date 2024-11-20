@@ -6,12 +6,15 @@ import NavBar from "../components/NavBarComponents/NavBar";
 import HeadLineCard from "../components/HeadLineCard";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { useActiveCoursesByStudentId } from "../services/queries";
-import { useDeleteEnrollmentDetail } from "../services/mutations";
+import {
+  useDeleteEnrollmentDetail,
+  useWithdrawEnrollmentDetail,
+} from "../services/mutations";
 import { ErrorSkeleton } from "../styles/Skeletons";
 import popToast from "../../../utils/popToast";
 import LoadingPage from "../../dev/pages/LoadingPage";
 
-function DropCoursePage() {
+function WithdrawPage() {
   const navigate = useNavigate();
   const studentId = localStorage.getItem("studentId");
   const queryClient = useQueryClient();
@@ -21,24 +24,24 @@ function DropCoursePage() {
     isLoading,
     isError,
   } = useActiveCoursesByStudentId(studentId);
-  const mutation = useDeleteEnrollmentDetail();
+  const mutation = useWithdrawEnrollmentDetail();
 
   const [selectedEnrollmentId, setSelectedEnrollmentId] = useState(null);
 
-  const handleDropCourses = async () => {
+  const handleWithdrawCourses = async () => {
     if (!selectedEnrollmentId) {
-      popToast("No course selected to drop.", "warning");
+      popToast("No course selected to withdraw.", "warning");
       return;
     }
 
     try {
       await mutation.mutateAsync({ enrollmentDetailId: selectedEnrollmentId });
-      popToast("Course Successfully Dropped", "success");
+      popToast("Course Successfully Withdrawn", "success");
       queryClient.invalidateQueries("courses");
     } catch (error) {
-      console.error("Error dropping course:", error);
+      console.error("Error withdrawing course:", error);
       popToast(
-        "Failed to drop the selected course. Please try again.",
+        "Failed to withdraw the selected course. Please try again.",
         "error"
       );
     }
@@ -51,7 +54,7 @@ function DropCoursePage() {
     <div className={containerDivStyles}>
       <NavBar />
       <main className={mainStyles}>
-        <HeadLineCard title="Drop Courses" link="/regis/course/detail" />
+        <HeadLineCard title="Withdraw Courses" link="/regis/course/detail" />
         <div className="divider"></div>
         <div className="p-6 bg-white rounded-md shadow-md">
           {courses?.length === 0 ? (
@@ -63,7 +66,9 @@ function DropCoursePage() {
               <table className="min-w-full text-left border">
                 <thead className="text-center">
                   <tr className="bg-[#c3554e] text-white">
-                    <th className="px-4 py-2 border border-gray-300">Drop</th>
+                    <th className="px-1 py-2 border border-gray-300">
+                      Withdraw
+                    </th>
                     <th className="px-4 py-2 border border-gray-300">Code</th>
                     <th className="px-4 py-2 border border-gray-300">
                       Section Data
@@ -111,8 +116,8 @@ function DropCoursePage() {
             <button className={`${button}`} onClick={() => navigate(-1)}>
               Back
             </button>
-            <button className={`${button}`} onClick={handleDropCourses}>
-              Drop Selected Course
+            <button className={`${button}`} onClick={handleWithdrawCourses}>
+              Withdraw Selected Course
             </button>
           </div>
         </div>
@@ -121,4 +126,4 @@ function DropCoursePage() {
   );
 }
 
-export default DropCoursePage;
+export default WithdrawPage;

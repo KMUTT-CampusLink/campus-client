@@ -81,8 +81,6 @@ const NavBar = () => {
     roleBasedFilter(link, role)
   );
 
-  console.log(filteredNavigationLinks);
-
   const mobileNavRef = useRef(null); // mobile nav reference
   const [isOpen, setIsOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);

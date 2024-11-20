@@ -50,7 +50,7 @@ export const fetchActiveCoursesByStudentId = (studentId) =>
 export const fetchPeriodBySemesterId = (semesterId) =>
   get(`/regis/semesters/period/${semesterId}`);
 export const fetchSemestersByStudentId = (studentId) =>
-    get(`/regis/semesters/${studentId}`);
+  get(`/regis/semesters/${studentId}`);
 export const fetchAllSemesters = () =>
   get(`/regis/semesters/all`);
 
@@ -68,6 +68,9 @@ export const fetchEnrollmentHead = (enrollment) =>
   post("/regis/enroll/head", enrollment);
 export const addEnrollmentDetail = (newEnrollment) =>
   post("/regis/enroll", newEnrollment);
+export const withdrawEnrollmentDetail = (enrollment) => {
+  return axiosInstance.post(`/regis/enroll/${enrollment.enrollmentDetailId}`);
+};
 export const deleteEnrollmentDetail = (enrollment) => {
   return axiosInstance.delete(`/regis/enroll/${enrollment.enrollmentDetailId}`);
 };
