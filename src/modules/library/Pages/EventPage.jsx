@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import axios from "axios";
+import axios from "../../../utils/axiosInstance";
 function EventPage() {
   const scrollToTicket = () => {
     const ticketSection = document.querySelector(".ticket-section");

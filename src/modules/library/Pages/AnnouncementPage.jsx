@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AnnouncementCard from "../components/Card/AnnouncementPageCard";
-import axios from "axios";
+import axios from "../../../utils/axiosInstance";
 
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";

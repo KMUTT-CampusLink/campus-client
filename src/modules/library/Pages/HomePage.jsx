@@ -3,7 +3,7 @@ import MainWallpaper from "../components/MainWallpaper";
 import AnnouncementCard from "../components/Card/AnnouncementCard";
 import EventCard from "../components/Card/EventCard";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
-import axios from "axios";
+import axios from "../../../utils/axiosInstance";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";

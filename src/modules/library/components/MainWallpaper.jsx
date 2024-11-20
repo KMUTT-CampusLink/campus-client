@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Button } from "antd";
+import axios from "../../../utils/axiosInstance";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import "./MainWallpaper.css"; // Import custom CSS for wave animation
 import { Link } from "react-router-dom";
@@ -106,15 +105,3 @@ function MainWallpaper() {
 }
 
 export default MainWallpaper;
-
-
-
-
-
-
-
-
-
-
-
-
