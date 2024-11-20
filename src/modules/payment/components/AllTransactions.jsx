@@ -10,6 +10,34 @@ const AllTransactions = ({
   setIsAscending,
   setShowAll,
 }) => {
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className="fixed right-0 top-0 z-50 bg-white h-screen w-full max-w-full p-4 lg:max-w-md lg:p-8 overflow-y-auto transition-transform duration-500 ease-in-out">
+        <div className="flex flex-row justify-between items-center mb-6 pt-14">
+          <h2 className="h3">All Transactions</h2>
+          {/* X button to close the modal */}
+          <button onClick={() => setShowAll(false)} aria-label="Close">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <p className="text-center body-1 text-gray-500">No Invoice Found</p>
+      </div>
+    );
+  }
+
   const filteredAllTransactions =
     filterAll === "All"
       ? transactions
@@ -107,13 +135,6 @@ const AllTransactions = ({
             </li>
           </ul>
         </div>
-
-        {/* <button
-          className="btn btn-outline body-1 lg:mt-0"
-          onClick={() => setIsAscending(!isAscending)}
-        >
-          {isAscending ? "Ascending" : "Descending"}
-        </button> */}
       </div>
 
       <div className="space-y-4 ">
@@ -130,44 +151,48 @@ const AllTransactions = ({
             </div>
             <div className="text-right flex flex-col items-end justify-center ml-auto mr-2">
               <p
-                className={`big-label ${transaction.status === "Paid"
-                  ? "text-green-500"
-                  : transaction.status === "Cancelled"
+                className={`big-label ${
+                  transaction.status === "Paid"
+                    ? "text-green-500"
+                    : transaction.status === "Cancelled"
                     ? "text-red-500"
                     : "text-yellow-500"
-                  }`}
+                }`}
               >
                 {formatNumberWithCommas(transaction.amount)} BAHT
               </p>
               <p
-                className={`bold-small ${transaction.status === "Paid"
-                  ? "text-green-600"
-                  : transaction.status === "Cancelled"
+                className={`bold-small ${
+                  transaction.status === "Paid"
+                    ? "text-green-600"
+                    : transaction.status === "Cancelled"
                     ? "text-red-600"
                     : transaction.status === "Pay_by_Installments"
-                      ? "text-yellow-600"
-                      : transaction.status === "Cancelled"
-                        ? "text-red-600"
-                        : "text-yellow-600"
-                  }`}
+                    ? "text-yellow-600"
+                    : transaction.status === "Cancelled"
+                    ? "text-red-600"
+                    : "text-yellow-600"
+                }`}
               >
-                {transaction.status === 'Pay_by_Installments' ? 'Pay by Installments' : transaction.status.toUpperCase()}
+                {transaction.status === "Pay_by_Installments"
+                  ? "Pay by Installments"
+                  : transaction.status.toUpperCase()}
               </p>
             </div>
 
             {/* Add Arrow for Unpaid or Pay by Installments Transactions */}
             {(transaction.status === "Unpaid" ||
               transaction.status === "Pay_by_Installments") && (
-                <div className="ml-2">
-                  <button
-                    className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
-                    onClick={() => handleArrowClick(transaction)}
-                    aria-label="Pay Now"
-                  >
-                    ➔
-                  </button>
-                </div>
-              )}
+              <div className="ml-2">
+                <button
+                  className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
+                  onClick={() => handleArrowClick(transaction)}
+                  aria-label="Pay Now"
+                >
+                  ➔
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

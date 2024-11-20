@@ -8,12 +8,79 @@ const RecentTransactions = ({
   setFilterRecent,
   setShowAll,
 }) => {
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className="w-full lg:w-1/2 mb-auto">
+        <h2 className=" h2 py-4 lg:py-8">Recent Transactions</h2>
+        <div className="flex flex-row p-0 h-min justify-between mb-4 items-center space-x-2">
+          {/* Filters */}
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-outline body-1">
+              Filter By: {filterRecent}
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a className="small-label" onClick={() => setFilterRecent("All")}>
+                  All
+                </a>
+              </li>
+              <li>
+                <a
+                  className="small-label"
+                  onClick={() => setFilterRecent("Paid")}
+                >
+                  Paid
+                </a>
+              </li>
+              <li>
+                <a
+                  className="small-label"
+                  onClick={() => setFilterRecent("Unpaid")}
+                >
+                  Unpaid
+                </a>
+              </li>
+              <li>
+                <a
+                  className="small-label"
+                  onClick={() => setFilterRecent("Cancelled")}
+                >
+                  Cancelled
+                </a>
+              </li>
+              <li>
+                <a
+                  className="small-label"
+                  onClick={() => setFilterRecent("Pay_by_Installments")}
+                >
+                  Pay by Installments
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* See All Button */}
+          <button
+            className="btn bg-payment-red hover:bg-red-400 text-white w-fit body-1"
+            onClick={() => setShowAll(true)}
+          >
+            See All
+          </button>
+        </div>
+        <p className="text-center body-1 text-gray-500">No Invoice Found</p>
+      </div>
+    );
+  }
+
   const filteredRecentTransactions =
     filterRecent === "All"
       ? transactions
       : transactions.filter(
-        (transaction) => transaction.status === filterRecent
-      );
+          (transaction) => transaction.status === filterRecent
+        );
 
   const sortedTransactions =
     filteredRecentTransactions &&
@@ -43,7 +110,6 @@ const RecentTransactions = ({
       console.error("Failed to fetch transaction details");
     }
   };
-
 
   return (
     <div className="w-full lg:w-1/2 mb-auto">
@@ -123,44 +189,46 @@ const RecentTransactions = ({
               </div>
               <div className="text-right flex flex-col items-end justify-center ml-auto mr-2">
                 <p
-                  className={`big-label ${transaction.status === "Paid"
+                  className={`big-label ${
+                    transaction.status === "Paid"
                       ? "text-green-500"
                       : transaction.status === "Cancelled"
-                        ? "text-red-500"
-                        : "text-yellow-500"
-                    }`}
+                      ? "text-red-500"
+                      : "text-yellow-500"
+                  }`}
                 >
                   {formatNumberWithCommas(transaction.amount)} BAHT
                 </p>
                 <p
-                  className={`bold-small ${transaction.status === "Paid"
-                    ? "text-green-600"
-                    : transaction.status === "Cancelled"
+                  className={`bold-small ${
+                    transaction.status === "Paid"
+                      ? "text-green-600"
+                      : transaction.status === "Cancelled"
                       ? "text-red-600"
                       : transaction.status === "Pay_by_Installments"
-                        ? "text-yellow-600"
-                        : transaction.status === "Cancelled"
-                          ? "text-red-600"
-                          : "text-yellow-600"
-                    }`}
+                      ? "text-yellow-600"
+                      : "text-yellow-600"
+                  }`}
                 >
-                  {transaction.status === 'Pay_by_Installments' ? 'Pay by Installments' : transaction.status.toUpperCase()}
+                  {transaction.status === "Pay_by_Installments"
+                    ? "Pay by Installments"
+                    : transaction.status.toUpperCase()}
                 </p>
               </div>
 
               {/* Arrow for Unpaid or Pay by Installments Transactions */}
               {(transaction.status === "Unpaid" ||
                 transaction.status === "Pay_by_Installments") && (
-                  <div className="ml-2">
-                    <button
-                      className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
-                      onClick={() => handleArrowClick(transaction)}
-                      aria-label="Pay Now"
-                    >
-                      ➔
-                    </button>
-                  </div>
-                )}
+                <div className="ml-2">
+                  <button
+                    className="btn btn-sm btn-circle bg-payment-red hover:bg-red-500 text-white ml-2"
+                    onClick={() => handleArrowClick(transaction)}
+                    aria-label="Pay Now"
+                  >
+                    ➔
+                  </button>
+                </div>
+              )}
             </div>
           ))}
       </div>
