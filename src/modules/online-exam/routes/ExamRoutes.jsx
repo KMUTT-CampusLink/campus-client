@@ -70,7 +70,7 @@ export default function ExamRoutes() {
           element: <ProfessorScoringPage />,
         },
         {
-          path: "overallScoring/:examId",
+          path: "overallScoring/:examId/:sectionId",
           element: <ProfessorOverallScoringPage />,
         },
       ],

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../../utils/axiosInstance"; // Import the axios instance
 
-export default function MaintenanceList() {
+export default function AdminMaintenanceList() {
   const [requests, setRequests] = useState([]); // State to hold fetched data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -9,22 +10,27 @@ export default function MaintenanceList() {
 
   // Fetch maintenance requests from the backend API
   useEffect(() => {
-    fetch("http://localhost:3000/api/security/MaintenanceList") // Adjust URL if necessary
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setRequests(data.data); // Update state with fetched data
+    const fetchMaintenanceRequests = async () => {
+      try {
+        const response = await axiosInstance.get("/security/MaintenanceList"); // Use axiosInstance                                    
+        if (response.data.success) {
+          setRequests(response.data.data); // Update state with fetched data
         } else {
-          console.error("Failed to fetch maintenance requests:", data.message);
-          setError(data.message);
+          console.error(
+            "Failed to fetch maintenance requests:",
+            response.data.message
+          );
+          setError(response.data.message);
         }
-        setLoading(false); // Stop loading indicator
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching maintenance requests:", error);
         setError("Error fetching data");
-        setLoading(false); // Stop loading even on error
-      });
+      } finally {
+        setLoading(false); // Stop loading indicator
+      }
+    };
+
+    fetchMaintenanceRequests();
   }, []);
 
   // Style based on status
