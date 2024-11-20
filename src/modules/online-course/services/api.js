@@ -60,3 +60,8 @@ export const editDiscussionPost = (topicId, updatedPost) =>
   put(`/courses/discussion/${topicId}/edit`, updatedPost);
 export const deleteDiscussionPost = (topicId) =>
   remove(`/courses/discussion/${topicId}/delete`);
+export const fetchAllCommentsByPostID = (postId) =>
+  get(`/courses/discussion/view/${postId}/comment`);
+export const createDiscussionReply = (topicId, newReply) =>
+  post(`/courses/discussion/${topicId}/comment/create`, newReply);
+

@@ -42,7 +42,11 @@ const TrDiscussion = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [dropDownOpen, setDropDownOpen] = useState(false);
 
-  const openCommentPopup = () => setIsCommentPopupOpen(true);
+ const openCommentPopup = (post) => {
+   setSelectedPost(post); // Pass the entire post object
+   setIsCommentPopupOpen(true);
+ };
+
   const closeCommentPopup = () => setIsCommentPopupOpen(false);
 
   const openUploadPopup = () => setIsUploadPopupOpen(true);
@@ -177,7 +181,7 @@ const TrDiscussion = () => {
                   </div>
                   <button
                     className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white py-2 rounded-md"
-                    onClick={openCommentPopup}
+                    onClick={() => openCommentPopup({id: discussion.id,ownerName: discussion.owner_name,createdAt: discussion.create_at})} // Pass post ID here
                   >
                     Comment
                   </button>
@@ -206,7 +210,13 @@ const TrDiscussion = () => {
         </div>
       )}
 
-      {isCommentPopupOpen && <CommentPopup closePopup={closeCommentPopup} />}
+      {isCommentPopupOpen && (
+        <CommentPopup
+          closePopup={closeCommentPopup}
+          postDetails={selectedPost} // Pass the selected post details
+        />
+      )}
+
       {isUploadPopupOpen && (
         <PopupDiscussion
           closePopup={closeUploadPopup}

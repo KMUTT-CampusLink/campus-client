@@ -8,6 +8,7 @@ import {
   fetchCourseHeaderBySectionID,
   fetchAllVideos,
   fetchAllDiscussionPostsBySectionID,
+  fetchAllCommentsByPostID,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -77,3 +78,14 @@ export const useAllDiscussionPostsBySectionID = (sectionID) => {
     },
   });
 }
+
+export const useAllCommentsByPostID = (postId) => {
+  return useQuery({
+    queryKey: ["allComment", postId],
+    queryFn: () => fetchAllCommentsByPostID(postId),
+    enabled: !!postId, // Ensure postId is valid
+    onError: (error) => {
+      console.error("Error fetching comments:", error);
+    },
+  });
+};

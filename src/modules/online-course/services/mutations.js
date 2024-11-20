@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchDiscussionPostBySectionID, deleteDiscussionPost, editDiscussionPost } from "./api";
+import { fetchDiscussionPostBySectionID, deleteDiscussionPost, editDiscussionPost,createDiscussionReply } from "./api";
 
 export const useDiscussionPostBySectionID = () => {
   const queryClient = useQueryClient();
@@ -64,6 +64,21 @@ export const useDeleteDiscussionPost = () => {
     mutationFn: (topicId) => deleteDiscussionPost(topicId),
     onSuccess: () => {
       queryClient.invalidateQueries("post"); // Invalidate to refresh posts
+    },
+  });
+};
+export const useCreateDiscussionReply = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ topicId, newReply }) =>
+      createDiscussionReply(topicId, newReply), // Pass topicId and newReply to the API call
+    onSuccess: () => {
+      // Invalidate the comment list query to refresh
+      queryClient.invalidateQueries("allComment");
+    },
+    onError: (error) => {
+      console.error("Error creating discussion reply:", error);
     },
   });
 };
