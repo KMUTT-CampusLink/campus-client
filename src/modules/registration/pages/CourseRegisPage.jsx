@@ -16,11 +16,11 @@ import LoadingPage from "../../dev/pages/LoadingPage";
 
 function CourseRegisPage() {
   const studentId = localStorage.getItem("studentId");
-  const currentSemesterId = 1016;
+  const currentSemesterId = localStorage.getItem("semesterId");
 
   const [headId, setHeadId] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
-  const regis = "registration";
+  const regis = localStorage.getItem("event");
   const {
     data: enrollmentHeadData,
     error: enrollmentError,
@@ -76,12 +76,12 @@ function CourseRegisPage() {
         <HeadLineCard title="My Courses" link="/regis/course/detail" />
         <div className="divider"></div>
 
-        <div className="bg-white p-6 shadow-md rounded-md">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-6 bg-white rounded-md shadow-md">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div>
               {/* Pass handleStudentData to SInfoCard */}
               <SInfoCard onStudentData={handleStudentData} />
-              <div className="ml-6 mt-4">
+              <div className="mt-4 ml-6">
                 <div className="mt-6">
                   <div>
                     Total Credits:{" "}
@@ -110,8 +110,9 @@ function CourseRegisPage() {
                     </span>
                   </div>
                 </div>
-                {(regis === "registration" || regis === "late") && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 py-10">
+                {(regis === "Registration" ||
+                  regis === "Late Registration") && (
+                  <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2">
                     <Link to="add">
                       <button className={`${button} h-full`}>Add Course</button>
                     </Link>
@@ -127,10 +128,10 @@ function CourseRegisPage() {
                 )}
                 {regis === "no" && (
                   <>
-                    <div className="bg-red-500 text-white text-center font-bold p-4 rounded-md mt-10">
+                    <div className="p-4 mt-10 font-bold text-center text-white bg-red-500 rounded-md">
                       Not In Time
                     </div>
-                    <p className="text-sm text-gray-500 text-center my-4">
+                    <p className="my-4 text-sm text-center text-gray-500">
                       Please check the registration time again.
                     </p>
                   </>
@@ -147,7 +148,7 @@ function CourseRegisPage() {
 
             <div className="col-span-2 gap-4">
               <div className="bg-[#c3554e] text-center text-white rounded-md py-2 mb-4">
-                <h3 className="font-bold text-lg font-geologica">
+                <h3 className="text-lg font-bold font-geologica">
                   Course Table
                 </h3>
               </div>

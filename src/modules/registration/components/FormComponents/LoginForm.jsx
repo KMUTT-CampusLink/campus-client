@@ -18,11 +18,13 @@ function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: logIn,
     onSuccess: (data) => {
-      const { id, role, studentId, empId } = data;
+      const { id, role, studentId, empId, semesterId, event } = data;
       localStorage.setItem("userId", id);
       localStorage.setItem("userRole", role);
       localStorage.setItem("studentId", studentId);
       localStorage.setItem("empId", empId);
+      localStorage.setItem("semesterId", semesterId);
+      localStorage.setItem("event", event);
       popToast("Login Successful", "success");
       navigate("/regis");
     },
@@ -56,7 +58,7 @@ function LoginForm() {
     <div className={`${formBg}`}>
       <h3 className={`${formHead}`}>Log in to System</h3>
 
-      {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
+      {errorMessage && <div className="mb-4 text-red-500">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit}>
         {/* Campus Email */}
