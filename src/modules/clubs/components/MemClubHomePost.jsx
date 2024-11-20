@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import ClubHomePostEditModal from "./ClubHomePostEditModal";
+import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
 const MemClubHomePost = (props) => {
   const { clubId } = useParams();
+  const navigate = useNavigate();
   const [toggleVisiblity, setToggleVisible] = useState(false); // false for posts, true for announcements
   const [activeButton, setActiveButton] = useState("post");
-
   const [clubPost, setClubPost] = useState([]);
   const [clubAnnouncement, setClubAnnouncement] = useState([]);
+  const [reservationStatus, setReservationStatus] = useState({}); // Status per announcement
+
+  // Utility functions
+  const getFormattedDate = (date) => {
+    if (!date) return "N/A";
+    const parseDate = new Date(date);
+    const day = String(parseDate.getDate()).padStart(2, "0");
+    const month = String(parseDate.getMonth() + 1).padStart(2, "0");
+    const year = parseDate.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const getFormattedTime = (time) => {
+    if (!time) return "N/A";
+    const parseTime = new Date(time);
+    if (isNaN(parseTime)) return "Invalid Time";
+    const hours = String(parseTime.getUTCHours()).padStart(2, "0");
+    const minutes = String(parseTime.getUTCMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
 
   // Fetch posts
   const fetchClubPost = async () => {
@@ -27,12 +46,29 @@ const MemClubHomePost = (props) => {
   // Fetch announcements
   const fetchClubAnnouncement = async () => {
     try {
-      const response = await axiosInstance.get(
-        `/clubs/announcements/${clubId}`
-      );
-      setClubAnnouncement(response.data.data);
+      const response = await axiosInstance.get(`/clubs/announcements/${clubId}`);
+      const announcements = response.data.data;
+      setClubAnnouncement(announcements);
+
+      // Fetch reservation status for each announcement
+      const userId = localStorage.getItem("userId");
+      const statusPromises = announcements.map(async (announcement) => {
+        const statusResponse = await axiosInstance.post("/clubs/events/status", {
+          clubAnnouncementId: announcement.id,
+          userId,
+        }); // Send data in the body
+        console.log(`Status for announcement ${announcement.id}:`, statusResponse.data); // Debug log
+        return { id: announcement.id, status: statusResponse.data.status };
+      });
+
+      const statuses = await Promise.all(statusPromises);
+      const statusMap = statuses.reduce((acc, { id, status, invoiceId }) => {
+        acc[id] = { status, invoiceId };
+        return acc;
+      }, {});
+      setReservationStatus(statusMap);
     } catch (err) {
-      console.error("Error fetching club announcement:", err);
+      console.error("Error fetching announcements:", err);
       setClubAnnouncement([]);
     }
   };
@@ -45,26 +81,6 @@ const MemClubHomePost = (props) => {
     fetchClubAnnouncement();
   }, [clubId]);
 
-  // Format date
-  function getFormattedDate(date) {
-    if (!date) return "N/A"; // Return a default value if dateTime is undefined
-    const parseDate = new Date(date);
-    const day = String(parseDate.getDate()).padStart(2, "0");
-    const month = String(parseDate.getMonth() + 1).padStart(2, "0");
-    const year = parseDate.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
-
-  // Format time
-  function getFormattedTime(time) {
-    if (!time) return "N/A"; // Return a default value if dateTime is undefined
-    const parseTime = new Date(time);
-    if (isNaN(parseTime)) return "Invalid Time";
-    const hours = String(parseTime.getUTCHours()).padStart(2, "0");
-    const minutes = String(parseTime.getUTCMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
-  }
-
   // Toggle between posts and announcements
   const triggerFunction = (e) => {
     const { id } = e.target;
@@ -72,46 +88,20 @@ const MemClubHomePost = (props) => {
     setToggleVisible(id === "announcement");
   };
 
-  // Reserve a seat for an announcement
-  // const reserveSeat = async (id) => {
-  //   try {
-  //     const response = await axiosInstance.patch(`/clubs/events/${id}/reserve`);
-  //     if (response.data.success) {
-  //       // Update the reserved_seat value locally
-  //       setClubAnnouncement((prevAnnouncements) =>
-  //         prevAnnouncements.map((announcement) =>
-  //           announcement.id === id
-  //             ? {
-  //                 ...announcement,
-  //                 reserved_seat: response.data.data.reserved_seat,
-  //               }
-  //             : announcement
-  //         )
-  //       );
-  //       alert("Seat reserved successfully!");
-  //     } else {
-  //       console.error("Failed to reserve seat:", response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error reserving seat:", error);
-  //   }
-  // };
   const reserveSeat = async (clubAnnouncementId) => {
     try {
       const userId = localStorage.getItem("userId");
-      console.log("userId", userId);
-      // Payload for the API
-      const payload = {
-        clubAnnouncementId,
-        userId,
-        //userId: "e2aaa131-24a1-4e4b-a32a-d6096753c711", // Replace with actual user ID
-      };
-  
-      // Send API request
+      const payload = { clubAnnouncementId, userId };
+
       const response = await axiosInstance.post("clubs/events/reserve", payload);
-  
+
       if (response.data.success) {
-        // Update local state for reserved_seats
+        alert("Reservation successful!");
+        const { invoice } = response.data.data;
+        setReservationStatus((prevState) => ({
+          ...prevState,
+          [clubAnnouncementId]: { status: "Unpaid", invoiceId: invoice.id,},
+        }));
         setClubAnnouncement((prevAnnouncements) =>
           prevAnnouncements.map((announcement) =>
             announcement.id === clubAnnouncementId
@@ -122,13 +112,51 @@ const MemClubHomePost = (props) => {
               : announcement
           )
         );
-        alert("Reservation successful!");
       } else {
         console.error("Reservation failed:", response.data.message);
       }
     } catch (error) {
       console.error("Error reserving seat:", error);
     }
+  };
+
+  const handlePendingPayment = (invoiceId) => {
+    navigate(`/payment/payment-invoice/${invoiceId}`); // Navigate to the payment page
+  };
+
+  const getButton = (statusObj, announcementId) => {
+    const { status, invoiceId } = statusObj || {};
+    if (status === "Unreserved") {
+      return (
+        <button
+          onClick={() => reserveSeat(announcementId)}
+          className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+        >
+          Reserve
+        </button>
+      );
+    }
+    if (status === "Unpaid") {
+      if(!invoiceId){ 
+        console.error(`Missing invoiceId for announcement ${announcementId}`);
+        return null;}
+      return (
+        <button
+        onClick={() => handlePendingPayment(invoiceId)}
+        className="bg-yellow-500 text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+      >
+        Pending Payment
+      </button>
+      );
+    }
+    if (status === "Paid") {
+      return (
+        <button className="bg-green-600 text-white px-3 md:px-8 py-1 md:py-2 rounded-lg" disabled>
+          Reserved
+        </button>
+      );
+    }
+    return null;
   };
 
   const { toggleLeft } = props;
@@ -168,10 +196,11 @@ const MemClubHomePost = (props) => {
           There are no {toggleVisiblity ? "announcements" : "posts"} available.
         </p>
       ) : (
-
         itemsToDisplay.map((item) => {
           const availableSeats =
             (item.max_seats || 0) - (item.reserved_seats || 0);
+          const statusObj = reservationStatus[item.id] || "Unreserved";
+
           return (
             <div
               key={item.id}
@@ -215,12 +244,7 @@ const MemClubHomePost = (props) => {
               )}
               {toggleVisiblity && (
                 <div className="flex items-end w-max ml-auto">
-                  <button
-                    onClick={() => reserveSeat(item.id)}
-                    className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg mr-3 md:mr-8"
-                  >
-                    Reserve
-                  </button>
+                  {getButton(statusObj, item.id)}
                 </div>
               )}
             </div>
