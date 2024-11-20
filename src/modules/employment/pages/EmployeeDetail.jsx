@@ -47,7 +47,7 @@ const EmployeeDetail = () => {
     fetchEmployee();
   }, [id, navigate]);
 
-  console.log(employee);
+  //console.log(employee);
 
   // if (!employee) return <p>Loading employee data...</p>;
   if (!employee) {
@@ -78,7 +78,7 @@ const EmployeeDetail = () => {
         console.error("Employee not found. Redirecting...");
         navigate(`/employ/employee`);
       } else {
-        console.log("Delete successful");
+        //console.log("Delete successful");
         setDeleteSuccess(true);
         setShowPopup(false);
         navigate(`/employ/employee`);

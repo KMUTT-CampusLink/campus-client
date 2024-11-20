@@ -137,7 +137,7 @@ const EmployeeUpdate = () => {
       Object.entries(employeeData).filter(([key, value]) => value)
     );
 
-    console.log("Filtered Employee Data:", filteredEmployeeData);
+    //console.log("Filtered Employee Data:", filteredEmployeeData);
 
     try {
       const response = await axiosInstance.post(
@@ -145,7 +145,7 @@ const EmployeeUpdate = () => {
         filteredEmployeeData
       );
       if (response.status === 200) {
-        console.log("Employee updated successfully");
+      //  console.log("Employee updated successfully");
         navigate(`/employ/employeeDetail/${id}`);
       } else {
         console.error("Error updating employee:", response.data);

@@ -48,7 +48,7 @@ const StudentDetail = () => {
     fetchStudent();
   }, [id, navigate]);
 
-  console.log(student);
+  //console.log(student);
 
   if (!student) return <p>Loading student data...</p>;
 
@@ -72,7 +72,7 @@ const StudentDetail = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`employ/deleteStu/${id}`);
-      console.log("Delete successful");
+     // console.log("Delete successful");
       setDeleteSuccess(true);
       setShowPopup(false);
       navigate(`/employ/student`);

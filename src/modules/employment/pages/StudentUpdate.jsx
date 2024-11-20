@@ -67,7 +67,7 @@ const StudentUpdate = () => {
       try {
         const r = await axiosInstance.get(`employ/getProgramName`);
         setPrograms(r.data);
-        console.log(r.data);
+        //console.log(r.data);
       } catch (error) {
         console.error("Error fetching programs:", error);
       }
@@ -77,7 +77,7 @@ const StudentUpdate = () => {
       try {
         const respond = await axiosInstance.get(`employ/getSemester`);
         setSemesters(respond.data);
-        console.log(respond.data);
+        // console.log(respond.data);
       } catch (error) {
         console.error("Error fetching semesters:", error);
       }
@@ -108,7 +108,7 @@ const StudentUpdate = () => {
       Object.entries(StudentData).filter(([key, value]) => value)
     );
 
-    console.log("Filtered Student Data:", filteredStudentData);
+    // console.log("Filtered Student Data:", filteredStudentData);
 
     try {
       const response = await axiosInstance.post(
@@ -116,7 +116,7 @@ const StudentUpdate = () => {
         filteredStudentData
       );
       if (response.status === 200) {
-        console.log("Student updated successfully");
+        //  console.log("Student updated successfully");
         navigate(`/employ/studentDetail/${id}`);
       } else {
         console.error("Error updating student:", response.data);
