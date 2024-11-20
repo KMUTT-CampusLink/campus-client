@@ -1,47 +1,60 @@
-import React, { useState } from "react";
-import { QrReader } from "react-qr-reader";
+import React, { useEffect, useRef, useState } from "react";
+import QrScanner from "qr-scanner";
 
 const DriverPage = () => {
-  const [scanResult, setScanResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [qrResult, setQrResult] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const videoRef = useRef(null); // Ref for the video element
 
-  const handleScan = (data) => {
-    if (data) {
-      setScanResult(data);
-      setError(null);
+  useEffect(() => {
+    if (videoRef.current) {
+      const qrScanner = new QrScanner(
+        videoRef.current,
+        (result) => {
+          setQrResult(result.data);
+          setErrorMessage(""); // Clear any previous error
+        },
+        {
+          onDecodeError: (error) => {
+            console.error(error);
+            setErrorMessage("Error scanning QR code. Try again.");
+          },
+        }
+      );
+      qrScanner.start();
+
+      return () => {
+        qrScanner.stop();
+        qrScanner.destroy();
+      };
     }
-  };
-
-  const handleError = (err) => {
-    console.error(err);
-    setError("Unable to access camera or scan QR code. Please try again.");
-  };
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Driver QR Code Reader
-      </h1>
-      <div className="bg-white shadow-lg p-6 rounded-md flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center w-80 h-80 bg-gray-200 rounded-lg">
-          <QrReader
-            onResult={(result, error) => {
-              if (!!result) handleScan(result.text);
-              if (!!error) handleError(error);
-            }}
-            constraints={{ facingMode: "environment" }}
-            className="w-full h-full rounded-lg"
-          />
-        </div>
-        <div className="mt-6 text-center">
-          {scanResult ? (
-            <p className="text-green-600 font-semibold">
-              ✅ Scan Result: {scanResult}
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Driver Page</h1>
+      <p className="text-gray-600 mb-8">Scan students' QR codes below</p>
+
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
+        <video
+          ref={videoRef}
+          style={{ width: "100%", height: 300 }}
+          className="rounded-lg"
+        ></video>
+        <div className="mt-4">
+          {qrResult ? (
+            <p className="text-green-700 text-lg font-medium">
+              Successfully scanned:{" "}
+              <span className="font-bold">{qrResult}</span>
             </p>
           ) : (
-            <p className="text-gray-600">Scan a QR code to see the result.</p>
+            <p className="text-gray-500 text-sm">
+              Point the camera at a QR code to scan...
+            </p>
           )}
-          {error && <p className="text-red-600 mt-2">{error}</p>}
+          {errorMessage && (
+            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+          )}
         </div>
       </div>
     </div>
@@ -49,3 +62,61 @@ const DriverPage = () => {
 };
 
 export default DriverPage;
+
+// import React, { useState } from "react";
+// import QrScanner from "qr-scanner";
+
+// const DriverPage = () => {
+//   const [qrResult, setQrResult] = useState("");
+//   const [errorMessage, setErrorMessage] = useState("");
+
+//   const handleScan = (data) => {
+//     if (data) {
+//       setQrResult(data.text || data);
+//       setErrorMessage(""); // Clear any previous error
+//     }
+//   };
+
+//   const handleError = (error) => {
+//     console.error(error);
+//     setErrorMessage("Error accessing camera or scanning the QR code.");
+//   };
+
+//   const previewStyle = {
+//     height: 300,
+//     width: "100%",
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+//       <h1 className="text-3xl font-bold text-gray-800 mb-6">Driver Page</h1>
+//       <p className="text-gray-600 mb-8">Scan students' QR codes below</p>
+
+//       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
+//         <QrScanner
+//           delay={300}
+//           style={previewStyle}
+//           onError={handleError}
+//           onScan={handleScan}
+//         />
+//         <div className="mt-4">
+//           {qrResult ? (
+//             <p className="text-green-700 text-lg font-medium">
+//               Successfully scanned:{" "}
+//               <span className="font-bold">{qrResult}</span>
+//             </p>
+//           ) : (
+//             <p className="text-gray-500 text-sm">
+//               Point the camera at a QR code to scan...
+//             </p>
+//           )}
+//           {errorMessage && (
+//             <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DriverPage;
