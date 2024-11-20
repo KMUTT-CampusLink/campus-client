@@ -31,15 +31,18 @@ const StudentDetail = () => {
 
   useEffect(() => {
     const fetchStudent = async () => {
+      //debugger;
       try {
         const result = await axiosInstance.get(`employ/getStu/${id}`);
         setStudents(result.data);
-        if (!result.data.uni_batch) {
+        // debugger;
+        if (!result.data.uni_batch || result.status == 404) {
           console.error("Faculty data missing. Redirecting to main page.");
           navigate(`/employ/student`);
         }
       } catch (error) {
-        console.error("Error fetching student data:", error);
+        //console.error("Error fetching student data:", error);
+        navigate(`/employ/student`);
       }
     };
     fetchStudent();
