@@ -1,51 +1,86 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod"; // Importing zod
-import { useNavigate } from "react-router-dom"; // Importing useNavigate
+import { z } from "zod";
+import { useNavigate, useParams } from "react-router-dom";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
-// Schema definition using Zod
 const schema = z.object({
-  postDescription: z
-    .string()
-    .nonempty({ message: "Post description is required" }),
-  postDetail: z
-    .string()
-    .nonempty({ message: "Post detail is required" }),
-  // We don't include photo in schema since zod does not validate files
+  title: z.string().nonempty({ message: "Post title is required" }),
+  content: z.string().nonempty({ message: "Post content is required" }),
 });
 
 function CreatePost() {
+  const { clubId } = useParams();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema), // Apply zodResolver with schema
+    resolver: zodResolver(schema),
   });
 
-  const navigate = useNavigate(); // Hook to navigate between routes
-  const [photo, setPhoto] = useState(null); // State to handle the uploaded photo
+  const navigate = useNavigate();
+  const [photo, setPhoto] = useState(null);
 
   // Handle file change event
-  const handlePhotoChange = (e) => {
-    setPhoto(e.target.files[0]); // Store the selected file
-  };
+  // const handlePhotoChange = (e) => {
+  //   setPhoto(e.target.files[0]);
+  // };
 
-  const onSubmit = (data) => {
-    const formData = new FormData(); // Create a FormData object to handle file uploads
-    formData.append("postDescription", data.postDescription);
-    formData.append("postDetail", data.postDetail);
-    if (photo) {
-      formData.append("photo", photo); // Add the photo to the FormData if it exists
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/avif",
+      ];
+      if (!allowedMimeTypes.includes(file.type)) {
+        alert("Invalid file type. Allowed types: JPEG, PNG, GIF, WebP, AVIF.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size must be less than 5MB.");
+        return;
+      }
     }
 
-    // For example, here you would send the formData to your backend (e.g., via Axios)
-    // axios.post("/api/posts", formData) - Uncomment when using axios or any HTTP request library
-    console.log(data, photo);
+    setPhoto(file || null); // Set to null if no file is selected
+  };
 
-    // Navigate to the desired route after submitting the form
-    navigate("/clubs/club-home"); // Change this to your desired route
+  const onSubmit = async (data) => {
+    if (!photo) {
+      alert("Please upload a valid photo.");
+      return; // Stop form submission if no photo is selected
+    }
+    const formData = new FormData();
+    formData.append("postTitle", data.title); // Must match backend expectation
+    formData.append("postContent", data.content); // Must match backend expectation
+    if (photo) {
+      formData.append("photo", photo); // Must match the key the backend expects
+    }
+
+    try {
+      const response = await axiosInstance.post(
+        `/clubs/admin/post/${clubId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      alert("Post created successfully");
+      navigate(`/clubs/club-home/${clubId}`); // Optional: navigate to another page
+    } catch (error) {
+      console.error("Error creating post:", error.message);
+      alert("Failed to create post");
+    }
   };
 
   return (
@@ -53,42 +88,46 @@ function CreatePost() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col space-y-4 sm:w-4/5 md:w-3/5 lg:w-2/5 mx-auto px-4"
-        encType="multipart/form-data" // Important for file uploads
+        //encType="multipart/form-data"
       >
-        {/* Post Description */}
+        {/* Post Title */}
         <div>
-          <label className="block text-xl font-semibold">Post Description</label>
+          <label className="block text-xl font-semibold">
+            Post Title <span className="text-red-500">*</span>
+          </label>
           <input
-            {...register("postDescription")}
+            {...register("title")}
             className={`border p-2 w-full rounded-md shadow-sm ${
-              errors.postDescription ? "border-red-500" : "border-gray-300"
+              errors.title ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.postDescription && (
-            <p className="text-red-500">{errors.postDescription.message}</p>
+          {errors.title && (
+            <p className="text-red-500">{errors.title.message}</p>
           )}
         </div>
 
-        {/* Post Detail */}
+        {/* Post Content */}
         <div>
-          <label className="block text-xl font-semibold">Post Detail</label>
+          <label className="block text-xl font-semibold">
+            Post Content <span className="text-red-500">*</span>
+          </label>
           <textarea
-            {...register("postDetail")}
+            {...register("content")}
             className={`border p-2 w-full rounded-md shadow-sm ${
-              errors.postDetail ? "border-red-500" : "border-gray-300"
+              errors.content ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.postDetail && (
-            <p className="text-red-500">{errors.postDetail.message}</p>
+          {errors.content && (
+            <p className="text-red-500">{errors.content.message}</p>
           )}
         </div>
 
         {/* Photo Upload */}
         <div>
-          <label className="block text-xl font-semibold">Upload Photo</label>
+          <label className="block text-xl font-semibold">Upload Photo <span className="text-red-500">*</span></label>
           <input
             type="file"
-            accept="image/*" // Accept image files only
+            accept="image/*"
             onChange={handlePhotoChange}
             className="border p-2 w-full rounded-md shadow-sm"
           />
