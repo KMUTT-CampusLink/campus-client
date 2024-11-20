@@ -14,7 +14,7 @@ const ImageElement = ({ src }) => {
   );
 };
 
-const NewsElement = () => {
+const NewsElement = ({ title, description, date }) => {
   return (
     <div className="hidden md:flex flex-col flex-1 h-full p-[1rem] gap-4">
       {/* Title */}
