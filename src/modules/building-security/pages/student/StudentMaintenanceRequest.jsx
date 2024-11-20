@@ -17,12 +17,12 @@ export default function StudentMaintenanceRequest() {
   const [description, setDescription] = useState("");
   const [error, setError] = useState(null);
 
-  const userId = "2dbd2251-6dcf-4aab-914c-2ecdda5eadd7"; // Temporary user_id
-
   useEffect(() => {
     const fetchBuildingData = async () => {
       try {
-        const response = await axiosInstance.get("/security/buildings");
+        const response = await axiosInstance.get(
+          "/security//buildingsWithRoom"
+        );
         setBuildingData(
           response.data.sort((a, b) => a.name.localeCompare(b.name))
         );
@@ -70,29 +70,22 @@ export default function StudentMaintenanceRequest() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formattedTimestamp =
-      new Date().toISOString().replace("T", " ").split(".")[0] + ".0000000";
-
     const maintenanceRequest = {
-      user_id: userId,
-      location: room,
+      room_id: parseInt(room, 10),
       type,
       priority,
       status,
       description,
-      created_at: formattedTimestamp,
-      updated_at: formattedTimestamp,
     };
 
     try {
       await axiosInstance.post(
-        "/api/security/addMaintenanceList",
+        "/security/addMaintenanceList",
         maintenanceRequest
       );
       alert("Maintenance request submitted successfully!");
       setError(null); // Clear errors
-      navigate("/security/administrator/list");
+      navigate("/security/student/list");
     } catch (error) {
       console.error("Error submitting maintenance request:", error);
       setError("Failed to submit the request.");
@@ -103,8 +96,10 @@ export default function StudentMaintenanceRequest() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
+        <br />
+        <br />
         <form
           onSubmit={handleSubmit}
           className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"

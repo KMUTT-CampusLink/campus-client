@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom";
+import getHomePageLink from "../pages/getHomePageLink";
 //Student
 import StudentMainPage from "../pages/student/StudentMainPage";
 import StudentMaintenanceRequest from "../pages/student/StudentMaintenanceRequest";
@@ -17,6 +19,10 @@ import AuthRoute from "../../registration/middleware/AuthRoute";
 
 export default function SecureRoutes() {
   return [
+    {
+      path: "",
+      element: <Navigate to={getHomePageLink()} />, // Redirect based on role
+    },
     {
       //student
       path: "student",

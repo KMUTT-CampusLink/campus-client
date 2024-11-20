@@ -3,7 +3,7 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 
-export default function AdministratorMaintenanceRequest() {
+export default function StudentMaintenanceRequest() {
   const navigate = useNavigate();
   const [buildingData, setBuildingData] = useState([]);
   const [floorData, setFloorData] = useState([]);
@@ -20,7 +20,9 @@ export default function AdministratorMaintenanceRequest() {
   useEffect(() => {
     const fetchBuildingData = async () => {
       try {
-        const response = await axiosInstance.get("/security/buildings");
+        const response = await axiosInstance.get(
+          "/security//buildingsWithRoom"
+        );
         setBuildingData(
           response.data.sort((a, b) => a.name.localeCompare(b.name))
         );
@@ -68,13 +70,12 @@ export default function AdministratorMaintenanceRequest() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const maintenanceRequest = {
-      room,
+      room_id: parseInt(room, 10),
       type,
-      description,
       priority,
       status,
+      description,
     };
 
     try {
@@ -95,8 +96,10 @@ export default function AdministratorMaintenanceRequest() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
+        <br />
+        <br />
         <form
           onSubmit={handleSubmit}
           className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
@@ -104,7 +107,7 @@ export default function AdministratorMaintenanceRequest() {
           <div className="flex justify-between items-center mb-4">
             <button
               className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
-              onClick={() => navigate("/security/administrator/")}
+              onClick={() => navigate("/security/student/")}
               type="button"
             >
               <svg
@@ -189,7 +192,25 @@ export default function AdministratorMaintenanceRequest() {
             </div>
           </div>
 
-    
+          <div className="form-control mb-4">
+            <label htmlFor="room">Room</label>
+            <select
+              id="room"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+              disabled={!floor}
+              required
+            >
+              <option value="" disabled>
+                Select Room
+              </option>
+              {roomData.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <div className="flex space-x-4 mb-4">
             <div className="form-control flex-1">
