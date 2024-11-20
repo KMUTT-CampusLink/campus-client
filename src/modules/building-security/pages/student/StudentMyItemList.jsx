@@ -126,7 +126,7 @@ export default function StudentMyItemList() {
                       className="bg-white shadow-sm rounded-lg mb-4"
                     >
                       <td className="p-3">{request.name}</td>
-                      <td className="p-3">{request.found_location}</td>
+                      <td className="p-3">{request.floor_id}</td>
                       <td className="p-3">{request.description}</td>
                       <td
                         className="p-3"

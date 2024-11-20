@@ -25,7 +25,7 @@ export const getFloor = async () => {
 export const getRoom = async () => {
   try {
     const response = await axiosInstance.get(
-      `security/room/:floorId`
+      `/security/room/:floorId`
     );
     return response;
   } catch (error) {

@@ -115,8 +115,8 @@ export default function StudentMaintenanceList() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
         <div style={pageStyles.container}>
           <h1 style={pageStyles.header}>Maintenance Request List</h1>
 

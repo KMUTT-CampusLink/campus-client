@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance"; // Ensure axiosInstance is correctly configured
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
-export default function StudentMaintenanceList() {
+export default function AdministratorMaintenanceList() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -133,8 +133,6 @@ export default function StudentMaintenanceList() {
     <>
       <NavBar />
       <div className="container">
-        <br />
-        <br />
         <br />
         <br />
         <div style={pageStyles.container}>

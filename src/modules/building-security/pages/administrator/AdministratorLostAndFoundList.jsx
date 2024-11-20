@@ -77,61 +77,6 @@ export default function AdministratorLostAndFoundList() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  const pageStyles = {
-    container: {
-      maxWidth: "1000px",
-      margin: "50px auto",
-      padding: "40px",
-      backgroundColor: "#ffffff",
-      borderRadius: "20px",
-      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
-      textAlign: "center",
-      position: "relative",
-    },
-    header: {
-      fontSize: "32px",
-      fontWeight: "bold",
-      marginBottom: "30px",
-    },
-    tableHeader: {
-      display: "grid",
-      gridTemplateColumns: "1fr 3fr 1fr 1fr", // Added column for Priority
-      fontWeight: "bold",
-      textAlign: "left",
-      padding: "10px",
-      borderBottom: "1px solid #ccc",
-      marginBottom: "20px",
-    },
-    requestCard: {
-      display: "grid",
-      gridTemplateColumns: "1fr 3fr 1fr 1fr", // Adjusted to include Priority column
-      alignItems: "center",
-      padding: "20px",
-      marginBottom: "15px",
-      borderRadius: "12px",
-      backgroundColor: "#f9f9f9",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-      textAlign: "left",
-    },
-    statusText: {
-      fontWeight: "bold",
-    },
-    floatingButton: {
-      position: "absolute",
-      top: "20px",
-      right: "20px",
-      width: "60px",
-      height: "60px",
-      borderRadius: "50%",
-      backgroundColor: "#8b5b34",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      cursor: "pointer",
-      color: "#fff",
-      boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
-    },
-  };
   return (
     <>
       <NavBar />
@@ -141,7 +86,7 @@ export default function AdministratorLostAndFoundList() {
         <div className="relative bg-gray-100 min-h-screen p-8">
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold">My Item List</h1>
+              <h1 className="text-2xl font-bold">Lost And Found List</h1>
               <button
                 className="bg-[#8b5b34] p-2 rounded-full shadow-lg hover:bg-[#6e3f35]"
                 onClick={() =>
@@ -176,57 +121,61 @@ export default function AdministratorLostAndFoundList() {
                 </tr>
               </thead>
               <tbody>
-                {requests.map((request) => (
-                  <tr
-                    key={request.id}
-                    className="bg-white shadow-sm rounded-lg mb-4"
-                  >
-                    <td className="p-3">{request.name}</td>
-                    <td className="p-3">{request.found_location}</td>
-                    <td className="p-3">{request.description}</td>
-                    <td className="p-3" style={getStatusStyle(request.status)}>
-                      {editingId === request.id ? (
-                        <div className="flex items-center">
-                          <select
-                            value={newStatus}
-                            onChange={handleStatusChange}
-                            className="border rounded p-1 mr-2"
+                {requests &&
+                  requests.map((request) => (
+                    <tr
+                      key={request.id}
+                      className="bg-white shadow-sm rounded-lg mb-4"
+                    >
+                      <td className="p-3">{request.name}</td>
+                      <td className="p-3">{request.floor_id}</td>
+                      <td className="p-3">{request.description}</td>
+                      <td
+                        className="p-3"
+                        style={getStatusStyle(request.status)}
+                      >
+                        {editingId === request.id ? (
+                          <div className="flex items-center">
+                            <select
+                              value={newStatus}
+                              onChange={handleStatusChange}
+                              className="border rounded p-1 mr-2"
+                            >
+                              <option value="Found">Found</option>
+                              <option value="Returned">Returned</option>
+                              <option value="Lost">Lost</option>
+                            </select>
+                            <button
+                              onClick={() => handleStatusUpdate(request.id)}
+                              className="bg-green-500 text-white px-2 rounded mr-1"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setEditingId(null)}
+                              className="bg-red-500 text-white px-2 rounded"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div
+                            className="flex items-center justify-between"
+                            style={{ minWidth: "90px" }}
                           >
-                            <option value="Found">Found</option>
-                            <option value="Returned">Returned</option>
-                            <option value="Lost">Lost</option>
-                          </select>
-                          <button
-                            onClick={() => handleStatusUpdate(request.id)}
-                            className="bg-green-500 text-white px-2 rounded mr-1"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => setEditingId(null)}
-                            className="bg-red-500 text-white px-2 rounded"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          className="flex items-center justify-between"
-                          style={{ minWidth: "90px" }}
-                        >
-                          <span>{request.status}</span>
-                          <button
-                            onClick={() =>
-                              handleEditClick(request.id, request.status)
-                            }
-                          >
-                            ✏️
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                            <span>{request.status}</span>
+                            <button
+                              onClick={() =>
+                                handleEditClick(request.id, request.status)
+                              }
+                            >
+                              ✏️
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
