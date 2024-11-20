@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ClubCreateMemberAddPage from "./ClubCreateMemberAddPage";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { z } from "zod";
@@ -50,6 +51,7 @@ function ClubCreatePage() {
   const [buildingId, setBuildingId] = useState("");
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate(); // Initialize useNavigate
   const MIN_MEMBERS = 3;
 
   useEffect(() => {
@@ -74,11 +76,11 @@ function ClubCreatePage() {
         const formattedMembers = [
           ...stdResponse.data.data.map((student) => ({
             id: student.id,
-            name: `${student.firstname} ${student.lastname}`,
+            name: `${student.firstname ?? ""} ${student.midname ?? ""} ${student.lastname ?? ""}`.trim(),
           })),
           ...profResponse.data.data.map((professor) => ({
             id: professor.id,
-            name: `${professor.firstname} ${professor.midname} ${professor.lastname}`,
+            name: `Prof. ${professor.firstname ?? ""} ${professor.midname ?? ""} ${professor.lastname ?? ""}`.trim(),
           })),
         ];
 
@@ -136,10 +138,6 @@ function ClubCreatePage() {
     setAddedMembers(updatedMembers);
   };
 
-  // const onFileChange = (e) => {
-  //   setSelectedFile(e.target.files[0] || null);
-  //   setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" }));
-  // };
   const onFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file || null); // Set to null if no file is selected
@@ -180,6 +178,10 @@ function ClubCreatePage() {
 
       if (response.status === 201) {
         alert("Club created successfully!");
+
+        // Navigate to the club's home page after successful creation
+        navigate("/clubs/");
+
         setClubName("");
         setClubDescription("");
         setClubDetails("");
@@ -256,7 +258,7 @@ function ClubCreatePage() {
             {/* Club Image Upload */}
             <div className="mb-4 pt-3">
               <label className="block text-lg font-medium leading-6 text-gray-900">
-                Club Image
+                Club Image <span className="text-red-500">*</span>
               </label>
               <div className="mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset sm:max-w-lg">
                 {/* Display selected file name or "No file selected" */}
@@ -267,17 +269,6 @@ function ClubCreatePage() {
                 {/*error message */}
                 {errors.clubImage && (
                   <p className="text-red-500">{errors.clubImage}</p>
-                )}
-
-                {/* Preview Image */}
-                {selectedFile && (
-                  <div className="mt-4">
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover border rounded"
-                    />
-                  </div>
                 )}
 
                 {/* File Upload Button */}
@@ -296,35 +287,6 @@ function ClubCreatePage() {
                 </label>
               </div>
             </div>
-            {/*img upload new part 
-            <div className="mb-4 pt-3">
-              <label className="block text-lg font-medium leading-6 text-gray-900">
-                Club Image <span className="text-red-500">*</span>
-              </label>
-              <div className="mt-2 flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <input
-                    id="file-upload"
-                    name="clubImage"
-                    type="file"
-                    accept="image/*"
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-400 file:text-white hover:file:bg-yellow-600"
-                    onChange={onFileChange}
-                  />
-                </div>
-                {/* Display validation error 
-                {errors.clubImage && (
-                  <p className="text-red-500">{errors.clubImage}</p>
-                )}
-                {/* Display selected file name 
-                {selectedFile && (
-                  <p className="text-gray-500 text-sm">
-                    Selected File: {selectedFile.name} (
-                    {(selectedFile.size / 1024).toFixed(2)} KB)
-                  </p>
-                )}
-              </div>
-            </div> */}
             <div className="mb-4 pt-3">
               <label
                 className="block text-lg font-medium leading-6 text-gray-900 mb-3"

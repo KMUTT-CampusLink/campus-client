@@ -68,19 +68,10 @@ function ClubDetailCard({ isAdmin, isMember }) {
         <h2 className="text-xl font-semibold text-gray-800">
           Location: {buildiingLocation}{" "}
         </h2>
-        {/* <Link to="/clubs/join-club">
-          <button
-            onClick={handleJoinRequest}
-            className="flex md:grid m-auto mt-3 md:mt-8 text-center p-3 md:p-3 w-max md:w-full rounded-2xl text-s md:text-xl shadow-lg text-white"
-            style={{ backgroundColor: "#F69800" }}
-          >
-            Join Club Now!
-          </button>
-        </Link> */}
         {!isAdmin && !isMember && (
           <button
             onClick={handleJoinRequest}
-            className="flex md:grid m-auto mt-3 md:mt-8 text-center p-3 md:p-3 w-max md:w-full rounded-2xl text-s md:text-xl shadow-lg text-white"
+            className="flex md:grid m-auto mt-3 md:mt-8 text-center p-3 rounded-lg text-s md:text-xl text-white"
             style={{ backgroundColor: "#F69800" }}
           >
             Join Club Now!
