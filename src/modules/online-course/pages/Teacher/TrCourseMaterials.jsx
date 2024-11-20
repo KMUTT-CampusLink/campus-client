@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faCheck,
+  faFile,
+} from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
   useAllVideos,
@@ -184,7 +188,6 @@ const TrCourseMaterials = () => {
           {isEditing ? "Save" : "Edit"}
         </button>
       </div>
-
       {isEditing && (
         <div className="bg-white min-h-screen rounded-lg sm:p-5">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
@@ -261,44 +264,56 @@ const TrCourseMaterials = () => {
           </div>
         </div>
       )}
-
-      <div>
-        <div className="mx-auto mt-4 mb-6 md:ml-6">
-          <label className="block mb-2 font-semibold font-georama">
-            Select Lecture Title
-          </label>
-          <select
-            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
-            value={videoDetails.video}
-            onChange={handleVideoSelectChange}
-          >
-            <option disabled>Select Lecture</option>
-            {videos?.map((vid, index) => (
-              <option key={index} value={vid.title}>
-                {vid.title}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
+      <div className="px-28 grid grid-cols-7 mb-12">
+        <div className="col-span-5">
           {videoDetails.videoURL && (
-            <div className="w-full mb-4 flex justify-center">
+            <div className="w-full m-4 mx-auto">
               <video
                 controls
-                className="max-w-full max-h-[400px] object-cover rounded-lg"
+                className="max-w-full max-h-[400px] mx-auto object-cover rounded-lg"
                 src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
               ></video>
             </div>
-          )}
-
-          <div>
-            <h4 className="font-semibold mb-4">Files</h4>
+          )}{" "}
+        </div>
+        <div className="col-span-2">
+          <div className="mx-auto mt-4 mb-6 md:ml-6">
+            <label className="block mb-2 font-semibold font-georama">
+              Select Lecture Title
+            </label>
+            <select
+              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
+              value={videoDetails.video}
+              onChange={handleVideoSelectChange}
+            >
+              <option disabled>Select Lecture</option>
+              {videos?.map((vid, index) => (
+                <option key={index} value={vid.title}>
+                  {vid.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <h3 className="p-2 font-bold text-xl">Class Materials</h3>
+          <div className="">
             {videoDetails.attachments?.length > 0 ? (
-              <ul className="list-disc pl-5">
+              <ul className="px-5 w-full">
                 {videoDetails.attachments.map((file, index) => (
-                  <li key={index}>
-                    <a href={`${MINIO_BASE_URL}/${file.file_path}`} download>
+                  <li
+                    key={index}
+                    className="flex items-center border my-2 rounded-md"
+                  >
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      size="xl"
+                      style={{ color: "#e6700f" }}
+                      className="px-2"
+                    />
+                    <a
+                      className="p-2 mx-2"
+                      href={`${MINIO_BASE_URL}/${file.file_path}`}
+                      download
+                    >
                       {file.file_name}
                     </a>
                   </li>
