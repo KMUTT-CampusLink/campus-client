@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import BookCard from "../components/Card/BookCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
@@ -19,7 +19,7 @@ function BookListPage() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/category"
         );
         setCategories(response.data.map((category) => category.title));
@@ -32,7 +32,7 @@ function BookListPage() {
 
   const getData = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/book"
       );
       setData(response.data);

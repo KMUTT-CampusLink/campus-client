@@ -3,7 +3,7 @@ import MainWallpaper from "../components/MainWallpaper";
 import AnnouncementCard from "../components/Card/AnnouncementCard";
 import EventCard from "../components/Card/EventCard";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ function HomePage() {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/announce"
         );
         const announcements = response.data;
@@ -59,7 +59,7 @@ function HomePage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/event"
         );
         setLibraryEvents(response.data);
@@ -75,7 +75,7 @@ function HomePage() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/book"
         );
         setData(response.data);
@@ -91,7 +91,7 @@ function HomePage() {
   useEffect(() => {
     const fetchBookDuplicates = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/bookDupe"
         );
         setBookDuplicate(response.data);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
+
 import { ArrowRightOutlined } from "@ant-design/icons";
 import "./MainWallpaper.css"; // Import custom CSS for wave animation
 import { Link } from "react-router-dom";
@@ -10,7 +11,7 @@ function MainWallpaper() {
 
   const getData = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/book"
       );
       setData(response.data);

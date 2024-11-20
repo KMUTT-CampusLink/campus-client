@@ -1123,7 +1123,7 @@
 // export default MyBookPage;
 
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import QRScannerDemo from "../Pages/QRScannerDemo";
@@ -1159,7 +1159,7 @@ function MyBookPage() {
   useEffect(() => {
     const fetchReservedBook = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/allDupe"
         );
         setReservedBook(response.data);
@@ -1180,7 +1180,7 @@ function MyBookPage() {
     };
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         "http://localhost:3000/api/library/returnBook",
         returnedBookData
       );

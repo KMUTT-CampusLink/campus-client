@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AnnouncementCard from "../components/Card/AnnouncementPageCard";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
@@ -14,7 +14,7 @@ function AnnouncementPage() {
   useEffect(() => {
     const getAnnouncements = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/announce"
         );
         setAnnouncements(response.data);

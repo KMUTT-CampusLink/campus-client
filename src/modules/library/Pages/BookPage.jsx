@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
@@ -30,7 +30,7 @@ function BookPage() {
   // Fetch book duplicates
   const getDuplicate = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/bookDupe"
       );
       setBookDuplicate(response.data);
@@ -42,7 +42,7 @@ function BookPage() {
   // Fetch all book data
   const getData = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/book"
       );
       setData(response.data);

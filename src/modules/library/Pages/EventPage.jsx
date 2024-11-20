@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 function EventPage() {
   const scrollToTicket = () => {
     const ticketSection = document.querySelector(".ticket-section");
@@ -22,7 +22,7 @@ function EventPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/event"
         );
         setLibraryEvents(response.data);

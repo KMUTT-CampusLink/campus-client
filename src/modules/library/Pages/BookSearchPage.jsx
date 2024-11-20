@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
@@ -51,7 +51,7 @@ function BookSearchPage() {
   useEffect(() => {
     const getDuplicate = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/bookDupe"
         );
         setBookDuplicate(response.data);
@@ -66,7 +66,7 @@ function BookSearchPage() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/category"
         );
         setCategories(response.data);

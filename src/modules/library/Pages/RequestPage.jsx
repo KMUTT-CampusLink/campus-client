@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import QRCode from "react-qr-code";
@@ -61,7 +61,7 @@ function RequestPage() {
 
   const getDuplicate = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/bookDupe"
       );
       setBookDuplicate(response.data);
@@ -109,7 +109,7 @@ function RequestPage() {
     };
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         "http://localhost:3000/api/library/reservations",
         reservationData
       );

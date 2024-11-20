@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../utils/axiosInstance";
+import { axiosInstance } from '../../../utils/axiosInstance';
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
@@ -26,7 +26,7 @@ function BrowseBookPage() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           "http://localhost:3000/api/library/category"
         );
         setCategories(response.data);
@@ -40,7 +40,7 @@ function BrowseBookPage() {
   // Fetch book data
   const getData = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/book"
       );
       setData(response.data);
@@ -57,7 +57,7 @@ function BrowseBookPage() {
   // Fetch duplicate data
   const getDuplicate = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         "http://localhost:3000/api/library/bookDupe"
       );
       setBookDuplicate(response.data);
