@@ -22,12 +22,12 @@ const ProfileButton = () => {
     <div className="relative flex-shrink-0 mr-2" ref={profileRef}>
       <button
         onClick={() => setIsProfileOpen((prev) => !prev)}
-        className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:ring-2 hover:ring-white hover:ring-offset-2"
+        className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:ring-2 hover:ring-white hover:ring-offset-2"
       >
         <img
           alt="Profile"
           src="/logos/profile-pic.png"
-          className="h-10 w-10 rounded-full object-cover"
+          className="object-cover w-10 h-10 rounded-full"
         />
       </button>
       <ProfileDropdown isProfileOpen={isProfileOpen} />

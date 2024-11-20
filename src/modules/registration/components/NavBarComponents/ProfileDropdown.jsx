@@ -6,10 +6,10 @@ const ProfileDropdown = ({ isProfileOpen }) => {
 
   const handleLogout = async () => {
     try {
-      await authConfig.logout();  // Call the logout function to clear session and cookies
-      navigate('/regis/login');  
+      await authConfig.logout(); // Call the logout function to clear session and cookies
+      navigate("/regis/login");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
   if (!isProfileOpen) {
@@ -17,7 +17,7 @@ const ProfileDropdown = ({ isProfileOpen }) => {
   }
 
   return (
-    <div className="absolute mt-4 right-0 z-10 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition">
+    <div className="absolute right-0 z-10 w-48 py-1 mt-4 transition origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
       <Link
         to="/regis/profile"
         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -25,14 +25,14 @@ const ProfileDropdown = ({ isProfileOpen }) => {
         My Profile
       </Link>
       <Link
-        to="/"
+        to="/settings"
         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
       >
         Settings
       </Link>
       <button
         onClick={handleLogout}
-        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
       >
         Log out
       </button>

@@ -9,6 +9,7 @@ export default function StudentQuestion({
   studentId,
   essayScore,
   setEssayScore,
+  setEssayComment,
   studentAnswer,
   questionid,
   questionNo,
@@ -35,6 +36,35 @@ export default function StudentQuestion({
       });
     }
   };
+  const setComment = (e) => {
+    const comment = e.target.value;
+    setEssayComment((prevEssayComment) => {
+      const updatedComment = prevEssayComment.comment.filter(
+        (item) => item.question_id !== questionid
+      );
+      updatedComment.push({ question_id: questionid, comment: comment });
+      return {
+        ...prevEssayComment,
+        comment: updatedComment,
+      };
+    });
+  };
+
+
+  // const updateEssayComment = (e) => {
+  //   const comment = e.target.value;
+  //   studentAnswer((prevEssayScore) => {
+  //     const updatedScoring = prevEssayScore.scoring.map((item) =>
+  //       item.question_id === questionid
+  //         ? { ...item, essay_comment: comment }
+  //         : item
+  //     );
+  //     return {
+  //       ...prevEssayScore,
+  //       scoring: updatedScoring,
+  //     };
+  //   });
+  // };
 
   const isAnswer = (choiceObj) => {
     return studentAnswer.some(
@@ -51,6 +81,19 @@ export default function StudentQuestion({
     return essayAnswer ? essayAnswer.answer : "";
   };
 
+  const isComment = () => {
+    const comment = studentAnswer.find(
+      (essay) => essay.question_id === questionid
+    );
+    return comment ? comment.essay_comment : "";
+  };
+
+  const isCommentDisabled = () => {
+    const comment = studentAnswer.find(
+      (essay) => essay.question_id === questionid
+    );
+    return comment && comment.essay_comment !== null;
+  };
   const getScore = async () => {
     try {
       const response = await getStudentScoreById(questionid, studentId);
@@ -142,6 +185,13 @@ export default function StudentQuestion({
                 {haveScore ? studentScore : null}/{maxScore}
               </h2>
             </div>
+            <p className="font-bold">comment</p>
+            <textarea
+              className="textarea textarea-bordered border-[#BEBEBE] w-full h-[100px]"
+              value={isComment()}
+              onChange={setComment}
+              disabled={isCommentDisabled()}
+            />
           </>
         )}
       </div>
