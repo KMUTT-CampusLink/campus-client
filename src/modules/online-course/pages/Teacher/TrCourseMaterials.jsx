@@ -5,6 +5,8 @@ import {
   faPenToSquare,
   faCheck,
   faFile,
+  faUpload,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
@@ -173,25 +175,28 @@ const TrCourseMaterials = () => {
         c_lecturer={details?.lecturer}
         c_time={details?.time}
       />
-
-      <div className="mx-auto mt-4 mb-6 md:ml-6">
-        <button
-          onClick={handleEditClick}
-          className={`p-2 rounded-md font-semibold ${
-            isEditing ? "bg-green-500" : "bg-blue-500"
-          } text-white`}
-        >
-          <FontAwesomeIcon
-            icon={isEditing ? faCheck : faPenToSquare}
-            className="mr-2"
-          />
-          {isEditing ? "Save" : "Edit"}
-        </button>
+      <div className="w-full px-28">
+        <div className="my-2 md:ml-4 flex items-center space-x-4">
+          <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
+          <button
+            onClick={handleEditClick}
+            className={`p-4 rounded-md font-semibold ${
+              isEditing ? "bg-red-500" : "bg-blue-500"
+            } text-white`}
+          >
+            <FontAwesomeIcon
+              icon={isEditing ? faX : faUpload}
+              className="mr-2"
+            />
+            {isEditing ? "Cancel Upload" : "Upload New Video"}
+          </button>
+        </div>
       </div>
+
       {isEditing && (
-        <div className="bg-white min-h-screen rounded-lg sm:p-5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
-            <div className="md:pl-20 pl-10 pr-10">
+        <div className="min-h-screen rounded-lg sm:p-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="md:pl-20 px-10">
               <div className="mb-4">
                 <label className="block text-lg font-medium">Video Title</label>
                 <input
@@ -267,10 +272,10 @@ const TrCourseMaterials = () => {
       <div className="px-28 grid grid-cols-7 mb-12">
         <div className="col-span-5">
           {videoDetails.videoURL && (
-            <div className="w-full m-4 mx-auto">
+            <div className="w-full m-4">
               <video
                 controls
-                className="max-w-full max-h-[400px] mx-auto object-cover rounded-lg"
+                className="max-w-full max-h-[400px] object-cover rounded-lg"
                 src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
               ></video>
             </div>
