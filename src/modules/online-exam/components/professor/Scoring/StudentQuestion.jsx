@@ -19,7 +19,7 @@ export default function StudentQuestion({
   const [maxScore, setMaxScore] = useState(0);
   const [studentScore, setStudentScore] = useState(0);
   const [haveScore, setHaveScore] = useState(false);
-  
+
   const setStudentEssayScore = (e) => {
     const score = e.target.value;
     if (score >= 0 && score <= maxScore) {
@@ -59,85 +59,92 @@ export default function StudentQuestion({
     } catch (error) {
       console.log(error);
     }
-  }
-
-    const getMaxScore = async () => {
-      try {
-        const response = await getQuestionScore(questionid);
-        setMaxScore(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    console.log(essayScore)
-    useEffect(() => {
-      getScore();
-      getMaxScore();
-    }, [questionid]);
-
-    return (
-      <div className="border rounded-xl p-[25px] w-full">
-        <h1>
-          {questionNo + 1}. {question}
-        </h1>
-        <div className="flex flex-col gap-[10px] pt-[20px]">
-          {choice.map((choiceObj, index) => (
-            <div key={index} className="flex items-center gap-[10px]">
-              {/* Multiple Choice */}
-              {type === "Multiple Choice" && (
-                <>
-                  <input
-                    type="radio"
-                    name={`radio-${questionNo}`}
-                    className="radio checked:bg-[#C76650] border-black"
-                    checked={isAnswer(choiceObj)}
-                    disabled
-                  />
-                  {choiceObj.choiceText ? choiceObj.choiceText : choiceObj}
-                </>
-              )}
-              {/* Checklist */}
-              {type === "Checklist" && (
-                <>
-                  <input
-                    type="checkbox"
-                    className={`checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]`}
-                    checked={isAnswer(choiceObj)}
-                    disabled
-                  />
-                  {choiceObj.choiceText ? choiceObj.choiceText : choiceObj}
-                </>
-              )}
-            </div>
-          ))}
-          <h2 className={`text-[16px] pt-[10px] ${type === "Essay" ? "hidden" : "flex"}`}>
-            Score : {studentScore}/{maxScore}
-          </h2>
-          {/* Essay */}
-          {type === "Essay" && (
-            <>
-              <textarea
-                className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
-                value={isEssayAnswer()}
-                disabled
-              />
-              <div className="flex items-center pt-[10px]">
-                <h2 className="text-[16px]">Score :</h2>
-                <input
-                  className={`input input-bordered w-[55px] h-[40px] ml-[10px] text-center ${haveScore ? "hidden" : ""}`}
-                  value={
-                    essayScore.scoring.find(
-                      (item) => item.question_id === questionid
-                    )?.score || ""
-                  }
-                  onChange={setStudentEssayScore}
-                />
-                <h2 className="text-[16px] pl-[5px]">{haveScore ? studentScore : null}/{maxScore}</h2>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    );
   };
+
+  const getMaxScore = async () => {
+    try {
+      const response = await getQuestionScore(questionid);
+      setMaxScore(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getScore();
+    getMaxScore();
+  }, [questionid]);
+
+  return (
+    <div className="border rounded-xl p-[25px] w-full">
+      <h1>
+        {questionNo + 1}. {question}
+      </h1>
+      <div className="flex flex-col gap-[10px] pt-[20px]">
+        {choice.map((choiceObj, index) => (
+          <div key={index} className="flex items-center gap-[10px]">
+            {/* Multiple Choice */}
+            {type === "Multiple Choice" && (
+              <>
+                <input
+                  type="radio"
+                  name={`radio-${questionNo}`}
+                  className="radio checked:bg-[#C76650] border-black"
+                  checked={isAnswer(choiceObj)}
+                  disabled
+                />
+                {choiceObj.choiceText ? choiceObj.choiceText : choiceObj}
+              </>
+            )}
+            {/* Checklist */}
+            {type === "Checklist" && (
+              <>
+                <input
+                  type="checkbox"
+                  className={`checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]`}
+                  checked={isAnswer(choiceObj)}
+                  disabled
+                />
+                {choiceObj.choiceText ? choiceObj.choiceText : choiceObj}
+              </>
+            )}
+          </div>
+        ))}
+        <h2
+          className={`text-[16px] pt-[10px] ${
+            type === "Essay" ? "hidden" : "flex"
+          }`}
+        >
+          Score : {studentScore}/{maxScore}
+        </h2>
+        {/* Essay */}
+        {type === "Essay" && (
+          <>
+            <textarea
+              className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
+              value={isEssayAnswer()}
+              disabled
+            />
+            <div className="flex items-center pt-[10px]">
+              <h2 className="text-[16px]">Score :</h2>
+              <input
+                className={`input input-bordered w-[55px] h-[40px] ml-[10px] text-center ${
+                  haveScore ? "hidden" : ""
+                }`}
+                value={
+                  essayScore.scoring.find(
+                    (item) => item.question_id === questionid
+                  )?.score || ""
+                }
+                onChange={setStudentEssayScore}
+              />
+              <h2 className="text-[16px] pl-[5px]">
+                {haveScore ? studentScore : null}/{maxScore}
+              </h2>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

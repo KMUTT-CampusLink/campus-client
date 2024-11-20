@@ -34,7 +34,7 @@ export default function ExamRoutes() {
           element: <StudentExamPage />,
         },
         {
-          path: "review/:examId",
+          path: "review/:examId/:studentExamId",
           element: <StudentReviewExamPage />,
         },
       ],

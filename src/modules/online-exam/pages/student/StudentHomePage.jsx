@@ -6,7 +6,11 @@ import ExamCard from "../../components/student/HomePage/ExamCard";
 import InProgressCard from "../../components/student/HomePage/InProgressCard";
 import HistoryCard from "../../components/student/HomePage/HistoryCard";
 
-import { getStudentExamsById, getHistoryStudentExams, getInprogressExam } from "../../services/apis/studentApi";
+import {
+  getStudentExamsById,
+  getHistoryStudentExams,
+  getInprogressExam,
+} from "../../services/apis/studentApi";
 import { faChessKing } from "@fortawesome/free-solid-svg-icons";
 
 export default function StudentHomePage() {
@@ -17,27 +21,28 @@ export default function StudentHomePage() {
 
   const getExams = async () => {
     const res = await getStudentExamsById(sectionId);
-    console.log(res )
     setExams(res.data.data);
-  }
+  };
 
   const getInprogressExams = async () => {
     const res = await getInprogressExam(sectionId);
     setInProgress(res.data.data);
-  }
+  };
 
   const getHistoryExams = async () => {
     const res = await getHistoryStudentExams(sectionId);
-    console.log(res)
+    console.log(res);
     setHistoryExams(res.data.data);
-  }
+  };
 
   useEffect(() => {
     getExams();
     getInprogressExams();
     getHistoryExams();
   }, []);
-  
+
+  // console.log(historyExams);
+
   return (
     <div className="w-auto">
       <NavBar />
@@ -48,7 +53,9 @@ export default function StudentHomePage() {
         <div className={`${inProgress.length > 0 ? "block" : "hidden"}`}>
           <hr className="mt-[20px] bg-[#798184] flex justify-center" />
           <div className=" flex justify-between pt-[20px]">
-            <h3 className="font-bold text-[22px] xl:text-[30px]">In Progress</h3>
+            <h3 className="font-bold text-[22px] xl:text-[30px]">
+              In Progress
+            </h3>
           </div>
           <div className="grid gap-4 py-[20px]">
             {inProgress.map((examName) => (
@@ -67,17 +74,33 @@ export default function StudentHomePage() {
             ))}
           </div>
         </div>
-        <div className={`${exams.length > 0 ? "hidden" : "block"} w-full flex justify-center`}>
+        <div
+          className={`${
+            exams.length > 0 ? "hidden" : "block"
+          } w-full flex justify-center`}
+        >
           <h3 className="text-[#798184] pt-[10px]">No Exam</h3>
         </div>
-        <hr className='my-[20px] bg-[#798184]' />
+        <hr className="my-[20px] bg-[#798184]" />
         <h3 className="font-bold text-[22px] xl:text-[30px]">History</h3>
-        <div className={`${historyExams.length > 0 ? "block" : "hidden"} grid gap-4 py-[20px]`}>
+        <div
+          className={`${
+            historyExams.length > 0 ? "block" : "hidden"
+          } grid gap-4 py-[20px]`}
+        >
           {historyExams.map((examName) => (
-            <HistoryCard examName={examName.title} Id={examName.id} />
+            <HistoryCard
+              examName={examName.title}
+              Id={examName.id}
+              studentExamId={examName.studentexamid}
+            />
           ))}
         </div>
-        <div className={`${historyExams.length > 0 ? "hidden" : "block"} w-full flex justify-center`}>
+        <div
+          className={`${
+            historyExams.length > 0 ? "hidden" : "block"
+          } w-full flex justify-center`}
+        >
           <h3 className="text-[#798184] pt-[10px]">No History</h3>
         </div>
       </div>
