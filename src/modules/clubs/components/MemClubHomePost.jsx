@@ -46,18 +46,26 @@ const MemClubHomePost = (props) => {
   // Fetch announcements
   const fetchClubAnnouncement = async () => {
     try {
-      const response = await axiosInstance.get(`/clubs/announcements/${clubId}`);
+      const response = await axiosInstance.get(
+        `/clubs/announcements/${clubId}`
+      );
       const announcements = response.data.data;
       setClubAnnouncement(announcements);
 
       // Fetch reservation status for each announcement
       const userId = localStorage.getItem("userId");
       const statusPromises = announcements.map(async (announcement) => {
-        const statusResponse = await axiosInstance.post("/clubs/events/status", {
-          clubAnnouncementId: announcement.id,
-          userId,
-        }); // Send data in the body
-        console.log(`Status for announcement ${announcement.id}:`, statusResponse.data); // Debug log
+        const statusResponse = await axiosInstance.post(
+          "/clubs/events/status",
+          {
+            clubAnnouncementId: announcement.id,
+            userId,
+          }
+        ); // Send data in the body
+        console.log(
+          `Status for announcement ${announcement.id}:`,
+          statusResponse.data
+        ); // Debug log
         return { id: announcement.id, status: statusResponse.data.status };
       });
 
@@ -93,14 +101,17 @@ const MemClubHomePost = (props) => {
       const userId = localStorage.getItem("userId");
       const payload = { clubAnnouncementId, userId };
 
-      const response = await axiosInstance.post("clubs/events/reserve", payload);
+      const response = await axiosInstance.post(
+        "clubs/events/reserve",
+        payload
+      );
 
       if (response.data.success) {
         alert("Reservation successful!");
         const { invoice } = response.data.data;
         setReservationStatus((prevState) => ({
           ...prevState,
-          [clubAnnouncementId]: { status: "Unpaid", invoiceId: invoice.id,},
+          [clubAnnouncementId]: { status: "Unpaid", invoiceId: invoice.id },
         }));
         setClubAnnouncement((prevAnnouncements) =>
           prevAnnouncements.map((announcement) =>
@@ -137,21 +148,25 @@ const MemClubHomePost = (props) => {
       );
     }
     if (status === "Unpaid") {
-      if(!invoiceId){ 
+      if (!invoiceId) {
         console.error(`Missing invoiceId for announcement ${announcementId}`);
-        return null;}
+        return null;
+      }
       return (
         <button
-        onClick={() => handlePendingPayment(invoiceId)}
-        className="bg-yellow-500 text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
-      >
-        Pending Payment
-      </button>
+          onClick={() => handlePendingPayment(invoiceId)}
+          className="bg-yellow-500 text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+        >
+          Pending Payment
+        </button>
       );
     }
     if (status === "Paid") {
       return (
-        <button className="bg-green-600 text-white px-3 md:px-8 py-1 md:py-2 rounded-lg" disabled>
+        <button
+          className="bg-green-600 text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+          disabled
+        >
           Reserved
         </button>
       );
@@ -213,21 +228,27 @@ const MemClubHomePost = (props) => {
                     item.is_pinned ? "text-orange-600" : "text-gray-400"
                   }`}
                 />
-                <div className="text-left mr-2 text-lg md:text-xl mt-3 font-semibold mb-4">
+                {/* <div className="text-left mr-2 text-lg md:text-xl mt-3 font-semibold mb-4">
                   {item.title}
-                </div>
+                </div> */}
               </div>
               <div className="flex flex-col md:flex-row text-left md:w-3/5">
                 {!toggleVisiblity && (
                   <img
-                    src={item.img_url}
+                    src={`${import.meta.env.VITE_MINIO_URL}${
+                      import.meta.env.VITE_MINIO_BUCKET_NAME
+                    }/${item.post_img}`}
                     alt="Post image"
-                    className="sm:grid-flow-col"
+                    className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl md:mt-0 sm:mt-4 sm:mb-4"
                   />
                 )}
-                <div className="inline-flex items-start mt-3 mb-4">
-                  <span className="mx-2">•</span>
-                  <p>{item.content}</p>
+                <div className="md:ml-10 inline-flex items-start">
+                  <div className="text-left mr-2 text-lg md:text-xl font-semibold">
+                    {item.title}
+                    <p className="md:mt-3 sm:mt-0 text-base">
+                      • {item.content}
+                    </p>
+                  </div>
                 </div>
               </div>
               {toggleVisiblity && (

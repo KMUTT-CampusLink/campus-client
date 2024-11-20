@@ -14,7 +14,6 @@ const ClubHomePost = (props) => {
 
   const [clubPost, setClubPost] = useState([]);
   const [clubAnnouncement, setClubAnnouncement] = useState([]);
-  const [postImg, setPostImg] = useState("");
 
   // Fetch posts
   const fetchClubPost = async () => {
@@ -216,9 +215,9 @@ const ClubHomePost = (props) => {
                   }`}
                 />
               </button>
-              <div className="text-left mr-2 text-lg md:text-xl mt-3 font-semibold mb-4">
-                {item.title}
-              </div>
+              {/* <div className="text-left mr-2 text-lg md:text-xl mt-3 font-semibold mb-4">
+              {item.title}
+            </div> */}
             </div>
             <div className="flex flex-col md:flex-row text-left md:w-3/5">
               {!toggleVisiblity && (
@@ -227,12 +226,14 @@ const ClubHomePost = (props) => {
                     import.meta.env.VITE_MINIO_BUCKET_NAME
                   }/${item.post_img}`}
                   alt="Post image"
-                  className="sm:grid-flow-col w-[60%] h-[60%]"
+                  className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl md:mt-0 sm:mt-4 sm:mb-4"
                 />
               )}
-              <div className="inline-flex items-start mt-3 mb-4">
-                <span className="mx-2">•</span>
-                <p>{item.content}</p>
+              <div className="md:ml-10 inline-flex items-start">
+                <div className="text-left mr-2 text-lg md:text-xl font-semibold">
+                  {item.title}
+                  <p className="md:mt-3 sm:mt-0 text-base">• {item.content}</p>
+                </div>
               </div>
             </div>
             {toggleVisiblity && (
