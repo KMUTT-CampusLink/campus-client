@@ -88,10 +88,17 @@ const TrCourseMaterials = () => {
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: files ? Array.from(files) : value,
+      [name]: files
+        ? name === "videoFile"
+          ? files[0] // Single file input
+          : Array.from(files) // Multiple files input
+        : value,
     }));
+
+    // Clear errors for the input field
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -119,6 +126,8 @@ const TrCourseMaterials = () => {
 
       if (response.status === 200) {
         setFormData({ title: "", videoFile: null, materialFiles: [] });
+        document.getElementById("videoFileInput").value = null; // Reset the video file input
+        document.getElementById("materialFilesInput").value = null; // Reset the material files input
         popToast("Files uploaded successfully!", "success");
       }
     } catch (error) {
@@ -199,6 +208,7 @@ const TrCourseMaterials = () => {
                 </label>
                 <input
                   type="file"
+                  id="videoFileInput"
                   name="videoFile"
                   onChange={handleInputChange}
                   className="block w-full px-3 py-2 border rounded-md"
@@ -218,6 +228,7 @@ const TrCourseMaterials = () => {
                 </label>
                 <input
                   type="file"
+                  id="materialFilesInput"
                   name="materialFiles"
                   multiple
                   onChange={handleInputChange}
