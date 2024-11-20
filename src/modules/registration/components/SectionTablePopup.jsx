@@ -96,29 +96,29 @@ const SectionTablePopup = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+    <div className="fixed inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50">
       <div
         ref={popupRef}
-        className="bg-white rounded-lg shadow-lg p-6 overflow-auto max-w-full max-h-full"
+        className="max-w-full max-h-full p-6 overflow-auto bg-white rounded-lg shadow-lg"
       >
-        <h2 className="text-lg font-bold mb-4">Section Details</h2>
+        <h2 className="mb-4 text-lg font-bold">Section Details</h2>
 
         <table className="min-w-full border-collapse">
           <thead>
             <tr className="bg-[#c3554e] text-white">
-              <th className="py-2 px-4 border border-gray-300">Add</th>
-              <th className="py-2 px-4 border border-gray-300">Section Name</th>
-              <th className="py-2 px-4 border border-gray-300">Professors</th>
-              <th className="py-2 px-4 border border-gray-300">Schedule</th>
-              <th className="py-2 px-4 border border-gray-300">Room</th>
-              <th className="py-2 px-4 border border-gray-300">Seats</th>
+              <th className="px-4 py-2 border border-gray-300">Add</th>
+              <th className="px-4 py-2 border border-gray-300">Section Name</th>
+              <th className="px-4 py-2 border border-gray-300">Professors</th>
+              <th className="px-4 py-2 border border-gray-300">Schedule</th>
+              <th className="px-4 py-2 border border-gray-300">Room</th>
+              <th className="px-4 py-2 border border-gray-300">Seats</th>
             </tr>
           </thead>
           <tbody>
             {sections && sections.length > 0 ? (
               sections.map((section, index) => (
                 <tr key={index} className="odd:bg-white even:bg-gray-100">
-                  <td className="py-2 px-4 text-center border border-gray-300 truncate">
+                  <td className="px-4 py-2 text-center truncate border border-gray-300">
                     <input
                       type="radio"
                       id={`section-${section.section_id}`}
@@ -128,20 +128,20 @@ const SectionTablePopup = ({
                       checked={selectedSectionId === section.section_id}
                     />
                   </td>
-                  <td className="py-2 px-4 border border-gray-300 truncate">
+                  <td className="px-4 py-2 truncate border border-gray-300">
                     {section.section_name}
                   </td>
-                  <td className="py-2 px-4 border border-gray-300 truncate">
+                  <td className="px-4 py-2 truncate border border-gray-300">
                     {section.professor_names}
                   </td>
-                  <td className="py-2 px-4 border border-gray-300">
+                  <td className="px-4 py-2 border border-gray-300">
                     <div>{section.section_day}</div>
                     <div>{`${section.start_time} - ${section.end_time}`}</div>
                   </td>
-                  <td className="py-2 px-4 border border-gray-300 truncate">
+                  <td className="px-4 py-2 truncate border border-gray-300">
                     {section.room_name}
                   </td>
-                  <td className="py-2 px-4 border border-gray-300">
+                  <td className="px-4 py-2 border border-gray-300">
                     {section.seats_left}
                   </td>
                 </tr>
@@ -150,7 +150,7 @@ const SectionTablePopup = ({
               <tr>
                 <td
                   colSpan="6"
-                  className="py-4 px-4 text-center text-gray-500 border border-gray-300"
+                  className="px-4 py-4 text-center text-gray-500 border border-gray-300"
                 >
                   No sections available for this course.
                 </td>
@@ -160,7 +160,7 @@ const SectionTablePopup = ({
         </table>
 
         <div className="mt-4">
-          <h3 className="font-semibold text-lg font-georama">
+          <h3 className="text-lg font-semibold font-georama">
             Course Information
           </h3>
           {sections.length > 0 && (
@@ -179,14 +179,14 @@ const SectionTablePopup = ({
         <div className="flex items-center justify-between">
           <button
             onClick={handleClose}
-            className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+            className="px-4 py-2 mt-4 text-white bg-red-500 rounded"
             aria-label="Close popup"
           >
             Close
           </button>
           <button
             onClick={handleAddEnrollment}
-            className="mt-4 bg-green-500 text-white py-2 px-4 rounded"
+            className="px-4 py-2 mt-4 text-white bg-green-500 rounded"
             disabled={mutation.isLoading || !selectedSectionId}
             aria-label="Add selected section"
           >

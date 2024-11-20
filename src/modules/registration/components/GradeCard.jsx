@@ -39,16 +39,16 @@ const GradeCard = ({ semester, semesterId, studentId }) => {
   if (isError) return <CardErrorSkeleton data="grade" />;
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg border border-gray-200">
+    <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-lg">
       <div className="bg-[#c3554e] text-white rounded-t-lg p-4 flex justify-evenly items-center">
         <div className="flex flex-col items-center justify-center text-center">
-          <p className="text-sm font-geologica font-bold">GPA</p>
+          <p className="text-sm font-bold font-geologica">GPA</p>
           <p className="text-xl font-bold">{gpa || "N/A"}</p>
           <p className="text-xs">Semester {semester}</p>
         </div>
-        <div className="h-12 border-l border-white mx-4"></div>
+        <div className="h-12 mx-4 border-l border-white"></div>
         <div className="flex flex-col items-center justify-center text-center">
-          <p className="text-sm font-geologica font-bold">GPAX</p>
+          <p className="text-sm font-bold font-geologica">GPAX</p>
           <p className="text-xl font-bold">{gpax || "N/A"}</p>
           <p className="text-xs">Overall</p>
         </div>
@@ -56,14 +56,14 @@ const GradeCard = ({ semester, semesterId, studentId }) => {
 
       <div className="p-4 divide-y divide-gray-200">
         {courses?.length === 0 ? (
-          <div className="text-center py-4 text-gray-500">
+          <div className="py-4 text-center text-gray-500">
             No courses available for this semester.
           </div>
         ) : (
           courses?.map((course, index) => (
             <div
               key={course.id || index}
-              className="py-3 flex justify-between items-center"
+              className="flex items-center justify-between py-3"
             >
               <div className="pr-2">
                 <p className="text-sm font-bold text-[#DC5A52]">

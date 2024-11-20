@@ -1,5 +1,11 @@
 import { axiosInstance } from "../../../utils/axiosInstance.js";
 
+const handleApiError = (error) => {
+  const errorMessage = error.response ? error.response.data : error.message;
+  console.error("API Error:", errorMessage);
+  throw new Error(errorMessage);
+};
+
 const get = async (url) => {
   try {
     const { data } = await axiosInstance.get(url);
@@ -38,7 +44,7 @@ const remove = async (url) => {
 
 
 export const fetchAllCourses = () => get("/courses/all");
-export const fetchAllVideos = () => get("/courses/videos");
+export const fetchAllVideos = (secId) => get(`/courses/videos/${secId}`);
 export const fetchCoursesByStudentID = (studentID) =>
   get(`/courses/student/${studentID}`);
 export const fetchAllCoursesByStudentID = (studentID) =>

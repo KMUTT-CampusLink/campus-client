@@ -15,6 +15,7 @@ import {
   fetchPaymentStatus,
   fetchAllSemesters,
   fetchStudentProfileById,
+  fetchPeriodBySemesterId,
 } from "./api";
 
 // Custom hook for authentication
@@ -96,6 +97,17 @@ export const useSemestersByStudentId = (studentId) => {
     queryKey: ["semesters", studentId],
     queryFn: () => fetchSemestersByStudentId(studentId),
     enabled: !!studentId,
+    onError: (error) => {
+      console.error("Error fetching semesters:", error);
+    },
+  });
+};
+
+export const usePeriodBySemesterId = (semesterId) => {
+  return useQuery({
+    queryKey: ["periods", semesterId],
+    queryFn: () => fetchPeriodBySemesterId(semesterId),
+    enabled: !!semesterId,
     onError: (error) => {
       console.error("Error fetching semesters:", error);
     },
