@@ -15,7 +15,7 @@ const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
   import.meta.env.VITE_MINIO_BUCKET_NAME
 }`;
 
-const TrCourseMaterials = () => {
+const HR = () => {
   const sec_id = localStorage.getItem("sec_id") || 1001;
 
   const schema = z.object({
@@ -314,4 +314,4 @@ const TrCourseMaterials = () => {
   );
 };
 
-export default TrCourseMaterials;
+export default HR;

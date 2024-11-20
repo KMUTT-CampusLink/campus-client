@@ -9,9 +9,15 @@ import {
 import UploadPopup from "../../components/Upload_Popup";
 import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useCourseHeaderBySectionID } from "../../services/queries";
+import CourseHeader from "../../components/CourseHeader";
 
 
-const TrTasks = () => {
+const TrTasks = () => { 
+
+  const sec_id = localStorage.getItem("sec_id");
+  const { data: details } =
+    useCourseHeaderBySectionID(sec_id);
 
   const navigate = useNavigate();
 
@@ -112,7 +118,7 @@ const TrTasks = () => {
     <div className="w-full min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"tasks"} />
 
-      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
+      {/* <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
         <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
@@ -129,7 +135,13 @@ const TrTasks = () => {
             (Thursday)
           </div>
         </div>
-      </div>
+      </div> */}
+      <CourseHeader
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
 
       <div className="py-8 w-full">
         <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center">

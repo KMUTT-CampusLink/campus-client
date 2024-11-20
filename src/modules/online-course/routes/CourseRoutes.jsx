@@ -12,7 +12,7 @@ import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
-import RedirectPage from "../pages/RedirectPage";
+import HR from "../pages/Teacher/HR";
 
 // const role = "Professor";
 const role = localStorage.getItem("userRole");
@@ -33,8 +33,11 @@ export default function CourseRoutes() {
   //   }
   // ];
 
-  
   return [
+    {
+      path: "hr",
+      element: <HR />,
+    },
     {
       path: "",
       element:
@@ -45,7 +48,7 @@ export default function CourseRoutes() {
         ),
     },
     {
-      path: "tr",
+      path: "/courses/tr",
       element: role === "Professor" ? null : <Navigate to="/courses/st" />,
       children: [
         {
@@ -88,7 +91,7 @@ export default function CourseRoutes() {
       ],
     },
     {
-      path: "st",
+      path: "/courses/st",
       element: role === "Student" ? null : <Navigate to="/courses/tr" />,
       children: [
         {
@@ -108,6 +111,7 @@ export default function CourseRoutes() {
           path: "course_description",
           element: <StCourseDescription />,
         },
+
         {
           path: "course_material",
           element: <StCourseMaterials />,
@@ -141,4 +145,3 @@ export default function CourseRoutes() {
     },
   ];
 }
-

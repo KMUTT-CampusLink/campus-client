@@ -1,14 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
+
 import {
   fetchAllCourses,
   fetchAllCoursesByStudentID,
-    fetchCoursesByStudentID,
+  fetchCoursesByStudentID,
   fetchAllCoursesByProfessorID,
+  fetchCourseHeaderBySectionID,
+  fetchAllVideos,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
     queryKey: ["courses"],
     queryFn: fetchAllCourses,
+  });
+};
+
+export const useAllVideos = (secId) => {
+  return useQuery({
+    queryKey: ["videos", secId],
+    queryFn: () => fetchAllVideos(secId),
+    enabled: !!secId,
+    onError: (error) => {
+      console.log(error);
+    },
   });
 };
 
@@ -35,12 +49,23 @@ export const useAllCoursesByStudentID = (studentID) => {
 };
 
 export const useAllCoursesByProfessorID = (professorID) => {
-    return useQuery({
-      queryKey: ["courses", professorID],
-      queryFn: () => fetchAllCoursesByProfessorID(professorID),
-      enabled: !!professorID,
-      onError: (error) => {
-        console.log(error);
-      },
-    });
-}
+  return useQuery({
+    queryKey: ["courses", professorID],
+    queryFn: () => fetchAllCoursesByProfessorID(professorID),
+    enabled: !!professorID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useCourseHeaderBySectionID = (sectionID) => {
+  return useQuery({
+    queryKey: ["section", sectionID],
+    queryFn: () => fetchCourseHeaderBySectionID(sectionID),
+    enabled: !!sectionID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
