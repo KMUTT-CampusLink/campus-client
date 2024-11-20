@@ -1,37 +1,47 @@
 import { useEffect, useState } from "react";
 import { studentGetStudentScoreById } from "../../../services/apis/studentApi";
 import { studentGetQuestionScore } from "../../../services/apis/studentApi";
+import { studentGetStudentAnswerById } from "../../../services/apis/studentApi";
 export default function Question({
   questionNo,
   question,
   choice,
   type,
   studentAnswer,
-  questionId
+  questionId,
+  examId,
 }) {
   const [frontScore, setFrontScore] = useState(0);
-  const [backScore,setBackScore] = useState(0);
+  const [backScore, setBackScore] = useState(0);
+  const [comment, setComment] = useState("");
   const getFrontScore = async () => {
     try {
       const response = await studentGetStudentScoreById(questionId);
-      console.log(response.data);
       setFrontScore(response.data);
     } catch (error) {
       console.log(error);
     }
   };
-  const getBackScore = async() => {
+  const getBackScore = async () => {
     try {
       const response = await studentGetQuestionScore(questionId);
-      console.log(response);
       setBackScore(response.data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+  const getComment = async () => {
+    try {
+      const response = await studentGetStudentAnswerById(examId, questionId);
+      setComment(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getFrontScore();
     getBackScore();
+    getComment();
   }, []);
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
@@ -71,12 +81,20 @@ export default function Question({
           })}
         {/* Essay */}
         {type === "Essay" && (
-          <textarea
-            className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
-            placeholder="Type your Answer Here"
-            disabled
-            value={studentAnswer[0].answer}
-          ></textarea>
+          <div>
+            <textarea
+              className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
+              placeholder="Type your Answer Here"
+              disabled
+              value={studentAnswer[0].answer}
+            ></textarea>
+            <p className="font-bold">comment</p>
+            <textarea
+              className="textarea textarea-bordered border-[#BEBEBE] w-full h-[100px]"
+              disabled
+              value={comment.essay_comment}
+            />
+          </div>
         )}
       </div>
     </div>

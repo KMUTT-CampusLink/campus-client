@@ -19,6 +19,7 @@ export default function StudentReviewExamPage() {
   const fetchStudentAnswer = async () => {
     try {
       const res = await getStudentReview(examId);
+      console.log(res);
       setStudentAns(res.data);
     } catch (error) {
       console.error(error);
@@ -76,6 +77,7 @@ export default function StudentReviewExamPage() {
                 type={item.type}
                 studentAnswer={item.student_answer}
                 questionId={item.id}
+                examId={examId}
                 className="w-[67%] h-auto"
               />
             ))}
