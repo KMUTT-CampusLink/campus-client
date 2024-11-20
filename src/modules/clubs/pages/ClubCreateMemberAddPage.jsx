@@ -1,13 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-function ClubCreateMemberAddPage({ isOpen, onClose, onAddMembers, addedMembers, stdList }) {
-
-  const [members, setMembers] = useState(stdList);
+function ClubCreateMemberAddPage({
+  isOpen,
+  onClose,
+  onAddMembers,
+  addedMembers,
+  memberList,
+}) {
+  const [members, setMembers] = useState(memberList);
+  const [searchItem, setSearchItem] = useState("");
 
   useEffect(() => {
     if (isOpen) {
-      const updatedMembers = stdList.map((member) => ({
+      const updatedMembers = memberList.map((member) => ({
         ...member,
         added: addedMembers.includes(member.id), // Set added state based on addedMembers
       }));
@@ -28,10 +34,14 @@ function ClubCreateMemberAddPage({ isOpen, onClose, onAddMembers, addedMembers, 
     const addedIds = members
       .filter((member) => member.added)
       .map((member) => member.id); // Get IDs of added members
-  
+
     onAddMembers(addedIds); // Call the function passed from the parent to update added members list
     onClose(); // Close the modal
   };
+
+  const filteredMembers = members.filter((member) =>
+    member.name.toLowerCase().includes(searchItem.toLowerCase())
+  );
 
   if (!isOpen) return null; // Don't render the modal if not open
 
@@ -50,16 +60,44 @@ function ClubCreateMemberAddPage({ isOpen, onClose, onAddMembers, addedMembers, 
               &times; {/* Close button */}
             </button>
           </div>
+          {/* Search Bar */}
+          <div className="flex justify-center mb-4">
+            <div className="relative w-[65%]">
+              <span className="absolute left-3 top-2.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-4.35-4.35M17 10A7 7 0 1 0 3 10a7 7 0 0 0 14 0z"
+                  />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Search"
+                className="input input-bordered w-full pl-10"
+                value={searchItem}
+                onChange={(e) => setSearchItem(e.target.value)}
+              />
+            </div>
+          </div>
 
           <div className="flex-grow max-h-[calc(80vh-100px)] overflow-y-auto p-4">
-            {members.map((member) => (
+            {filteredMembers.map((member) => (
               <div
                 key={member.id}
                 className="flex items-center justify-between py-2"
               >
                 <div className="flex items-center">
                   <img
-                    src={member.image}
+                    src={member.image || "https://img.placeholder.com/50"} 
                     alt={member.name}
                     className="w-12 h-12 rounded-full mr-3"
                   />

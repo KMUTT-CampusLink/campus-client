@@ -1,22 +1,55 @@
-import { Children } from "react";
+import { Navigate } from "react-router-dom";
 import TrDashboard from "../pages/Teacher/TrDashboard";
 import TrCourseDescription from "../pages/Teacher/TrCourseDescription";
 import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
 import TrTasks from "../pages/Teacher/TrTasks";
 import TrDiscussion from "../pages/Teacher/TrDiscussion";
 import StDashboard from "../pages/Students/StDashboard";
-import StAllCourses from "../pages/Students/StAllCourses"
+import StAllCourses from "../pages/Students/StAllCourses";
 import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
+import HR from "../pages/Teacher/HR";
+
+// const role = "Professor";
+const role = localStorage.getItem("userRole");
 
 export default function CourseRoutes() {
+  // return [
+  //   {
+  //     path: "",
+  //     element: <RedirectPage />,
+  //   },
+  //   {
+  //     path: "st",
+  //     element: <StDashboard />,
+  //   },
+  //   {
+  //     path: "tr",
+  //     element: <TrDashboard/>
+  //   }
+  // ];
+
   return [
     {
-      path: "Tr",
+      path: "hr",
+      element: <HR />,
+    },
+    {
+      path: "",
+      element:
+        role === "Student" ? (
+          <Navigate to="/courses/st" />
+        ) : (
+          <Navigate to="/courses/tr" />
+        ),
+    },
+    {
+      path: "/courses/tr",
+      element: role === "Professor" ? null : <Navigate to="/courses/st" />,
       children: [
         {
           path: "",
@@ -58,7 +91,8 @@ export default function CourseRoutes() {
       ],
     },
     {
-      path: "St",
+      path: "/courses/st",
+      element: role === "Student" ? null : <Navigate to="/courses/tr" />,
       children: [
         {
           path: "",
@@ -77,6 +111,7 @@ export default function CourseRoutes() {
           path: "course_description",
           element: <StCourseDescription />,
         },
+
         {
           path: "course_material",
           element: <StCourseMaterials />,
@@ -94,8 +129,8 @@ export default function CourseRoutes() {
             },
             {
               path: "comment",
-              element: <Comment/>,
-            }
+              element: <Comment />,
+            },
           ],
         },
         // {

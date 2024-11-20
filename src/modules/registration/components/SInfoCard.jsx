@@ -15,9 +15,9 @@ function SInfoCard({ onStudentData }) {
   if (isError) return <CardErrorSkeleton data="student" />;
 
   return (
-    <div className="ml-6 mb-6">
-      <p className="text-gray-500 mt-4 text-sm">{student?.studentid}</p>
-      <h1 className="text-2xl font-geologica font-bold">
+    <div className="mb-6 ml-6">
+      <p className="mt-4 text-sm text-gray-500">{student?.studentid}</p>
+      <h1 className="text-2xl font-bold font-geologica">
         <p>{student?.firstname}</p>
         <p>{student?.lastname}</p>
       </h1>

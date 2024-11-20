@@ -25,19 +25,19 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
 
   // Function to navigate back to the dashboard dynamically
   const backToDashboard = () => {
-    if (location.pathname.includes("/courses/St")) {
-      navigate("/courses/St");
+    if (location.pathname.includes("/courses/st")) {
+      navigate("/courses/st");
     } else {
-      navigate("/courses/Tr");
+      navigate("/courses/tr");
     }
   };
 
   // Helper function to handle navigation based on role (St/Tr)
   const handleNavigation = (subPath) => {
-    if (location.pathname.includes("/courses/St")) {
-      navigate(`/courses/St/${subPath}`);
+    if (location.pathname.includes("/courses/st")) {
+      navigate(`/courses/st/${subPath}`);
     } else {
-      navigate(`/courses/Tr/${subPath}`);
+      navigate(`/courses/tr/${subPath}`);
     }
   };
 
@@ -65,7 +65,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               <span
                 className={`${
-                  currentPage !== "course_description"
+                  currentPage !== "description"
                     ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
                     : "text-black"
                 }`}
@@ -80,7 +80,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             >
               <span
                 className={`${
-                  currentPage !== "course_material"
+                  currentPage !== "materials"
                     ? "hover:text-[#6E6E6E] text-white hover:cursor-pointer"
                     : "text-black"
                 }`}

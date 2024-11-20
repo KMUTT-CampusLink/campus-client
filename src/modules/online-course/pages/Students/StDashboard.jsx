@@ -8,10 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAllCourses, useCoursesByStudentID } from "../../services/queries.js";
+import {
+  useAllCourses,
+  useCoursesByStudentID,
+} from "../../services/queries.js";
 
 const StDashboard = () => {
-  const studentId = "STU00019";
+  const studentId = localStorage.getItem("studentId");
   const semesterId = 1010;
   const navigate = useNavigate();
   const { data: courses, isLoading } = useCoursesByStudentID(studentId);
@@ -26,13 +29,13 @@ const StDashboard = () => {
         >
           <span
             className="hover:border-b-4 hover:border-black hover:cursor-pointer"
-            onClick={() => navigate("/courses/St")}
+            onClick={() => navigate("/courses/st")}
           >
             Dashboard
           </span>
           <span
             className="hover:border-b-4 hover:border-black hover:cursor-pointer"
-            onClick={() => navigate("/courses/St/all_courses")}
+            onClick={() => navigate("/courses/st/all_courses")}
           >
             Courses
           </span>
@@ -43,7 +46,7 @@ const StDashboard = () => {
             <span className="text-4xl font-bold ">Recent Courses</span>
             <button
               className="text-[#EC5A51] text-md font-bold lg:text-base hover:underline"
-              onClick={() => navigate("/courses/St/all_courses")}
+              onClick={() => navigate("/courses/st/all_courses")}
             >
               See All
             </button>
@@ -56,14 +59,7 @@ const StDashboard = () => {
             justify-items-center mx-auto w-3/4"
         >
           {courses?.map((course) => (
-            <CourseCard
-              key={course.code}
-              code={course.code}
-              imageURL={course.imageUrl}
-              title={course.course_name}
-              description={course.description}
-              route={"course_description"}
-            />
+            <CourseCard key={course.sec_id} course={course} />
           ))}
         </div>
       </div>

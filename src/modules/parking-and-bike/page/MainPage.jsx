@@ -18,7 +18,7 @@ function MainPage() {
     const getBuilding = async () => {
         const res = await getParkingData();
         setBuilding(res);
-        console.log(res);
+       
     };
 
     
