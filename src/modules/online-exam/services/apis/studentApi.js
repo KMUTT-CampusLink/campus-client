@@ -189,3 +189,14 @@ export const studentGetStudentAnswerById = async (examId, questionId) => {
     return error.response.data;
   }
 };
+
+export const getStudentExamReview = async (examId, studentExamId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/studentExamReview?examId=${examId}&studentExamId=${studentExamId}`
+    );
+    return response.data;
+  } catch (e) {
+    return e.response.data;
+  }
+};
