@@ -2,30 +2,51 @@ import AttendancePage from "../page/AttendancePage";
 import QrPage from "../page/QrPage";
 import StAttendancePage from "../page/StAttendancePage";
 import StQrPage from "../page/StQrPage";
-import FaceAttendancePage from "../page/faceAttendacePage";
+import FaceAttendancePage from "../page/faceAttendacePage";  // Import your new page
 import QrScannerComponent from "../components/ScannerComponent";
+import AuthRoute from "../../registration/middleware/AuthRoute";  // Import the AuthRoute component
+
 export default function AttendRoutes() {
   return [
     {
       path: "",
-      element: <AttendancePage />,
+      element: (
+        <AuthRoute>
+          <AttendancePage />
+        </AuthRoute>
+      ),
     },
     {
       path: "qr",
-      element: <QrPage />,
+      element: (
+        <AuthRoute>
+          <QrPage />
+        </AuthRoute>
+      ),
     },
     {
       path: "stQr",
-      element: <StQrPage />,
+      element: (
+        <AuthRoute>
+          <StQrPage />
+        </AuthRoute>
+      ),
     },
     {
       path: "statt",
-      element: <StAttendancePage/>,
+      element: (
+        <AuthRoute>
+          <StAttendancePage />
+        </AuthRoute>
+      ),
     },
     {
-      path: "faceAttendance",
-      element: <FaceAttendancePage/>
-    }
-
+      path: "faceAttendance",  
+      element: (
+        <AuthRoute>
+          <FaceAttendancePage />
+        </AuthRoute>
+      ),
+    },
   ];
 }
