@@ -21,43 +21,43 @@ export const ErrorSkeleton = () => {
 
 export const SInfoLoadingSkeleton = () => (
   <div className="ml-6 animate-pulse">
-    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-    <p className="text-gray-500 mt-4 text-sm h-10 text-center bg-gray-200 rounded w-3/4">
+    <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+    <p className="w-3/4 h-10 mt-4 text-sm text-center text-gray-500 bg-gray-200 rounded">
       Loading Student Data
     </p>
   </div>
 );
 
 export const CardErrorSkeleton = ({ data }) => (
-  <div className="mt-2 bg-red-500 text-white py-1 px-4 rounded">
+  <div className="px-4 py-1 mt-2 text-white bg-red-500 rounded">
     <p>Error Loading {data} Data.</p>
   </div>
 );
 
 export const GradeCardLoadingSkeleton = () => (
-  <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg border border-gray-200 animate-pulse">
-    <div className="bg-gray-200 text-white rounded-t-lg p-4 flex justify-evenly items-center">
+  <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-lg animate-pulse">
+    <div className="flex items-center p-4 text-white bg-gray-200 rounded-t-lg justify-evenly">
       <div className="flex flex-col items-center justify-center text-center">
-        <div className="h-4 w-12 bg-gray-300 rounded mb-2"></div>
-        <div className="h-5 w-8 bg-gray-300 rounded mb-2"></div>
-        <div className="h-4 w-12 bg-gray-300 rounded"></div>
+        <div className="w-12 h-4 mb-2 bg-gray-300 rounded"></div>
+        <div className="w-8 h-5 mb-2 bg-gray-300 rounded"></div>
+        <div className="w-12 h-4 bg-gray-300 rounded"></div>
       </div>
       <div className="h-12 mx-4"></div>
       <div className="flex flex-col items-center justify-center text-center">
-        <div className="h-4 w-12 bg-gray-300 rounded mb-2"></div>
-        <div className="h-5 w-8 bg-gray-300 rounded mb-2"></div>
-        <div className="h-4 w-12 bg-gray-300 rounded"></div>
+        <div className="w-12 h-4 mb-2 bg-gray-300 rounded"></div>
+        <div className="w-8 h-5 mb-2 bg-gray-300 rounded"></div>
+        <div className="w-12 h-4 bg-gray-300 rounded"></div>
       </div>
     </div>
 
     <div className="p-4">
-      <div className="py-3 flex justify-between items-center">
+      <div className="flex items-center justify-between py-3">
         <div className="flex flex-col items-start">
-          <div className="h-3 w-24 bg-gray-300 rounded mb-1"></div>
-          <div className="h-4 w-36 bg-gray-300 rounded mb-1"></div>
-          <div className="h-3 w-16 bg-gray-300 rounded"></div>
+          <div className="w-24 h-3 mb-1 bg-gray-300 rounded"></div>
+          <div className="h-4 mb-1 bg-gray-300 rounded w-36"></div>
+          <div className="w-16 h-3 bg-gray-300 rounded"></div>
         </div>
-        <div className="h-5 w-5 bg-gray-300 rounded"></div>
+        <div className="w-5 h-5 bg-gray-300 rounded"></div>
       </div>
     </div>
   </div>
