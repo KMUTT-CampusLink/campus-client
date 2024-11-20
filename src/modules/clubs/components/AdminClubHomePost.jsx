@@ -268,6 +268,7 @@ const ClubHomePost = (props) => {
         onClose={closeModal}
         data={modalData}
         onUpdate={toggleVisiblity ? updateAnnouncement : updatePost}
+        toggleVisibility={toggleVisiblity}
       />
     </div>
   );

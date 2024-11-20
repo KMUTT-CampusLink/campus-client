@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ClubCreateMemberAddPage from "./ClubCreateMemberAddPage";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { z } from "zod";
@@ -50,6 +51,7 @@ function ClubCreatePage() {
   const [buildingId, setBuildingId] = useState("");
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate(); // Initialize useNavigate
   const MIN_MEMBERS = 3;
 
   useEffect(() => {
@@ -176,6 +178,10 @@ function ClubCreatePage() {
 
       if (response.status === 201) {
         alert("Club created successfully!");
+
+        // Navigate to the club's home page after successful creation
+        navigate("/clubs/");
+
         setClubName("");
         setClubDescription("");
         setClubDetails("");
@@ -252,7 +258,7 @@ function ClubCreatePage() {
             {/* Club Image Upload */}
             <div className="mb-4 pt-3">
               <label className="block text-lg font-medium leading-6 text-gray-900">
-                Club Image
+                Club Image <span className="text-red-500">*</span>
               </label>
               <div className="mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset sm:max-w-lg">
                 {/* Display selected file name or "No file selected" */}
@@ -263,17 +269,6 @@ function ClubCreatePage() {
                 {/*error message */}
                 {errors.clubImage && (
                   <p className="text-red-500">{errors.clubImage}</p>
-                )}
-
-                {/* Preview Image */}
-                {selectedFile && (
-                  <div className="mt-4">
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover border rounded"
-                    />
-                  </div>
                 )}
 
                 {/* File Upload Button */}

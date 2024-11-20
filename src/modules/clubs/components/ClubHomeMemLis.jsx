@@ -175,9 +175,9 @@ const ClubHomeMemLis = (props) => {
           </div>
         </div>
       )}
-      <button className="flex w-max px-[5%] bg-red-500 text-white py-2 my-3 rounded">
+      {/* <button className="flex w-max px-[5%] bg-red-500 text-white py-2 my-3 rounded">
         Leave
-      </button>
+      </button> */}
     </div>
   );
 };

@@ -95,18 +95,18 @@ function ClubDetailInfo( { isAdmin, isMember, memberId } ) {
         <div className="flex flex-wrap justify-end md:mt-12 mt-6">
         <Link
           to={`/clubs/club-home/${clubId}`}
-          className="bg-[#F69800] text-white px-2 md:px-14 py-2 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 md:ml-6 block"
+          className="bg-[#F69800] text-white px-2 md:px-10 py-2 rounded-lg md:rounded-lg md:text-xl md:mt-5 md:ml-6 block"
         >
           Announcements
         </Link>
         <button
-          className="bg-[#EC5A51] text-white px-2 md:px-14 py-1 shadow-xl rounded-lg md:rounded-full md:text-xl md:mt-5 ml-4 md:ml-6"
+          className="bg-[#EC5A51] text-white px-2 md:px-10 py-1 rounded-lg md:rounded-lg md:text-xl md:mt-5 ml-4 md:ml-6"
           onClick={openModal}
         >
           Edit Description
         </button>
         <button 
-          className="bg-[#864E41] text-white px-3 md:px-14 py-1 shadow-xl rounded-lg md:rounded-full md:text-xl mt-3 md:mt-5 md:ml-6"
+          className="bg-[#864E41] text-white px-3 md:px-10 py-1 rounded-lg md:rounded-lg md:text-xl mt-3 md:mt-5 md:ml-6"
           onClick={handleDelete} // Attach handleDelete function
         >
           Delete Club

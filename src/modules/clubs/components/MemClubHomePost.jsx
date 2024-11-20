@@ -66,8 +66,9 @@ const MemClubHomePost = (props) => {
           `Status for announcement ${announcement.id}:`,
           statusResponse.data
         ); // Debug log
-        return { id: announcement.id, status: statusResponse.data.status };
+        return { id: announcement.id, status: statusResponse.data.status, invoiceId: statusResponse.data.invoiceId };
       });
+
 
       const statuses = await Promise.all(statusPromises);
       const statusMap = statuses.reduce((acc, { id, status, invoiceId }) => {
@@ -136,6 +137,7 @@ const MemClubHomePost = (props) => {
   };
 
   const getButton = (statusObj, announcementId) => {
+    console.log(statusObj, announcementId);
     const { status, invoiceId } = statusObj || {};
     if (status === "Unreserved") {
       return (
