@@ -3,6 +3,7 @@ import AnnouncementCard from "../components/Card/AnnouncementPageCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import { getAnnouncements } from "../services/api";
+
 function AnnouncementPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest"); // Default is "newest"
@@ -11,8 +12,8 @@ function AnnouncementPage() {
 
   const announcementData = async () => {
     const response = await getAnnouncements();
-    setAnnouncements(response.data);
-    setFilteredAnnouncements(response.data);
+    setAnnouncements(response || []); // Ensure announcements is always an array
+    setFilteredAnnouncements(response || []); // Ensure filteredAnnouncements is always an array
   };
 
   useEffect(() => {
@@ -54,7 +55,7 @@ function AnnouncementPage() {
   }, [searchQuery, sortOption, announcements]);
 
   // Group announcements by date
-  const groupedAnnouncements = filteredAnnouncements.reduce(
+  const groupedAnnouncements = (filteredAnnouncements || []).reduce(
     (acc, announcement) => {
       const date = new Date(announcement.updated_at).toLocaleDateString();
       if (!acc[date]) {

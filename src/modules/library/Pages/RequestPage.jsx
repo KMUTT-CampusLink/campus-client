@@ -100,7 +100,6 @@ function RequestPage() {
 
     const reservationData = {
       status: "Reserved",
-      user_id: "9ea13823-6a05-4d2f-8116-26345d8d7047",
       book_duplicate_id: selectedDuplicateID,
       start_date: new Date().toISOString(),
       end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),

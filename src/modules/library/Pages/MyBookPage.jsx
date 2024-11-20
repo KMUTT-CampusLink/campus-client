@@ -1145,7 +1145,6 @@ function MyBookPage() {
   const popupRef = useRef(null); // Create a ref for the page input popup
   const returnOptionsModalRef = useRef(null); // Create a ref for the return options modal
   const codeEntryModalRef = useRef(null); // Create a ref for the code entry modal
-  const user_id = "9ea13823-6a05-4d2f-8116-26345d8d7047";
 
   useEffect(() => {
     console.log("Scanned result:", result);
@@ -1185,7 +1184,7 @@ function MyBookPage() {
   };
 
   const filteredBooks = reservedBook.filter(
-    (book) => book.user_id === user_id && book.reserve_status === "Reserved"
+    (book) => book.user_id && book.reserve_status === "Reserved"
   );
 
   const readCode = (e) => {
@@ -1253,7 +1252,7 @@ function MyBookPage() {
   };
 
   const totalPages = Math.ceil(
-    reservedBook.filter((book) => book.user_id === user_id).length / 10
+    reservedBook.filter((book) => book.user_id).length / 10
   );
 
   const handleReturnOptionClick = (book) => {
@@ -1596,7 +1595,7 @@ function MyBookPage() {
               </h2>
               {reservedBook.length > 0 ? (
                 reservedBook
-                  .filter((book) => book.user_id === user_id)
+                  .filter((book) => book.user_id)
                   .slice((currentPage - 1) * 10, currentPage * 10)
                   .map((book, index) => (
                     <div
@@ -1649,7 +1648,7 @@ function MyBookPage() {
                   You currently have no history of borrowed books.
                 </p>
               )}
-              {reservedBook.filter((book) => book.user_id === user_id).length >
+              {reservedBook.filter((book) => book.user_id).length >
                 0 && (
                 <div className="flex items-center justify-center mt-4 gap-2">
                   <button
