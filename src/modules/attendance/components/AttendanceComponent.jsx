@@ -1,85 +1,41 @@
-/* eslint-disable react/prop-types */
-import { Col, Divider, Menu, Row } from "antd";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import useAttendance from "../hook/useAttendance";
-import '../styles/dashboard.css'; 
 
 const AttendanceComponent = () => {
-  const { items, handleMenuClick, AttendanceDetail, chooseDate, table } = useAttendance(); 
+  const { items, handleMenuClick, AttendanceDetail, chooseDate, table } = useAttendance();
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        background: "linear-gradient(to right, #c2544d, #f09107)",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-red-500 to-yellow-500">
       <NavBar />
 
-      <div
-        style={{
-          marginTop: "70px",
-          flex: 1,
-          borderTopRightRadius: "40px",
-          borderTopLeftRadius: "40px",
-          backgroundColor: "white",
-          minHeight: "100%",
-          overflow: "hidden",
-        }}
-      >
-        <Row>
-          <Col span={4}></Col>
-          <Col span={20}>
-            <Menu
-              onClick={handleMenuClick}
-              items={items}
-              mode="horizontal"
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                marginTop: "15px",
-              }}
-            />
-          </Col>
-        </Row>
+      <div className="mt-16 flex-1 bg-white rounded-t-3xl relative">
+        {/* Menu items */}
+        <div className="w-full flex justify-center mt-4 px-4 sm:px-48">
+          <div className="flex gap-4 sm:gap-10 flex-wrap justify-center">
+            {items?.map((item, index) => (
+              <span
+                key={index}
+                className="text-lg font-semibold cursor-pointer hover:border-b-4 hover:border-black"
+                onClick={() => handleMenuClick(item.key)}
+              >
+                {item.label}
+              </span>
+            ))}
+          </div>
+        </div>
 
-        <div
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <Divider
-            style={{
-              borderColor: "#000000",
-              height: "4px",
-              width: "100%",
-              margin: "0",
-            }}
-          />
-
-          <div style={{ marginTop: "20px", textAlign: "left", marginLeft: "10vw" }}>
-            {AttendanceDetail()} 
+        <div className="px-4 sm:px-0">
+          <hr className="border-b border-black w-full" />
+          <div className="p-4 sm:p-8 lg:p-12">
+            {AttendanceDetail && AttendanceDetail()}
           </div>
 
-          <Divider
-            style={{
-              borderColor: "#979797",
-              height: "4px",
-              width: "100%",
-              marginTop: "3vh",
-            }}
-          />
-          
-          <div style={{ marginTop: "30px", textAlign: "left", marginLeft: "10vw" }}>
-            {chooseDate()} 
-          </div>
-
-          <div style={{ marginTop: "30px", textAlign: "left", marginLeft: "10vw" }}>
-            {table()}  
+          <hr className="border-b border-gray-300 w-full" />
+          <div className="p-4 sm:p-8 lg:p-12">
+            {chooseDate && chooseDate()}
+            <div className="mt-8">
+              {table && table()}
+            </div>
           </div>
         </div>
       </div>

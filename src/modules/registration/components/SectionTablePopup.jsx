@@ -1,21 +1,46 @@
 import { useEffect, useRef, useState } from "react";
 import { useAddEnrollmentDetail } from "../services/mutations";
-import Alert from "./Alert";
-
+import popToast from "../../../utils/popToast";
+import { useSectionByCourseCode } from "../services/queries";
 const SectionTablePopup = ({
   isOpen,
   onClose,
-  sections,
+  courseCode,
   studentId,
   headId,
-  onSectionAdded, // Receive the refetch callback
+  semesterId,
 }) => {
   const popupRef = useRef();
+  const { data: sectionData, refetch: refetchSections } =
+    useSectionByCourseCode(courseCode, semesterId);
+  const [sections, setSelectedSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState("");
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   const mutation = useAddEnrollmentDetail();
+
+  // Reset sections when popup is closed
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedSections([]); // Clear sections when popup closes
+      setSelectedSectionId(null); // Reset selected section ID as well
+    }
+  }, [isOpen]);
+
+  // Refetch sections and handle no sections case
+  useEffect(() => {
+    if (isOpen) {
+      refetchSections(); // Fetch sections every time the popup is opened
+    }
+  }, [isOpen, courseCode, refetchSections]);
+
+  // Update sections when new section data is fetched
+  useEffect(() => {
+    if (sectionData && sectionData.length > 0) {
+      setSelectedSections(sectionData); // Update sections if available
+    } else {
+      setSelectedSections([]); // Reset sections if no data is available
+    }
+  }, [sectionData, courseCode]); // Make sure to include courseCode here
 
   const handleAddEnrollment = async () => {
     const selectedSection = sections.find(
@@ -23,33 +48,20 @@ const SectionTablePopup = ({
     );
 
     if (selectedSection && selectedSection.seats_left > 0) {
-      try {
-        await mutation.mutateAsync({
-          head_id: headId,
-          student_id: studentId,
-          section_id: selectedSectionId,
-        });
-      } catch (error) {
-        // Check for 409 Conflict (Enrollment already exists)
-        if (error.response?.status === 409) {
-          setAlertMessage("You have already added this section.");
-          setAlertSeverity("error");
-        } else {
-          setAlertMessage("Failed to add course. Please try again.");
-          setAlertSeverity("error");
-        }
-        setIsAlertVisible(true);
-      }
+      await mutation.mutateAsync({
+        head_id: headId,
+        student_id: studentId,
+        section_id: selectedSectionId,
+      });
     } else {
-      setAlertMessage("Cannot add section. No seats left.");
-      setAlertSeverity("error");
-      setIsAlertVisible(true);
+      popToast("Cannot add section. No seats left.", "error");
     }
   };
 
   const handleClose = () => {
     if (mutation.isLoading) return; // Prevent closing while loading
     onClose();
+    setSelectedSectionId(null);
   };
 
   useEffect(() => {
@@ -70,27 +82,16 @@ const SectionTablePopup = ({
 
   useEffect(() => {
     if (mutation.isSuccess) {
-      setAlertMessage("Course added successfully.");
-      setAlertSeverity("success");
-      setIsAlertVisible(true);
-      onSectionAdded(); // Trigger the refetch when the section is successfully added
+      popToast("Course added successfully.", "success");
+      mutation.reset(); // Reset mutation state after success
     } else if (mutation.isError) {
-      setAlertMessage(
-        "Failed to add course. You may have added this section or course already."
+      popToast(
+        "Failed to add course. You may have added this section or course already.",
+        "error"
       );
-      setAlertSeverity("error");
-      setIsAlertVisible(true);
+      mutation.reset(); // Reset mutation state after error
     }
-  }, [mutation.isSuccess, mutation.isError, onSectionAdded]);
-
-  useEffect(() => {
-    if (isAlertVisible) {
-      const timer = setTimeout(() => {
-        setIsAlertVisible(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isAlertVisible]);
+  }, [mutation.isSuccess, mutation.isError]);
 
   if (!isOpen) return null;
 
@@ -101,15 +102,6 @@ const SectionTablePopup = ({
         className="bg-white rounded-lg shadow-lg p-6 overflow-auto max-w-full max-h-full"
       >
         <h2 className="text-lg font-bold mb-4">Section Details</h2>
-
-        {/* Display Alert if visible */}
-        {isAlertVisible && (
-          <Alert
-            severity={alertSeverity}
-            message={alertMessage}
-            onClose={() => setIsAlertVisible(false)}
-          />
-        )}
 
         <table className="min-w-full border-collapse">
           <thead>
@@ -123,37 +115,47 @@ const SectionTablePopup = ({
             </tr>
           </thead>
           <tbody>
-            {sections.map((section, index) => (
-              <tr key={index} className="odd:bg-white even:bg-gray-100">
-                <td className="py-2 px-4 text-center border border-gray-300 truncate">
-                  <input
-                    type="radio"
-                    id={`section-${section.section_id}`}
-                    name="section"
-                    value={section.section_id}
-                    onChange={() => setSelectedSectionId(section.section_id)}
-                    checked={selectedSectionId === section.section_id}
-                    aria-labelledby={`section-${section.section_id}-label`} // Accessibility label
-                  />
-                </td>
-                <td className="py-2 px-4 border border-gray-300 truncate">
-                  {section.section_name}
-                </td>
-                <td className="py-2 px-4 border border-gray-300 truncate">
-                  {section.professor_names}
-                </td>
-                <td className="py-2 px-4 border border-gray-300">
-                  <div>{section.section_day}</div>
-                  <div>{`${section.start_time} - ${section.end_time}`}</div>
-                </td>
-                <td className="py-2 px-4 border border-gray-300 truncate">
-                  {section.room_name}
-                </td>
-                <td className="py-2 px-4 border border-gray-300">
-                  {section.seats_left}
+            {sections && sections.length > 0 ? (
+              sections.map((section, index) => (
+                <tr key={index} className="odd:bg-white even:bg-gray-100">
+                  <td className="py-2 px-4 text-center border border-gray-300 truncate">
+                    <input
+                      type="radio"
+                      id={`section-${section.section_id}`}
+                      name="section"
+                      value={section.section_id}
+                      onChange={() => setSelectedSectionId(section.section_id)}
+                      checked={selectedSectionId === section.section_id}
+                    />
+                  </td>
+                  <td className="py-2 px-4 border border-gray-300 truncate">
+                    {section.section_name}
+                  </td>
+                  <td className="py-2 px-4 border border-gray-300 truncate">
+                    {section.professor_names}
+                  </td>
+                  <td className="py-2 px-4 border border-gray-300">
+                    <div>{section.section_day}</div>
+                    <div>{`${section.start_time} - ${section.end_time}`}</div>
+                  </td>
+                  <td className="py-2 px-4 border border-gray-300 truncate">
+                    {section.room_name}
+                  </td>
+                  <td className="py-2 px-4 border border-gray-300">
+                    {section.seats_left}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="py-4 px-4 text-center text-gray-500 border border-gray-300"
+                >
+                  No sections available for this course.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 

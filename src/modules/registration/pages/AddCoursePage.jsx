@@ -6,23 +6,18 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../components/NavBarComponents/NavBar";
 import HeadLineCard from "../components/HeadLineCard";
 import SectionTablePopup from "../components/SectionTablePopup";
-import {
-  useCourseBySearch,
-  useGetEnrollmentHead,
-  useSectionByCourseCode,
-} from "../services/queries";
+import { useCourseBySearch, useGetEnrollmentHead } from "../services/queries";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
-import { ErrorSkeleton, LoadingSkeleton } from "../styles/Skeletons";
-
+import { ErrorSkeleton } from "../styles/Skeletons";
+import LoadingPage from "../../dev/pages/LoadingPage";
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
-  const currentSemesterId = 2;
+  const currentSemesterId = 1016;
   const navigate = useNavigate();
 
   const [headId, setHeadId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedSections, setSelectedSections] = useState([]);
   const [courseCode, setCourseCode] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -35,8 +30,6 @@ function AddCoursePage() {
     currentSemesterId,
   });
 
-  const { data: sectionData, refetch: refetchSections } =
-    useSectionByCourseCode(courseCode);
   const { data: courses, refetch } = useCourseBySearch(searchTerm);
 
   useEffect(() => {
@@ -44,12 +37,6 @@ function AddCoursePage() {
       setHeadId(enrollmentHeadData.head_id);
     }
   }, [enrollmentHeadData]);
-
-  useEffect(() => {
-    if (sectionData) {
-      setSelectedSections(sectionData);
-    }
-  }, [sectionData]);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -62,11 +49,7 @@ function AddCoursePage() {
     setIsPopupOpen(true);
   };
 
-  const handleSectionAdded = () => {
-    refetchSections();
-  };
-
-  if (isLoading) return <LoadingSkeleton />;
+  if (isLoading) return <LoadingPage />;
   if (isError) return <ErrorSkeleton />;
 
   return (
@@ -142,10 +125,10 @@ function AddCoursePage() {
       <SectionTablePopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        sections={selectedSections}
+        courseCode={courseCode}
         studentId={studentId}
+        semesterId={currentSemesterId}
         headId={headId}
-        onSectionAdded={handleSectionAdded}
       />
     </>
   );

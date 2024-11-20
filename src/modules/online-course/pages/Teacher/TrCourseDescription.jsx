@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import NavForIndvCourse from "../../components/NavForIndvCourse"
+import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from "react-router-dom";
 
 const TrCourseDescription = ({ sideOpen }) => {
+  const { state } = useLocation();
+  const { sec_id, course_code, course_name } = state || {};
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(
     "Computer systems, processor, memory and input/output modules, interconnections among these major components, central processing unit, control unit, registers, arithmetic and logic unit, and instruction unit, data representation, Boolean algebra, digital logic, architectural issues, instruction-set design, organizational issues, pipelining, parallel organization, multiple processors and vector processing organizations, performance measurements."
@@ -33,13 +36,18 @@ const TrCourseDescription = ({ sideOpen }) => {
       // className={`bg-white transition-all duration-300 ${
       //   sideOpen ? "ml-64" : ""
       // }`}
-      className="min-h-screen"
+      className="w-full min-h-screen overflow-x-hidden"
     >
       {/* <NavBarForIndv/> */}
       <NavForIndvCourse page={"description"} />
-
-      <div className="pt-12 border-b-2 border-black pb-8">
-        <div className="w-3/4 m-auto">
+      <div>
+        <h1>Course Description</h1>
+        <p>Section ID: {sec_id}</p>
+        <p>Course Code: {course_code}</p>
+        <p>Course Name: {course_name}</p>
+      </div>
+      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 ">
+        <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto">
           <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
             About Classroom
           </div>
@@ -57,8 +65,8 @@ const TrCourseDescription = ({ sideOpen }) => {
         </div>
       </div>
 
-      <div className="py-8 w-full">
-        <div className="w-3/4 mx-auto flex gap-10 items-center mb-4">
+      <div className="py-8 w-full max-md:text-xs">
+        <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto flex max-md:gap-3 gap-10 items-center mb-4">
           <div className="text-2xl font-bold text-[#ecb45e]">
             Course Description
           </div>
@@ -87,10 +95,10 @@ const TrCourseDescription = ({ sideOpen }) => {
             </button>
           )}
         </div>
-        <div className="w-3/4 mx-auto text-gray-700 leading-relaxed">
+        <div className="max-md:w-full max-md:px-2 w-3/4 mx-auto text-gray-700 leading-relaxed">
           {isEditing ? (
             <textarea
-              className="w-full border border-gray-300 rounded p-2"
+              className="w-full border border-gray-300 rounded p-2 h-20"
               value={tempDescription}
               onChange={handleDescriptionChange}
             />
@@ -100,11 +108,11 @@ const TrCourseDescription = ({ sideOpen }) => {
         </div>
       </div>
 
-      <div className="py-8 bg-white">
-        <div className="w-3/4 mx-auto text-2xl font-bold text-[#ecb45e] mb-4">
+      <div className="py-8 bg-white max-md:text-xs px-2">
+        <div className="max-md:w-full w-3/4 mx-auto text-2xl font-bold text-[#ecb45e] mb-4">
           Learning Outcomes
         </div>
-        <div className="w-3/4 mx-auto text-gray-700 leading-relaxed">
+        <div className="max-md:w-full w-3/4 mx-auto text-gray-700 leading-relaxed">
           <ul className="list-disc list-inside">
             <li>Understand the architecture of modern computer systems.</li>
             <li>Analyze the functioning of the control unit and CPU.</li>

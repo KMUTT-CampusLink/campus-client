@@ -3,16 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import Navbar from '../../../registration/components/NavBarComponents/NavBar';
 import Question from '../../components/professor/CreateExam/Question';
+import StudentQuestion from '../../components/professor/EditedExam/StudentQuestion';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPlus, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { createNewExam } from '../../services/apis/professerApi';
 
 export default function ProfessorCreateExamPage() {
-  const { courseId } = useParams();
+  const { sectionId } = useParams();
   const navigate = useNavigate();
-
+  const [viewAsStudent, setViewAsStudent] = useState(false);
+  
   //exam data all stored in here
   const [exam, setExam] = useState({
     title: '',
@@ -35,8 +37,11 @@ export default function ProfessorCreateExamPage() {
 
   // set default score for all questions function
   const handleDefaultScoreChange = (e) => {
-    const score = parseInt(e.target.value) || 0;
-    if (score < 0) return;
+    const score = parseInt(e.target.value);
+    if (score <= 0) {
+      setDefaultScore(1);
+      return;
+    };
     setDefaultScore(score);
     const updatedQuestions = exam.questions.map((question) => ({
       ...question,
@@ -78,10 +83,14 @@ export default function ProfessorCreateExamPage() {
         score: question.score || defaultScore,
       })),
     };
-    const res = await createNewExam(finalExam);
-    const id = res.data.data;
-    if (res.status === 200) {
-      navigate(`/exams/professor/setting/${id}`);
+    try {
+      const res = await createNewExam(finalExam, sectionId);
+      const id = res.data.data;
+      if (res.status === 200) {
+        navigate(`/exams/professor/setting/${id}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -89,81 +98,100 @@ export default function ProfessorCreateExamPage() {
     <div className='w-auto'>
       <Navbar />
       <div className='mx-[35px] xl:mx-[100px] pb-[30px] pt-20'>
-        <div className='flex flex-col justify-between gap-[20px]'>
-          <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">Create Exam</h1>
-            {/* view as student button */}
-            <button className="btn"><FontAwesomeIcon icon={faEye} /> View as student</button>
-          </div>
-          {/* exam details */}
-          <h4>Exam Name</h4>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Exam Name Here"
-            value={exam.title}
-            onChange={handleExamNameChange}
-          />
-          <h4>Description</h4>
-          <textarea
-            className="textarea textarea-bordered w-full h-[100px]"
-            placeholder="Description Here"
-            value={exam.description}
-            onChange={handleDescriptionChange}
-          ></textarea>
-          {/* set default score for all questions */}
-          <div className='flex gap-[10px] items-center'>
-            <h4>Set Default Score: </h4>
-            <input
-              type="number"
-              className="input input-bordered w-[100px] h-[40px]"
-              value={defaultScore}
-              onChange={handleDefaultScoreChange}
-            />
-          </div>
-          {/* Map question */}
-          {exam.questions.map((question, index) => (
-            <>
-              <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
-              <Question
-                key={index}
-                question={question}
-                index={index}
-                setExam={setExam}
-                exam={exam}
-                onDeleteQuestion={deleteQuestion}
-                defaultScore={defaultScore}
-              />
-            </>
-          ))}
-          {/* Add question button */}
-          <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white' onClick={addQuestion}><FontAwesomeIcon icon={faPlus} /> Add Question</button>
-        </div>
-        <hr className='mt-[30px] border' />
-        {/* subnit exam button */}
-        <div className='flex justify-end pt-[30px]'>
-          <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Submit Exam
-          </button>
-          <dialog id="confirmModal" className="p-[30px] rounded-xl">
-            <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
-            <p className="py-4">You can submit the exam only once.</p>
-            <div className="modal-action">
-              <form method="dialog" className="flex flex-row gap-[20px]">
-                <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
-                  Close
-                </button>
-                <button
-                  className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
-                  onClick={() => {
-                    // handleSubmit();
-                    console.log(exam)
-                  }}
-                >
-                  Confirm
-                </button>
-              </form>
+        <div className={`${viewAsStudent ? "hidden" : "block"}`}>
+          <div className='flex flex-col justify-between gap-[20px]'>
+            <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
+              <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">Create Exam</h1>
+              {/* view as student button */}
+              <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(true) }}><FontAwesomeIcon icon={faEye} /> View as student</button>
             </div>
-          </dialog>
+            {/* exam details */}
+            <h4>Exam Name</h4>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Exam Name Here"
+              value={exam.title}
+              onChange={handleExamNameChange}
+            />
+            <h4>Description</h4>
+            <textarea
+              className="textarea textarea-bordered w-full h-[200px]"
+              placeholder="Description Here"
+              value={exam.description}
+              onChange={handleDescriptionChange}
+            ></textarea>
+            {/* set default score for all questions */}
+            <div className='flex gap-[10px] items-center'>
+              <h4>Set Default Score: </h4>
+              <input
+                type="number"
+                className="input input-bordered w-[100px] h-[40px]"
+                value={defaultScore}
+                onChange={handleDefaultScoreChange}
+              />
+            </div>
+            {/* Map question */}
+            {exam && exam.questions.map((question, index) => (
+              <>
+                <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
+                <Question
+                  key={index}
+                  question={question}
+                  index={index}
+                  setExam={setExam}
+                  exam={exam}
+                  onDeleteQuestion={deleteQuestion}
+                  defaultScore={defaultScore}
+                />
+              </>
+            ))}
+            {/* Add question button */}
+            <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white' onClick={addQuestion}><FontAwesomeIcon icon={faPlus} /> Add Question</button>
+          </div>
+          <hr className='mt-[30px] border' />
+          {/* subnit exam button */}
+          <div className='flex justify-end pt-[30px]'>
+            <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Submit Exam
+            </button>
+            <dialog id="confirmModal" className="p-[30px] rounded-xl">
+              <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
+              <p className="py-4">You can submit the exam only once.</p>
+              <div className="modal-action">
+                <form method="dialog" className="flex flex-row gap-[20px]">
+                  <button className="btn bg-[#EC5A51] hover:bg-[#d5564f] text-white">
+                    Close
+                  </button>
+                  <button
+                    className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Confirm
+                  </button>
+                </form>
+              </div>
+            </dialog>
+          </div>
+        </div>
+        <div className={`${viewAsStudent ? "block" : "hidden"}`}>
+          <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
+            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">{exam.title}</h1>
+            <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(false) }}> <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam</button>
+          </div>
+          <div className="my-[20px] flex flex-col gap-[20px]">
+            {exam.questions.map((question, index) => (
+              <StudentQuestion
+                key={index}
+                questionid={question.question_id}
+                questionNo={index}
+                question={question.questionText}
+                choice={question.options}
+                type={question.type}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

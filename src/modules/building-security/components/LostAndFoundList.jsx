@@ -1,121 +1,184 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function LostAndFoundList() {
-  const requests = [
-    {
-      author: "Chawisa",
-      item: "Backpack",
-      room: "CB305",
-      detail: "It's pink backpack with my name",
-      status: "Found",
-    },
-    {
-      author: "Chawisa",
-      item: "Slipper",
-      room: "CB306",
-      detail: "It's pink backpack with my name",
-      status: "Received",
-    },
-    {
-      author: "Chawisa",
-      item: "Phone",
-      room: "CB306",
-      detail: "It's pink backpack with my name",
-      status: "Searching...",
-    },
-  ];
+export default function MyItemList() {
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [newStatus, setNewStatus] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/security/LostAndFoundList"
+        );
+        if (!response.ok) throw new Error("Failed to fetch data");
+
+        const result = await response.json();
+        setRequests(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const getStatusStyle = (status) => {
     switch (status) {
       case "Found":
         return { color: "green" };
-      case "Received":
+      case "Returned":
         return { color: "blue" };
-      case "Searching...":
+      case "Lost":
         return { color: "orange" };
       default:
         return { color: "black" };
     }
   };
 
-  const pageStyles = {
-    container: {
-      maxWidth: "1300px",
-      margin: "50px auto",
-      padding: "40px",
-      backgroundColor: "#ffffff",
-      borderRadius: "12px",
-      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
-      fontFamily: "'Arial', sans-serif",
-    },
-    header: {
-      fontSize: "28px",
-      fontWeight: "bold",
-      marginBottom: "20px",
-      textAlign: "left",
-    },
-    tableHeader: {
-      display: "grid",
-      gridTemplateColumns: "2fr 2fr 1fr 4fr 1fr",
-      fontWeight: "bold",
-      textAlign: "left",
-      padding: "10px",
-      borderBottom: "1px solid #ccc",
-      marginBottom: "10px",
-      lineHeight: "1.5",
-    },
-    requestRow: {
-      display: "grid",
-      gridTemplateColumns: "2fr 2fr 1fr 4fr 1fr",
-      alignItems: "center",
-      padding: "15px",
-      marginBottom: "10px",
-      borderRadius: "8px",
-      backgroundColor: "#f9f9f9",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-      textAlign: "left",
-      lineHeight: "1.5",
-      fontSize: "16px",
-    },
-    statusText: {
-      fontWeight: "bold",
-    },
-    icon: {
-      cursor: "pointer",
-      color: "#8b5b34",
-      fontSize: "18px",
-      marginLeft: "10px",
-    },
+  const handleEditClick = (id, currentStatus) => {
+    setEditingId(id);
+    setNewStatus(currentStatus);
   };
 
+  const handleStatusChange = (e) => {
+    setNewStatus(e.target.value);
+  };
+
+  const handleStatusUpdate = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/security/updateStatus/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update status");
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        setRequests((prevRequests) =>
+          prevRequests.map((request) =>
+            request.id === id ? { ...request, status: newStatus } : request
+          )
+        );
+        setEditingId(null);
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div style={pageStyles.container}>
-      <h1 style={pageStyles.header}>Lost And Found List</h1>
-
-      {/* Table Header */}
-      <div style={pageStyles.tableHeader}>
-        <div>Author</div>
-        <div>Items</div>
-        <div>Room</div>
-        <div>Detail</div>
-        <div>Status</div>
-      </div>
-
-      {/* Request Rows */}
-      {requests.map((request, index) => (
-        <div key={index} style={pageStyles.requestRow}>
-          <div>{request.author}</div>
-          <div>{request.item}</div>
-          <div>{request.room}</div>
-          <div>{request.detail}</div>
-          <div style={getStatusStyle(request.status)}>
-            <span style={pageStyles.statusText}>{request.status}</span>
-            <span style={pageStyles.icon} onClick={() => console.log("Edit")}>
-              ✏️
-            </span>
-          </div>
+    <div className="relative bg-gray-100 min-h-screen p-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">My Item List</h1>
+          <button
+            className="bg-[#8b5b34] p-2 rounded-full shadow-lg hover:bg-[#6e3f35]"
+            onClick={() => navigate("/security/administrator/lostandfoundform")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6 text-white"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </button>
         </div>
-      ))}
+        <hr className="my-4" />
+
+        <table className="w-full border-collapse text-left">
+          <thead>
+            <tr>
+              <th className="p-3 text-gray-600">Items</th>
+              <th className="p-3 text-gray-600">Room</th>
+              <th className="p-3 text-gray-600">Detail</th>
+              <th className="p-3 text-gray-600">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {requests.map((request) => (
+              <tr
+                key={request.id}
+                className="bg-white shadow-sm rounded-lg mb-4"
+              >
+                <td className="p-3">{request.name}</td>
+                <td className="p-3">{request.found_location}</td>
+                <td className="p-3">{request.description}</td>
+                <td className="p-3" style={getStatusStyle(request.status)}>
+                  {editingId === request.id ? (
+                    <div className="flex items-center">
+                      <select
+                        value={newStatus}
+                        onChange={handleStatusChange}
+                        className="border rounded p-1 mr-2"
+                      >
+                        <option value="Found">Found</option>
+                        <option value="Returned">Returned</option>
+                        <option value="Lost">Lost</option>
+                      </select>
+                      <button
+                        onClick={() => handleStatusUpdate(request.id)}
+                        className="bg-green-500 text-white px-2 rounded mr-1"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditingId(null)}
+                        className="bg-red-500 text-white px-2 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className="flex items-center justify-between"
+                      style={{ minWidth: "90px" }}
+                    >
+                      <span>{request.status}</span>
+                      <button
+                        onClick={() =>
+                          handleEditClick(request.id, request.status)
+                        }
+                      >
+                        ✏️
+                      </button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

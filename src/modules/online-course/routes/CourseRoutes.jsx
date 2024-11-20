@@ -1,19 +1,52 @@
-import { Children } from "react";
+import { Navigate } from "react-router-dom";
 import TrDashboard from "../pages/Teacher/TrDashboard";
 import TrCourseDescription from "../pages/Teacher/TrCourseDescription";
 import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
 import TrTasks from "../pages/Teacher/TrTasks";
 import TrDiscussion from "../pages/Teacher/TrDiscussion";
 import StDashboard from "../pages/Students/StDashboard";
+import StAllCourses from "../pages/Students/StAllCourses";
 import StCourseDescription from "../pages/Students/StCourseDescription";
 import StCourseMaterials from "../pages/Students/StCourseMaterials";
 import StTasks from "../pages/Students/StTasks";
 import StDiscussion from "../pages/Students/StDiscussion";
+import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
+import Comment from "../components/Comment";
+import RedirectPage from "../pages/RedirectPage";
+
+// const role = "Professor";
+const role = localStorage.getItem("userRole");
 
 export default function CourseRoutes() {
+  // return [
+  //   {
+  //     path: "",
+  //     element: <RedirectPage />,
+  //   },
+  //   {
+  //     path: "st",
+  //     element: <StDashboard />,
+  //   },
+  //   {
+  //     path: "tr",
+  //     element: <TrDashboard/>
+  //   }
+  // ];
+
+  
   return [
     {
-      path: "Tr",
+      path: "",
+      element:
+        role === "Student" ? (
+          <Navigate to="/courses/st" />
+        ) : (
+          <Navigate to="/courses/tr" />
+        ),
+    },
+    {
+      path: "tr",
+      element: role === "Professor" ? null : <Navigate to="/courses/st" />,
       children: [
         {
           path: "",
@@ -29,11 +62,20 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
-          element: <TrTasks />, 
+          children: [
+            {
+              path: "",
+              element: <TrTasks />,
+            },
+            {
+              path: "submission",
+              element: <TrTaskSubmission />,
+            },
+          ],
         },
         {
           path: "discussion",
-          element: <TrDiscussion />, 
+          element: <TrDiscussion />,
         },
         // {
         //   path: "online_exam",
@@ -46,11 +88,21 @@ export default function CourseRoutes() {
       ],
     },
     {
-      path: "St",
+      path: "st",
+      element: role === "Student" ? null : <Navigate to="/courses/tr" />,
       children: [
         {
           path: "",
-          element: <StDashboard />,
+          children: [
+            {
+              path: "",
+              element: <StDashboard />,
+            },
+            {
+              path: "all_courses",
+              element: <StAllCourses />,
+            },
+          ],
         },
         {
           path: "course_description",
@@ -62,11 +114,20 @@ export default function CourseRoutes() {
         },
         {
           path: "tasks",
-          element: <StTasks />, 
+          element: <StTasks />,
         },
         {
           path: "discussion",
-          element: <StDiscussion />,
+          children: [
+            {
+              path: "",
+              element: <StDiscussion />,
+            },
+            {
+              path: "comment",
+              element: <Comment />,
+            },
+          ],
         },
         // {
         //   path: "online_exam",
@@ -74,7 +135,7 @@ export default function CourseRoutes() {
         // },
         // {
         //   path: "attendance",
-        //   element: <StAttendance />, 
+        //   element: <StAttendance />,
         // },
       ],
     },

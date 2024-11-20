@@ -7,7 +7,7 @@ export default function StudentMyItemList() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
+        <h1>My Item List</h1>
         <p>Detailed information</p>
         <MyItemList/>
       </div>
