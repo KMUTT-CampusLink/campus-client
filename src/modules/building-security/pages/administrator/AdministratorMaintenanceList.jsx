@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../../../utils/axiosInstance"; // Import the axios instance
+import { axiosInstance } from "../../../../utils/axiosInstance"; // Ensure axiosInstance is correctly configured
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function AdministratorMaintenanceList() {
@@ -12,14 +12,10 @@ export default function AdministratorMaintenanceList() {
   useEffect(() => {
     const fetchMaintenanceRequests = async () => {
       try {
-        const response = await axiosInstance.get("/security/MaintenanceList");
+        const response = await axiosInstance.get("/security/MaintenanceList"); // Correct API endpoint
         if (response.data.success) {
           setRequests(response.data.data);
         } else {
-          console.error(
-            "Failed to fetch maintenance requests:",
-            response.data.message
-          );
           setError(response.data.message);
         }
       } catch (error) {
@@ -32,6 +28,19 @@ export default function AdministratorMaintenanceList() {
 
     fetchMaintenanceRequests();
   }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(`/security/adminDeleteMaintenanceList/${id}`);
+      setRequests((prevRequests) =>
+        prevRequests.filter((req) => req.id !== id)
+      );
+      alert("Request deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting maintenance request:", error);
+      alert("Failed to delete the request.");
+    }
+  };
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -86,7 +95,7 @@ export default function AdministratorMaintenanceList() {
     },
     requestCard: {
       display: "grid",
-      gridTemplateColumns: "1fr 3fr 1fr 1fr",
+      gridTemplateColumns: "1fr 3fr 1fr 1fr auto", // Added space for delete icon
       alignItems: "center",
       padding: "20px",
       marginBottom: "15px",
@@ -97,6 +106,11 @@ export default function AdministratorMaintenanceList() {
     },
     statusText: {
       fontWeight: "bold",
+    },
+    deleteButton: {
+      backgroundColor: "transparent",
+      border: "none",
+      cursor: "pointer",
     },
     floatingButton: {
       position: "absolute",
@@ -119,8 +133,8 @@ export default function AdministratorMaintenanceList() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
         <div style={pageStyles.container}>
           <h1 style={pageStyles.header}>Maintenance Request List</h1>
 
@@ -137,9 +151,9 @@ export default function AdministratorMaintenanceList() {
                 <div>Priority</div>
               </div>
 
-              {requests.map((request, index) => (
-                <div key={index} style={pageStyles.requestCard}>
-                  <div>{request.location}</div>
+              {requests.map((request) => (
+                <div key={request.id} style={pageStyles.requestCard}>
+                  <div>{request.room_id}</div>
                   <div>{request.description}</div>
                   <div style={getStatusStyle(request.status)}>
                     <span style={pageStyles.statusText}>{request.status}</span>
@@ -147,6 +161,26 @@ export default function AdministratorMaintenanceList() {
                   <div style={getPriorityStyle(request.priority)}>
                     <span>{request.priority}</span>
                   </div>
+                  <button
+                    onClick={() => handleDelete(request.id)}
+                    style={pageStyles.deleteButton}
+                    title="Delete Request"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="red"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                 </div>
               ))}
             </>

@@ -52,9 +52,12 @@ export default function AdministratorLostAndFoundList() {
 
   const handleStatusUpdate = async (id) => {
     try {
-      const response = await axiosInstance.patch(`/updateStatus/${id}`, {
-        status: newStatus,
-      });
+      const response = await axiosInstance.patch(
+        `/security/updateStatus/${id}`,
+        {
+          status: newStatus,
+        }
+      );
 
       if (response.data.success) {
         setRequests((prevRequests) =>
@@ -78,12 +81,12 @@ export default function AdministratorLostAndFoundList() {
     <>
       <NavBar />
       <div className="container">
-        <h1>Lost And Found List</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
         <div className="relative bg-gray-100 min-h-screen p-8">
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold">My Item List</h1>
+              <h1 className="text-2xl font-bold">Lost And Found List</h1>
               <button
                 className="bg-[#8b5b34] p-2 rounded-full shadow-lg hover:bg-[#6e3f35]"
                 onClick={() =>
@@ -118,57 +121,61 @@ export default function AdministratorLostAndFoundList() {
                 </tr>
               </thead>
               <tbody>
-                {requests.map((request) => (
-                  <tr
-                    key={request.id}
-                    className="bg-white shadow-sm rounded-lg mb-4"
-                  >
-                    <td className="p-3">{request.name}</td>
-                    <td className="p-3">{request.found_location}</td>
-                    <td className="p-3">{request.description}</td>
-                    <td className="p-3" style={getStatusStyle(request.status)}>
-                      {editingId === request.id ? (
-                        <div className="flex items-center">
-                          <select
-                            value={newStatus}
-                            onChange={handleStatusChange}
-                            className="border rounded p-1 mr-2"
+                {requests &&
+                  requests.map((request) => (
+                    <tr
+                      key={request.id}
+                      className="bg-white shadow-sm rounded-lg mb-4"
+                    >
+                      <td className="p-3">{request.name}</td>
+                      <td className="p-3">{request.floor_id}</td>
+                      <td className="p-3">{request.description}</td>
+                      <td
+                        className="p-3"
+                        style={getStatusStyle(request.status)}
+                      >
+                        {editingId === request.id ? (
+                          <div className="flex items-center">
+                            <select
+                              value={newStatus}
+                              onChange={handleStatusChange}
+                              className="border rounded p-1 mr-2"
+                            >
+                              <option value="Found">Found</option>
+                              <option value="Returned">Returned</option>
+                              <option value="Lost">Lost</option>
+                            </select>
+                            <button
+                              onClick={() => handleStatusUpdate(request.id)}
+                              className="bg-green-500 text-white px-2 rounded mr-1"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setEditingId(null)}
+                              className="bg-red-500 text-white px-2 rounded"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div
+                            className="flex items-center justify-between"
+                            style={{ minWidth: "90px" }}
                           >
-                            <option value="Found">Found</option>
-                            <option value="Returned">Returned</option>
-                            <option value="Lost">Lost</option>
-                          </select>
-                          <button
-                            onClick={() => handleStatusUpdate(request.id)}
-                            className="bg-green-500 text-white px-2 rounded mr-1"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => setEditingId(null)}
-                            className="bg-red-500 text-white px-2 rounded"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          className="flex items-center justify-between"
-                          style={{ minWidth: "90px" }}
-                        >
-                          <span>{request.status}</span>
-                          <button
-                            onClick={() =>
-                              handleEditClick(request.id, request.status)
-                            }
-                          >
-                            ✏️
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                            <span>{request.status}</span>
+                            <button
+                              onClick={() =>
+                                handleEditClick(request.id, request.status)
+                              }
+                            >
+                              ✏️
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

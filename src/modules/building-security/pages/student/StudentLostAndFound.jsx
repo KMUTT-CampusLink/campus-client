@@ -10,7 +10,6 @@ export default function StudentLostAndFound() {
   const [roomData, setRoomData] = useState([]);
   const [building, setBuilding] = useState("");
   const [floor, setFloor] = useState("");
-  const [room, setRoom] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Lost"); // Default status
   const [error, setError] = useState(null);
@@ -35,9 +34,7 @@ export default function StudentLostAndFound() {
     const selectedBuildingId = event.target.value;
     setBuilding(selectedBuildingId);
     setFloor("");
-    setRoom("");
     setFloorData([]);
-    setRoomData([]);
 
     try {
       const response = await axiosInstance.get(
@@ -50,33 +47,14 @@ export default function StudentLostAndFound() {
     }
   };
 
-  const handleFloorChange = async (event) => {
-    const selectedFloorId = event.target.value;
-    setFloor(selectedFloorId);
-    setRoom("");
-
-    try {
-      const response = await axiosInstance.get(
-        `/security/rooms/${selectedFloorId}`
-      );
-      setRoomData(response.data.sort((a, b) => a.name.localeCompare(b.name)));
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-      setError("Failed to load room data.");
-    }
+  const handleFloorChange = (event) => {
+    setFloor(event.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const currentTime = new Date();
-    const offset = currentTime.getTimezoneOffset() + 420; // Adjust to UTC+7
-    const localTime = new Date(currentTime.getTime() + offset * 60000);
-    const formattedTimestamp =
-      localTime.toISOString().replace("T", " ").split(".")[0] + ".0000000";
-
     const lostAndFoundData = {
-      floor,
+      floor_id: parseInt(floor),
       description,
       status,
     };
@@ -93,20 +71,17 @@ export default function StudentLostAndFound() {
       setError("Failed to submit the request.");
     }
   };
+
   return (
     <>
       <NavBar />
-      <div className="container">
-        <h1>LostAndFound</h1>
-        <p>Detailed information</p>
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md relative"
-        >
-          {/* Navigation Icons */}
-          <div className="flex justify-between items-center mb-4">
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <br />
+        <br />
+        <div className="max-w-3xl mx-auto bg-white p-8 shadow-md rounded-lg">
+          <div className="flex justify-between items-center mb-6">
             <button
-              className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+              className="p-3 bg-gray-200 rounded-full shadow hover:bg-gray-300"
               onClick={() => navigate("/security/student")}
               type="button"
             >
@@ -116,20 +91,18 @@ export default function StudentLostAndFound() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6 text-[#864E41]"
+                className="w-6 h-6 text-gray-600"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+                  d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 011 12h-3"
                 />
               </svg>
             </button>
-
-            <h1 className="text-2xl font-bold">Lost And Found</h1>
-
+            <h1 className="text-2xl font-bold text-gray-800">Lost And Found</h1>
             <button
-              className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+              className="p-3 bg-gray-200 rounded-full shadow hover:bg-gray-300"
               onClick={() => navigate("/security/student/myitemlist")}
               type="button"
             >
@@ -139,7 +112,7 @@ export default function StudentLostAndFound() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6 text-[#864E41]"
+                className="w-6 h-6 text-gray-600"
               >
                 <path
                   strokeLinecap="round"
@@ -150,139 +123,131 @@ export default function StudentLostAndFound() {
             </button>
           </div>
 
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
 
-          {/* Building and Floor on the same line */}
-          <div className="flex space-x-4 mb-4">
-            <div className="form-control w-1/2">
-              <label className="label" htmlFor="building">
-                Building
-              </label>
-              <select
-                id="building"
-                value={building}
-                onChange={handleBuildingChange}
-                className="select select-bordered"
-                required
-              >
-                <option value="" disabled>
-                  Select Building
-                </option>
-                {buildingData.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-control w-1/2">
-              <label className="label" htmlFor="floor">
-                Floor
-              </label>
-              <select
-                id="floor"
-                value={floor}
-                onChange={handleFloorChange}
-                className="select select-bordered"
-                disabled={!building}
-                required
-              >
-                <option value="" disabled>
-                  Select Floor
-                </option>
-                {floorData.map((f) => (
-                  <option key={f.id} value={f.id}>
-                    {f.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* <div className="form-control mb-4">
-        <label className="label" htmlFor="room">
-          Room
-        </label>
-        <select
-          id="room"
-          value={room}
-          onChange={(e) => setRoom(e.target.value)}
-          className="select select-bordered"
-          disabled={!floor}
-          required
-        >
-          <option value="" disabled>
-            Select Room
-          </option>
-          {roomData.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.name}
-            </option>
-          ))}
-        </select>
-      </div> */}
-
-          <div className="form-control mb-4">
-            <label className="label">Status</label>
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex space-x-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="status"
-                  value="Lost"
-                  checked={status === "Lost"}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="radio"
-                />
-                <span>Lost</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="status"
-                  value="Found"
-                  checked={status === "Found"}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="radio"
-                />
-                <span>Found</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="status"
-                  value="Returned"
-                  checked={status === "Returned"}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="radio"
-                />
-                <span>Returned</span>
-              </label>
+              <div className="flex-1">
+                <label
+                  htmlFor="building"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Building
+                </label>
+                <select
+                  id="building"
+                  value={building}
+                  onChange={handleBuildingChange}
+                  className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  required
+                >
+                  <option value="" disabled>
+                    Select Building
+                  </option>
+                  {buildingData.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="floor"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Floor
+                </label>
+                <select
+                  id="floor"
+                  value={floor}
+                  onChange={handleFloorChange}
+                  className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  disabled={!building}
+                  required
+                >
+                  <option value="" disabled>
+                    Select Floor
+                  </option>
+                  {floorData.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div className="form-control mb-4">
-            <label className="label" htmlFor="description">
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="textarea textarea-bordered"
-              placeholder="Provide details about the lost or found item"
-              required
-            ></textarea>
-          </div>
+            <div>
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Status
+              </label>
+              <div className="mt-1 flex space-x-4">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="status"
+                    value="Lost"
+                    checked={status === "Lost"}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="radio"
+                  />
+                  <span>Lost</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="status"
+                    value="Found"
+                    checked={status === "Found"}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="radio"
+                  />
+                  <span>Found</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="status"
+                    value="Returned"
+                    checked={status === "Returned"}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="radio"
+                  />
+                  <span>Returned</span>
+                </label>
+              </div>
+            </div>
 
-          <button
-            type="submit"
-            className="btn w-full bg-[#864E41] hover:bg-[#6e3f35] text-white"
-          >
-            Submit
-          </button>
-        </form>
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Provide details about the lost or found item"
+                required
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-orange-600 text-white py-2 px-4 rounded-md shadow hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </>
   );

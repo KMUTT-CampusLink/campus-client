@@ -15,8 +15,15 @@ import AdministratorMyBookingSubmit from "../pages/administrator/AdministratorMy
 import AdministratorLostAndFoundForm from "../pages/administrator/AdministratorLostAndFoundForm";
 import AuthRoute from "../../registration/middleware/AuthRoute";
 
+// redirect page
+import RedirectPage from "../pages/RedirectPage";
+
 export default function SecureRoutes() {
   return [
+    {
+      path: "",
+      element: <RedirectPage />,
+    },
     {
       //student
       path: "student",
