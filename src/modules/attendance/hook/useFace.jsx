@@ -9,9 +9,20 @@ const useFace = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [attendanceId, setAttendanceId] = useState(null);
   const [loadingModels, setLoadingModels] = useState(true);
+  const [faceMatcher, setFaceMatcher] = useState(null);
+  const [detectedIds, setDetectedIds] = useState({});
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
+
+  const COOLDOWN_PERIOD = 5000; // ms (5seconds)
+
+  const refFaces = [
+    { image: "../mockUpDataSet/832.jpg", label: "STU00020" },
+    { image: "../mockUpDataSet/845.jpg", label: "STU00022" },
+    { image: "../mockUpDataSet/850.jpg", label: "STU00088" },
+    { image: "../mockUpDataSet/857.jpg", label: "STU00051" },
+  ];
 
   const items = [
     { label: "Attendance", key: "Attendance" },
@@ -24,12 +35,11 @@ const useFace = () => {
       navigate("/attendance");
     } else if (key === "QR CODE") {
       navigate("/attendance/qr");
-    } else if (key == "Face Attendance") {
+    } else if (key === "Face Attendance") {
       navigate("/attendance/faceAttendance");
     }
-    console.log("HI");
   };
-  
+
   const startVideo = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -49,76 +59,121 @@ const useFace = () => {
       videoRef.current.srcObject = null;
     }
     setIsStreaming(false);
-    // Clear the canvas
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
   };
+
   const handleGenerateAttendance = async (sectionId) => {
     const result = await generateFaceAttendance(sectionId);
-    console.log(result); // Log the entire result
-
     setAttendanceId(result.data.attendanceId);
     startVideo();
-    console.log("attendance: " + result.data.attendanceId);
   };
 
   const loadModels = async () => {
     setLoadingModels(true);
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("http://localhost:5173/models"),
-      faceapi.nets.faceLandmark68Net.loadFromUri(
-        "http://localhost:5173/models"
-      ),
-      faceapi.nets.faceRecognitionNet.loadFromUri(
-        "http://localhost:5173/models"
-      ),
+      faceapi.nets.faceLandmark68Net.loadFromUri("http://localhost:5173/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("http://localhost:5173/models"),
+      faceapi.nets.ssdMobilenetv1.loadFromUri("http://localhost:5173/models"),
     ]);
     setLoadingModels(false);
   };
 
-  const detectFaces = async () => {
-    if (videoRef.current && isStreaming) {
+  const generateLabeledDescriptors = async () => {
+    const labeledDescriptors = [];
+
+    for (const refFace of refFaces) {
+      const img = await faceapi.fetchImage(refFace.image);
+      const fullFaceDescription = await faceapi
+        .detectSingleFace(img)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (fullFaceDescription) {
+        labeledDescriptors.push(
+          new faceapi.LabeledFaceDescriptors(refFace.label, [
+            fullFaceDescription.descriptor,
+          ])
+        );
+      }
+    }
+
+    setFaceMatcher(new faceapi.FaceMatcher(labeledDescriptors));
+  };
+
+  const detectAndMatchFaces = async () => {
+    if (videoRef.current && isStreaming && faceMatcher) {
       const videoElement = videoRef.current;
       const displaySize = {
         width: videoElement.videoWidth,
         height: videoElement.videoHeight,
       };
 
-      if (displaySize.width > 0 && displaySize.height > 0) {
-        const detections = await faceapi
-          .detectAllFaces(videoElement, new faceapi.TinyFaceDetectorOptions())
-          .withFaceLandmarks()
-          .withFaceDescriptors();
+      const detections = await faceapi
+        .detectAllFaces(videoElement, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptors();
 
-        const canvas = canvasRef.current;
-        faceapi.matchDimensions(canvas, displaySize);
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        const resizedDetections = faceapi.resizeResults(
-          detections,
-          displaySize
-        );
+      const canvas = canvasRef.current;
+      faceapi.matchDimensions(canvas, displaySize);
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-        // Draw bounding boxes
-        faceapi.draw.drawDetections(canvas, resizedDetections);
+      if (detections.length > 0) {
+        detections.forEach((detection) => {
+          const bestMatch = faceMatcher.findBestMatch(detection.descriptor);
+          const studentId = bestMatch.label;
+
+          if (studentId !== "unknown") {
+            const now = Date.now();
+
+            // Add Cooldown logic
+            if (
+              !detectedIds[studentId] ||
+              now - detectedIds[studentId] > COOLDOWN_PERIOD
+            ) {
+              console.log(`Matched: ${studentId}`);
+
+              // Send attendance to backend
+              if (attendanceId) {
+                markAttendance(attendanceId, studentId)
+                  .then((response) => {
+                    console.log(`Attendance marked for ${studentId}`);
+                  })
+                  .catch((error) => {
+                    console.error(`Failed to mark attendance for ${studentId}`);
+                  });
+
+              }
+
+              // Update cooldown timestamp
+              setDetectedIds((prev) => ({ ...prev, [studentId]: now }));
+            } else {
+              console.log(`Cooldown active for: ${studentId}`);
+            }
+          }
+        });
       }
+
+      faceapi.draw.drawDetections(canvas, resizedDetections);
     }
   };
 
   useEffect(() => {
-    loadModels();
+    loadModels().then(() => generateLabeledDescriptors());
     return () => {
-      stopVideo(); // Stop the video stream and clear the canvas during cleanup
+      stopVideo();
     };
   }, []);
 
   useEffect(() => {
     if (isStreaming) {
-      const interval = setInterval(detectFaces, 200); // Detect faces every 200ms
+      const interval = setInterval(detectAndMatchFaces, 200);
       return () => clearInterval(interval);
     }
-  }, [isStreaming]);
+  }, [isStreaming, faceMatcher, detectedIds]);
 
   const detail = () => (
     <div className="flex flex-col p-4 space-y-2 md:space-y-4">
@@ -132,7 +187,6 @@ const useFace = () => {
       </div>
     </div>
   );
-
   const faceButton = () => (
     <div className="flex flex-col items-center">
       {!isStreaming && !loadingModels && (
@@ -153,22 +207,7 @@ const useFace = () => {
       )}
       <div className="w-[640px] h-[480px] relative">
         {loadingModels && <p>Loading models...</p>}
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="mt-4 absolute"
-          onLoadedMetadata={() => {
-            if (videoRef.current) {
-              const { videoWidth, videoHeight } = videoRef.current;
-              const canvas = canvasRef.current;
-              if (canvas) {
-                canvas.width = videoWidth;
-                canvas.height = videoHeight;
-              }
-            }
-          }}
-        />
+        <video ref={videoRef} autoPlay playsInline className="mt-4 absolute" />
         <canvas ref={canvasRef} className="absolute top-4"></canvas>
       </div>
     </div>

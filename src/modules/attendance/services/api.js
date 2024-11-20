@@ -18,11 +18,11 @@ export const generateFaceAttendance = async (sectionId) => {
   }
 }
 
-export const markAttendance = async(attendanceid,studentid) => {
+export const markAttendance = async(attendanceId,studentId) => {
   try{
     const response = await axiosInstance.post(`attend/markattendance`,{
-      attendanceid,
-      studentid,
+      attendanceId,
+      studentId,
     });
     return response;
   } catch(error){
