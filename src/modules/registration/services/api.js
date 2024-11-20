@@ -47,8 +47,10 @@ export const fetchSectionByCourseCode = (courseCode, semesterId) =>
 export const fetchActiveCoursesByStudentId = (studentId) =>
   get(`/regis/course/${studentId}/active`);
 
+export const fetchPeriodBySemesterId = (semesterId) =>
+  get(`/regis/semesters/period/${semesterId}`);
 export const fetchSemestersByStudentId = (studentId) =>
-  get(`/regis/semesters/${studentId}`);
+    get(`/regis/semesters/${studentId}`);
 export const fetchAllSemesters = () =>
   get(`/regis/semesters/all`);
 

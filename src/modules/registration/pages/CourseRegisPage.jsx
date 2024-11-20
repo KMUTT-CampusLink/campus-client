@@ -136,7 +136,7 @@ function CourseRegisPage() {
                     </p>
                   </>
                 )}
-                {regis === "withdraw" && (
+                {regis === "Withdraw" && (
                   <Link to="drop">
                     <button className={`${button} my-10`}>
                       Withdraw Course
