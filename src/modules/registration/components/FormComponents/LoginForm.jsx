@@ -26,7 +26,7 @@ function LoginForm() {
       localStorage.setItem("semesterId", semesterId);
       localStorage.setItem("event", event);
       popToast("Login Successful", "success");
-      navigate("/regis");
+      navigate("/");
     },
     onError: (error) => {
       console.error("Login failed:", error);
@@ -83,7 +83,7 @@ function LoginForm() {
 
         {/* Submit Button */}
         <button type="submit" className={`${button}`}>
-          sign-in
+          Sign in
         </button>
 
         <SmallNavText to="/regis/activation" name="Activate Your Account?" />
