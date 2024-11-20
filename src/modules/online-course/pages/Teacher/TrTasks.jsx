@@ -121,7 +121,7 @@ const TrTasks = () => {
       <div className="max-md:text-xs w-full border-b-2 border-gray-300">
         <div className="max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-3 gap-4 font-bold py-2 px-2">
           <div>Title</div>
-          <div>Description</div>
+          <div>File</div>
           <div>Actions</div>
         </div>
       </div>
