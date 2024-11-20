@@ -521,8 +521,6 @@
 
 // export default MyBookPage;
 
-
-
 // import React, { useState, useEffect, useRef } from "react";
 // import axios from "axios";
 // import NavBar from "../../registration/components/NavBarComponents/NavBar";
@@ -1123,12 +1121,11 @@
 // export default MyBookPage;
 
 import React, { useState, useEffect, useRef } from "react";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
-import QRScannerDemo from "../Pages/QRScannerDemo";
 import QrScanner from "qr-scanner";
 import { VideoCameraOutlined } from "@ant-design/icons";
+import { fetchReservedBook, returnBook } from "../services/api";
 
 function MyBookPage() {
   const [reservedBook, setReservedBook] = useState([]);
@@ -1157,34 +1154,26 @@ function MyBookPage() {
   }, [result, selectedBook]);
 
   useEffect(() => {
-    const fetchReservedBook = async () => {
+    const loadReservedBooks = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/allDupe"
-        );
-        setReservedBook(response.data);
+        const reservedBooks = await fetchReservedBook(); // Use the function from api.js
+        if (reservedBooks) {
+          setReservedBook(reservedBooks); // Set the reserved books
+        }
       } catch (error) {
-        console.error("Error fetching ReservedBook:", error);
+        console.error("Error loading reserved books:", error);
       }
     };
 
-    fetchReservedBook();
+    loadReservedBooks();
   }, []);
 
   const handleReturnBook = async (reservationId, duplicateId) => {
     setLoadingBook(reservationId);
-    const returnedBookData = {
-      status: "Returned",
-      reservation_id: reservationId,
-      duplicateId: duplicateId,
-    };
 
     try {
-      const response = await axiosInstance.post(
-        "http://localhost:3000/api/library/returnBook",
-        returnedBookData
-      );
-      console.log("Book returned successfully!", response.data);
+      const response = await returnBook(reservationId, duplicateId); // Use the API function
+      console.log("Book returned successfully!", response);
       setReservedBook((prevBooks) =>
         prevBooks.filter((book) => book.reservation_id !== reservationId)
       );
@@ -1276,14 +1265,17 @@ function MyBookPage() {
 
   const handleEnterCode = async () => {
     if (enteredCode === selectedBook?.unlock_id) {
-      await handleReturnBook(selectedBook.reservation_id, selectedBook.duplicate_id);
+      await handleReturnBook(
+        selectedBook.reservation_id,
+        selectedBook.duplicate_id
+      );
       if (codeEntryModalRef.current) {
         codeEntryModalRef.current.close();
       }
       setEnteredCode("");
       setPageError("");
     } else {
-      setPageError('Incorrect Code');
+      setPageError("Incorrect Code");
     }
   };
 
@@ -1357,13 +1349,13 @@ function MyBookPage() {
                         Publisher: {book.publisher || "Unspecified"}
                       </p>
                       <p className="text-sm text-gray-600">
-                        Reserved Date: {" "}
+                        Reserved Date:{" "}
                         <span className="font-semibold">
                           {new Date(book.start_date).toLocaleDateString()}
                         </span>
                       </p>
                       <p className="text-sm text-gray-600">
-                        Return Date: {" "}
+                        Return Date:{" "}
                         <span className="font-semibold">
                           {new Date(book.end_date).toLocaleDateString()}
                         </span>
@@ -1384,7 +1376,11 @@ function MyBookPage() {
               )}
 
               {/* Return Options Modal */}
-              <dialog ref={returnOptionsModalRef} id="return_options_modal" className="modal">
+              <dialog
+                ref={returnOptionsModalRef}
+                id="return_options_modal"
+                className="modal"
+              >
                 <div className="modal-box w-[30rem] max-w-screen-lg p-6 bg-white rounded-lg shadow-lg relative">
                   <h3 className="font-bold text-xl text-center mb-4">
                     Return Book Options
@@ -1423,7 +1419,11 @@ function MyBookPage() {
               </dialog>
 
               {/* Code Entry Modal */}
-              <dialog ref={codeEntryModalRef} id="code_entry_modal" className="modal">
+              <dialog
+                ref={codeEntryModalRef}
+                id="code_entry_modal"
+                className="modal"
+              >
                 <div className="modal-box w-[30rem] max-w-screen-lg p-6 bg-white rounded-lg shadow-lg relative">
                   <h3 className="font-bold text-xl text-center mb-4">
                     Enter Unlock Code
@@ -1516,7 +1516,8 @@ function MyBookPage() {
                       <strong>{selectedBook.title}</strong>
                       <br /> Scan your saved QR code below
                       <br />
-                      Your ref number is <strong>{selectedBook.reservation_id}</strong>
+                      Your ref number is{" "}
+                      <strong>{selectedBook.reservation_id}</strong>
                     </p>
 
                     <div className="flex flex-col items-center w-[80%] mx-auto  rounded-lg m-6 p-4 border shadow-lg">
@@ -1629,13 +1630,13 @@ function MyBookPage() {
                           Publisher: {book.publisher || "Unspecified"}
                         </p>
                         <p className="text-sm text-gray-600">
-                          Reserved Date: {" "}
+                          Reserved Date:{" "}
                           <span className="font-semibold">
                             {new Date(book.start_date).toLocaleDateString()}
                           </span>
                         </p>
                         <p className="text-sm text-gray-600">
-                          Return Date: {" "}
+                          Return Date:{" "}
                           <span className="font-semibold">
                             {new Date(book.end_date).toLocaleDateString()}
                           </span>
@@ -1648,7 +1649,8 @@ function MyBookPage() {
                   You currently have no history of borrowed books.
                 </p>
               )}
-              {reservedBook.filter((book) => book.user_id === user_id).length > 0 && (
+              {reservedBook.filter((book) => book.user_id === user_id).length >
+                0 && (
                 <div className="flex items-center justify-center mt-4 gap-2">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
@@ -1657,29 +1659,32 @@ function MyBookPage() {
                   >
                     &lt;
                   </button>
-                  {Array.from({ length: Math.min(totalPages, 5) }, (_, index) => {
-                    let pageNumber;
-                    if (currentPage <= 3 || totalPages <= 5) {
-                      pageNumber = index + 1;
-                    } else if (currentPage > totalPages - 3) {
-                      pageNumber = totalPages - 4 + index;
-                    } else {
-                      pageNumber = currentPage - 2 + index;
+                  {Array.from(
+                    { length: Math.min(totalPages, 5) },
+                    (_, index) => {
+                      let pageNumber;
+                      if (currentPage <= 3 || totalPages <= 5) {
+                        pageNumber = index + 1;
+                      } else if (currentPage > totalPages - 3) {
+                        pageNumber = totalPages - 4 + index;
+                      } else {
+                        pageNumber = currentPage - 2 + index;
+                      }
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handlePageChange(pageNumber)}
+                          className={`btn ${
+                            currentPage === pageNumber
+                              ? "bg-orange-500 text-white"
+                              : "bg-gray-300 text-gray-800"
+                          } px-4 py-2`}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
                     }
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => handlePageChange(pageNumber)}
-                        className={`btn ${
-                          currentPage === pageNumber
-                            ? "bg-orange-500 text-white"
-                            : "bg-gray-300 text-gray-800"
-                        } px-4 py-2`}
-                      >
-                        {pageNumber}
-                      </button>
-                    );
-                  })}
+                  )}
                   {totalPages > 5 && (
                     <span
                       className="text-gray-800 px-4 py-2 cursor-pointer bg-gray-300 rounded-md hover:bg-gray-400 hover:text-black transition duration-200"
@@ -1699,14 +1704,19 @@ function MyBookPage() {
               )}
               {showPagePopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                  <div ref={popupRef} className="bg-white p-6 w-[18rem] max-w-full rounded-lg shadow-lg relative">
+                  <div
+                    ref={popupRef}
+                    className="bg-white p-6 w-[18rem] max-w-full rounded-lg shadow-lg relative"
+                  >
                     <button
                       onClick={() => setShowPagePopup(false)}
                       className="absolute top-2 left-2 text-gray-500 hover:text-gray-800"
                     >
                       Close
                     </button>
-                    <h2 className="text-xl font-bold mb-4 text-center">Go to Page</h2>
+                    <h2 className="text-xl font-bold mb-4 text-center">
+                      Go to Page
+                    </h2>
                     <div className="flex justify-center mb-4">
                       <input
                         type="number"

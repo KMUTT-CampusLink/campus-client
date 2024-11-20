@@ -3,12 +3,11 @@ import { useLocation } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import { BuildOutlined, CalendarOutlined } from "@ant-design/icons";
-import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { axiosInstance } from '../../../utils/axiosInstance';
+import { fetchEvents } from "../services/api";
 function EventPage() {
   const scrollToTicket = () => {
     const ticketSection = document.querySelector(".ticket-section");
@@ -20,18 +19,16 @@ function EventPage() {
   const { event } = location.state; // Retrieve the passed event data
   // Fetch events data
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchLibraryEvents = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/event"
-        );
-        setLibraryEvents(response.data);
+        const events = await fetchEvents(); // Use the fetchEvents function from your API
+        setLibraryEvents(events); // Set the fetched events data
       } catch (error) {
         console.error("Error fetching events:", error);
       }
     };
 
-    fetchEvents();
+    fetchLibraryEvents();
   }, []);
   // Format the event date
   const formattedDate = new Date(event.event_date).toLocaleDateString("en-US", {

@@ -1,9 +1,9 @@
 import { useLocation, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
+import { getData, getDuplicate } from "../services/api";
 
 function BookPage() {
   const [bookDuplicate, setBookDuplicate] = useState([]);
@@ -27,37 +27,30 @@ function BookPage() {
   const [remainingCopies, setRemainingCopies] = useState(0);
   const [data, setData] = useState([]);
 
-  // Fetch book duplicates
-  const getDuplicate = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/library/bookDupe"
-      );
-      setBookDuplicate(response.data);
-    } catch (error) {
-      console.error("Error fetching book duplicate:", error);
-    }
-  };
-
-  // Fetch all book data
-  const getData = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/library/book"
-      );
-      setData(response.data);
-      setFilteredBooks(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   useEffect(() => {
-    getDuplicate();
-    getData();
+    const fetchData = async () => {
+      try {
+        // Fetch Book Duplicates
+        const duplicateResponse = await getDuplicate();
+        if (duplicateResponse) {
+          setBookDuplicate(duplicateResponse);
+        }
 
-    // Scroll to top when the page is loaded or route changes
-    window.scrollTo(0, 0);
+        // Fetch Book Data
+        const dataResponse = await getData();
+        if (dataResponse) {
+          setData(dataResponse);
+          setFilteredBooks(dataResponse);
+        }
+
+        // Scroll to top when the page is loaded or route changes
+        window.scrollTo(0, 0);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData(); // Call the async function
   }, [location.key]); // Re-run on route change
 
   useEffect(() => {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
 import BrowsebookCardList from "../components/Card/BrowsebookCardList";
+import { getCategory, getData, getDuplicate } from "../services/api";
 
 function BookSearchPage() {
   const { keyword } = useParams();
@@ -34,10 +34,10 @@ function BookSearchPage() {
     const fetchBooks = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          "http://localhost:3000/api/library/book"
-        );
-        setData(response.data);
+        const response = await getData(); 
+        if (response) {
+          setData(response);
+        }
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching books:", error);
@@ -46,35 +46,34 @@ function BookSearchPage() {
     };
     fetchBooks();
   }, []);
-
   // Fetch duplicate data for availability
   useEffect(() => {
-    const getDuplicate = async () => {
+    const fetchDuplicateData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/bookDupe"
-        );
-        setBookDuplicate(response.data);
+        const response = await getDuplicate(); // Use the getDuplicate() function from api.js
+        if (response) {
+          setBookDuplicate(response);
+        }
       } catch (error) {
         console.error("Error fetching book duplicates:", error);
       }
     };
-    getDuplicate();
+    fetchDuplicateData();
   }, []);
 
   // Fetch categories
   useEffect(() => {
-    const getCategory = async () => {
+    const fetchCategories = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/category"
-        );
-        setCategories(response.data);
+        const response = await getCategory(); // Use the getCategory() function from api.js
+        if (response) {
+          setCategories(response);
+        }
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
-    getCategory();
+    fetchCategories();
   }, []);
 
   // Filter and sort books based on the keyword, filters, and sorting criteria

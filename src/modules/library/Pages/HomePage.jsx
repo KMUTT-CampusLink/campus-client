@@ -3,10 +3,15 @@ import MainWallpaper from "../components/MainWallpaper";
 import AnnouncementCard from "../components/Card/AnnouncementCard";
 import EventCard from "../components/Card/EventCard";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
+import {
+  fetchAnnouncements,
+  fetchEvents,
+  getData,
+  getDuplicate,
+} from "../services/api";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -24,83 +29,58 @@ function HomePage() {
 
   // Fetch announcements data
   useEffect(() => {
-    const fetchAnnouncements = async () => {
+    const loadAnnouncements = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/announce"
-        );
-        const announcements = response.data;
-
-        const sorted = announcements
-          .map((announcement) => {
-            const updatedDate = new Date(announcement.updated_at);
-            const currentDate = new Date();
-            const daysDifference = Math.ceil(
-              (currentDate - updatedDate) / (1000 * 60 * 60 * 24)
-            );
-
-            return {
-              ...announcement,
-              isNew: daysDifference <= 7,
-            };
-          })
-          .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-
-        setSortedAnnouncements(sorted);
+        const sortedAnnouncements = await fetchAnnouncements(); // Use fetchAnnouncements from api.js
+        setSortedAnnouncements(sortedAnnouncements); // Set sorted announcements
       } catch (error) {
         console.error("Error fetching announcements:", error);
       }
     };
 
-    fetchAnnouncements();
+    loadAnnouncements();
   }, []);
 
   // Fetch events data
   useEffect(() => {
-    const fetchEvents = async () => {
+    const loadEvents = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/event"
-        );
-        setLibraryEvents(response.data);
+        const events = await fetchEvents(); // Use fetchEvents from api.js
+        setLibraryEvents(events); // Set events
       } catch (error) {
         console.error("Error fetching events:", error);
       }
     };
 
-    fetchEvents();
+    loadEvents();
   }, []);
 
   // Fetch books data
   useEffect(() => {
-    const fetchBooks = async () => {
+    const loadBooks = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/book"
-        );
-        setData(response.data);
+        const books = await getData(); // Use getData from api.js
+        setData(books); // Set books data
       } catch (error) {
         console.error("Error fetching books:", error);
       }
     };
 
-    fetchBooks();
+    loadBooks();
   }, []);
 
   // Fetch duplicate books data
   useEffect(() => {
-    const fetchBookDuplicates = async () => {
+    const loadBookDuplicates = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/bookDupe"
-        );
-        setBookDuplicate(response.data);
+        const duplicates = await getDuplicate(); // Use getDuplicate from api.js
+        setBookDuplicate(duplicates); // Set book duplicates
       } catch (error) {
         console.error("Error fetching book duplicates:", error);
       }
     };
 
-    fetchBookDuplicates();
+    loadBookDuplicates();
   }, []);
 
   return (

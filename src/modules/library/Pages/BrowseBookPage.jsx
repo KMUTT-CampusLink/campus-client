@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { axiosInstance } from '../../../utils/axiosInstance';
+import { axiosInstance } from "../../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
+import { getData, getDuplicate } from "../services/api";
 
 function BrowseBookPage() {
   const [data, setData] = useState([]);
@@ -26,9 +27,7 @@ function BrowseBookPage() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/category"
-        );
+        const response = await axiosInstance.get("/library/category");
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -38,36 +37,32 @@ function BrowseBookPage() {
   }, []);
 
   // Fetch book data
-  const getData = async () => {
+  const fetchBookData = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/library/book"
-      );
-      setData(response.data);
-      setFilteredBooks(response.data); // Set filtered books to full book list initially
+      const data = await getData(); // Use the getData function from api.js
+      setData(data);
+      setFilteredBooks(data); // Set filtered books to full book list initially
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching book data:", error);
     }
   };
 
   useEffect(() => {
-    getData();
+    fetchBookData();
   }, []);
 
   // Fetch duplicate data
-  const getDuplicate = async () => {
+  const fetchDuplicateData = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/library/bookDupe"
-      );
-      setBookDuplicate(response.data);
+      const duplicates = await getDuplicate(); // Use the getDuplicate function from api.js
+      setBookDuplicate(duplicates);
     } catch (error) {
       console.error("Error fetching book duplicates:", error);
     }
   };
 
   useEffect(() => {
-    getDuplicate();
+    fetchDuplicateData();
   }, []);
 
   // Handle view all click for category

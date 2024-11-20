@@ -1,34 +1,26 @@
 import React, { useState, useEffect } from "react";
 import AnnouncementCard from "../components/Card/AnnouncementPageCard";
-import { axiosInstance } from '../../../utils/axiosInstance';
-
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
+import { getAnnouncements } from "../services/api";
 function AnnouncementPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest"); // Default is "newest"
   const [announcements, setAnnouncements] = useState([]);
   const [filteredAnnouncements, setFilteredAnnouncements] = useState([]);
 
-  // Fetch announcements from API
+  const announcementData = async () => {
+    const response = await getAnnouncements();
+    setAnnouncements(response.data);
+    setFilteredAnnouncements(response.data);
+  };
+
   useEffect(() => {
-    const getAnnouncements = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/announce"
-        );
-        setAnnouncements(response.data);
-        setFilteredAnnouncements(response.data); // Initialize with fetched data
-      } catch (error) {
-        console.error("Error fetching announcements:", error);
-      }
-    };
-    getAnnouncements();
+    announcementData();
   }, []);
 
-  // Scroll to top when component mounts
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {

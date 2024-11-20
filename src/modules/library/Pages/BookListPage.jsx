@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import BookCard from "../components/Card/BookCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
+import { getCategory } from "../services/api";
 
 function BookListPage() {
   const [data, setData] = useState([]);
@@ -17,32 +17,25 @@ function BookListPage() {
   const booksPerPage = 9;
 
   useEffect(() => {
-    const getCategory = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/category"
-        );
-        setCategories(response.data.map((category) => category.title));
+        // Fetch Categories
+        const categoryResponse = await getCategory();
+        if (categoryResponse) {
+          setCategories(categoryResponse); // Set categories directly
+        }
+
+        // Fetch Book Data
+        const dataResponse = await getData();
+        if (dataResponse) {
+          setData(dataResponse);
+        }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    getCategory();
-  }, []);
 
-  const getData = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/library/book"
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    getData();
+    fetchData(); // Call the combined function
   }, []);
 
   useEffect(() => {
@@ -161,7 +154,9 @@ function BookListPage() {
             <div className="container pt-3 flex flex-col">
               <h1 className="font-semibold text-3xl mb-3">Book List</h1>
               <p className="pb-3 text-orange-600 text-xl">
-                Found: <span className="font-semibold">{filteredBooks.length}</span> Book Title
+                Found:{" "}
+                <span className="font-semibold">{filteredBooks.length}</span>{" "}
+                Book Title
               </p>
 
               <div className="form-control container pb-3 relative">

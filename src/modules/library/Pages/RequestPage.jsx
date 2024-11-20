@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import QRCode from "react-qr-code";
+import { getDuplicate, makeReservation } from "../services/api";
 
 function RequestPage() {
   const location = useLocation();
@@ -59,26 +59,24 @@ function RequestPage() {
     img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
   };
 
-  const getDuplicate = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/library/bookDupe"
-      );
-      setBookDuplicate(response.data);
-
-      const matchingBook = response.data.find(
-        (book) => book.book_id === bookID && book.status === true
-      );
-      if (matchingBook) {
-        setSelectedDuplicateID(matchingBook.id);
-      }
-    } catch (error) {
-      console.error("Error fetching book duplicate:", error);
-    }
-  };
-
   useEffect(() => {
-    getDuplicate();
+    const loadDuplicateBooks = async () => {
+      try {
+        const duplicates = await getDuplicate(); // Use the API function
+        setBookDuplicate(duplicates); // Set duplicate books
+
+        const matchingBook = duplicates.find(
+          (book) => book.book_id === bookID && book.status === true
+        );
+        if (matchingBook) {
+          setSelectedDuplicateID(matchingBook.id);
+        }
+      } catch (error) {
+        console.error("Error fetching book duplicates:", error);
+      }
+    };
+
+    loadDuplicateBooks();
   }, [bookID]);
 
   useEffect(() => {
@@ -109,11 +107,8 @@ function RequestPage() {
     };
 
     try {
-      const response = await axiosInstance.post(
-        "http://localhost:3000/api/library/reservations",
-        reservationData
-      );
-      console.log("Reservation successful:", response.data);
+      const response = await makeReservation(reservationData); // Use the API function
+      console.log("Reservation successful:", response);
       downloadQRCode(); // Download the QR code after successful reservation
 
       // Navigate to MyBook page after QR code download
@@ -182,8 +177,11 @@ function RequestPage() {
                   </div>
 
                   <p className="text-center mb-4">
-                    Use QR Code below to scan when returning the
-                    reserved book. <span className="text-gray-900 font-semibold"> It will automatically download after confirmation</span>
+                    Use QR Code below to scan when returning the reserved book.{" "}
+                    <span className="text-gray-900 font-semibold">
+                      {" "}
+                      It will automatically download after confirmation
+                    </span>
                   </p>
 
                   <div className="flex justify-center mb-6 p-4 bg-white rounded-lg">

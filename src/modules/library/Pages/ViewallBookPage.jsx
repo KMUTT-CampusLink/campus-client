@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from '../../../utils/axiosInstance';
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import BrowsebookCard from "../components/Card/BrowsebookCard";
 import BrowsebookCardList from "../components/Card/BrowsebookCardList";
+import { getData, getDuplicate } from "../services/api";
 
 function ViewallBookPage() {
   const { category } = useParams();
@@ -20,34 +20,30 @@ function ViewallBookPage() {
   const [viewMode, setViewMode] = useState("grid");
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const loadBooks = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          "http://localhost:3000/api/library/book"
-        );
-        setData(response.data);
+        const books = await getData();
+        setData(books);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching books:", error);
         setIsLoading(false);
       }
     };
-    fetchBooks();
+    loadBooks();
   }, []);
 
   useEffect(() => {
-    const getDuplicate = async () => {
+    const loadBookDuplicates = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/library/bookDupe"
-        );
-        setBookDuplicate(response.data);
+        const duplicates = await getDuplicate();
+        setBookDuplicate(duplicates);
       } catch (error) {
         console.error("Error fetching book duplicates:", error);
       }
     };
-    getDuplicate();
+    loadBookDuplicates();
   }, []);
 
   // Filter and sort books based on the category, filters, and sorting criteria
