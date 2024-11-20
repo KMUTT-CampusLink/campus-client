@@ -1,13 +1,46 @@
+import { useEffect, useState } from "react";
+import { studentGetStudentScoreById } from "../../../services/apis/studentApi";
+import { studentGetQuestionScore } from "../../../services/apis/studentApi";
 export default function Question({
   questionNo,
   question,
   choice,
   type,
   studentAnswer,
+  questionId
 }) {
+  const [frontScore, setFrontScore] = useState(0);
+  const [backScore,setBackScore] = useState(0);
+  const getFrontScore = async () => {
+    try {
+      const response = await studentGetStudentScoreById(questionId);
+      console.log(response.data);
+      setFrontScore(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getBackScore = async() => {
+    try {
+      const response = await studentGetQuestionScore(questionId);
+      console.log(response);
+      setBackScore(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getFrontScore();
+    getBackScore();
+  }, []);
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
-      <h1>{question}</h1>
+      <div className="flex justify-between items-center mb-[20px]">
+        <h1>{question}</h1>
+        <h1>
+          {frontScore}/{backScore}
+        </h1>
+      </div>
       <div className="flex flex-col gap-[10px] pt-[20px]">
         {type !== "Essay" &&
           choice.map((choiceObj, index) => {
