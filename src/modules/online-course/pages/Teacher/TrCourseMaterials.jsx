@@ -12,6 +12,10 @@ import { z } from "zod";
 import popToast from "../../../../utils/popToast";
 
 const TrCourseMaterials = () => {
+  const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
+    import.meta.env.VITE_MINIO_BUCKET_NAME
+  }`;
+
   const sec_id = localStorage.getItem("sec_id") || 1001;
   const schema = z.object({
     title: z.string().min(1, { message: "Video Title is required" }),
@@ -144,6 +148,7 @@ const TrCourseMaterials = () => {
   const [videoId, setVideoId] = useState("");
   const [videoURL, setVideoURL] = useState("");
   const [isEditing, setIsEditing] = useState(false); // State to track editing mode
+  const [attachments, setAttachments] = useState([]); // State to store attachments
 
   useEffect(() => {
     if (videos && videos.length > 0) {
@@ -151,6 +156,7 @@ const TrCourseMaterials = () => {
       setVideo(firstVideo.title);
       setVideoId(firstVideo.id);
       setVideoURL(firstVideo.video_url);
+      setAttachments(firstVideo.course_attachment); // Set attachments for the first video
     }
   }, [videos]);
 
@@ -162,6 +168,7 @@ const TrCourseMaterials = () => {
       setVideo(selectedVideo.title);
       setVideoId(selectedVideo.id);
       setVideoURL(selectedVideo.video_url);
+      setAttachments(selectedVideo.course_attachment); // Set attachments for the selected video
     }
   };
 
@@ -297,15 +304,33 @@ const TrCourseMaterials = () => {
           {videos && videos.length > 0 ? (
             <video
               className="mx-auto"
-              src={`${
-                import.meta.env.VITE_MINIO_URL +
-                import.meta.env.VITE_MINIO_BUCKET_NAME
-              }/${videoURL}`} // Prepend the base URL
+              src={`${MINIO_BASE_URL}/${videoURL}`} // Use the extracted base URL
               controls
               width="700"
             ></video>
           ) : (
             <p>No videos available</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold">Attachments</h2>
+          {attachments?.length > 0 ? (
+            <ul>
+              {attachments?.map((attachment, index) => (
+                <li key={index}>
+                  <a
+                    href={`${MINIO_BASE_URL}/${attachment.file_path}`} // Use the extracted base URL
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500"
+                  >
+                    {attachment.file_name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No attachments available.</p>
           )}
         </div>
       </div>
