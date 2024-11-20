@@ -1,76 +1,106 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { z } from "zod";
 import popToast from "../../../../utils/popToast";
+
 const sec_id = localStorage.getItem("sec_id") || 10001;
+
 const schema = z.object({
   title: z.string().min(1, { message: "Video Title is required" }),
-  courseVideo: z
+  videoFile: z
     .instanceof(File)
-    .refine((file) => file?.size !== 0, "File is required")
+    .refine((file) => file?.size !== 0, "Video file is required")
     .refine(
       (file) => file?.size < 50 * 1024 * 1024,
       "Video file must be at most 50MB"
-    ) // Adjust max size as needed
-    .refine((file) => {
-      const allowedMimeTypes = [
-        "video/mp4",
-        "video/ogg",
-        "video/webm",
-        "video/x-msvideo",
-      ];
-      return allowedMimeTypes.includes(file.type); // Match MIME type
-    }, "Invalid file type. Allowed types: MP4, OGG, WebM, AVI."),
+    )
+    .refine(
+      (file) =>
+        ["video/mp4", "video/ogg", "video/webm", "video/x-msvideo"].includes(
+          file.type
+        ),
+      "Invalid video file type. Allowed types: MP4, OGG, WebM, AVI."
+    ),
+  materialFiles: z
+    .array(
+      z
+        .instanceof(File)
+        .refine((file) => file?.size !== 0, "File is required")
+        .refine(
+          (file) => file?.size < 20 * 1024 * 1024,
+          "Each file must be at most 20MB"
+        )
+        .refine(
+          (file) =>
+            ![
+              "video/mp4",
+              "video/ogg",
+              "video/webm",
+              "video/x-msvideo",
+            ].includes(file.type),
+          "Video files are not allowed here."
+        )
+    )
+    .optional(),
 });
 
 function HR() {
   const [title, setTitle] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
+  const [materialFiles, setMaterialFiles] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const handleChange = (field, value) => {
-    // Clear the error for the specific field
-    setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
-    // Update the state based on the field being updated
-    switch (field) {
-      case "title":
-        setTitle(value);
-        break;
-
-      default:
-        break;
-    }
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+    setErrors((prev) => ({ ...prev, title: "" }));
   };
 
-  const onFileChange = (e) => {
+  const handleVideoChange = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file || null); // Set to null if no file is selected
-    if (file) {
-      console.log("File selected:", file); // Debugging info
-    }
-    setErrors((prevErrors) => ({ ...prevErrors, courseVideo: "" })); // Clear errors
+    setVideoFile(file || null);
+    setErrors((prev) => ({ ...prev, videoFile: "" }));
+  };
+
+  const handleMaterialsChange = (e) => {
+    const files = Array.from(e.target.files);
+    setMaterialFiles(files);
+    setErrors((prev) => ({ ...prev, materialFiles: "" }));
   };
 
   const validateAndSubmit = async () => {
     const formData = {
       title,
-      sec_id,
-      courseVideo: selectedFile,
+      videoFile,
+      materialFiles,
     };
-    console.log(formData);
+
     try {
-      schema.parse(formData);
+      schema.parse(formData); // Validate data using Zod
       setErrors({});
 
       const submitData = new FormData();
       submitData.append("title", title);
       submitData.append("sec_id", sec_id);
-      if (selectedFile) {
-        submitData.append("courseVideo", selectedFile);
+      if (videoFile) {
+        submitData.append("videoFile", videoFile);
+      }
+      materialFiles.forEach((file, index) => {
+        submitData.append(`materials[${index}]`, file);
+      });
+
+      // Log files being sent
+      console.log("Uploading the following data:");
+      console.log("Title:", title);
+      console.log("Video File:", videoFile);
+      console.log("Material Files:", materialFiles);
+
+      // Inspect FormData content
+      for (let pair of submitData.entries()) {
+        console.log(`${pair[0]}:`, pair[1]);
       }
 
       const response = await axiosInstance.post(
-        "/courses/addVideo",
+        "/courses/addVideoMaterials",
         submitData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -79,105 +109,97 @@ function HR() {
 
       if (response.status === 200) {
         setTitle("");
-        setSelectedFile(null);
-        popToast("Video Uploaded successfully!", "success");
+        setVideoFile(null);
+        setMaterialFiles([]);
+        popToast("Files uploaded successfully!", "success");
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // Convert Zod errors into a usable error object for displaying messages
         const formErrors = error.errors.reduce((acc, err) => {
           acc[err.path[0]] = err.message;
           return acc;
         }, {});
-        setErrors(formErrors); // Set errors state with validation messages
+        setErrors(formErrors);
       } else {
-        console.error("Error creating video:", error);
-        popToast("An error occurred while creating the video.", "error");
+        console.error("Error uploading files:", error);
+        popToast("An error occurred while uploading the files.", "error");
       }
     }
   };
 
   return (
-    <>
-      <div
-        className="bg-white min-h-screen rounded-lg sm:p-5"
-        encType="multipart/form-data"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
-          <div className="md:pl-20 pl-10 pr-10">
-            <div className="mb-4">
-              <label className="block text-lg font-medium leading-6 text-gray-900">
-                Video Title
-              </label>
+    <div className="bg-white min-h-screen rounded-lg sm:p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
+        <div className="md:pl-20 pl-10 pr-10">
+          {/* Video Title Input */}
+          <div className="mb-4">
+            <label className="block text-lg font-medium">Video Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="Enter Video Title"
+              className="block w-full px-3 py-2 border rounded-md"
+            />
+            {errors.title && <p className="text-red-500">{errors.title}</p>}
+          </div>
 
-              <div className="mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-lg">
-                <input
-                  id="videotitle"
-                  type="text"
-                  value={title}
-                  onChange={(e) => handleChange("title", e.target.value)}
-                  placeholder="Enter Video Title"
-                  className="block flex-1 border-0 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                />
+          {/* Video File Input */}
+          <div className="mb-4">
+            <label className="block text-lg font-medium">Upload Video</label>
+            <input
+              type="file"
+              onChange={handleVideoChange}
+              className="block w-full px-3 py-2 border rounded-md"
+              accept="video/mp4, video/ogg, video/webm, video/x-msvideo"
+            />
+            {videoFile && <p>Selected Video: {videoFile.name}</p>}
+            {errors.videoFile && (
+              <p className="text-red-500">{errors.videoFile}</p>
+            )}
+          </div>
+
+          {/* Material Files Input */}
+          <div className="mb-4">
+            <label className="block text-lg font-medium">
+              Upload Materials
+            </label>
+            <input
+              type="file"
+              multiple
+              onChange={handleMaterialsChange}
+              className="block w-full px-3 py-2 border rounded-md"
+              accept="application/pdf,image/*"
+            />
+            {materialFiles.length > 0 && (
+              <div>
+                <h4 className="font-medium">Selected Materials:</h4>
+                <ul className="list-disc pl-5">
+                  {materialFiles.map((file, index) => (
+                    <li key={index}>
+                      {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                    </li>
+                  ))}
+                </ul>
               </div>
-              {errors.title && <p className="text-red-500">{errors.title}</p>}
-            </div>
+            )}
+            {errors.materialFiles && (
+              <p className="text-red-500">{errors.materialFiles}</p>
+            )}
+          </div>
 
-            <div className="mb-4 pt-3">
-              <label className="block text-lg font-medium leading-6 text-gray-900">
-                Video
-              </label>
-              <div className="mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset sm:max-w-lg">
-                {/* Display selected file name or "No file selected" */}
-                <span className="flex-1 inline-flex items-center px-3 py-2 text-gray-500 text-sm bg-transparent border-r border-gray-300">
-                  {selectedFile ? selectedFile.name : "No file selected"}
-                </span>
-
-                {/*error message */}
-                {errors.courseVideo && (
-                  <p className="text-red-500">{errors.courseVideo}</p>
-                )}
-
-                {/* Preview Image */}
-                {selectedFile && (
-                  <div className="mt-4">
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover border rounded"
-                    />
-                  </div>
-                )}
-
-                {/* File Upload Button */}
-                <label
-                  htmlFor="file-upload"
-                  className="relative cursor-pointer rounded-r-lg bg-orange-400 text-white font-medium py-2 px-4 hover:bg-yellow-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500"
-                >
-                  <span>Select File</span>
-                  <input
-                    id="file-upload"
-                    name="file-upload"
-                    type="file"
-                    className="sr-only"
-                    onChange={onFileChange}
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className="mt-4 w-full max-w-lg flex justify-end pb-8">
-              <button
-                onClick={validateAndSubmit}
-                className="bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600"
-              >
-                Upload Video
-              </button>
-            </div>
+          {/* Submit Button */}
+          <div className="mt-4">
+            <button
+              onClick={validateAndSubmit}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Upload Files
+            </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
