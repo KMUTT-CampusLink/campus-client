@@ -3,42 +3,52 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import loadingImage from "../asset/verify.svg";
 import SuccessImage from "../asset/success.svg";
+import { getVerifyStripe } from "../services/api"; // Import API function
 
 const CheckoutSuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
-  const [countdown, setCountdown] = useState(8);
+  const [countdown, setCountdown] = useState(4);
+  const sessionId = new URLSearchParams(window.location.search).get("session_id");
   const navigate = useNavigate();
-  const sessionId = new URLSearchParams(window.location.search).get(
-    "session_id"
-  );
 
   useEffect(() => {
-    if (sessionId) {
-      // Fetch session_id from URL and verify payment
-      fetch(
-        `${
-          import.meta.env.VITE_API_URL
-        }/payment/verify-session?session_id=${sessionId}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "succeeded") {
+    const verifyPayment = async () => {
+      if (sessionId) {
+        try {
+          const response = await getVerifyStripe(sessionId); // Call the API function
+          if (response?.data?.status === "succeeded") {
             setPaymentStatus("Payment succeeded!");
+            const invoiceId = response.data.invoice_id || response.data.installment?.invoice_id;
+            if (response.data.type === "installment" && invoiceId) {
+              setTimeout(() => {
+                window.location.href = `/payment/payment-invoice/${invoiceId}`;
+              }, 8000);
+            } else {
+              setTimeout(() => {
+                window.location.href = `/payment`;
+              }, 8000);
+            }
           } else {
             setPaymentStatus("Payment not completed.");
           }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
+        } catch (error) {
+          console.error("Error verifying payment:", error);
           setPaymentStatus("An error occurred while verifying payment.");
-        });
-    }
-  }, [sessionId]);
+        }
+      }
+    };
+
+    verifyPayment();
+  }, [sessionId, navigate]);
 
   useEffect(() => {
     if (paymentStatus) {
       if (countdown === 0) {
-        navigate("/payment");
+        if (paymentStatus === "Payment succeeded!") {
+          // Redirect handled by the verifyPayment useEffect
+        } else {
+          window.location.href = "/payment";
+        }
       }
 
       const timer = setInterval(() => {
@@ -47,7 +57,7 @@ const CheckoutSuccess = () => {
 
       return () => clearInterval(timer);
     }
-  }, [countdown, paymentStatus, navigate]);
+  }, [countdown, paymentStatus]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -63,7 +73,7 @@ const CheckoutSuccess = () => {
               </p>
               <img
                 src={SuccessImage}
-                alt="Loading"
+                alt="Success"
                 className="w-50 h-80 mx-auto mt-8"
               />
             </>
