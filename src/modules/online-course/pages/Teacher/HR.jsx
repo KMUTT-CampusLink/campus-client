@@ -3,7 +3,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import { z } from "zod";
 import popToast from "../../../../utils/popToast";
 
-const sec_id = localStorage.getItem("sec_id") || 10001;
+const sec_id = localStorage.getItem("sec_id") || 1001;
 
 const schema = z.object({
   title: z.string().min(1, { message: "Video Title is required" }),
@@ -111,6 +111,8 @@ function HR() {
         setTitle("");
         setVideoFile(null);
         setMaterialFiles([]);
+        document.getElementById("videoFileInput").value = null; // Reset the video file input
+        document.getElementById("materialFilesInput").value = null; // Reset the material files input
         popToast("Files uploaded successfully!", "success");
       }
     } catch (error) {
@@ -149,6 +151,7 @@ function HR() {
             <label className="block text-lg font-medium">Upload Video</label>
             <input
               type="file"
+              id="videoFileInput"
               onChange={handleVideoChange}
               className="block w-full px-3 py-2 border rounded-md"
               accept="video/mp4, video/ogg, video/webm, video/x-msvideo"
@@ -166,6 +169,7 @@ function HR() {
             </label>
             <input
               type="file"
+              id="materialFilesInput"
               multiple
               onChange={handleMaterialsChange}
               className="block w-full px-3 py-2 border rounded-md"
