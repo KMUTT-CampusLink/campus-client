@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../../../utils/axiosInstance"; // Import the axios instance
+import { axiosInstance } from "../../../../utils/axiosInstance"; // Ensure axiosInstance is correctly configured
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function StudentMaintenanceList() {
@@ -12,14 +12,10 @@ export default function StudentMaintenanceList() {
   useEffect(() => {
     const fetchMaintenanceRequests = async () => {
       try {
-        const response = await axiosInstance.get("/security/MaintenanceList");
+        const response = await axiosInstance.get("/security/MaintenanceList"); // Correct API endpoint
         if (response.data.success) {
           setRequests(response.data.data);
         } else {
-          console.error(
-            "Failed to fetch maintenance requests:",
-            response.data.message
-          );
           setError(response.data.message);
         }
       } catch (error) {
@@ -119,8 +115,8 @@ export default function StudentMaintenanceList() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Maintenance Requests</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
         <div style={pageStyles.container}>
           <h1 style={pageStyles.header}>Maintenance Request List</h1>
 
@@ -139,7 +135,7 @@ export default function StudentMaintenanceList() {
 
               {requests.map((request, index) => (
                 <div key={index} style={pageStyles.requestCard}>
-                  <div>{request.location}</div>
+                  <div>{request.room_id}</div>
                   <div>{request.description}</div>
                   <div style={getStatusStyle(request.status)}>
                     <span style={pageStyles.statusText}>{request.status}</span>

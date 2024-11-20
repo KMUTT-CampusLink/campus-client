@@ -52,9 +52,12 @@ export default function StudentMyItemList() {
 
   const handleStatusUpdate = async (id) => {
     try {
-      const response = await axiosInstance.patch(`/updateStatus/${id}`, {
-        status: newStatus,
-      });
+      const response = await axiosInstance.patch(
+        `/security/updateStatus/${id}`,
+        {
+          status: newStatus,
+        }
+      );
 
       if (response.data.success) {
         setRequests((prevRequests) =>
@@ -78,17 +81,15 @@ export default function StudentMyItemList() {
     <>
       <NavBar />
       <div className="container">
-        <h1>My Item List</h1>
-        <p>Detailed information</p>
+        <br />
+        <br />
         <div className="relative bg-gray-100 min-h-screen p-8">
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
             <div className="flex justify-between items-center">
               <h1 className="text-2xl font-bold">My Item List</h1>
               <button
                 className="bg-[#8b5b34] p-2 rounded-full shadow-lg hover:bg-[#6e3f35]"
-                onClick={() =>
-                  navigate("/security/student/lostandfound")
-                }
+                onClick={() => navigate("/security/student/lostandfound")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +126,7 @@ export default function StudentMyItemList() {
                       className="bg-white shadow-sm rounded-lg mb-4"
                     >
                       <td className="p-3">{request.name}</td>
-                      <td className="p-3">{request.found_location}</td>
+                      <td className="p-3">{request.floor_id}</td>
                       <td className="p-3">{request.description}</td>
                       <td
                         className="p-3"
