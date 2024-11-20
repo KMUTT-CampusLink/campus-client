@@ -9,7 +9,6 @@ import { faBell, faFile, faStar } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  useAllCourses,
   useCoursesByStudentID,
 } from "../../services/queries.js";
 
@@ -17,7 +16,7 @@ const StDashboard = () => {
   const studentId = localStorage.getItem("studentId");
   const semesterId = 1010;
   const navigate = useNavigate();
-  const { data: courses, isLoading } = useCoursesByStudentID(studentId);
+  const { data: courses} = useCoursesByStudentID(studentId);
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />

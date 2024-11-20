@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchDiscussionPostBySectionID } from "./api";
+import { fetchDiscussionPostBySectionID, deleteDiscussionPost, editDiscussionPost } from "./api";
 
 export const useDiscussionPostBySectionID = () => {
   const queryClient = useQueryClient();
@@ -8,7 +8,7 @@ export const useDiscussionPostBySectionID = () => {
     mutationFn: (newTopic) => fetchDiscussionPostBySectionID(newTopic),
     onMutate: async (newTopic) => {
       console.log("Optimistically updating:", newTopic);
-      
+
       // Cancel outgoing queries for the same key to avoid overwriting optimistic updates
       await queryClient.cancelQueries("topicDetails");
 
@@ -41,6 +41,29 @@ export const useDiscussionPostBySectionID = () => {
     onSettled: () => {
       // Re-fetch the data to ensure consistency
       queryClient.invalidateQueries("topicDetails");
+    },
+  });
+};
+
+export const useEditDiscussionPost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ topicId, updatedPost }) =>
+      editDiscussionPost(topicId, updatedPost),
+    onSuccess: () => {
+      queryClient.invalidateQueries("post"); // Invalidate to refresh posts
+    },
+  });
+};
+
+export const useDeleteDiscussionPost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (topicId) => deleteDiscussionPost(topicId),
+    onSuccess: () => {
+      queryClient.invalidateQueries("post"); // Invalidate to refresh posts
     },
   });
 };

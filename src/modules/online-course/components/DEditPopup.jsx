@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useDiscussionPostBySectionID } from "../services/mutations";
+import { useEditDiscussionPost } from "../services/mutations";
 
-const PopupDiscussion = ({ closePopup, onSubmit }) => {
-  // Added `onSubmit` as a prop
-  const mutation = useDiscussionPostBySectionID(); // Use the mutation here
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+const DEditPopup = ({ post, closePopup }) => {
+  const editMutation = useEditDiscussionPost(); // Mutation for editing posts
+  const [title, setTitle] = useState(post.title);
+  const [content, setContent] = useState(post.content);
   const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
@@ -17,27 +16,31 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content) {
-      alert("Please provide both a title and content.");
+      alert("Title and content are required.");
       return;
     }
 
-    const newTopic = {
-      section_id: localStorage.getItem("sec_id"),
-      user_id: localStorage.getItem("userId"),
+    const updatedPost = {
       title,
       content,
-      discussion_img: file ? file.name : null,
+      discussion_img: file ? file.name : post.discussion_img, // Use new file if uploaded, otherwise keep existing
     };
 
     try {
-      await mutation.mutateAsync(newTopic); // Trigger the mutation
-      closePopup(); // Close popup after success
+      await editMutation.mutateAsync(
+        { topicId: post.id, updatedPost },
+        {
+          onSuccess: () => {
+            alert("Post updated successfully!");
+            closePopup(); // Close the popup after a successful update
+          },
+        }
+      );
     } catch (error) {
-      console.error("Error submitting discussion:", error);
+      console.error("Error updating discussion:", error);
+      alert("Failed to update the post. Please try again.");
     }
   };
-
-
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -52,10 +55,10 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
 
         {/* Header */}
         <h2 className="text-xl font-bold text-[#ecb45e] mb-4">
-          Create Discussion
+          Edit Discussion
         </h2>
 
-        {/* Upload Form */}
+        {/* Edit Form */}
         <form onSubmit={handleSubmit}>
           {/* Title Input */}
           <div className="mb-4">
@@ -71,7 +74,6 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
-              placeholder="Enter a title"
               required
             />
           </div>
@@ -89,19 +91,18 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
-              placeholder="Enter content here"
               rows="4"
               required
             ></textarea>
           </div>
 
-          {/* Optional File Upload */}
+          {/* File Upload */}
           <div className="mb-4">
             <label
               htmlFor="file"
               className="block text-gray-700 font-medium mb-1"
             >
-              Upload File (Optional)
+              Change Image (Optional)
             </label>
             <input
               type="file"
@@ -123,9 +124,9 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
             <button
               type="submit"
               className="bg-[#ecb45e] text-white px-4 py-2 rounded-md hover:bg-[#d9a24b]"
-              disabled={mutation.isLoading} // Disable button while loading
+              disabled={editMutation.isLoading}
             >
-              {mutation.isLoading ? "Submitting..." : "Submit"}
+              {editMutation.isLoading ? "Updating..." : "Update"}
             </button>
           </div>
         </form>
@@ -134,4 +135,4 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
   );
 };
 
-export default PopupDiscussion;
+export default DEditPopup;
