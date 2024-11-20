@@ -136,7 +136,7 @@ const TrCourseMaterials = () => {
   };
 
   const { data: details } = useCourseHeaderBySectionID(sec_id);
-  const { data: videos } = useAllVideos();
+  const { data: videos } = useAllVideos(sec_id);
   console.log(details);
   console.log("Fetched videos:", videos);
 

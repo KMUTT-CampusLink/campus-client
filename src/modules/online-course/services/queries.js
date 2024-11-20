@@ -15,10 +15,14 @@ export const useAllCourses = () => {
   });
 };
 
-export const useAllVideos = () => {
+export const useAllVideos = (secId) => {
   return useQuery({
-    queryKey: ["videos"],
-    queryFn: fetchAllVideos,
+    queryKey: ["videos", secId],
+    queryFn: () => fetchAllVideos(secId),
+    enabled: !!secId,
+    onError: (error) => {
+      console.log(error);
+    },
   });
 };
 
@@ -61,8 +65,7 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
-      console.log(error)
-    }
-  })
-}
-
+      console.log(error);
+    },
+  });
+};
