@@ -68,7 +68,6 @@ function PeriodPage() {
                 <Button to="/regis/course" text="Withdraw Courses" />
               ) : (
                 <>
-                  {" "}
                   <Button
                     to="/regis/course"
                     disabled={regis === "Late Registration"}
