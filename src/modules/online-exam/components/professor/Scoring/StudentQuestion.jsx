@@ -20,6 +20,7 @@ export default function StudentQuestion({
   const [maxScore, setMaxScore] = useState(0);
   const [studentScore, setStudentScore] = useState(0);
   const [haveScore, setHaveScore] = useState(false);
+
   const setStudentEssayScore = (e) => {
     const score = e.target.value;
     if (score >= 0 && score <= maxScore) {

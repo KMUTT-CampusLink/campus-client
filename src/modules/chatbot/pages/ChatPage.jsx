@@ -75,7 +75,7 @@ const ChatPage = () => {
       <div className="mx-auto max-w-7xl pt-12 sm:pt-10 md:pt-6 pb-6 sm:pb-4 md:pb-0 w-full sm:w-[90%] h-screen rounded-t-xl flex flex-col items-center justify-end">
         {/* messaging area */}
         <div className={`w-full sm:w-[90%] flex 
-                        ${startChat ? `gap-0 pt-0 mt-10 pb-0 mb-0 flex-col-reverse h-[100%]` : 
+                        ${startChat ? `gap-0 pt-0 sm:pt-[8rem] pb-0 mb-0 flex-col-reverse h-[100%]` : 
                         `h-[80%] gap-6 lg:gap-8 xl:gap-10 flex-col py-0`} justify-start 
                         ${loading || imageLoading ? `animate-pulse` : ``} `}>
           {/* bot profile div */}

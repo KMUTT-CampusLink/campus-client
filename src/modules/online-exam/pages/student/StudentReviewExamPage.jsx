@@ -18,6 +18,22 @@ export default function StudentReviewExamPage() {
       console.log(e);
     }
   };
+  const getScore = async () => {
+    try {
+      const response = await getStudentScore(studentExamId);
+      setStudentScore(response.data.data.total_score);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getStudentFullMark = async() => {
+    try {
+      const response = await getFullMark(examId);
+      setFullMark(response.data.data.full_mark);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchReview();
   }, []);
