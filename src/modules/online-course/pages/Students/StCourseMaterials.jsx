@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CourseHeader from "../../components/CourseHeader";
 import { useCourseHeaderBySectionIDForStudent } from "../../services/queries";
 import {
   faPenToSquare,
