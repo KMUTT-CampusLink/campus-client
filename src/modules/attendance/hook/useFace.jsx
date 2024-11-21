@@ -74,10 +74,10 @@ const useFace = () => {
   const loadModels = async () => {
     setLoadingModels(true);
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri("http://localhost:5173/models"),
-      faceapi.nets.faceLandmark68Net.loadFromUri("http://localhost:5173/models"),
-      faceapi.nets.faceRecognitionNet.loadFromUri("http://localhost:5173/models"),
-      faceapi.nets.ssdMobilenetv1.loadFromUri("http://localhost:5173/models"),
+      faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
     ]);
     setLoadingModels(false);
   };
@@ -145,7 +145,6 @@ const useFace = () => {
                   .catch((error) => {
                     console.error(`Failed to mark attendance for ${studentId}`);
                   });
-
               }
 
               // Update cooldown timestamp
