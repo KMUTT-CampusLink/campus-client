@@ -53,7 +53,7 @@ const DepartmentDetailModel = ({ isOpen, onClose, data }) => {
     <div className="modal modal-open" onClick={handleBackdropClick}>
       <div
         className="modal-box relative p-10 px-14 overflow-hidden flex flex-col transition-all duration-700 ease-in-out transform scale-90 animate-modal-fade"
-        style={{ width: "50vw", maxWidth: "none", height: "72vh" }}
+        style={{ width: "50vw", maxWidth: "none", height: "72vh", maxHeight:"72vh" }}
       >
         <div className="flex bg-gray-400/20 rounded-xl w-[90%] mx-auto h-[10%]">
           <div
@@ -101,7 +101,7 @@ const DepartmentDetailModel = ({ isOpen, onClose, data }) => {
             Parking
           </button>
         </div>
-        <div className="flex-grow overflow-hidden">{Component}</div>
+        <div className="h-full">{Component}</div>
       </div>
     </div>
   );
