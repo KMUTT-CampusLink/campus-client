@@ -38,6 +38,7 @@ function ScannedCheckOut() {
       if (res.message === "Checkout and Invoice completed successfully!") {
         alert("Checkout Successful! Your Invoice Has Been Created!");
         // Navigate to checkout page with reservationData
+        localStorage.clear('checkoutData', JSON.stringify(res));
         navigate('/parking', { state: res });
         console.log(res);
         

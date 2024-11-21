@@ -43,7 +43,7 @@ function MainPage() {
           caption: ''
         },
       ];
-    return (
+    return (    
         <>
             <Navbar />
             <Slide>

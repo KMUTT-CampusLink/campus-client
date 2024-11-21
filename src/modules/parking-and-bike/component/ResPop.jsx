@@ -1,11 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getBuildingById, postReservation } from "../services/api.js";
+import { getBuildingById, postReservation, getCarVerify } from "../services/api.js";
+import AuthRoute from "../../registration/middleware/AuthRoute.jsx";
 
 function ResPop({ id, img, name, onClose }) {
   const [parking, setParking] = useState([]);
@@ -13,14 +11,22 @@ function ResPop({ id, img, name, onClose }) {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [reservationTime, setReservationTime] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isCarVerified, setIsCarVerified] = useState(false); 
   const navigate = useNavigate();
 
-  const closeRespop = () => {
-    if (onClose) {
-      onClose();
+  // Check car verification status
+  const checkCarVerification = async () => {
+    try {
+      const res = await getCarVerify();
+      setIsCarVerified(res);
+    } catch (error) {
+      console.error("Error verifying car:", error);
+      setIsCarVerified(false);
     }
   };
-
+  console.log(isCarVerified.verified);
+  
+  // Fetch parking data
   const getParking = async () => {
     try {
       const res = await getBuildingById(id);
@@ -34,9 +40,68 @@ function ResPop({ id, img, name, onClose }) {
     }
   };
 
+  // Handle reservation submission
+  const handleReservation = async (e) => {
+    e.preventDefault();
+
+    if (!isCarVerified) {
+      setErrorMessage("You cannot reserve a slot because your car is not verified.");
+      return;
+    }
+
+    if (!selectedFloor || !selectedSlot || !reservationTime) {
+      setErrorMessage("Please select a floor, slot, and time.");
+      return;
+    }
+
+    const requestData = {
+      parking_slot_id: selectedSlot,
+      reserve_time: reservationTime,
+    };
+
+    try {
+      const res = await postReservation(requestData);
+      if (res.message === "Reservation created successfully!") {
+        const qrData = JSON.stringify({
+          reservationId: res.reservation_id,
+          floorName: currentFloor.floor_name,
+          slotName: currentFloor.slots.find(
+            (slot) => slot.slot_id === selectedSlot
+          ).slot_name,
+          reserveTime: reservationTime,
+        });
+        alert("Reservation successful!");
+        navigate("/parking/checkin", {
+          state: {
+            ...res,
+            qrCodeData: qrData,
+            floor_name: currentFloor.floor_name,
+            slot_name: currentFloor.slots.find(
+              (slot) => slot.slot_id === selectedSlot
+            ).slot_name,
+          },
+        });
+      } else {
+        setErrorMessage("Failed to reserve slot. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error reserving slot:", error);
+      setErrorMessage(
+        error.response?.data?.error || "An error occurred. Please try again."
+      );
+    }
+  };
+
+  const closeRespop = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   useEffect(() => {
     if (id) {
       getParking();
+      checkCarVerification();
     }
   }, [id]);
 
@@ -59,54 +124,6 @@ function ResPop({ id, img, name, onClose }) {
     (floor) => floor.floor_id === selectedFloor
   );
 
-  const handleReservation = async (e) => {
-    e.preventDefault();
-
-    if (!selectedFloor || !selectedSlot || !reservationTime) {
-      setErrorMessage("Please select a floor, slot, and time.");
-      return;
-    }
-
-    const requestData = {
-      car_id: 1001,
-      parking_slot_id: selectedSlot,
-      reserve_time: reservationTime,
-    };
-
-    try {
-      const res = await postReservation(requestData);
-      if (res.message === "Reservation created successfully!") {
-        const resData = res;
-        const qrData = JSON.stringify({
-          reservationId: resData.reservation_id,
-          floorName: currentFloor.floor_name,
-          slotName: currentFloor.slots.find(
-            (slot) => slot.slot_id === selectedSlot
-          ).slot_name,
-          reserveTime: reservationTime,
-        });
-        alert("Reservation successful!");
-        navigate("/parking/checkin", {
-          state: {
-            ...resData,
-            qrCodeData: qrData,
-            floor_name: currentFloor.floor_name,
-            slot_name: currentFloor.slots.find(
-              (slot) => slot.slot_id === selectedSlot
-            ).slot_name,
-          },
-        });
-      } else {
-        setErrorMessage("Failed to reserve slot. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error reserving slot:", error);
-      setErrorMessage(
-        error.response?.data?.error || "An error occurred. Please try again."
-      );
-    }
-  };
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-slate-200 bg-opacity-50 z-50">
       <div className="bg-white w-full max-w-lg md:max-w-2xl lg:max-w-3xl mx-4 p-6 md:p-10 rounded-3xl shadow-2xl">
@@ -122,23 +139,35 @@ function ResPop({ id, img, name, onClose }) {
               src={img}
               alt="Building"
             />
-            <div className="mt-4 md:mt-6 flex items-center gap-2 text-black font-semibold px-3 py-2 rounded-lg shadow-md">
+            <div className={`mt-4 md:mt-6 flex items-center gap-2 text-black font-semibold px-3 py-2 rounded-lg shadow-md`}>
               <FontAwesomeIcon
-                className="w-4 h-4 md:w-5 md:h-5 text-red-500"
-                icon={faCircleCheck}
+                className={`w-4 h-4 md:w-5 md:h-5 ${
+                  isCarVerified.verified ? "text-red-500" : "text-red-500"
+                }`}
+                icon={isCarVerified.verified ? faCircleCheck : faCircleXmark}
               />
-              <span>Your Car is verified</span>
+              <span>
+                {isCarVerified.verified
+                  ? "Your Car is verified"
+                  : "Your Car is not verified"}
+              </span>
+              
             </div>
+            <span className="text-red-500">
+            {isCarVerified.verified
+                  ? ""
+                  : "**please register your car first**"}
+            </span>
           </div>
 
-          <div className="flex flex-col items-start w-full md:w-auto justify-center items-center">
+          <div className="flex flex-col items-start w-full md:w-auto justify-center">
             <div className="text-center md:text-left">
               <div className="text-xl md:text-2xl font-bold">{name}</div>
               <div className="font-medium mt-2">Located beside the library</div>
             </div>
             <form
               onSubmit={handleReservation}
-              className="mt-6 flex flex-col gap-4 "
+              className="mt-6 flex flex-col gap-4"
             >
               <select
                 className="py-2 px-4 rounded-lg shadow-md bg-gray-100 focus:outline-none"
@@ -179,7 +208,10 @@ function ResPop({ id, img, name, onClose }) {
 
               <button
                 type="submit"
-                className="bg-red-500 mt-4 text-white w-full md:w-auto py-2 rounded-lg hover:bg-red-600 transition"
+                disabled={!isCarVerified}
+                className={`bg-red-500 mt-4 text-white w-full md:w-auto py-2 rounded-lg transition ${
+                  !isCarVerified ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
+                }`}
               >
                 RESERVE
               </button>

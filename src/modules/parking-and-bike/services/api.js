@@ -9,6 +9,10 @@ export const getBuildingById = async (id) => {
   const response = await axiosInstance.get(`/parking/getBuildingById/${id}`);
   return response.data;
 };
+export const getCarVerify = async () => {
+  const response = await axiosInstance.get("/parking/getCar");
+  return response.data;
+};
 
 export const postCheckin = async (requestData) => {
   const response = await axiosInstance.post(

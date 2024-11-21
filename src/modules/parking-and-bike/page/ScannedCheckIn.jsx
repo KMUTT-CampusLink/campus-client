@@ -33,7 +33,7 @@ function ScannedCheckIn() {
       const res = await postCheckin(requestData);
       if (res.message === "QR Checkout created successfully!") {
         alert("Checkin successful!");
-        
+        localStorage.clear('checkinData', JSON.stringify(res));
         // Store check-in response data in local storage for use in checkout
         localStorage.setItem('checkoutData', JSON.stringify(res));
 

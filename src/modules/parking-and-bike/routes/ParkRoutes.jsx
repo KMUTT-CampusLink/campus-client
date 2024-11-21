@@ -11,23 +11,34 @@ export default function ParkRoutes() {
   return [
     {
       path: "",
-      element: (
-        <AuthRoute>
-          <MainPage />
-        </AuthRoute>
-      ),
+      element:(<AuthRoute>
+        <MainPage />
+      </AuthRoute>
+      )
+          ,
     },
     {
       path:"parkingslot/",
-      element:<Parkingslot/>,
+      element:(<AuthRoute>
+        <Parkingslot />
+      </AuthRoute>
+      ),
     },
     {
       path:"checkin/",
-      element:<CheckIn/>
+      element:
+      (<AuthRoute>
+        <CheckIn />
+      </AuthRoute>
+      ),
     },
     {
       path:"regis/",
-      element:<RegisCar/>
+      element:
+      (<AuthRoute>
+        <RegisCar />
+      </AuthRoute>
+      ),
     },
     {
       path:"failed/",

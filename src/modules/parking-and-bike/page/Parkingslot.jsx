@@ -9,6 +9,8 @@ function Parkingslot() {
     const getBuilding = async () => {
         const res = await getParkingData();
         setBuilding(res);
+        console.log(res);
+        
     };
 
     useEffect(() => {
@@ -28,11 +30,12 @@ function Parkingslot() {
                 </div>
                 {building.map((key) => (
                     <Building
-                        key={key.id}
-                        id={key.id}
-                        bdimg={key.building_img}
-                        bdname={key.name}
-                        avaslot={key.capacity}
+                    key={key.id}
+                    bdid={key.id}
+                    bdimg={key.building_img}
+                    bdname={key.name}
+                    avaslot={key.reserved_slots}
+                    maxslot={key.parking_capacity}
                     />
                 ))}
             </div>
