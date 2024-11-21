@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faCheck, faCloudUploadAlt, faX } from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
   useAllVideos,
@@ -11,9 +11,8 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import { z } from "zod";
 import popToast from "../../../../utils/popToast";
 
-const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
-  import.meta.env.VITE_MINIO_BUCKET_NAME
-}`;
+const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME
+  }`;
 
 const TrCourseMaterials = () => {
   const sec_id = localStorage.getItem("sec_id") || 1001;
@@ -74,6 +73,7 @@ const TrCourseMaterials = () => {
   const { data: details } = useCourseHeaderBySectionID(sec_id);
   const { data: videos } = useAllVideos(sec_id);
 
+  // Preload video details when videos are available
   useEffect(() => {
     if (videos && videos.length > 0) {
       const firstVideo = videos[0];
@@ -85,6 +85,15 @@ const TrCourseMaterials = () => {
       });
     }
   }, [videos]);
+
+  // Initialize state or perform any necessary updates
+  useEffect(() => {
+    console.log("Component mounted or updated");
+    // Any other setup logic can be added here
+    return () => {
+      console.log("Cleanup on component unmount");
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -161,57 +170,56 @@ const TrCourseMaterials = () => {
   };
 
   return (
-    <div className="max-md:text-xs w-full min-h-screen overflow-x-hidden">
+    <div className="">
       <NavForIndvCourse page="materials" />
-      <CourseHeader
-        c_code={details?.course_code}
-        c_name={details?.course_name}
-        c_lecturer={details?.lecturer}
-        c_time={details?.time}
-      />
 
-      <div className="mx-auto mt-4 mb-6 md:ml-6">
-        <button
-          onClick={handleEditClick}
-          className={`p-2 rounded-md font-semibold ${
-            isEditing ? "bg-green-500" : "bg-blue-500"
-          } text-white`}
-        >
-          <FontAwesomeIcon
-            icon={isEditing ? faCheck : faPenToSquare}
-            className="mr-2"
-          />
-          {isEditing ? "Save" : "Edit"}
-        </button>
-      </div>
+      <div className="container mx-auto py-6 min-h-screen">
+        <CourseHeader
+          c_code={details?.course_code}
+          c_name={details?.course_name}
+          c_lecturer={details?.lecturer}
+          c_time={details?.time}
+        />
 
-      {isEditing && (
-        <div className="bg-white min-h-screen rounded-lg sm:p-5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
-            <div className="md:pl-20 pl-10 pr-10">
-              <div className="mb-4">
-                <label className="block text-lg font-medium">Video Title</label>
+        <div className="mx-auto mt-4 mb-6 flex justify-end">
+          <button
+            onClick={handleEditClick}
+            className={`p-3 rounded-md text-white shadow-md ${isEditing ? "bg-red-600" : "bg-blue-600"
+              } hover:bg-opacity-90 transition-all`}
+          >
+            <FontAwesomeIcon
+              icon={isEditing ? faX : faPenToSquare}
+              className="mr-2"
+            />
+            {isEditing ? "Cancel Upload" : "Edit Materials"}
+          </button>
+        </div>
+
+        {isEditing && (
+          <div className="bg-white min-h-screen rounded-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Upload New Materials</h2>
+            <div className="grid gap-6">
+              <div>
+                <label className="block text-sm font-medium">Video Title</label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  placeholder="Enter Video Title"
-                  className="block w-full px-3 py-2 border rounded-md"
+                  placeholder="Enter video title"
+                  className="block w-full p-2 border rounded-md shadow-sm"
                 />
                 {errors.title && <p className="text-red-500">{errors.title}</p>}
               </div>
 
-              <div className="mb-4">
-                <label className="block text-lg font-medium">
-                  Upload Video
-                </label>
+              <div>
+                <label className="block text-sm font-medium">Upload Video</label>
                 <input
                   type="file"
                   id="videoFileInput"
                   name="videoFile"
                   onChange={handleInputChange}
-                  className="block w-full px-3 py-2 border rounded-md"
+                  className="block w-full border p-2 rounded-md"
                   accept="video/mp4, video/ogg, video/webm, video/x-msvideo"
                 />
                 {formData.videoFile && (
@@ -222,9 +230,9 @@ const TrCourseMaterials = () => {
                 )}
               </div>
 
-              <div className="mb-4">
-                <label className="block text-lg font-medium">
-                  Upload Materials
+              <div>
+                <label className="block text-sm font-medium">
+                  Upload Additional Materials
                 </label>
                 <input
                   type="file"
@@ -232,7 +240,7 @@ const TrCourseMaterials = () => {
                   name="materialFiles"
                   multiple
                   onChange={handleInputChange}
-                  className="block w-full px-3 py-2 border rounded-md"
+                  className="block w-full border p-2 rounded-md"
                   accept="application/pdf,image/*"
                 />
                 {formData.materialFiles.length > 0 && (
@@ -249,68 +257,70 @@ const TrCourseMaterials = () => {
                 )}
               </div>
 
-              <div className="mt-4">
+              <div>
                 <button
                   onClick={handleSubmit}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition-all"
                 >
+                  <FontAwesomeIcon icon={faCloudUploadAlt} className="mr-2" />
                   Upload Files
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div>
-        <div className="mx-auto mt-4 mb-6 md:ml-6">
-          <label className="block mb-2 font-semibold font-georama">
-            Select Lecture Title
-          </label>
-          <select
-            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
-            value={videoDetails.video}
-            onChange={handleVideoSelectChange}
-          >
-            <option disabled>Select Lecture</option>
-            {videos?.map((vid, index) => (
-              <option key={index} value={vid.title}>
-                {vid.title}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className="rounded-lg p-6 mt-6">
+          <h2 className="text-xl font-bold mb-4">Video and Attachments</h2>
+          <div className="mb-4">
+            <label className="block text-sm font-medium">Select Lecture</label>
+            <select
+              className="w-full border rounded-md p-2"
+              value={videoDetails.video}
+              onChange={handleVideoSelectChange}
+            >
+              <option disabled>Select Lecture</option>
+              {videos?.map((vid, index) => (
+                <option key={index} value={vid.title}>
+                  {vid.title}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div>
           {videoDetails.videoURL && (
-            <div className="w-full mb-4 flex justify-center">
+            <div className="mb-4">
               <video
                 controls
-                className="max-w-full max-h-[400px] object-cover rounded-lg"
+                className="w-full rounded-lg shadow-lg"
                 src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
               ></video>
             </div>
           )}
 
-          <div>
-            <h4 className="font-semibold mb-4">Files</h4>
+          <div className="m-10">
+            <h3 className="text-lg font-semibold">Attachments</h3>
             {videoDetails.attachments?.length > 0 ? (
               <ul className="list-disc pl-5">
                 {videoDetails.attachments.map((file, index) => (
                   <li key={index}>
-                    <a href={`${MINIO_BASE_URL}/${file.file_path}`} download>
+                    <a
+                      href={`${MINIO_BASE_URL}/${file.file_path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
                       {file.file_name}
                     </a>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>No files available.</p>
+              <p>No attachments available.</p>
             )}
           </div>
         </div>
-      </div>
-    </div>
+      </div></div>
   );
 };
 
