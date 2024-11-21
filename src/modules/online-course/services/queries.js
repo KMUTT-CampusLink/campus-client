@@ -7,6 +7,8 @@ import {
   fetchAllCoursesByProfessorID,
   fetchCourseHeaderBySectionID,
   fetchAllVideos,
+  fetchAllDiscussionPostsBySectionID,
+  fetchAllCommentsByPostID,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -39,7 +41,7 @@ export const useCoursesByStudentID = (studentID) => {
 
 export const useAllCoursesByStudentID = (studentID) => {
   return useQuery({
-    queryKey: ["courses", studentID],
+    queryKey: ["allCourses", studentID],
     queryFn: () => fetchAllCoursesByStudentID(studentID),
     enabled: !!studentID,
     onError: (error) => {
@@ -50,7 +52,7 @@ export const useAllCoursesByStudentID = (studentID) => {
 
 export const useAllCoursesByProfessorID = (professorID) => {
   return useQuery({
-    queryKey: ["courses", professorID],
+    queryKey: ["coursesP", professorID],
     queryFn: () => fetchAllCoursesByProfessorID(professorID),
     enabled: !!professorID,
     onError: (error) => {
@@ -65,7 +67,29 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
+      console.log(error)
+    }
+  })
+}
+
+export const useAllDiscussionPostsBySectionID = (sectionID) => {
+  return useQuery({
+    queryKey: ["post", sectionID],
+    queryFn: () => fetchAllDiscussionPostsBySectionID(sectionID),
+    enabled: !!sectionID,
+    onError: (error) => {
       console.log(error);
+    },
+  });
+}
+
+export const useAllCommentsByPostID = (postId) => {
+  return useQuery({
+    queryKey: ["allComment", postId],
+    queryFn: () => fetchAllCommentsByPostID(postId),
+    enabled: !!postId, // Ensure postId is valid
+    onError: (error) => {
+      console.error("Error fetching comments:", error);
     },
   });
 };

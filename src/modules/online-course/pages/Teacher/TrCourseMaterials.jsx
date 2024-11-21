@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faCheck,
+  faFile,
+  faUpload,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
   useAllVideos,
@@ -169,26 +175,29 @@ const TrCourseMaterials = () => {
         c_lecturer={details?.lecturer}
         c_time={details?.time}
       />
-
-      <div className="mx-auto mt-4 mb-6 md:ml-6">
-        <button
-          onClick={handleEditClick}
-          className={`p-2 rounded-md font-semibold ${
-            isEditing ? "bg-green-500" : "bg-blue-500"
-          } text-white`}
-        >
-          <FontAwesomeIcon
-            icon={isEditing ? faCheck : faPenToSquare}
-            className="mr-2"
-          />
-          {isEditing ? "Save" : "Edit"}
-        </button>
+      <div className="w-full px-28">
+        <div className="my-2 md:pl-4 flex items-center space-x-4 mb-4">
+          <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
+          <button
+            onClick={handleEditClick}
+            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${
+              isEditing ? "bg-red-500" : "bg-blue-500"
+            } text-white`}
+          >
+            <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="" />
+            {isEditing ? (
+              <span>Cancel Upload</span>
+            ) : (
+              <span>Upload New Video</span>
+            )}
+          </button>
+        </div>
       </div>
 
       {isEditing && (
-        <div className="bg-white min-h-screen rounded-lg sm:p-5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-14">
-            <div className="md:pl-20 pl-10 pr-10">
+        <div className="min-h-screen rounded-lg sm:p-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="md:pl-20 px-10">
               <div className="mb-4">
                 <label className="block text-lg font-medium">Video Title</label>
                 <input
@@ -261,44 +270,56 @@ const TrCourseMaterials = () => {
           </div>
         </div>
       )}
-
-      <div>
-        <div className="mx-auto mt-4 mb-6 md:ml-6">
-          <label className="block mb-2 font-semibold font-georama">
-            Select Lecture Title
-          </label>
-          <select
-            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
-            value={videoDetails.video}
-            onChange={handleVideoSelectChange}
-          >
-            <option disabled>Select Lecture</option>
-            {videos?.map((vid, index) => (
-              <option key={index} value={vid.title}>
-                {vid.title}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
+      <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+        <div className="sm:col-span-5">
           {videoDetails.videoURL && (
-            <div className="w-full mb-4 flex justify-center">
+            <div className="w-full">
               <video
                 controls
                 className="max-w-full max-h-[400px] object-cover rounded-lg"
                 src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
               ></video>
             </div>
-          )}
-
-          <div>
-            <h4 className="font-semibold mb-4">Files</h4>
+          )}{" "}
+        </div>
+        <div className="sm:col-span-2">
+          <div className="mx-auto mt-4 mb-6 sm:ml-6">
+            <label className="block mb-2 font-semibold font-georama">
+              Select Lecture Title
+            </label>
+            <select
+              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
+              value={videoDetails.video}
+              onChange={handleVideoSelectChange}
+            >
+              <option disabled>Select Lecture</option>
+              {videos?.map((vid, index) => (
+                <option key={index} value={vid.title}>
+                  {vid.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <h3 className="p-4 font-bold text-xl">Class Materials</h3>
+          <div className="">
             {videoDetails.attachments?.length > 0 ? (
-              <ul className="list-disc pl-5">
+              <ul className="px-5 w-full">
                 {videoDetails.attachments.map((file, index) => (
-                  <li key={index}>
-                    <a href={`${MINIO_BASE_URL}/${file.file_path}`} download>
+                  <li
+                    key={index}
+                    className="flex items-center border my-2 rounded-md"
+                  >
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      size="xl"
+                      style={{ color: "#e6700f" }}
+                      className="px-2"
+                    />
+                    <a
+                      className="p-2 mx-2"
+                      href={`${MINIO_BASE_URL}/${file.file_path}`}
+                      download
+                    >
                       {file.file_name}
                     </a>
                   </li>
