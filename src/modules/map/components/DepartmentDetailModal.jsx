@@ -1,90 +1,107 @@
-import BuildingImage from "../assets/buldingImage.jpg";
+import { useState, useEffect } from "react";
+import ModalDetailOption from "./modalDetailOption";
+import ModalLostAndFound from "./ModalLostAndFound";
+import ModalParking from "./ModalParking";
 
 const DepartmentDetailModel = ({ isOpen, onClose, data }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setActiveIndex(0); // Reset activeIndex when modal is closed
+    }
+  }, [isOpen]);
+
+  const handleBackdropClick = (e) => {
+    if (e.target.classList.contains("modal")) {
+      onClose();
+    }
+  };
+
+  const handleButtonClick = (index) => {
+    setActiveIndex(index);
+  };
+
+  const Component =
+    activeIndex === 0 ? (
+      <ModalDetailOption subData={data} />
+    ) : activeIndex === 1 ? (
+      <ModalLostAndFound subData={data} />
+    ) : (
+      <ModalParking subData={data} />
+    );
+
   if (!isOpen) return null;
 
   return (
-    <div className="modal modal-open">
+    <div className="modal modal-open" onClick={handleBackdropClick}>
       <div
-        className="modal-box relative p-10"
-        style={{ width: "40vw", maxWidth: "none" }}
+        className="modal-box relative p-10 px-14 overflow-hidden flex flex-col transition-all duration-700 ease-in-out transform scale-90 animate-modal-fade"
+        style={{ width: "50vw", maxWidth: "none", height: "72vh" }}
       >
-        <div className="flex align">
-          <h2 className="text-4xl font-extrabold">{data?.name}</h2>
-
-          <button
-            className="btn btn-md my-auto ml-auto"
-            onClick={onClose}
+        <div className="flex bg-gray-400/20 rounded-xl w-[90%] mx-auto h-[10%]">
+          <div
+            className={`${
+              data.zone.includes("S") ? "bg-[#DCC625]" : "bg-[#FF4612]"
+            } scale-125 rounded-full mr-4 w-[9%] h-auto aspect-square flex text-white`}
           >
-            ✕
+            <h1 className="m-auto text-2xl">{data?.zone}</h1>
+          </div>
+          <div className="m-auto">
+            <h2 className="font-semibold text-center flex my-auto">
+              {data?.name}
+            </h2>
+          </div>
+        </div>
+        <div className="flex border-b-2 mt-12 mb-1 text-gray-500/85 font-semibold">
+          <button
+            onClick={() => handleButtonClick(0)}
+            className={`px-6 py-2 align-middle leading-[1] transition-all duration-300 ${
+              activeIndex === 0
+                ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
+                : ""
+            }`}
+          >
+            Details
+          </button>
+          <button
+            onClick={() => handleButtonClick(1)}
+            className={`px-6 py-2 align-middle leading-[1] transition-all duration-300 ${
+              activeIndex === 1
+                ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
+                : ""
+            }`}
+          >
+            Lost and Found
+          </button>
+          <button
+            onClick={() => handleButtonClick(2)}
+            className={`px-6 py-2 align-middle leading-[1] transition-all duration-300 ${
+              activeIndex === 2
+                ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
+                : ""
+            }`}
+          >
+            Parking
           </button>
         </div>
-        <div className="flex my-10">
-          <img
-            src={BuildingImage}
-            alt="building image"
-            className="w-[50%] aspect-5/3 rounded-xl"
-          />
-          <label className="form-control grid px-4 w-full">
-            <div className="label">
-              <span className="label-text font-semibold text-xl">
-                Location Details:
-              </span>
-            </div>
-            <input
-              type="text"
-              placeholder="Location details..."
-              value={data.location}
-              className="input input-bordered w-full max-w-xs border-transparent p-2"
-            />
-
-            <div className="label">
-              <span className="label-text font-semibold text-xl">Phone:</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Location details..."
-              value={data.phone}
-              className="input input-bordered w-full max-w-xs border-transparent p-2"
-            />
-
-            <div className="label">
-              <span className="label-text font-semibold text-xl">Fax:</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Location details..."
-              value={data.fax}
-              className="input input-bordered w-full max-w-xs border-transparent p-2 mb-4"
-            />
-            <a
-              href="https://www.google.com/maps"
-              className="flex p-2 mx-auto w-max border-2 border-red-400 rounded-xl"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="#FF0000"
-                class="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                />
-              </svg>
-
-              <span>Navigate Now!</span>
-            </a>
-          </label>
-        </div>
+        <div className="flex-grow overflow-hidden">{Component}</div>
       </div>
     </div>
   );
