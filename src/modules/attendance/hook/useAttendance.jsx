@@ -27,6 +27,7 @@ const useAttendance = () => {
   const items = [
     { label: "Attendance", key: "Attendance" },
     { label: "QR CODE", key: "QR CODE" },
+    { label: "Face Attendance", key: "Face Attendance" },
   ];
 
   const handleMenuClick = (key) => {
@@ -34,7 +35,10 @@ const useAttendance = () => {
       navigate("/attendance");
     } else if (key === "QR CODE") {
       navigate("/attendance/qr");
+    } else if(key == "Face Attendance"){
+      navigate("/attendance/faceAttendance")
     }
+    console.log("HI");
   };
 
   const handleSearch = () => {

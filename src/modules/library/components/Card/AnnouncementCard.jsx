@@ -1,107 +1,58 @@
-import React, { useState, useEffect } from "react";
-import RightArrow from "../../assets/ArrowRight.png";
-import LeftArrow from "../../assets/ArrowLeft.png";
+import React from "react";
 import { Link } from "react-router-dom";
-function AnnouncementCard({ announcements = [] }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [sortedAnnouncements, setSortedAnnouncements] = useState([]);
 
-  useEffect(() => {
-    // Sort announcements by updated_at date in descending order (newest first)
-    const sorted = [...announcements].sort(
-      (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
-    );
-    setSortedAnnouncements(sorted);
-  }, [announcements]);
-
-  if (!sortedAnnouncements || sortedAnnouncements.length === 0) {
-    return (
-      <div className="p-6 text-center">
-        <h1 className="text-2xl font-semibold">No Announcements Available</h1>
-      </div>
-    );
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === sortedAnnouncements.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const handlePrevious = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? sortedAnnouncements.length - 1 : prevIndex - 1
-    );
-  };
-
-  const currentAnnouncement = sortedAnnouncements[currentIndex];
-
+function AnnouncementCard({ announcement }) {
   return (
-    <div className="flex flex-col lg:flex-row h-auto lg:h-[20rem] justify-between shadow-2xl rounded-2xl relative overflow-hidden bg-white w-full">
-      <div className="p-6 flex flex-col justify-center w-full lg:w-2/3">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-4xl font-semibold">Announcement</h1>
-          <Link to="/library/announcement">
-            <button className="flex items-center p-2 px-6 bg-orange-100 rounded-full font-semibold text-orange-600 border-2 border-orange-600 hover:bg-orange-600 hover:text-white transition-all duration-300">
-              View All
-            </button>
-          </Link>
-        </div>
+    <Link
+      to={`/library/announcement/${announcement.title}`}
+      state={{
+        title: announcement.title,
+        description: announcement.description,
+        updated: announcement.updated,
+        location: announcement.location,
+        image: announcement.image,
+        source: announcement.source,
+        duration: announcement.duration,
+        date: announcement.updated_at,
+      }}
+    >
+      <div className="active:scale-90 relative w-full mx-auto overflow-hidden rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105 m-6">
+        {/* Background Image */}
+        <img
+          src={announcement.image}
+          alt={announcement.title}
+          className="w-full h-64 object-cover object-center"
+        />
 
-        {/* Announcement Content */}
-        <div className="flex flex-col h-full p-2">
-          <h2 className="text-2xl font-semibold mb-2 text-sky-950 flex items-center">
-            {currentAnnouncement?.title}{" "}
-            {sortedAnnouncements.indexOf(currentAnnouncement) < 5 && (
-              <span className="text-orange-500 animate-bounce ml-3">NEW!</span>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+          <h2 className="text-2xl font-bold text-white mb-2">
+            {announcement.title}
+            {announcement.isNew && (
+              <span className="text-orange-500 text-sm font-semibold ml-2">
+                NEW!
+              </span>
             )}
           </h2>
-          <h3 className="text-sky-800 text-xl">
-            {new Date(currentAnnouncement?.updated_at).toLocaleDateString(
-              "en-US",
-              {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            )}
+          <span className="badge mb-2 badge-outline text-orange-500 outline-orange-500">Announcement</span>
+          <h3 className="text-white text-sm">
+            {new Date(announcement.updated_at).toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </h3>
-          <h3 className="text-gray-950 text-xl font-thin">
-            {currentAnnouncement?.description}
-          </h3>
+
+          <p className="text-sm text-gray-300 mb-4 line-clamp-3">
+            {announcement.description}
+          </p>
+          <div className="flex items-center justify-between">
+            {/* Additional elements like rating, genre tags can be added here */}
+          </div>
         </div>
       </div>
-
-      {/* Image Section */}
-      <div className="w-full lg:w-1/3 h-[12rem] lg:h-auto">
-        <img
-          src={currentAnnouncement?.image}
-          alt="Announcement"
-          className="h-full w-full object-cover rounded-b-2xl lg:rounded-none lg:rounded-r-2xl"
-        />
-      </div>
-
-      {/* Arrows - positioned at bottom left */}
-      <div className="absolute bottom-4 left-4 flex space-x-4">
-        {/* Left Arrow */}
-        <button
-          onClick={handlePrevious}
-          className="bg-white text-white p-3 rounded-full transition-transform ease-in-out hover:scale-110 hover:bg-gray-100 duration-300 shadow-xl"
-        >
-          <img src={LeftArrow} alt="Previous" className="w-5" />
-        </button>
-
-        {/* Right Arrow */}
-        <button
-          onClick={handleNext}
-          className="bg-white text-white p-3 rounded-full transition-transform ease-in-out hover:scale-110 hover:bg-gray-100 duration-300 shadow-xl"
-        >
-          <img src={RightArrow} alt="Next" className="w-5" />
-        </button>
-      </div>
-    </div>
+    </Link>
   );
 }
 

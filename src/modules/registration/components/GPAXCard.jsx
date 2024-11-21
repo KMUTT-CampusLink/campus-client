@@ -35,15 +35,15 @@ function GPAXCard({ studentId }) {
   if (isError) return <CardErrorSkeleton data="gpax" />;
 
   return (
-    <div className="bg-gray-200 p-4 rounded shadow">
-      <h2 className="font-bold text-2xl mb-2">Cumulative GPA</h2>
+    <div className="p-4 bg-gray-200 rounded shadow">
+      <h2 className="mb-2 text-2xl font-bold">Cumulative GPA</h2>
       <div className="divider"></div>
       <SInfoCard />
       <div className="divider"></div>
 
       {isLoading ? (
-        <div className="text-sm mb-4 animate-pulse" aria-live="polite">
-          <p className="h-4 bg-gray-200 rounded w-1/2">Loading GPAX Data...</p>
+        <div className="mb-4 text-sm animate-pulse" aria-live="polite">
+          <p className="w-1/2 h-4 bg-gray-200 rounded">Loading GPAX Data...</p>
         </div>
       ) : (
         <div className="text-sm">

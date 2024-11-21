@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import CenteredBox from "../../components/CenteredBox";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
 export default function AdministratorMyBookingSubmit() {
   const [buildingData, setBuildingData] = useState([]);
@@ -19,9 +20,6 @@ export default function AdministratorMyBookingSubmit() {
 
   const navigate = useNavigate();
 
-  // Temporary placeholder userId for testing
-  const userId = "2dbd2251-6dcf-4aab-914c-2ecdda5eadd7";
-
   // Define possible 30-minute time slots from 8:30 AM to 7:00 PM
   const timeSlots = Array.from({ length: 23 }, (_, i) =>
     new Date(0, 0, 0, 8, 30 + i * 30).toLocaleTimeString([], {
@@ -34,19 +32,14 @@ export default function AdministratorMyBookingSubmit() {
   useEffect(() => {
     const fetchBuildingData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/security/buildings"
-        );
-        if (!response.ok) throw new Error("Failed to fetch building data");
-        const data = await response.json();
-
-        // Sort buildings by name in ascending order
-        const sortedBuildings = data.sort((a, b) =>
+        const response = await axiosInstance.get("/security/buildings");
+        const sortedBuildings = response.data.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
         setBuildingData(sortedBuildings);
       } catch (error) {
         console.error("Error fetching building data:", error);
+        setError("Failed to load building data. Please try again.");
       }
     };
 
@@ -62,13 +55,12 @@ export default function AdministratorMyBookingSubmit() {
     setRoomData([]);
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/security/floors/${selectedBuildingId}`
+      const response = await axiosInstance.get(
+        `/security/floors/${selectedBuildingId}`
       );
-      if (!response.ok) throw new Error("Failed to fetch floors");
-      const data = await response.json();
-
-      const sortedFloors = data.sort((a, b) => a.name.localeCompare(b.name));
+      const sortedFloors = response.data.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
       setFloorData(sortedFloors);
     } catch (error) {
       console.error("Error fetching floors:", error);
@@ -79,17 +71,19 @@ export default function AdministratorMyBookingSubmit() {
   const handleFloorChange = async (event) => {
     const selectedFloorId = event.target.value;
     setFloor(selectedFloorId);
-    setRoom("");
+    setRoom(""); // Reset room selection
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/security/rooms/${selectedFloorId}`
+      const response = await axiosInstance.get(
+        `/security/rooms/${selectedFloorId}`
       );
-      if (!response.ok) throw new Error("Failed to fetch rooms");
-      const data = await response.json();
+      console.log("Rooms API response:", response.data); // Log the response
 
-      const sortedRooms = data.sort((a, b) => a.name.localeCompare(b.name));
+      const sortedRooms = response.data.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
       setRoomData(sortedRooms);
+      console.log("Sorted rooms:", sortedRooms); // Log sorted rooms
     } catch (error) {
       console.error("Error fetching rooms:", error);
     }
@@ -107,41 +101,23 @@ export default function AdministratorMyBookingSubmit() {
 
   const fetchAvailableTimes = async (roomId, date) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/security/getAvailableTimes?roomId=${roomId}&date=${date}`
-      );
+      const response = await axiosInstance.get(`/security/getAvailableTimes`, {
+        params: { roomId, date },
+      });
 
-      if (!response.ok) throw new Error("Failed to fetch available times");
-
-      const data = await response.json();
-
-      if (data.message === "No bookings available for this room and date") {
-        setAvailableStartTimes(timeSlots); // Show all start time slots
-        setAvailableEndTimes([]); // Reset end times
+      if (
+        response.data.message === "No bookings available for this room and date"
+      ) {
+        setAvailableStartTimes(timeSlots);
+        setAvailableEndTimes([]);
         return;
       }
 
-      // Filter start times based on available slots
-      setAvailableStartTimes(data.availableTimes);
+      setAvailableStartTimes(response.data.availableTimes);
     } catch (error) {
       console.error("Error fetching available times:", error);
       setError("An error occurred while fetching available times.");
     }
-  };
-
-  // Generate all 30-minute slots from 8:30 AM to 7:00 PM
-  const generateAllDaySlots = () => {
-    const slots = [];
-    let startTime = new Date(0, 0, 0, 8, 30);
-    const endTime = new Date(0, 0, 0, 19, 0);
-
-    while (startTime < endTime) {
-      slots.push(
-        startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-      );
-      startTime.setMinutes(startTime.getMinutes() + 30);
-    }
-    return slots;
   };
 
   const handleStartTimeChange = (event) => {
@@ -159,39 +135,39 @@ export default function AdministratorMyBookingSubmit() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const bookingData = {
-      userId,
       roomId: room,
       bookingDate: date,
       startTime: `${date}T${startTime}`,
       endTime: `${date}T${endTime}`,
     };
-
-    console.log("Booking Data:", bookingData);
-
+  
+    console.log("Booking Data:", bookingData); // Log the data being sent to the server
+  
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/security/bookings",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(bookingData),
-        }
+      const response = await axiosInstance.post(
+        "/security/bookings",
+        bookingData
       );
-
-      const result = await response.json();
-      if (response.ok) {
+  
+      if (response.status === 201) {
         alert("Booking successful!");
         navigate("/security/administrator/mybookinglist");
       } else {
-        setError(result.message || "An error occurred during booking.");
+        setError(response.data.message || "An error occurred during booking.");
       }
     } catch (error) {
-      console.error("Error submitting booking:", error);
-      setError("An error occurred. Please try again.");
+      console.error(
+        "Error submitting booking:",
+        error.response?.data?.message || error.message
+      );
+      setError(
+        error.response?.data?.message || "An unexpected error occurred."
+      );
     }
   };
+  
 
   return (
     <>
@@ -208,14 +184,13 @@ export default function AdministratorMyBookingSubmit() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
-              class="size-6"
-              className="w-6 h-6 text-[#864E41]"
+              className="w-6 h-6 text-[#864E41] size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
               />
             </svg>
