@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faCheck, faCloudUploadAlt, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faCheck,
+  faFile,
+  faUpload,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
   useAllVideos,
@@ -172,35 +178,37 @@ const TrCourseMaterials = () => {
   return (
     <div className="">
       <NavForIndvCourse page="materials" />
-
-      <div className="container mx-auto py-6 min-h-screen">
-        <CourseHeader
-          c_code={details?.course_code}
-          c_name={details?.course_name}
-          c_lecturer={details?.lecturer}
-          c_time={details?.time}
-        />
-
-        <div className="mx-auto mt-4 mb-6 flex justify-end">
+      <CourseHeader
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
+      <div className="w-full px-28">
+        <div className="my-2 md:pl-4 flex items-center space-x-4 mb-4">
+          <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
           <button
             onClick={handleEditClick}
-            className={`p-3 rounded-md text-white shadow-md ${isEditing ? "bg-red-600" : "bg-blue-600"
-              } hover:bg-opacity-90 transition-all`}
+            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${
+              isEditing ? "bg-red-500" : "bg-blue-500"
+            } text-white`}
           >
-            <FontAwesomeIcon
-              icon={isEditing ? faX : faPenToSquare}
-              className="mr-2"
-            />
-            {isEditing ? "Cancel Upload" : "Edit Materials"}
+            <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="" />
+            {isEditing ? (
+              <span>Cancel Upload</span>
+            ) : (
+              <span>Upload New Video</span>
+            )}
           </button>
         </div>
+      </div>
 
-        {isEditing && (
-          <div className="bg-white min-h-screen rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-4">Upload New Materials</h2>
-            <div className="grid gap-6">
-              <div>
-                <label className="block text-sm font-medium">Video Title</label>
+      {isEditing && (
+        <div className="min-h-screen rounded-lg sm:p-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="md:pl-20 px-10">
+              <div className="mb-4">
+                <label className="block text-lg font-medium">Video Title</label>
                 <input
                   type="text"
                   name="title"
@@ -268,14 +276,27 @@ const TrCourseMaterials = () => {
               </div>
             </div>
           </div>
-        )}
-
-        <div className="rounded-lg p-6 mt-6">
-          <h2 className="text-xl font-bold mb-4">Video and Attachments</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Select Lecture</label>
+        </div>
+      )}
+      <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+        <div className="sm:col-span-5">
+          {videoDetails.videoURL && (
+            <div className="w-full">
+              <video
+                controls
+                className="max-w-full max-h-[400px] object-cover rounded-lg"
+                src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
+              ></video>
+            </div>
+          )}{" "}
+        </div>
+        <div className="sm:col-span-2">
+          <div className="mx-auto mt-4 mb-6 sm:ml-6">
+            <label className="block mb-2 font-semibold font-georama">
+              Select Lecture Title
+            </label>
             <select
-              className="w-full border rounded-md p-2"
+              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
               value={videoDetails.video}
               onChange={handleVideoSelectChange}
             >
@@ -287,28 +308,25 @@ const TrCourseMaterials = () => {
               ))}
             </select>
           </div>
-
-          {videoDetails.videoURL && (
-            <div className="mb-4">
-              <video
-                controls
-                className="w-full rounded-lg shadow-lg"
-                src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
-              ></video>
-            </div>
-          )}
-
-          <div className="m-10">
-            <h3 className="text-lg font-semibold">Attachments</h3>
+          <h3 className="p-4 font-bold text-xl">Class Materials</h3>
+          <div className="">
             {videoDetails.attachments?.length > 0 ? (
-              <ul className="list-disc pl-5">
+              <ul className="px-5 w-full">
                 {videoDetails.attachments.map((file, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    className="flex items-center border my-2 rounded-md"
+                  >
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      size="xl"
+                      style={{ color: "#e6700f" }}
+                      className="px-2"
+                    />
                     <a
+                      className="p-2 mx-2"
                       href={`${MINIO_BASE_URL}/${file.file_path}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
+                      download
                     >
                       {file.file_name}
                     </a>

@@ -68,9 +68,17 @@ const NavBar = () => {
       case "Management":
         return link.name !== "Registration" && link.name !== "Grade";
       case "Staff":
-        return link.name === "Help & Tools" || link.name === "Payment";
+        return (
+          link.name === "Help & Tools" ||
+          link.name === "Payment" ||
+          link.name === "Campus Services"
+        );
       case "Driver":
-        return link.name === "Help & Tools" || link.name === "Payment";
+        return (
+          link.name === "Help & Tools" ||
+          link.name === "Payment" ||
+          link.name === "Campus Services"
+        );
       default:
         return false;
     }

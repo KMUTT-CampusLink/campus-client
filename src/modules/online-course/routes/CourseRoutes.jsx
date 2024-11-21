@@ -1,4 +1,3 @@
-import { Navigate } from "react-router-dom";
 import TrDashboard from "../pages/Teacher/TrDashboard";
 import TrCourseDescription from "../pages/Teacher/TrCourseDescription";
 import TrCourseMaterials from "../pages/Teacher/TrCourseMaterials";
@@ -13,26 +12,9 @@ import StDiscussion from "../pages/Students/StDiscussion";
 import TrTaskSubmission from "../pages/Teacher/TrTaskSubmission";
 import Comment from "../components/Comment";
 import HR from "../pages/Teacher/HR";
-
-// const role = "Professor";
-const role = localStorage.getItem("userRole");
+import RedirectPage from "../pages/RedirectPage";
 
 export default function CourseRoutes() {
-  // return [
-  //   {
-  //     path: "",
-  //     element: <RedirectPage />,
-  //   },
-  //   {
-  //     path: "st",
-  //     element: <StDashboard />,
-  //   },
-  //   {
-  //     path: "tr",
-  //     element: <TrDashboard/>
-  //   }
-  // ];
-
   return [
     {
       path: "hr",
@@ -40,16 +22,10 @@ export default function CourseRoutes() {
     },
     {
       path: "",
-      element:
-        role === "Student" ? (
-          <Navigate to="/courses/st" />
-        ) : (
-          <Navigate to="/courses/tr" />
-        ),
+      element: <RedirectPage />,
     },
     {
       path: "/courses/tr",
-      element: role === "Professor" ? null : <Navigate to="/courses/st" />,
       children: [
         {
           path: "",
@@ -92,7 +68,6 @@ export default function CourseRoutes() {
     },
     {
       path: "/courses/st",
-      element: role === "Student" ? null : <Navigate to="/courses/tr" />,
       children: [
         {
           path: "",

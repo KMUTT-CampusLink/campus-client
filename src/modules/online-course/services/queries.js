@@ -7,8 +7,10 @@ import {
   fetchAllCoursesByProfessorID,
   fetchCourseHeaderBySectionID,
   fetchAllVideos,
+  fetchAllDiscussionPostsBySectionID,
+  fetchAllCommentsByPostID,
   fetchCourseHeaderBySectionIDForStudent,
-  fetchAllAssignmentsBySectionID
+  fetchAllAssignmentsBySectionID,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -52,7 +54,7 @@ export const useAllCoursesByStudentID = (studentID) => {
 
 export const useAllCoursesByProfessorID = (professorID) => {
   return useQuery({
-    queryKey: ["courses", professorID],
+    queryKey: ["coursesP", professorID],
     queryFn: () => fetchAllCoursesByProfessorID(professorID),
     enabled: !!professorID,
     onError: (error) => {
@@ -67,10 +69,17 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
-      console.log(error)
-    }
-  })
-}
+      console.log(error);
+    },
+  });
+};
+
+export const useAllDiscussionPostsBySectionID = (sectionID) => {
+  return useQuery({
+    queryKey: ["post", sectionID],
+    queryFn: () => fetchAllDiscussionPostsBySectionID(sectionID),
+  });
+};
 
 export const useCourseHeaderBySectionIDForStudent = (sectionID) => {
   return useQuery({
@@ -78,10 +87,10 @@ export const useCourseHeaderBySectionIDForStudent = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionIDForStudent(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
-      console.log(error)
-    }
-  })
-}
+      console.log(error);
+    },
+  });
+};
 
 export const useAllAssignmentsBySectionID = (sectionID) => {
   return useQuery({
@@ -98,3 +107,14 @@ export const useAllAssignmentsBySectionID = (sectionID) => {
   });
 };
 
+
+export const useAllCommentsByPostID = (postId) => {
+  return useQuery({
+    queryKey: ["allComment", postId],
+    queryFn: () => fetchAllCommentsByPostID(postId),
+    enabled: !!postId, // Ensure postId is valid
+    onError: (error) => {
+      console.error("Error fetching comments:", error);
+    },
+  });
+};

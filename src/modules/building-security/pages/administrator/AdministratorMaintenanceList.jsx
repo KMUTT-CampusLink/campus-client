@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../../../utils/axiosInstance"; // Import the axios instance
+import { axiosInstance } from "../../../../utils/axiosInstance"; // Ensure axiosInstance is correctly configured
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function AdministratorMaintenanceList() {
@@ -12,14 +12,10 @@ export default function AdministratorMaintenanceList() {
   useEffect(() => {
     const fetchMaintenanceRequests = async () => {
       try {
-        const response = await axiosInstance.get("/security/MaintenanceList");
+        const response = await axiosInstance.get("/security/MaintenanceList"); // Correct API endpoint
         if (response.data.success) {
           setRequests(response.data.data);
         } else {
-          console.error(
-            "Failed to fetch maintenance requests:",
-            response.data.message
-          );
           setError(response.data.message);
         }
       } catch (error) {
@@ -32,6 +28,19 @@ export default function AdministratorMaintenanceList() {
 
     fetchMaintenanceRequests();
   }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(`/security/adminDeleteMaintenanceList/${id}`);
+      setRequests((prevRequests) =>
+        prevRequests.filter((req) => req.id !== id)
+      );
+      alert("Request deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting maintenance request:", error);
+      alert("Failed to delete the request.");
+    }
+  };
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -86,7 +95,7 @@ export default function AdministratorMaintenanceList() {
     },
     requestCard: {
       display: "grid",
-      gridTemplateColumns: "1fr 3fr 1fr 1fr",
+      gridTemplateColumns: "1fr 3fr 1fr 1fr auto", // Added space for delete icon
       alignItems: "center",
       padding: "20px",
       marginBottom: "15px",
@@ -97,6 +106,11 @@ export default function AdministratorMaintenanceList() {
     },
     statusText: {
       fontWeight: "bold",
+    },
+    deleteButton: {
+      backgroundColor: "transparent",
+      border: "none",
+      cursor: "pointer",
     },
     floatingButton: {
       position: "absolute",
@@ -118,59 +132,98 @@ export default function AdministratorMaintenanceList() {
   return (
     <>
       <NavBar />
-      <div className="container">
-        <h1>My Maintenance Requests</h1>
-        <p>Detailed information</p>
-        <div style={pageStyles.container}>
-          <h1 style={pageStyles.header}>Maintenance Request List</h1>
+      <div className="container mx-auto px-4">
+        <br />
+        <br />
+        <div className="relative bg-gray-50 min-h-screen py-8">
+          <div className="max-w-5xl mx-auto bg-gradient-to-r from-gray-100 to-white rounded-2xl shadow-lg p-8">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+                Maintenance Request List
+              </h1>
+              <button
+                className="bg-[#8b5b34] p-3 rounded-full shadow-lg hover:bg-[#6e3f35] transition-all duration-300"
+                onClick={() => navigate("/security/administrator/request")}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-6 h-6 text-white"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+              </button>
+            </div>
 
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <>
-              <div style={pageStyles.tableHeader}>
-                <div>Room</div>
-                <div>Detail</div>
-                <div>Status</div>
-                <div>Priority</div>
-              </div>
+            <hr className="my-4 border-gray-300" />
 
-              {requests.map((request, index) => (
-                <div key={index} style={pageStyles.requestCard}>
-                  <div>{request.location}</div>
+            {/* Table Header */}
+            <div className="grid grid-cols-4 font-medium text-gray-600 bg-gray-200 rounded-t-lg py-3 px-4">
+              <div>Room</div>
+              <div>Detail</div>
+              <div>Status</div>
+              <div>Priority</div>
+            </div>
+
+            {/* Request List */}
+            {loading ? (
+              <p className="text-center text-gray-500 py-6">Loading...</p>
+            ) : error ? (
+              <p className="text-center text-red-500 py-6">{error}</p>
+            ) : (
+              requests.map((request) => (
+                <div
+                  key={request.id}
+                  className="grid grid-cols-4 items-center bg-gray-50 border-b hover:bg-gray-100 transition-all duration-300 py-4 px-4 text-gray-700"
+                >
+                  <div>{request.room_id}</div>
                   <div>{request.description}</div>
-                  <div style={getStatusStyle(request.status)}>
-                    <span style={pageStyles.statusText}>{request.status}</span>
+                  <div
+                    className="font-bold"
+                    style={getStatusStyle(request.status)}
+                  >
+                    {request.status}
                   </div>
-                  <div style={getPriorityStyle(request.priority)}>
-                    <span>{request.priority}</span>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="font-bold"
+                      style={getPriorityStyle(request.priority)}
+                    >
+                      {request.priority}
+                    </span>
+                    <button
+                      onClick={() => handleDelete(request.id)}
+                      className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 shadow-sm transition-all duration-300"
+                      title="Delete Request"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="red"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 2.25h6a2.25 2.25 0 0 1 2.25 2.25v.75M4.5 6.75h15m-1.5 0-.664 12.159a2.25 2.25 0 0 1-2.245 2.091H8.409a2.25 2.25 0 0 1-2.245-2.091L5.5 6.75m3.75 3v6m6-6v6"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-              ))}
-            </>
-          )}
-
-          <button
-            style={pageStyles.floatingButton}
-            onClick={() => navigate("/security/administrator/request")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6 text-white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-          </button>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </>

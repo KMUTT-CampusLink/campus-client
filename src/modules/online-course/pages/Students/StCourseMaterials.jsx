@@ -1,222 +1,139 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CourseHeader from "../../components/CourseHeader"
 import { useCourseHeaderBySectionIDForStudent } from "../../services/queries";
 import {
   faPenToSquare,
-  faTrash,
-  faVideo,
-  faPlus,
+  faCheck,
+  faFile,
+  faUpload,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
-import UploadPopup from "../../components/Upload_Popup";
-import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
+import CourseHeader from "../../components/CourseHeader";
+import {
+  useAllVideos,
+  useCourseHeaderBySectionID,
+} from "../../services/queries";
+
+const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
+  import.meta.env.VITE_MINIO_BUCKET_NAME
+}`;
 
 const StCourseMaterials = () => {
-  const sec_id = localStorage.getItem("sec_id");
-  const {data: details} = useCourseHeaderBySectionIDForStudent(sec_id);
-  const [materials, setMaterials] = useState([
-    {
-      title: "Lecture 1 - Introduction",
-      date: "12/4/2024",
-      attachments: ["name"],
-      quantity: 1,
-      videos: ["(3 hr 4 minutes)", "(2 hr 10 minutes)"], // Multiple recordings
-    },
-    {
-      title: "Lecture 2 - Data Representation",
-      date: "12/5/2024",
-      attachments: ["name"],
-      quantity: 1,
-      videos: ["(3 hr 4 minutes)"],
-    },
-  ]);
+  const sec_id = localStorage.getItem("sec_id") || 1001;
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [currentMaterial, setCurrentMaterial] = useState(null);
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
-  const [deleteContext, setDeleteContext] = useState(null);
-  const [materialToDelete, setMaterialToDelete] = useState(null);
-  const [recordingIndex, setRecordingIndex] = useState(null);
+  const [videoDetails, setVideoDetails] = useState({
+    video: "",
+    videoId: "",
+    videoURL: "",
+    attachments: [],
+  });
 
-  // Sort materials by title in ascending order
-  const sortedMaterials = [...materials].sort((a, b) =>
-    a.title.localeCompare(b.title)
-  );
+  const { data: details } = useCourseHeaderBySectionID(sec_id);
+  const { data: videos } = useAllVideos(sec_id);
 
-  const handleUploadClick = () => {
-    setIsPopupOpen(true);
-    setCurrentMaterial(null);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  const handleSubmitMaterial = (newMaterial) => {
-    if (currentMaterial) {
-      setMaterials((prevMaterials) =>
-        prevMaterials.map((material) =>
-          material === currentMaterial ? newMaterial : material
-        )
-      );
-    } else {
-      setMaterials((prevMaterials) => [...prevMaterials, newMaterial]);
+  useEffect(() => {
+    if (videos && videos.length > 0) {
+      const firstVideo = videos[0];
+      setVideoDetails({
+        video: firstVideo.title,
+        videoId: firstVideo.id,
+        videoURL: firstVideo.video_url,
+        attachments: firstVideo.course_attachment,
+      });
     }
-    setIsPopupOpen(false);
-  };
+  }, [videos]);
 
-  const handleDeleteAttachmentClick = (material) => {
-    setMaterialToDelete(material);
-    setDeleteContext("attachment");
-    setIsDeletePopupOpen(true);
-  };
-
-  const handleDeleteRecordingClick = (material, index) => {
-    setMaterialToDelete(material);
-    setRecordingIndex(index);
-    setDeleteContext("recording");
-    setIsDeletePopupOpen(true);
-  };
-
-  const handleDeleteAttachments = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.map((material) =>
-        material === materialToDelete
-          ? { ...material, attachments: [], quantity: 0 }
-          : material
-      )
+  const handleVideoSelectChange = (event) => {
+    const selectedVideo = videos.find(
+      (vid) => vid.title === event.target.value
     );
-    setIsDeletePopupOpen(false);
-  };
-
-  const handleDeleteRow = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.filter((material) => material !== materialToDelete)
-    );
-    setIsDeletePopupOpen(false);
-  };
-
-  const handleDeleteRecording = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.map((material) =>
-        material === materialToDelete
-          ? {
-              ...material,
-              videos: material.videos.filter((_, i) => i !== recordingIndex),
-            }
-          : material
-      )
-    );
-    setIsDeletePopupOpen(false);
-  };
-
-  const handleEditClick = (material) => {
-    setCurrentMaterial(material);
-    setIsPopupOpen(true);
+    if (selectedVideo) {
+      setVideoDetails({
+        video: selectedVideo.title,
+        videoId: selectedVideo.id,
+        videoURL: selectedVideo.video_url,
+        attachments: selectedVideo.course_attachment,
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-gray-100">
-      <NavForIndvCourse page={"materials"} />
-
+    <div className="max-md:text-xs w-full min-h-screen overflow-x-hidden">
+      <NavForIndvCourse page="materials" />
       <CourseHeader
         c_code={details?.course_code}
         c_name={details?.course_name}
         c_lecturer={details?.lecturer}
         c_time={details?.time}
       />
-
-      <div className="py-8 w-full">
-        <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-[#ecb45e]">MATERIALS</div>
-          {/* <button
-            className="bg-[#ecb45e] text-white py-2 px-4 rounded hover:bg-[#d9a24b] transition duration-200"
-            onClick={handleUploadClick}
-          >
-            <FontAwesomeIcon icon={faPlus} className="mr-2" size="xl" />
-            Upload
-          </button> */}
+      <div className="w-full px-28">
+        <div className="my-2 md:pl-4 flex items-center space-x-4 mb-4">
+          <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
         </div>
       </div>
 
-      <div className="w-full border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-4 gap-4 font-bold py-2 px-2">
-          <div>Title</div>
-          <div>Date</div>
-          <div>Attachments</div>
-          <div>Recording</div>
-        </div>
-      </div>
-
-      <div className="max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
-        {sortedMaterials.map((material, index) => (
-          <div key={index} className="grid grid-cols-4 gap-4 py-4">
-            <div>{material.title}</div>
-            <div>{material.date}</div>
-            <div className="flex items-start gap-2 flex-col">
-              <div>{material.attachments.join(", ")}</div>
-              <div>{material.quantity} file(s)</div>
-              {/* <div className="flex gap-2">
-                <button onClick={() => handleEditClick(material)}>
-                  <FontAwesomeIcon icon={faPenToSquare} color="red" />
-                </button>
-                <button onClick={() => handleDeleteAttachmentClick(material)}>
-                  <FontAwesomeIcon icon={faTrash} color="red" />
-                </button>
-              </div> */}
+      <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+        <div className="sm:col-span-5">
+          {videoDetails.videoURL && (
+            <div className="w-full">
+              <video
+                controls
+                className="max-w-full max-h-[400px] object-cover rounded-lg"
+                src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
+              ></video>
             </div>
-
-            <div className="flex flex-col gap-2">
-              {(material.videos || []).map((video, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <FontAwesomeIcon icon={faVideo} color="red" />
-                  {video}
-                  {/* <button
-                    onClick={() => handleDeleteRecordingClick(material, i)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" />
-                  </button> */}
-                </div>
+          )}
+        </div>
+        <div className="sm:col-span-2">
+          <div className="mx-auto mt-4 mb-6 sm:ml-6">
+            <label className="block mb-2 font-semibold font-georama">
+              Select Lecture Title
+            </label>
+            <select
+              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
+              value={videoDetails.video}
+              onChange={handleVideoSelectChange}
+            >
+              <option disabled>Select Lecture</option>
+              {videos?.map((vid, index) => (
+                <option key={index} value={vid.title}>
+                  {vid.title}
+                </option>
               ))}
-            </div>
+            </select>
           </div>
-        ))}
+          <h3 className="p-4 font-bold text-xl">Class Materials</h3>
+          <div className="">
+            {videoDetails.attachments?.length > 0 ? (
+              <ul className="px-5 w-full">
+                {videoDetails.attachments.map((file, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center border my-2 rounded-md"
+                  >
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      size="xl"
+                      style={{ color: "#e6700f" }}
+                      className="px-2"
+                    />
+                    <a
+                      className="p-2 mx-2"
+                      href={`${MINIO_BASE_URL}/${file.file_path}`}
+                      download
+                    >
+                      {file.file_name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No files available.</p>
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* {isPopupOpen && (
-        <UploadPopup
-          onClose={handleClosePopup}
-          onSubmit={handleSubmitMaterial}
-          material={currentMaterial}
-          showVideos={true}
-        />
-      )} */}
-
-      {/* {isDeletePopupOpen && (
-        <DeleteConfirmationPopup
-          onClose={() => setIsDeletePopupOpen(false)}
-          onDeleteAction={
-            deleteContext === "attachment"
-              ? [handleDeleteAttachments, handleDeleteRow]
-              : [handleDeleteRecording, () => setIsDeletePopupOpen(false)]
-          }
-          message={
-            deleteContext === "attachment"
-              ? "Would you like to delete all attachments or the entire row?"
-              : "Would you like to delete this recording?"
-          }
-          action1Label={
-            deleteContext === "attachment"
-              ? "Delete All Attachments"
-              : "Delete Recording"
-          }
-          action2Label={
-            deleteContext === "attachment" ? "Delete Entire Row" : "Cancel"
-          }
-          showAction2={deleteContext === "attachment"}
-        />
-      )} */}
     </div>
   );
 };

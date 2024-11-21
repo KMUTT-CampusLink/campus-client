@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useDiscussionPostBySectionID } from "../services/mutations";
 
-const PopupDiscussion = ({ closePopup }) => {
+const PopupDiscussion = ({ closePopup, onSubmit }) => {
+  // Added `onSubmit` as a prop
   const mutation = useDiscussionPostBySectionID(); // Use the mutation here
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -21,22 +22,22 @@ const PopupDiscussion = ({ closePopup }) => {
     }
 
     const newTopic = {
-      section_id: localStorage.getItem("sec_id"), // Retrieve section ID from localStorage
-      user_id: localStorage.getItem("userId"), // Replace with actual user ID logic
+      section_id: localStorage.getItem("sec_id"),
+      user_id: localStorage.getItem("userId"),
       title,
       content,
-      discussion_img: file ? file.name : null, // Use file name for now if a file is uploaded
+      discussion_img: file ? file.name : null,
     };
 
     try {
-      mutation.mutate(newTopic);
-      alert("Discussion successfully submitted!");
-      closePopup(); // Close the popup on success
+      await mutation.mutateAsync(newTopic); // Trigger the mutation
+      closePopup(); // Close popup after success
     } catch (error) {
       console.error("Error submitting discussion:", error);
-      alert("Failed to submit discussion. Please try again.");
     }
   };
+
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

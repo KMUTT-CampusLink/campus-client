@@ -3,25 +3,24 @@ import React from "react";
 import Searchbar from "../../components/Searchbar";
 import CourseCard from "../../components/CourseCard";
 import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar.jsx";
 import { useNavigate } from "react-router-dom";
 import { useAllCoursesByStudentID } from "../../services/queries.js";
 
 const StAllCourses = () => {
   const studentId = localStorage.getItem("studentId");
-  const { data: courses, isLoading } = useAllCoursesByStudentID(studentId);
+  const { data: allCourses } = useAllCoursesByStudentID(studentId);
   const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
-  const [filteredCourses, setFilteredCourses] = useState(courses);
+  const [filteredCourses, setFilteredCourses] = useState(allCourses);
 
   useEffect(() => {
-    setFilteredCourses(courses || []);
-  }, [courses]);
+    setFilteredCourses(allCourses || []);
+  }, [allCourses]);
 
   const searchFunction = () => {
-    const results = courses?.filter(
+    const results = allCourses?.filter(
       (course) =>
         course.course_name.toLowerCase().includes(search.toLowerCase()) ||
         course.code.toLowerCase().includes(search.toLowerCase())

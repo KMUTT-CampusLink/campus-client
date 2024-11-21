@@ -17,7 +17,6 @@ const CourseHeader = ({c_code, c_name, c_lecturer, c_time}) => {
         </div>
         <div className="text-gray-800">
           <span className="font-semibold">Time:</span> {`${c_time}`}
-          (Thursday)
         </div>
       </div>
     </div>

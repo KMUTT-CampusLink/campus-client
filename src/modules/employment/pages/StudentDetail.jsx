@@ -31,21 +31,24 @@ const StudentDetail = () => {
 
   useEffect(() => {
     const fetchStudent = async () => {
+      //debugger;
       try {
         const result = await axiosInstance.get(`employ/getStu/${id}`);
         setStudents(result.data);
-        if (!result.data.uni_batch) {
+        // debugger;
+        if (!result.data.uni_batch || result.status == 404) {
           console.error("Faculty data missing. Redirecting to main page.");
           navigate(`/employ/student`);
         }
       } catch (error) {
-        console.error("Error fetching student data:", error);
+        //console.error("Error fetching student data:", error);
+        navigate(`/employ/student`);
       }
     };
     fetchStudent();
   }, [id, navigate]);
 
-  console.log(student);
+  //console.log(student);
 
   if (!student) return <p>Loading student data...</p>;
 
@@ -69,7 +72,7 @@ const StudentDetail = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`employ/deleteStu/${id}`);
-      console.log("Delete successful");
+     // console.log("Delete successful");
       setDeleteSuccess(true);
       setShowPopup(false);
       navigate(`/employ/student`);

@@ -146,3 +146,36 @@ export const getRemainingTime = async (examId) => {
         return error.response.data;
     }
 }
+
+export const getFullMark = async(examId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getFullMark?examId=${examId}`
+      );
+      return response;
+  } catch (error) {
+      return error.response.data;
+  }
+}
+
+export const studentGetStudentScoreById = async (questionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getScoreById?questionId=${questionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const studentGetQuestionScore = async (questionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getstudentQuestionScore?questionId=${questionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};

@@ -70,7 +70,7 @@ const QrScannerComponent = () => {
       console.error("Error sending QR data:", error);
       if (error.response) {
         console.error("Error response from server:", error.response);
-        setMessage(`Error: ${error.response.data.message || "Unknown error"}`);
+        setMessage(`Error: ${error.response.data.message || 'Unknown error'}`);
       } else {
         setMessage("Failed to send QR data to backend.");
       }
@@ -92,11 +92,7 @@ const QrScannerComponent = () => {
       />
       {showSuccessCard && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <SuccessCard
-            message={message}
-            messageType={messageType}
-            onClose={handleCloseCard}
-          />
+          <SuccessCard message={message} messageType={messageType} onClose={handleCloseCard} />
         </div>
       )}
     </div>

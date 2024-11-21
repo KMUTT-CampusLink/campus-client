@@ -18,7 +18,7 @@ const StDashboard = () => {
   const studentId = localStorage.getItem("studentId");
   const semesterId = 1010;
   const navigate = useNavigate();
-  const { data: courses, isLoading } = useCoursesByStudentID(studentId);
+  const { data: courses } = useCoursesByStudentID(studentId);
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />
@@ -41,7 +41,7 @@ const StDashboard = () => {
             Courses
           </span>
         </div>
-        <Searchbar />
+
         <div className="w-3/4 m-auto">
           <div className="flex justify-between items-center gap-2 pb-3 lg:pr-10">
             <span className="text-4xl font-bold ">Recent Courses</span>

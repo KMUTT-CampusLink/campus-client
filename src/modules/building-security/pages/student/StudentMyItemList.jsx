@@ -52,9 +52,12 @@ export default function StudentMyItemList() {
 
   const handleStatusUpdate = async (id) => {
     try {
-      const response = await axiosInstance.patch(`/updateStatus/${id}`, {
-        status: newStatus,
-      });
+      const response = await axiosInstance.patch(
+        `/security/updateStatus/${id}`,
+        {
+          status: newStatus,
+        }
+      );
 
       if (response.data.success) {
         setRequests((prevRequests) =>
@@ -77,18 +80,19 @@ export default function StudentMyItemList() {
   return (
     <>
       <NavBar />
-      <div className="container">
-        <h1>My Item List</h1>
-        <p>Detailed information</p>
-        <div className="relative bg-gray-100 min-h-screen p-8">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
-            <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold">My Item List</h1>
+      <div className="container mx-auto px-4">
+        <br />
+        <br />
+        <div className="relative bg-gray-50 min-h-screen py-8">
+          <div className="max-w-5xl mx-auto bg-gradient-to-r from-gray-100 to-white rounded-2xl shadow-lg p-8">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+                My Item List
+              </h1>
               <button
-                className="bg-[#8b5b34] p-2 rounded-full shadow-lg hover:bg-[#6e3f35]"
-                onClick={() =>
-                  navigate("/security/student/lostandfound")
-                }
+                className="bg-[#8b5b34] p-3 rounded-full shadow-lg hover:bg-[#6e3f35] transition-all duration-300"
+                onClick={() => navigate("/security/student/lostandfound")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -106,37 +110,41 @@ export default function StudentMyItemList() {
                 </svg>
               </button>
             </div>
-            <hr className="my-4" />
-
-            <table className="w-full border-collapse text-left">
-              <thead>
-                <tr>
-                  <th className="p-3 text-gray-600">Items</th>
-                  <th className="p-3 text-gray-600">Room</th>
-                  <th className="p-3 text-gray-600">Detail</th>
-                  <th className="p-3 text-gray-600">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {requests &&
-                  requests.map((request) => (
+  
+            <hr className="my-4 border-gray-300" />
+  
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-lg">
+                <thead className="bg-gray-200 text-gray-700">
+                  <tr>
+                    <th className="p-4 text-left font-medium">Name</th>
+                    <th className="p-4 text-left font-medium">Room</th>
+                    <th className="p-4 text-left font-medium">Detail</th>
+                    <th className="p-4 text-left font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requests.map((request) => (
                     <tr
                       key={request.id}
-                      className="bg-white shadow-sm rounded-lg mb-4"
+                      className="bg-gray-50 border-b hover:bg-gray-100 transition-all duration-300"
                     >
-                      <td className="p-3">{request.name}</td>
-                      <td className="p-3">{request.found_location}</td>
-                      <td className="p-3">{request.description}</td>
+                      <td className="p-4 text-sm md:text-base">{request.name}</td>
+                      <td className="p-4 text-sm md:text-base">{request.floor_id}</td>
+                      <td className="p-4 text-sm md:text-base">
+                        {request.description}
+                      </td>
                       <td
-                        className="p-3"
+                        className="p-4 text-sm md:text-base"
                         style={getStatusStyle(request.status)}
                       >
                         {editingId === request.id ? (
-                          <div className="flex items-center">
+                          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
                             <select
                               value={newStatus}
                               onChange={handleStatusChange}
-                              className="border rounded p-1 mr-2"
+                              className="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-green-500"
                             >
                               <option value="Found">Found</option>
                               <option value="Returned">Returned</option>
@@ -144,27 +152,25 @@ export default function StudentMyItemList() {
                             </select>
                             <button
                               onClick={() => handleStatusUpdate(request.id)}
-                              className="bg-green-500 text-white px-2 rounded mr-1"
+                              className="bg-green-500 text-white px-3 py-1 rounded shadow hover:bg-green-600 transition-all duration-300"
                             >
                               Save
                             </button>
                             <button
                               onClick={() => setEditingId(null)}
-                              className="bg-red-500 text-white px-2 rounded"
+                              className="bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600 transition-all duration-300"
                             >
                               Cancel
                             </button>
                           </div>
                         ) : (
-                          <div
-                            className="flex items-center justify-between"
-                            style={{ minWidth: "90px" }}
-                          >
+                          <div className="flex items-center justify-between min-w-[90px]">
                             <span>{request.status}</span>
                             <button
                               onClick={() =>
                                 handleEditClick(request.id, request.status)
                               }
+                              className="text-blue-500 hover:text-blue-700 transition-all duration-300"
                             >
                               ✏️
                             </button>
@@ -173,11 +179,13 @@ export default function StudentMyItemList() {
                       </td>
                     </tr>
                   ))}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </>
   );
+  
 }

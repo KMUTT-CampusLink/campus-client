@@ -7,6 +7,11 @@ import BookPage from "../Pages/BookPage";
 import EventPage from "../Pages/EventPage";
 import AnnouncePage from "../Pages/AnnouncePage";
 import MyBookPage from "../Pages/MyBookPage";
+import BrowseBookPage from "../Pages/BrowseBookPage";
+import BookSearchPage from "../Pages/BookSearchPage";
+import ViewallBookPage from "../Pages/ViewallBookPage";
+import AuthRoute from "../../registration/middleware/AuthRoute";
+import AllEventPage from "../Pages/AllEventPage";
 
 export default function LibRoutes() {
   return [
@@ -16,11 +21,15 @@ export default function LibRoutes() {
     },
     {
       path: "/library/booklist",
-      element: <BookListPage />,
+      element: <BrowseBookPage />,
     },
     {
       path: "/library/mybook",
-      element: <MyBookPage />,
+      element: (
+        <AuthRoute>
+          <MyBookPage />
+        </AuthRoute>
+      ),
     },
     {
       path: "/library/contact",
@@ -29,6 +38,10 @@ export default function LibRoutes() {
     {
       path: "/library/announcement",
       element: <AnnouncementPage />,
+    },
+    {
+      path: "/library/event",
+      element: <AllEventPage />,
     },
     {
       path: "/library/book/:title",
@@ -44,7 +57,19 @@ export default function LibRoutes() {
     },
     {
       path: "/library/request/:title",
-      element: <RequestPage />,
+      element: (
+        <AuthRoute>
+          <RequestPage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "/library/search/:keyword",
+      element: <BookSearchPage />,
+    },
+    {
+      path: "/library/viewall/:category",
+      element: <ViewallBookPage />,
     },
   ];
 }
