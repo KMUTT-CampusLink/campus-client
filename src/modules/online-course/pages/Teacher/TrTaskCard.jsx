@@ -1,37 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useAllAssignmentsBySectionID } from "../../services/queries";
 
-const AssignmentsList = ({ sec_id, toSubmissionTr, handleEditClick, handleDeleteClick }) => {
-  const { data: assignments , isLoading, error } = useAllAssignmentsBySectionID(sec_id);
-  const [hasData, setHasData] = useState(false);
-
-  // Update hasData state based on assignments availability
-  useEffect(() => {
-    setHasData(assignments?.length > 0); // Simplified conditional
-  }, [assignments]);
-
+const AssignmentsList = ({
+  assignments = [],
+  toSubmissionTr,
+  handleEditClick,
+  handleDeleteClick,
+  isLoading,
+  error,
+}) => {
+  const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
+  import.meta.env.VITE_MINIO_BUCKET_NAME
+}`;
   return (
     <div className="max-md:text-xs max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
       {isLoading ? (
-        <p>Loading tasks...</p>
+        <div>Loading tasks...</div>
       ) : error ? (
-        <p className="text-red-500">Error loading tasks: {error.message}</p>
-      ) : !hasData ? (
+        <p className="text-red-500">
+          {error.message || "An error occurred while loading tasks."}
+        </p>
+      ) : assignments.length === 0 ? (
         <p>No assignments available</p>
       ) : (
-        assignments?.map((assignment) => (
+        assignments.map((assignment) => (
           <div key={assignment.id} className="grid grid-cols-3 gap-4 py-4">
-            <div onClick={() => toSubmissionTr(assignment)} className="cursor-pointer text-blue-500 hover:underline">
+            <div
+              onClick={() => toSubmissionTr(assignment)}
+              className="cursor-pointer text-blue-500 hover:underline"
+            >
               {assignment.title}
             </div>
-            <div>{assignment.description || "No description provided"}</div>
+            <div>
+              {assignment.description ? (
+
+                <a
+                href={`${MINIO_BASE_URL}/${assignment.description}`}
+                  download={`Assignment-${assignment.title}.pdf`}
+                  className="text-blue-500 underline"
+                >
+                  View/Download File
+                </a>
+              ) : (
+                "No file attached"
+              )}
+            </div>
             <div className="flex gap-2">
-              <button onClick={() => handleEditClick(assignment)} className="hover:scale-110 transition">
+              <button
+                onClick={() => handleEditClick(assignment)}
+                className="hover:scale-110 transition"
+                title="Edit Assignment"
+              >
                 <FontAwesomeIcon icon={faPenToSquare} color="blue" />
               </button>
-              <button onClick={() => handleDeleteClick(assignment)} className="hover:scale-110 transition">
+              <button
+                onClick={() => handleDeleteClick(assignment)}
+                className="hover:scale-110 transition"
+                title="Delete Assignment"
+              >
                 <FontAwesomeIcon icon={faTrash} color="red" />
               </button>
             </div>

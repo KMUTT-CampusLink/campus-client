@@ -87,8 +87,9 @@ export const useAllAssignmentsBySectionID = (sectionID) => {
   return useQuery({
     queryKey: ["assignments", sectionID],
     queryFn: async () => {
-      const data = await fetchAllAssignmentsBySectionID(sectionID);
-      return data;
+      const { assignments } = await fetchAllAssignmentsBySectionID(sectionID);
+      console.log("Fetched Assignments:", assignments); // Logs only the array
+      return assignments; // Return the assignments array directly
     },
     enabled: !!sectionID,
     onError: (error) => {
@@ -96,3 +97,4 @@ export const useAllAssignmentsBySectionID = (sectionID) => {
     },
   });
 };
+

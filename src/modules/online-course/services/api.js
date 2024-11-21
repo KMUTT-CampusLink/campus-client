@@ -60,14 +60,19 @@ export const fetchCourseHeaderBySectionIDForStudent = (sectionID) =>
 
 
 // assignment Teacher
+
 export const fetchAllAssignmentsBySectionID = (sectionID) =>
   get(`/courses/assignment/${sectionID}/all`);
-export const createAssignment = (newAssignment) =>
-  post("/courses/assignment/create", newAssignment);
+//export const createAssignment = (newAssignment) =>
+  //post("/courses/assignment/create", newAssignment);
 export const editAssignment = (assignmentID, updatedAssignment) =>
   put(`/courses/assignment/${assignmentID}/edit`, updatedAssignment);
 export const deleteAssignment = (assignmentID) =>
   remove(`/courses/assignment/${assignmentID}/delete`);
+
+export const createAssignment = (newAssignment) =>
+  post("/courses/assignment/upload", newAssignment); // Update the endpoint to match the file-upload functionality
+
 
 
 // discussion Teacher

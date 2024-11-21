@@ -76,19 +76,35 @@ export const useDeleteDiscussionPost = () => {
 };
 
 // Mutation to create a new assignment
+// export const useCreateAssignment = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation({
+//     mutationFn: createAssignment,
+//     onSuccess: () => {
+//       // Invalidate the assignments cache to refetch data
+//       queryClient.invalidateQueries(["assignments"]);
+//     },
+//     onError: (error) => {
+//       console.log(error);
+//     },
+//   });
+// };
+
 export const useCreateAssignment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createAssignment,
+    mutationFn: createAssignment, // The updated API function
     onSuccess: () => {
       // Invalidate the assignments cache to refetch data
       queryClient.invalidateQueries(["assignments"]);
     },
     onError: (error) => {
-      console.log(error);
+      console.error("Error creating assignment:", error);
     },
   });
 };
+
+
 
 // Mutation to edit an existing assignment
 export const useEditAssignment = () => {
