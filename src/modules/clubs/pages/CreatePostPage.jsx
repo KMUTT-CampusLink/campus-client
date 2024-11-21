@@ -124,7 +124,7 @@ function CreatePost() {
 
         {/* Photo Upload */}
         <div>
-          <label className="block text-xl font-semibold">Upload Photo</label>
+          <label className="block text-xl font-semibold">Upload Photo <span className="text-red-500">*</span></label>
           <input
             type="file"
             accept="image/*"
