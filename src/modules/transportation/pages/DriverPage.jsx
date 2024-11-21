@@ -19,6 +19,9 @@ const DriverPage = () => {
             console.error(error);
             setErrorMessage("Error scanning QR code. Try again.");
           },
+          // calculateScanRegion:
+          highlightScanRegion: true,
+          highlightCodeOutline: true,
         }
       );
       qrScanner.start();
