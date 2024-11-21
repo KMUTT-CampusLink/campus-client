@@ -9,7 +9,7 @@ import { useAllCoursesByStudentID } from "../../services/queries.js";
 
 const StAllCourses = () => {
   const studentId = localStorage.getItem("studentId");
-const {data: allCourses} = useAllCoursesByStudentID(studentId)
+  const { data: allCourses } = useAllCoursesByStudentID(studentId);
   const navigate = useNavigate();
 
   const [search, setSearch] = useState("");

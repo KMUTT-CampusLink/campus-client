@@ -15,12 +15,12 @@ const get = async (url) => {
   }
 };
 
-const post = async (url, payload) => {
+const post = async (url, body) => {
   try {
-    const { data } = await axiosInstance.post(url, payload);
+    const { data } = await axiosInstance.post(url, body);
     return data;
   } catch (error) {
-    handleApiError(error);
+    return error;
   }
 };
 
@@ -50,8 +50,25 @@ export const fetchAllCoursesByStudentID = (studentID) =>
   get(`/courses/student/${studentID}/all`);
 export const fetchAllCoursesByProfessorID = (professorID) =>
   get(`/courses/${professorID}/teach`);
+
 export const fetchCourseHeaderBySectionID = (sectionID) =>
-  get(`/courses/${sectionID}`);
+  get(`/courses/course/${sectionID}`);
+// Add a new function for student course header
+
+export const fetchCourseHeaderBySectionIDForStudent = (sectionID) =>
+  get(`/courses/student/course/${sectionID}`);
+
+// assignment Teacher
+export const fetchAllAssignmentsBySectionID = (sectionID) =>
+  get(`/courses/assignment/${sectionID}/all`);
+export const createAssignment = (newAssignment) =>
+  post("/courses/assignment/create", newAssignment);
+export const editAssignment = (assignmentID, updatedAssignment) =>
+  put(`/courses/assignment/${assignmentID}/edit`, updatedAssignment);
+export const deleteAssignment = (assignmentID) =>
+  remove(`/courses/assignment/${assignmentID}/delete`);
+
+// discussion Teacher
 export const fetchAllDiscussionPostsBySectionID = (sectionID) =>
   get(`/courses/discussion/${sectionID}`);
 export const fetchDiscussionPostBySectionID = (newTopic) =>
@@ -64,4 +81,3 @@ export const fetchAllCommentsByPostID = (postId) =>
   get(`/courses/discussion/view/${postId}/comment`);
 export const createDiscussionReply = (topicId, newReply) =>
   post(`/courses/discussion/${topicId}/comment/create`, newReply);
-

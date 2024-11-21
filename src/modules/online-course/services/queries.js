@@ -9,6 +9,8 @@ import {
   fetchAllVideos,
   fetchAllDiscussionPostsBySectionID,
   fetchAllCommentsByPostID,
+  fetchCourseHeaderBySectionIDForStudent,
+  fetchAllAssignmentsBySectionID,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -67,21 +69,42 @@ export const useCourseHeaderBySectionID = (sectionID) => {
     queryFn: () => fetchCourseHeaderBySectionID(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
-      console.log(error)
-    }
-  })
-}
+      console.log(error);
+    },
+  });
+};
 
 export const useAllDiscussionPostsBySectionID = (sectionID) => {
   return useQuery({
     queryKey: ["post", sectionID],
     queryFn: () => fetchAllDiscussionPostsBySectionID(sectionID),
+  });
+};
+
+export const useCourseHeaderBySectionIDForStudent = (sectionID) => {
+  return useQuery({
+    queryKey: ["section", sectionID],
+    queryFn: () => fetchCourseHeaderBySectionIDForStudent(sectionID),
     enabled: !!sectionID,
     onError: (error) => {
       console.log(error);
     },
   });
-}
+};
+
+export const useAllAssignmentsBySectionID = (sectionID) => {
+  return useQuery({
+    queryKey: ["assignments", sectionID],
+    queryFn: async () => {
+      const data = await fetchAllAssignmentsBySectionID(sectionID);
+      return data;
+    },
+    enabled: !!sectionID,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
 
 export const useAllCommentsByPostID = (postId) => {
   return useQuery({

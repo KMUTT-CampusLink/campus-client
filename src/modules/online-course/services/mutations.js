@@ -1,5 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchDiscussionPostBySectionID, deleteDiscussionPost, editDiscussionPost,createDiscussionReply } from "./api";
+import {
+  fetchDiscussionPostBySectionID,
+  deleteDiscussionPost,
+  editDiscussionPost,
+  createAssignment,
+  editAssignment,
+  deleteAssignment,
+} from "./api";
 
 export const useDiscussionPostBySectionID = () => {
   const queryClient = useQueryClient();
@@ -79,6 +86,51 @@ export const useCreateDiscussionReply = () => {
     },
     onError: (error) => {
       console.error("Error creating discussion reply:", error);
+    },
+  });
+};
+
+// Mutation to create a new assignment
+export const useCreateAssignment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createAssignment,
+    onSuccess: () => {
+      // Invalidate the assignments cache to refetch data
+      queryClient.invalidateQueries(["assignments"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+// Mutation to edit an existing assignment
+export const useEditAssignment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ assignmentID, body }) => editAssignment(assignmentID, body),
+    onSuccess: () => {
+      // Invalidate the assignments cache to refetch data
+      queryClient.invalidateQueries(["assignments"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+// Mutation to delete an assignment
+export const useDeleteAssignment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteAssignment,
+    onSuccess: () => {
+      // Invalidate the assignments cache to refetch data
+      queryClient.invalidateQueries(["assignments"]);
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 };
