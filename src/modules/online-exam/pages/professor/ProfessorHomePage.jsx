@@ -21,9 +21,13 @@ export default function ProfessorHomePage() {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const getAllExams = async () => {
-    const res = await getExams(sectionId);
-    setExams(res.data.exam);
-    setCourseTitle(res.data.courseTitle[0].name);
+    try{
+      const res = await getExams(sectionId);
+      setExams(res.data.exam);
+      setCourseTitle(res.data.courseTitle[0].name);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleRefresh = () => {
