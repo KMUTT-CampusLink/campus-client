@@ -66,9 +66,9 @@ const CommentPopup = ({ closePopup, postDetails }) => {
           </div>
           <div className="ml-[6%] mt-4">
             <h2 className="font-bold mb-2">
-              {comments[0]?.topic_title || "Untitled Topic"}
+              {comments?.[0]?.topic_title || "Untitled Topic"}
             </h2>
-            <p>{comments[0]?.topic_content || "No content available."}</p>
+            <p>{comments?.[0]?.topic_content || "No content available."}</p>
           </div>
         </div>
 

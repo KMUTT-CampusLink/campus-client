@@ -41,7 +41,7 @@ const StDashboard = () => {
             Courses
           </span>
         </div>
-        <Searchbar />
+
         <div className="w-3/4 m-auto">
           <div className="flex justify-between items-center gap-2 pb-3 lg:pr-10">
             <span className="text-4xl font-bold ">Recent Courses</span>

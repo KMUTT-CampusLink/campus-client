@@ -6,6 +6,7 @@ import {
   createAssignment,
   editAssignment,
   deleteAssignment,
+  createDiscussionReply,
 } from "./api";
 
 export const useDiscussionPostBySectionID = () => {
