@@ -11,6 +11,7 @@ const NavigationPage = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
   const navigate = useNavigate();
   // console.log(driverTrips);
+  console.log(userRole);
 
   const handleBookingClick = (trip_id) => {
     navigate(`/transport/booking/${trip_id}`);
@@ -52,6 +53,8 @@ const NavigationPage = () => {
             Search for Routes
           </Link>
         </div>
+
+        {userRole == null ? <></> : <p>Signed in as {userRole}</p>}
         {userRole === "Student" ? (
           <>
             <h3 className="text-2xl font-semibold text-gray-700 mb-4">
@@ -110,7 +113,7 @@ const NavigationPage = () => {
           </>
         ) : (
           <div className="text-center text-lg text-gray-700 mt-6">
-            <p>Not signed in</p>
+            <p>Not signed in as Student or a Driver</p>
           </div>
         )}
       </div>
