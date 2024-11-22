@@ -189,9 +189,8 @@ const TrCourseMaterials = () => {
           <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
           <button
             onClick={handleEditClick}
-            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${
-              isEditing ? "bg-red-500" : "bg-blue-500"
-            } text-white`}
+            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${isEditing ? "bg-red-500" : "bg-blue-500"
+              } text-white`}
           >
             <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="" />
             {isEditing ? (
