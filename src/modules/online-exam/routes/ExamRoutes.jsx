@@ -34,7 +34,7 @@ export default function ExamRoutes() {
           element: <StudentExamPage />,
         },
         {
-          path: "review/:examId",
+          path: "review/:examId/:studentExamId",
           element: <StudentReviewExamPage />,
         },
       ],
@@ -70,7 +70,7 @@ export default function ExamRoutes() {
           element: <ProfessorScoringPage />,
         },
         {
-          path: "overallScoring/:examId",
+          path: "overallScoring/:examId/:sectionId",
           element: <ProfessorOverallScoringPage />,
         },
       ],

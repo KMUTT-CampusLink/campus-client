@@ -9,14 +9,14 @@ const useStQr = () => {
 
   const items = [
     { label: "Attendance", key: "Attendance" },
-    { label: "QR CODE", key: "QR CODE" },
+    { label: "Scanner", key: "Scanner" },
   ];
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
-      navigate("/attendance");
-    } else if (key === "QR CODE") {
-      navigate("/attendance/qr");
+      navigate("/attendance/statt");
+    } else if (key === "Scanner") {
+      navigate("/attendance/stQr");
     }
   };
 

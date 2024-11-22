@@ -40,18 +40,18 @@ useEffect(() => {
   getAnnouncements(); // Call the function to fetch data
 }, []); */
 
-  const items = [
-    { label: "Attendance", key: "Attendance" },
-    { label: "QR CODE", key: "QR CODE" },
-  ];
+const items = [
+  { label: "Attendance", key: "Attendance" },
+  { label: "Scanner", key: "Scanner" },
+];
 
-  const handleMenuClick = (key) => {
-    if (key === "Attendance") {
-      navigate("/attendance");
-    } else if (key === "QR CODE") {
-      navigate("/attendance/qr");
-    }
-  };
+const handleMenuClick = (key) => {
+  if (key === "Attendance") {
+    navigate("/attendance/statt");
+  } else if (key === "Scanner") {
+    navigate("/attendance/stQr");
+  }
+};
 
   const handleSearch = () => {
     console.log(`Searching for: ${searchQuery}`);

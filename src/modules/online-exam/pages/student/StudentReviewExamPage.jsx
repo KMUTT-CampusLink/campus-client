@@ -5,22 +5,45 @@ import NavBar from '../../../registration/components/NavBarComponents/NavBar'
 import Chip from '../../components/professor/Scoring/Chip'
 import Question from '../../components/student/ReviewExamPage/Question'
 import { getStudentReview } from "../../services/apis/studentApi";
+import { getStudentScore } from "../../services/apis/professerApi";
+import { getFullMark } from "../../services/apis/studentApi";
+
 
 export default function StudentReviewExamPage() {
   const [permission, setPermission] = useState(1);
   const [studentAns, setStudentAns] = useState([]);
   const { examId } = useParams();
+  const studentExamId = useParams().studentExamId;
+  const [studentScore, setStudentScore] = useState(0);
+  const [fullMark,setFullMark] = useState(0);
   const fetchStudentAnswer = async () => {
     try {
       const res = await getStudentReview(examId);
-      console.log(res.data);
       setStudentAns(res.data);
     } catch (error) {
       console.error(error);
     }
   };
+  const getScore = async () => {
+    try {
+      const response = await getStudentScore(studentExamId);
+      setStudentScore(response.data.data.total_score);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getStudentFullMark = async() => {
+    try {
+      const response = await getFullMark(examId);
+      setFullMark(response.data.data.full_mark);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchStudentAnswer();
+    getScore();
+    getStudentFullMark();
   }, []);
   return (
     <>
@@ -34,7 +57,9 @@ export default function StudentReviewExamPage() {
           <div className="flex flex-col items-end">
             <Chip />
             <div className="flex gap-1">
-              <p className="text-[22px] lg:text-[30px]">100/100</p>
+              <p className="text-[22px] lg:text-[30px]">
+                {studentScore}/{fullMark}
+              </p>
               {/* <p className="text-[30px]">/</p>
             <p className="text-[30px]">100</p> */}
             </div>
@@ -50,6 +75,7 @@ export default function StudentReviewExamPage() {
                 choice={item.exam_choice}
                 type={item.type}
                 studentAnswer={item.student_answer}
+                questionId={item.id}
                 className="w-[67%] h-auto"
               />
             ))}

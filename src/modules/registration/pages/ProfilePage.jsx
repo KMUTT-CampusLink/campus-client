@@ -53,10 +53,10 @@ function ProfilePage() {
               <img
                 src="/logos/profile-pic.png"
                 alt="Logo"
-                className="w-full h-full rounded-full object-cover border-4 border-gray-200"
+                className="object-cover w-full h-full border-4 border-gray-200 rounded-full"
               />
             </div>
-            <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
+            <div className="p-4 mt-4 bg-white rounded-lg shadow-md">
               <div className="flex items-center space-x-2">
                 <FontAwesomeIcon
                   icon={faGraduationCap}
@@ -67,7 +67,7 @@ function ProfilePage() {
                   <p className="font-semibold">{profileData?.degree_level}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="flex items-center mt-4 space-x-2">
                 <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
                 <div>
                   <p className="text-sm text-gray-500">Personal email</p>
@@ -76,20 +76,20 @@ function ProfilePage() {
               </div>
             </div>
 
-            <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
+            <div className="p-4 mt-6 bg-white rounded-lg shadow-md">
               <h3 className="text-lg font-semibold">Contact Information</h3>
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="flex items-center mt-4 space-x-2">
                 <FontAwesomeIcon icon={faPhone} className="text-gray-600" />
                 <p className="font-semibold">{profileData?.phone}</p>
               </div>
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="flex items-center mt-4 space-x-2">
                 <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
                 <p className="font-semibold">{profileData?.personal_email}</p>
               </div>
             </div>
-            <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
-              <div className="flex space-x-2 items-center">
-                <FontAwesomeIcon icon={faUser} className=" text-gray-600" />
+            <div className="p-4 mt-6 bg-white rounded-lg shadow-md ">
+              <div className="flex items-center space-x-2">
+                <FontAwesomeIcon icon={faUser} className="text-gray-600 " />
                 <h3 className="text-lg font-semibold">Personal Information</h3>
               </div>
 
@@ -106,9 +106,9 @@ function ProfilePage() {
                 </p>
               </div>
             </div>
-            <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
-              <div className="flex space-x-2 items-center">
-                <FontAwesomeIcon icon={faHome} className=" text-gray-600" />
+            <div className="p-4 mt-6 bg-white rounded-lg shadow-md ">
+              <div className="flex items-center space-x-2">
+                <FontAwesomeIcon icon={faHome} className="text-gray-600 " />
                 <h3 className="text-lg font-semibold">Current Address</h3>
               </div>
 
@@ -137,7 +137,7 @@ function ProfilePage() {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-lg">
+          <div className="p-4 bg-white rounded-lg shadow-lg">
             <SInfoCard />
             <GradeCard
               studentId={studentId}

@@ -19,6 +19,7 @@ import TransRoutes from "./modules/transportation/routes/TransRoutes";
 import HomePage from "./modules/dev/pages/HomePage";
 import NotFound from "./modules/dev/pages/NotFound";
 import UnAuthorized from "./modules/dev/pages/UnAuthorized";
+import AuthRoute from "./modules/registration/middleware/AuthRoute";
 
 const main_router = [
   {
@@ -27,7 +28,11 @@ const main_router = [
     children: [
       {
         path: "",
-        element: <HomePage />,
+        element: (
+          <AuthRoute>
+            <HomePage />
+          </AuthRoute>
+        ),
       },
       {
         path: "attendance",
