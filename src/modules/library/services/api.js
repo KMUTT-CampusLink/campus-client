@@ -138,3 +138,14 @@ export const makeReservation = async (reservationData) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+
+// Function to fetch books with duplicates
+export const fetchEveryBook = async () => {
+  try {
+    const response = await axiosInstance.get("/library/everyBook");
+    return response.data; // Return the data from the API
+  } catch (error) {
+    console.error("Error fetching books with duplicates:", error);
+    return null; // Return null in case of an error
+  }
+};
