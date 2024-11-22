@@ -33,7 +33,7 @@ const CourseCard = ({ course }) => {
         </p>
       </div>
 
-      <h3 className="mt-1 text-base max-lg:text-sm font-bold px-4 transition-colors duration-300 ease-in-out hover:text-blue-500">
+      <h3 className="mt-1 text-base max-lg:text-sm font-semibold px-4 transition-colors duration-300 ease-in-out hover:text-blue-500">
         {course?.course_name}
       </h3>
       <p className="px-4 pb-4 text-gray-600 text-sm max-lg:text-xs transition-colors duration-300 ease-in-out hover:text-gray-800">

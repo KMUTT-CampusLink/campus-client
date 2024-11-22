@@ -33,7 +33,7 @@ const TrDashboard = () => {
           setSearch={setSearch}
           searchFunction={searchFunction}
         />
-        <div className="w-3/4 m-auto">
+        <div className="w-5/6 m-auto pt-4">
           <span className="text-3xl font-bold pb-4 2xl:text-5xl">
             All Courses
           </span>
