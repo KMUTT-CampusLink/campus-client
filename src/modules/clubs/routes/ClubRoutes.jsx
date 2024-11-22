@@ -10,8 +10,9 @@ import AdminMainPage from "../pages/AdminMainPage";
 import ClubCreatePage from "../pages/ClubCreatePage";
 import JoinFormPage from "../pages/JoinFormPage";
 import ClubDetailPage from "../pages/ClubDetailPage";
-import ClubHomePage from "../pages/ClubHomePage";
+import ClubHomePage from "../pages/AdminClubHomePage";
 import CreateAnnouncement from "../pages/CreateAnnouncementsPage";
+import MemClubHomePage from "../pages/MemClubHomePage";
 
 export default function ClubRoutes() {
   return [
@@ -42,7 +43,7 @@ export default function ClubRoutes() {
           element: <JoinFormPage />,
         },
         {
-          path: "club-home", // Club home page at "/clubs/club-home"
+          path: "club-home/:clubId", // Club home page at "/clubs/club-home"
           element: <ClubHomePage />,
         },
       ],
@@ -73,26 +74,26 @@ export default function ClubRoutes() {
           element: <ClubCreatePage />,
         },
         {
-          path: "view-requests", // Admin view requests at "/clubs/admin/view-requests"
+          path: ":clubId/view-requests", // Admin view requests at "/clubs/admin/view-requests"
           element: <ViewRequest />,
         },
         {
-          path: "create-post", // Admin create post at "/clubs/admin/create-post"
+          path: "create-post/:clubId", // Admin create post at "/clubs/admin/create-post"
           element: <CreatePost />,
         },
         {
-          path: "create-announcement", // Admin create announcement at "/clubs/admin/create-announcement"
+          path: "create-announcement/:clubId", // Admin create announcement at "/clubs/admin/create-announcement"
           element: <CreateAnnouncement />,
         },
         {
-          path: "notifications", // Admin notifications at "/clubs/admin/notifications"
+          path: ":clubId/notifications", // Admin notifications at "/clubs/admin/notifications"
           element: <AdminNotification />,
         },
       ],
     },
     // Member Section under /clubs/member
     {
-      path: "/clubs/member",
+      path: "/clubs/member/:memberId",
       element: (
         <div>
           <NavBar />
@@ -114,6 +115,10 @@ export default function ClubRoutes() {
         {
           path: "notifications", // Member notifications at "/clubs/member/notifications"
           element: <AdminNotification />, // Ensure Notifications component is correctly imported
+        },
+        {
+          path: "club-home/:clubId", 
+          element: <MemClubHomePage />, 
         },
       ],
     },

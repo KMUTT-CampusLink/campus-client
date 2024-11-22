@@ -53,25 +53,25 @@ function DropCoursePage() {
       <main className={mainStyles}>
         <HeadLineCard title="Drop Courses" link="/regis/course/detail" />
         <div className="divider"></div>
-        <div className="bg-white p-6 shadow-md rounded-md">
+        <div className="p-6 bg-white rounded-md shadow-md">
           {courses?.length === 0 ? (
-            <div className="text-center py-6">
+            <div className="py-6 text-center">
               <p>No active courses available for this student.</p>
             </div>
           ) : (
-            <div className="bg-gray-200 rounded-md overflow-x-auto">
+            <div className="overflow-x-auto bg-gray-200 rounded-md">
               <table className="min-w-full text-left border">
-                <thead>
+                <thead className="text-center">
                   <tr className="bg-[#c3554e] text-white">
-                    <th className="py-2 px-4 border border-gray-300">Drop</th>
-                    <th className="py-2 px-4 border border-gray-300">Code</th>
-                    <th className="py-2 px-4 border border-gray-300">
+                    <th className="px-4 py-2 border border-gray-300">Drop</th>
+                    <th className="px-4 py-2 border border-gray-300">Code</th>
+                    <th className="px-4 py-2 border border-gray-300">
                       Section Data
                     </th>
-                    <th className="py-2 px-4 border border-gray-300">
+                    <th className="px-4 py-2 border border-gray-300">
                       Professors
                     </th>
-                    <th className="py-2 px-4 border border-gray-300">
+                    <th className="px-4 py-2 border border-gray-300">
                       Credits
                     </th>
                   </tr>
@@ -79,7 +79,7 @@ function DropCoursePage() {
                 <tbody>
                   {courses.map((course, index) => (
                     <tr key={index} className="odd:bg-white even:bg-gray-100">
-                      <td className="py-2 px-4 border border-gray-300 text-center">
+                      <td className="px-4 py-2 text-center border border-gray-300">
                         <input
                           type="radio"
                           name="course"
@@ -87,18 +87,18 @@ function DropCoursePage() {
                           onChange={() => setSelectedEnrollmentId(course.ed_id)}
                         />
                       </td>
-                      <td className="py-2 px-4 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300">
                         {course.course_code}
                       </td>
-                      <td className="py-2 px-4 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300">
                         <div>{course.section_name}</div>
                         <div>{course.section_day}</div>
                         <div>{`${course.start_time} - ${course.end_time}`}</div>
                       </td>
-                      <td className="py-2 px-4 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300">
                         {course.professor_names}
                       </td>
-                      <td className="py-2 px-4 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300">
                         {course.credits}
                       </td>
                     </tr>
@@ -107,7 +107,7 @@ function DropCoursePage() {
               </table>
             </div>
           )}
-          <div className="grid sm:grid-cols-2 gap-2 py-4">
+          <div className="grid gap-2 py-4 sm:grid-cols-2">
             <button className={`${button}`} onClick={() => navigate(-1)}>
               Back
             </button>

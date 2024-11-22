@@ -33,22 +33,26 @@ const EmployeeDetail = () => {
     const fetchEmployee = async () => {
       try {
         const result = await axiosInstance.get(`employ/getEmp/${id}`);
-        setEmployee(result.data);
-
         if (!result.data.faculty) {
           console.error("Faculty data missing. Redirecting to main page.");
-          navigate(`/employ`);
+          navigate(`/employ/employee`);
+        } else {
+          setEmployee(result.data);
         }
       } catch (error) {
-        console.error("Error fetching employee data:", error);
+        //console.error("Error fetching employee data:", error);
+        return navigate(`/employ/employee`);
       }
     };
     fetchEmployee();
   }, [id, navigate]);
 
-  console.log(employee);
+  //console.log(employee);
 
-  if (!employee) return <p>Loading employee data...</p>;
+  // if (!employee) return <p>Loading employee data...</p>;
+  if (!employee) {
+    return navigate(`/employ/employee`);
+  }
 
   const dobS = employee.date_of_birth;
   const dob = new Date(dobS);
@@ -70,10 +74,15 @@ const EmployeeDetail = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`employ/deleteEmp/${id}`);
-      console.log("Delete successful");
-      setDeleteSuccess(true);
-      setShowPopup(false);
-      navigate(`/employ/employee`);
+      if (!response.data) {
+        console.error("Employee not found. Redirecting...");
+        navigate(`/employ/employee`);
+      } else {
+        //console.log("Delete successful");
+        setDeleteSuccess(true);
+        setShowPopup(false);
+        navigate(`/employ/employee`);
+      }
     } catch (error) {
       console.error("Error deleting employee:", error);
     }

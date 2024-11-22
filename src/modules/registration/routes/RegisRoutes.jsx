@@ -10,6 +10,7 @@ import AuthRoute from "../middleware/AuthRoute";
 import PeriodPage from "../pages/PeriodPage";
 import ProfilePage from "../pages/ProfilePage";
 import AdminPage from "../pages/AdminPage";
+import WithdrawPage from "../pages/WithdrawPage";
 
 export default function RegisRoutes() {
   return [
@@ -54,6 +55,14 @@ export default function RegisRoutes() {
       element: (
         <AuthRoute allowed_roles={["Student"]}>
           <DropCoursePage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "course/withdraw",
+      element: (
+        <AuthRoute allowed_roles={["Student"]}>
+          <WithdrawPage />
         </AuthRoute>
       ),
     },

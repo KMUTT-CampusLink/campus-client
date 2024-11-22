@@ -1,377 +1,32 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const ClubHomeMemLis = (props) => {
-  const clubMembers = [
-    {
-      id: 1,
-      club_id: 101,
-      student_id: 1001,
-      name: "Alice Johnson",
-      is_admin: true,
-      created_at: "2023-09-12 14:23:56",
-      updated_at: 1694532236,
-    },
-    {
-      id: 2,
-      club_id: 101,
-      student_id: 1002,
-      name: "Brian Smith",
-      is_admin: false,
-      created_at: "2023-09-13 09:15:34",
-      updated_at: 1694602534,
-    },
-    {
-      id: 3,
-      club_id: 102,
-      student_id: 1003,
-      name: "Charlie Brown",
-      is_admin: true,
-      created_at: "2023-10-01 11:45:23",
-      updated_at: 1696157123,
-    },
-    {
-      id: 4,
-      club_id: 102,
-      student_id: 1004,
-      name: "Diana Prince",
-      is_admin: false,
-      created_at: "2023-10-05 08:30:00",
-      updated_at: 1696591800,
-    },
-    {
-      id: 5,
-      club_id: 103,
-      student_id: 1005,
-      name: "Edward Norton",
-      is_admin: false,
-      created_at: "2023-10-10 17:22:10",
-      updated_at: 1696940530,
-    },
-    {
-      id: 6,
-      club_id: 103,
-      student_id: 1006,
-      name: "Fiona Green",
-      is_admin: true,
-      created_at: "2023-10-12 14:00:00",
-      updated_at: 1697085600,
-    },
-    {
-      id: 7,
-      club_id: 104,
-      student_id: 1007,
-      name: "George Martin",
-      is_admin: false,
-      created_at: "2023-09-15 12:34:12",
-      updated_at: 1694770452,
-    },
-    {
-      id: 8,
-      club_id: 104,
-      student_id: 1008,
-      name: "Hannah Baker",
-      is_admin: false,
-      created_at: "2023-09-20 08:22:19",
-      updated_at: 1695220939,
-    },
-    {
-      id: 9,
-      club_id: 105,
-      student_id: 1009,
-      name: "Ian Malcolm",
-      is_admin: false,
-      created_at: "2023-10-08 10:12:45",
-      updated_at: 1696782765,
-    },
-    {
-      id: 10,
-      club_id: 105,
-      student_id: 1010,
-      name: "Jessica Jones",
-      is_admin: false,
-      created_at: "2023-09-25 18:55:23",
-      updated_at: 1695666923,
-    },
-    {
-      id: 11,
-      club_id: 106,
-      student_id: 1011,
-      name: "Kevin Spacey",
-      is_admin: false,
-      created_at: "2023-10-02 16:05:32",
-      updated_at: 1696242332,
-    },
-    {
-      id: 12,
-      club_id: 106,
-      student_id: 1012,
-      name: "Lily Evans",
-      is_admin: false,
-      created_at: "2023-10-06 07:14:10",
-      updated_at: 1696576450,
-    },
-    {
-      id: 13,
-      club_id: 107,
-      student_id: 1013,
-      name: "Mike Wazowski",
-      is_admin: false,
-      created_at: "2023-10-09 12:22:56",
-      updated_at: 1696850576,
-    },
-    {
-      id: 14,
-      club_id: 107,
-      student_id: 1014,
-      name: "Nina Williams",
-      is_admin: false,
-      created_at: "2023-09-28 15:44:23",
-      updated_at: 1695907463,
-    },
-    {
-      id: 15,
-      club_id: 108,
-      student_id: 1015,
-      name: "Oscar Isaac",
-      is_admin: false,
-      created_at: "2023-09-19 13:00:00",
-      updated_at: 1695109200,
-    },
-    {
-      id: 16,
-      club_id: 108,
-      student_id: 1016,
-      name: "Paula Patton",
-      is_admin: false,
-      created_at: "2023-09-22 09:20:18",
-      updated_at: 1695373218,
-    },
-    {
-      id: 17,
-      club_id: 109,
-      student_id: 1017,
-      name: "Quincy Adams",
-      is_admin: false,
-      created_at: "2023-10-04 11:45:55",
-      updated_at: 1696412755,
-    },
-    {
-      id: 18,
-      club_id: 109,
-      student_id: 1018,
-      name: "Rachel Green",
-      is_admin: false,
-      created_at: "2023-09-30 14:32:09",
-      updated_at: 1696079529,
-    },
-    {
-      id: 19,
-      club_id: 110,
-      student_id: 1019,
-      name: "Sam Wilson",
-      is_admin: false,
-      created_at: "2023-10-03 07:50:11",
-      updated_at: 1696331411,
-    },
-    {
-      id: 20,
-      club_id: 110,
-      student_id: 1020,
-      name: "Tina Fey",
-      is_admin: false,
-      created_at: "2023-10-11 16:12:44",
-      updated_at: 1697038364,
-    },
-    {
-      id: 21,
-      club_id: 101,
-      student_id: 1001,
-      name: "Alice Johnson",
-      is_admin: false,
-      created_at: "2023-09-12 14:23:56",
-      updated_at: 1694532236,
-    },
-    {
-      id: 22,
-      club_id: 101,
-      student_id: 1002,
-      name: "Brian Smith",
-      is_admin: false,
-      created_at: "2023-09-13 09:15:34",
-      updated_at: 1694602534,
-    },
-    {
-      id: 23,
-      club_id: 102,
-      student_id: 1003,
-      name: "Charlie Brown",
-      is_admin: false,
-      created_at: "2023-10-01 11:45:23",
-      updated_at: 1696157123,
-    },
-    {
-      id: 24,
-      club_id: 102,
-      student_id: 1004,
-      name: "Diana Prince",
-      is_admin: false,
-      created_at: "2023-10-05 08:30:00",
-      updated_at: 1696591800,
-    },
-    {
-      id: 25,
-      club_id: 103,
-      student_id: 1005,
-      name: "Edward Norton",
-      is_admin: false,
-      created_at: "2023-10-10 17:22:10",
-      updated_at: 1696940530,
-    },
-    {
-      id: 26,
-      club_id: 103,
-      student_id: 1006,
-      name: "Fiona Green",
-      is_admin: false,
-      created_at: "2023-10-12 14:00:00",
-      updated_at: 1697085600,
-    },
-    {
-      id: 27,
-      club_id: 104,
-      student_id: 1007,
-      name: "George Martin",
-      is_admin: false,
-      created_at: "2023-09-15 12:34:12",
-      updated_at: 1694770452,
-    },
-    {
-      id: 28,
-      club_id: 104,
-      student_id: 1008,
-      name: "Hannah Baker",
-      is_admin: false,
-      created_at: "2023-09-20 08:22:19",
-      updated_at: 1695220939,
-    },
-    {
-      id: 29,
-      club_id: 105,
-      student_id: 1009,
-      name: "Ian Malcolm",
-      is_admin: false,
-      created_at: "2023-10-08 10:12:45",
-      updated_at: 1696782765,
-    },
-    {
-      id: 30,
-      club_id: 105,
-      student_id: 1010,
-      name: "Jessica Jones",
-      is_admin: false,
-      created_at: "2023-09-25 18:55:23",
-      updated_at: 1695666923,
-    },
-    {
-      id: 31,
-      club_id: 106,
-      student_id: 1011,
-      name: "Kevin Spacey",
-      is_admin: false,
-      created_at: "2023-10-02 16:05:32",
-      updated_at: 1696242332,
-    },
-    {
-      id: 32,
-      club_id: 106,
-      student_id: 1012,
-      name: "Lily Evans",
-      is_admin: false,
-      created_at: "2023-10-06 07:14:10",
-      updated_at: 1696576450,
-    },
-    {
-      id: 33,
-      club_id: 107,
-      student_id: 1013,
-      name: "Mike Wazowski",
-      is_admin: false,
-      created_at: "2023-10-09 12:22:56",
-      updated_at: 1696850576,
-    },
-    {
-      id: 34,
-      club_id: 107,
-      student_id: 1014,
-      name: "Nina Williams",
-      is_admin: false,
-      created_at: "2023-09-28 15:44:23",
-      updated_at: 1695907463,
-    },
-    {
-      id: 35,
-      club_id: 108,
-      student_id: 1015,
-      name: "Oscar Isaac",
-      is_admin: false,
-      created_at: "2023-09-19 13:00:00",
-      updated_at: 1695109200,
-    },
-    {
-      id: 36,
-      club_id: 108,
-      student_id: 1016,
-      name: "Paula Patton",
-      is_admin: false,
-      created_at: "2023-09-22 09:20:18",
-      updated_at: 1695373218,
-    },
-    {
-      id: 37,
-      club_id: 109,
-      student_id: 1017,
-      name: "Quincy Adams",
-      is_admin: false,
-      created_at: "2023-10-04 11:45:55",
-      updated_at: 1696412755,
-    },
-    {
-      id: 38,
-      club_id: 109,
-      student_id: 1018,
-      name: "Rachel Green",
-      is_admin: false,
-      created_at: "2023-09-30 14:32:09",
-      updated_at: 1696079529,
-    },
-    {
-      id: 39,
-      club_id: 110,
-      student_id: 1019,
-      name: "Sam Wilson",
-      is_admin: false,
-      created_at: "2023-10-03 07:50:11",
-      updated_at: 1696331411,
-    },
-    {
-      id: 40,
-      club_id: 110,
-      student_id: 1020,
-      name: "Tina Fey",
-      is_admin: false,
-      created_at: "2023-10-11 16:12:44",
-      updated_at: 1697038364,
-    },
-  ];
-
-  const { toggleRight } = props;
-
-  const admins = clubMembers.filter((members) => members.is_admin == true);
-  const members = clubMembers.filter((members) => members.is_admin == false);
-
+  const { clubId } = useParams();
+  const [clubMembers, setClubMemebers] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { toggleRight } = props;
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await axiosInstance.get(`/clubs/members/${clubId}`);
+        setClubMemebers(response.data.data);
+      } catch (error) {
+        console.error("Error fetching club members:", error);
+      }
+    };
+    fetchMembers();
+  }, [clubId]);
+
+  const admins = clubMembers.filter((members) => members.is_admin);
+  const members = clubMembers.filter(
+    (members) => members.status === "Accepted" && !members.is_admin
+  );
+  //console.log(admins, members);
 
   const handleClick = (item) => {
     setSelectedItem(item);
@@ -384,18 +39,39 @@ const ClubHomeMemLis = (props) => {
     setSelectedItem(null);
   };
 
+  const renderName = (members) => {
+    if (members.student) {
+      return `${members.student.firstname || ""} ${
+        members.student.midname || ""
+      } ${members.student.lastname || ""}`;
+    }
+
+    if (members.employee) {
+      return (
+        "Prof. " +
+        `${members.employee.firstname || ""} ${
+          members.employee.midname || ""
+        } ${members.employee.lastname || ""}`
+      );
+    }
+    return "Unknown";
+  };
+
   return (
     <div
       className={` ${
         toggleRight ? "grid" : "hidden"
-      } md:grid border-solid border-[1px] rounded-lg md:rounded-l-none p-4 h-max`}
+      } md:grid border-solid border-[1px] sm:border-black md:border-none rounded-lg md:rounded-l-none p-4 h-max`}
     >
       <div className="">
         <h5 className="  pt-3 mb-3 m-auto text-center font-semibold w-4/5 border-b-2 border-black border-solid">
           Admin
         </h5>
-        {admins.map((admins) => (
-          <div className="flex ml-[7%] p-0.5 mr-auto items-center space-x-2">
+        {admins.map((admins, key) => (
+          <div
+            key={key}
+            className="flex ml-[7%] p-0.5 mr-auto items-center space-x-2"
+          >
             <img
               className="w-[10%] aspect-square rounded-full"
               src="https://i.imgur.com/xKf7cjo.png"
@@ -404,9 +80,8 @@ const ClubHomeMemLis = (props) => {
             <h5
               onClick={() => handleClick(admins)}
               className="cursor-pointer px-3"
-              key={admins.id}
             >
-              {admins.name}
+              {renderName(admins)}
             </h5>
           </div>
         ))}
@@ -415,8 +90,11 @@ const ClubHomeMemLis = (props) => {
         Member
       </h5>
       <div className="overflow-y-scroll h-full">
-        {members.map((members) => (
-          <div className="ml-[7%] mr-auto p-0.5 flex items-center space-x-2">
+        {members.map((members, key) => (
+          <div
+            key={key}
+            className="ml-[7%] mr-auto p-0.5 flex items-center space-x-2"
+          >
             <img
               className=" w-[10%] aspect-square rounded-full"
               src="https://i.imgur.com/xKf7cjo.png"
@@ -425,42 +103,81 @@ const ClubHomeMemLis = (props) => {
             <h5
               onClick={() => handleClick(members)}
               className="cursor-pointer px-3"
-              key={members.id}
             >
-              {members.name}
+              {renderName(members)}
             </h5>
           </div>
         ))}
       </div>
 
-      {isModalOpen && (
+      {isModalOpen && selectedItem && (
         <div
+          className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex items-center justify-center"
           onClick={closeModal}
-          className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex items-center justify-center text-left text-white"
         >
-          <div className="bg-[#505050] px-[8%] md:px-[5%] py-[3%] rounded-xl shadow-lg aspect-[4/3] w-[85%] md:w-[30%] ">
-            <h2 className="text-lg mb-2"></h2>
-            {selectedItem && (
-              <div className="">
-                <img
-                  className="w-[20%] aspect-square rounded-full m-auto"
-                  src="https://i.imgur.com/xKf7cjo.png"
-                  alt="avatar"
-                />
-                <p>
-                  <h2>StudentID: {selectedItem.student_id}</h2>
-                </p>
-                <p>
-                  <h2>Name: {selectedItem.name}</h2>
-                </p>
-              </div>
-            )}
+          <div
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+            style={{
+              background: "rgba(255, 255, 255, 0.9)",
+              backdropFilter: "blur(8px)",
+            }}
+            className="px-[8%] md:px-[5%] py-[3%] rounded-xl shadow-lg w-[85%] md:w-[30%]"
+          >
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 text-xl font-bold text-gray-700 hover:text-gray-900"
+            >
+              ×
+            </button>
+            <div className="text-left">
+              {selectedItem.student && (
+                <div>
+                  <img
+                    className="w-[25%] aspect-square rounded-full m-auto"
+                    src="https://i.imgur.com/xKf7cjo.png"
+                    alt="avatar"
+                  />
+                  <h2 className="text-center text-xl font-bold mt-3">
+                    Student Details
+                  </h2>
+                  <p>
+                    <strong>ID: </strong>
+                    {selectedItem.student.id}
+                  </p>
+                  <p>
+                    <strong>Name: </strong>
+                    {selectedItem.student.firstname}{" "}
+                    {selectedItem.student.lastname}
+                  </p>
+                  <p className="mb-2">
+                    <strong>Line ID:</strong>{" "}
+                    {selectedItem.student.line_id || "Not provided"}
+                  </p>
+                </div>
+              )}
+              {selectedItem.employee && (
+                <div className="text-center border-t-2 border-gray-300 pt-4">
+                  <img
+                    className="w-[20%] aspect-square rounded-full m-auto"
+                    src="https://i.imgur.com/xKf7cjo.png"
+                    alt="avatar"
+                  />
+                  <h2 className="text-xl font-bold mt-3">Professor Details</h2>
+                  <p>Employee ID: {selectedItem.employee.id}</p>
+                  <p>
+                    Name: Prof. {selectedItem.employee.firstname}{" "}
+                    {selectedItem.employee.lastname}
+                  </p>
+                  <p>Department: Add department info here</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
-      <button className="flex w-max px-[5%] bg-red-500 text-white py-2 my-3 rounded">
+      {/* <button className="flex w-max px-[5%] bg-red-500 text-white py-2 my-3 rounded">
         Leave
-      </button>
+      </button> */}
     </div>
   );
 };
