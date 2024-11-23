@@ -27,19 +27,31 @@ const post = async (url, payload) => {
   }
 };
 
+// Generic DELETE request
+const del = async (url, payload) => {
+  try {
+    const response = await axiosInstance.delete(url, payload);
+    return response;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 // API calls
 
 export const fetchDriverTrips = () => get("/transport/driver/trips");
 export const fetchBookingsForTrip = (tripID) =>
   get(`/transport/driver/tripBookings/${tripID}`);
 
-export const bookTrip = (tripID) => post(`/transport/user/book`, { tripID });
+export const deleteBooking = (bookingID) =>
+  del("/transport/user/booking", { bookingID });
+export const bookTrip = (tripID) => post(`/transport/user/booking`, { tripID });
 export const fetchUserBookings = () => get("/transport/user/bookings");
 export const fetchAllStops = () => get("/transport/user/queryAllStops");
 export const isBooked = (tripID) => get(`/transport/user/isBooked/${tripID}`);
 
 /**
- * Fetches the route connecting two stops.
+ * Fetches the routes connecting two stops.
  *
  * @param {int} startStopID - The ID of the starting stop.
  * @param {int} endStopId - The ID of the ending stop.
