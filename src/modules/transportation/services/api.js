@@ -30,7 +30,7 @@ const post = async (url, payload) => {
 // Generic DELETE request
 const del = async (url, payload) => {
   try {
-    const response = await axiosInstance.delete(url, payload);
+    const response = await axiosInstance.delete(url, { data: payload });
     return response;
   } catch (error) {
     handleApiError(error);

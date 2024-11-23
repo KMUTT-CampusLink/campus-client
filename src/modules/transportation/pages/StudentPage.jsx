@@ -1,43 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
-import {
-  fetchUserBookings,
-  fetchDriverTrips,
-  deleteBooking,
-} from "../services/api";
+import { fetchUserBookings, deleteBooking } from "../services/api";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const StudentPage = () => {
   const [userBookings, setUserBookings] = useState([]);
-  const [driverTrips, setDriverTrips] = useState([]);
-  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
   const navigate = useNavigate();
 
   const handleBookingClick = (trip_id) => {
     navigate(`/transport/booking/${trip_id}`);
   };
 
-  const handleDeleteBookingClick = (bookingID) => {};
+  const handleDeleteBookingClick = (bookingID) => {
+    deleteBooking(bookingID).then(() => {
+      fetchUserBookings().then((data) => {
+        setUserBookings(data.bookings);
+      });
+    });
+  };
 
   // Fetch user's bookings if they are authenticated
   useEffect(() => {
-    switch (userRole) {
-      case "Driver":
-        fetchDriverTrips().then((data) => {
-          setDriverTrips(data.trips);
-        });
-        break;
-      case "Student":
-        fetchUserBookings().then((data) => {
-          setUserBookings(data.bookings);
-        });
-        break;
-      default:
-        break;
-    }
-  }, [userRole]);
+    fetchUserBookings().then((data) => {
+      setUserBookings(data.bookings);
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-white font-geologica">
