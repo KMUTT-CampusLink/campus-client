@@ -17,16 +17,13 @@ function BookingPage() {
   useEffect(() => {
     const fetchData = async () => {
       const tripData = await fetchTripData(tripID); // Use tripID from URL parameters
-      await isBooked(tripID).then((res) => {
-        setBooking(res.data);
-      });
       const trip = tripData.trip;
-      const isBookedResponse = await isBooked(tripID);
-      if (isBookedResponse.isBooked) {
-        setBooking(isBookedResponse.booking);
-        setIsConfirmed(true);
-      }
-
+      await isBooked(tripID).then((res) => {
+        if (res.booking) {
+          setBooking(res.booking);
+          setIsConfirmed(true);
+        }
+      });
       const bookingDetails = {
         startTime: format(new Date(trip.trip_schedule.start_time), "HH:mm"),
         endTime: format(new Date(trip.trip_schedule.end_time), "HH:mm"),
