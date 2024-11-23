@@ -1,11 +1,8 @@
 import BookingPage from "../pages/BookingPage";
 import HomePage from "../pages/HomePage";
-import React, { useState, useEffect } from "react";
 import TestPage from "../pages/TestPage";
 import QRCodePage from "../pages/QRCodePage";
-import DriverPage from "../pages/DriverPage";
-import StudentPage from "../pages/StudentPage";
-import NotSignedInPage from "../pages/NotSignedInPage";
+import RedirectPage from "../pages/RedirectPage";
 
 export default function TransRoutes() {
   const userRole = localStorage.getItem("userRole");
@@ -13,14 +10,7 @@ export default function TransRoutes() {
   return [
     {
       path: "",
-      element:
-        userRole == "Driver" ? (
-          <DriverPage />
-        ) : userRole == "Student" ? (
-          <StudentPage />
-        ) : (
-          <NotSignedInPage />
-        ),
+      element: <RedirectPage />,
     },
     { path: "home", element: <HomePage /> },
     { path: "booking/:tripID", element: <BookingPage /> },
