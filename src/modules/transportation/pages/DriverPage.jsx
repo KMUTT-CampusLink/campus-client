@@ -1,125 +1,74 @@
-import React, { useEffect, useRef, useState } from "react";
-import QrScanner from "qr-scanner";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
+import { fetchDriverTrips } from "../services/api";
+import { format } from "date-fns";
 
 const DriverPage = () => {
-  const [qrResult, setQrResult] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const videoRef = useRef(null); // Ref for the video element
+  const [driverTrips, setDriverTrips] = useState([]);
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
 
+  // Fetch driver's trips if they are authenticated
   useEffect(() => {
-    if (videoRef.current) {
-      const qrScanner = new QrScanner(
-        videoRef.current,
-        (result) => {
-          setQrResult(result.data);
-          setErrorMessage(""); // Clear any previous error
-        },
-        {
-          onDecodeError: (error) => {
-            console.error(error);
-            setErrorMessage("Error scanning QR code. Try again.");
-          },
-          // calculateScanRegion:
-          highlightScanRegion: true,
-          highlightCodeOutline: true,
-        }
-      );
-      qrScanner.start();
-
-      return () => {
-        qrScanner.stop();
-        qrScanner.destroy();
-      };
+    if (userRole === "Driver") {
+      fetchDriverTrips().then((data) => {
+        setDriverTrips(data.trips);
+      });
     }
-  }, []);
+  }, [userRole]);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Driver Page</h1>
-      <p className="text-gray-600 mb-8">Scan students' QR codes below</p>
+    <div className="min-h-screen bg-white font-geologica">
+      <NavBar />
+      <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
+        {/* Dashboard Header */}
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">
+          Shuttle buss transport service
+        </h2>
 
-      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
-        <video
-          ref={videoRef}
-          style={{ width: "100%", height: 300 }}
-          className="rounded-lg"
-        ></video>
-        <div className="mt-4">
-          {qrResult ? (
-            <p className="text-green-700 text-lg font-medium">
-              Successfully scanned:{" "}
-              <span className="font-bold">{qrResult}</span>
-            </p>
-          ) : (
-            <p className="text-gray-500 text-sm">
-              Point the camera at a QR code to scan...
-            </p>
-          )}
-          {errorMessage && (
-            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
-          )}
+        {/* Search for Routes Link */}
+        <div className="mb-10 text-center">
+          <Link
+            to="./home"
+            className="text-lg font-medium text-blue-500 underline hover:text-blue-600 transition duration-200"
+          >
+            Search for Routes also from router but different file
+          </Link>
         </div>
+
+        {userRole == null ? <></> : <p>Signed in as {userRole}</p>}
+        {userRole === "Driver" ? (
+          <>
+            <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+              My Trips
+            </h3>
+
+            <div className="space-y-4">
+              {driverTrips.map((trip, index) => (
+                <div
+                  key={index}
+                  className="bg-white shadow-md rounded-md p-4 border-l-4 border-orange-400"
+                >
+                  <p className="text-lg font-semibold text-gray-800">
+                    {format(new Date(trip.trip_date), "yyyy-MM-dd")}
+                  </p>
+                  <p className="text-gray-600">
+                    Time:{" "}
+                    {format(new Date(trip.trip_schedule.start_time), "HH:mm")} -{" "}
+                    {format(new Date(trip.trip_schedule.end_time), "HH:mm")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="text-center text-lg text-gray-700 mt-6">
+            <p>Not signed in as a Driver</p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default DriverPage;
-
-// import React, { useState } from "react";
-// import QrScanner from "qr-scanner";
-
-// const DriverPage = () => {
-//   const [qrResult, setQrResult] = useState("");
-//   const [errorMessage, setErrorMessage] = useState("");
-
-//   const handleScan = (data) => {
-//     if (data) {
-//       setQrResult(data.text || data);
-//       setErrorMessage(""); // Clear any previous error
-//     }
-//   };
-
-//   const handleError = (error) => {
-//     console.error(error);
-//     setErrorMessage("Error accessing camera or scanning the QR code.");
-//   };
-
-//   const previewStyle = {
-//     height: 300,
-//     width: "100%",
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
-//       <h1 className="text-3xl font-bold text-gray-800 mb-6">Driver Page</h1>
-//       <p className="text-gray-600 mb-8">Scan students' QR codes below</p>
-
-//       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
-//         <QrScanner
-//           delay={300}
-//           style={previewStyle}
-//           onError={handleError}
-//           onScan={handleScan}
-//         />
-//         <div className="mt-4">
-//           {qrResult ? (
-//             <p className="text-green-700 text-lg font-medium">
-//               Successfully scanned:{" "}
-//               <span className="font-bold">{qrResult}</span>
-//             </p>
-//           ) : (
-//             <p className="text-gray-500 text-sm">
-//               Point the camera at a QR code to scan...
-//             </p>
-//           )}
-//           {errorMessage && (
-//             <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DriverPage;

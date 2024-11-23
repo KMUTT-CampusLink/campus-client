@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
-import { fetchUserBookings, fetchDriverTrips } from "../services/api";
+import {
+  fetchUserBookings,
+  fetchDriverTrips,
+  deleteBooking,
+} from "../services/api";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
-const NavigationPage = () => {
+const StudentPage = () => {
   const [userBookings, setUserBookings] = useState([]);
   const [driverTrips, setDriverTrips] = useState([]);
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
   const navigate = useNavigate();
-  // console.log(driverTrips);
-  console.log(userRole);
 
   const handleBookingClick = (trip_id) => {
     navigate(`/transport/booking/${trip_id}`);
   };
+
+  const handleDeleteBookingClick = (bookingID) => {};
 
   // Fetch user's bookings if they are authenticated
   useEffect(() => {
@@ -41,7 +45,7 @@ const NavigationPage = () => {
       <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
         {/* Dashboard Header */}
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">
-          Dashboard
+          Shuttle buss transport service
         </h2>
 
         {/* Search for Routes Link */}
@@ -50,7 +54,7 @@ const NavigationPage = () => {
             to="./home"
             className="text-lg font-medium text-blue-500 underline hover:text-blue-600 transition duration-200"
           >
-            Search for Routes
+            Search for Routes naivgated from router
           </Link>
         </div>
 
@@ -64,25 +68,38 @@ const NavigationPage = () => {
             <div className="space-y-4">
               {userBookings.map((booking, index) => (
                 <div
-                  onClick={() => handleBookingClick(booking.trip_id)}
                   key={index}
                   className="bg-white shadow-md rounded-md p-4 border-l-4 border-orange-400"
                 >
-                  <p className="text-lg font-semibold text-gray-800">
-                    {format(new Date(booking.trip.trip_date), "yyyy-MM-dd")}
-                  </p>
-                  <p className="text-gray-600">
-                    Time:{" "}
-                    {format(
-                      new Date(booking.trip.trip_schedule.start_time),
-                      "HH:mm"
-                    )}{" "}
-                    -{" "}
-                    {format(
-                      new Date(booking.trip.trip_schedule.end_time),
-                      "HH:mm"
-                    )}
-                  </p>
+                  <div>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {format(new Date(booking.trip.trip_date), "yyyy-MM-dd")}
+                    </p>
+                    <p className="text-gray-600">
+                      Time:{" "}
+                      {format(
+                        new Date(booking.trip.trip_schedule.start_time),
+                        "HH:mm"
+                      )}{" "}
+                      -{" "}
+                      {format(
+                        new Date(booking.trip.trip_schedule.end_time),
+                        "HH:mm"
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => handleDeleteBookingClick(booking.id)}
+                    >
+                      cancel Booking
+                    </button>
+                  </div>
+                  <div>
+                    <button onClick={() => handleBookingClick(booking.trip_id)}>
+                      Details
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -121,4 +138,4 @@ const NavigationPage = () => {
   );
 };
 
-export default NavigationPage;
+export default StudentPage;
