@@ -24,117 +24,113 @@ const StDashboard = () => {
       <NavBar />
 
       <div className="w-full mb-3">
-        <div
-          className="flex mt-16 border-b-[1px] border-black text-lg gap-10 pt-5 
-        max-sm:pl-16 max-md:pl-20 max-lg:pl-36 lg:pl-56"
-        >
+        <div className="flex mt-16 border-b-[1px] border-gray-300 text-lg gap-8 pt-5 
+  max-sm:pl-4 max-md:pl-6 max-lg:pl-10 lg:pl-16 justify-center sm:justify-start">
+
           <span
-            className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+            className="text-md sm:text-base lg:text-lg font-semibold text-gray-700 border-b-4 border-[#EC5A51] pb-1 cursor-pointer"
             onClick={() => navigate("/courses/st")}
           >
             Dashboard
           </span>
+
           <span
-            className="hover:border-b-4 hover:border-black hover:cursor-pointer"
+            className="text-md sm:text-base lg:text-lg font-semibold text-gray-700 cursor-pointer pb-1 transition-all duration-300"
             onClick={() => navigate("/courses/st/all_courses")}
           >
             Courses
           </span>
+
+
         </div>
 
-        <div className="w-3/4 m-auto">
-          <div className="flex justify-between items-center gap-2 pb-3 lg:pr-10">
-            <span className="text-4xl font-bold ">Recent Courses</span>
+
+        <div className="w-5/6 m-auto pt-4">
+          <div className="flex justify-between items-center gap-2 lg:pr-10 mb-2">
+
+            <span className="text-2xl sm:text-3xl font-bold pb-1 2xl:text-5xl ">
+              Recent Courses
+            </span>
+
+
             <button
-              className="text-[#EC5A51] text-md font-bold lg:text-base hover:underline"
+              className="text-[#EC5A51] font-semibold text-sm sm:text-md lg:text-base hover:underline px-2 py-1 sm:px-3 sm:py-2 lg:px-4 lg:py-2 rounded-lg transition-transform duration-300 hover:scale-105"
               onClick={() => navigate("/courses/st/all_courses")}
             >
               See All
             </button>
           </div>
-        </div>
-      </div>
-      <div>
-        <div
-          className="grid max-md:grid-cols-2 grid-cols-3 p-5 gap-10 max-md:p-5 max-md:gap-6 max-sm:p-2
-            justify-items-center mx-auto w-3/4"
-        >
-          {courses?.map((course) => (
-            <CourseCard key={course.sec_id} course={course} />
-          ))}
+
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-2 sm:gap-8 lg:gap-10 justify-items-center mx-auto max-w-7xl 2xl:max-w-[90%]"
+          >
+            {courses?.map((course) => (
+              <CourseCard key={course.sec_id} course={course} />
+            ))}
+          </div>
+
+
+          <div className="pt-4">
+            <span className="font-semibold max-md:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
+              Important Announcement
+              <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
+            </span>
+          </div>
+
+
+          <div className="border border-gray-300 rounded-lg mb-6 mt-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div className="flex flex-col justify-between items-start max-md:gap-4 max-md:mx-4 max-lg:mx-8 lg:mx-12 p-2 bg-gray-50 rounded-md">
+              <span className="font-semibold text-[#EC5A51] text-xs sm:text-sm md:text-base lg:text-lg mb-2">
+                CSC 213 Database
+              </span>
+              <span className="font-normal text-xs sm:text-sm md:text-base lg:text-lg text-gray-700">
+                We have an evening lab today. Don't forget to arrive on time.
+              </span>
+            </div>
+          </div>
+
+          <div className="pt-4">
+            <span className="font-semibold max-md:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
+              Upcoming events
+              <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
+            </span>
+          </div>
+
+
+          <div className="border border-gray-300 rounded-lg mb-6 mt-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div className="flex flex-col justify-between items-start max-md:gap-4 max-md:mx-4 max-lg:mx-8 lg:mx-12 p-2 bg-gray-50 rounded-md">
+              <span className="font-semibold text-[#EC5A51] text-xs sm:text-sm md:text-base lg:text-lg mb-2">
+                CSC 213 Database
+              </span>
+              <span className="font-normal text-xs sm:text-sm md:text-base lg:text-lg text-gray-700">
+                8:00AM-2:00PM
+              </span>
+            </div>
+          </div>
+
+          <div className="pt-4">
+            <span className="font-semibold max-md:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
+              Today Class Schedule
+              <FontAwesomeIcon icon={faStar} className="ml-2" size="lg" />
+            </span>
+          </div>
+
+
+          <div className="border border-gray-300 rounded-lg mb-6 mt-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div className="flex flex-col justify-between items-start max-md:gap-4 max-md:mx-4 max-lg:mx-8 lg:mx-12 p-2 bg-gray-50 rounded-md">
+              <span className="font-semibold text-[#EC5A51] text-xs sm:text-sm md:text-base lg:text-lg mb-2">
+                CSC 213 Database
+              </span>
+              <span className="font-normal text-xs sm:text-sm md:text-base lg:text-lg text-gray-700">
+                8:00AM-2:00PM
+              </span>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div>
-        <span className="font-bold max-md:text-sm max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
-          Important Announcement
-          <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
-        </span>
-      </div>
-      <div className="border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className=" flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
-          <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
-            TITLE
-          </span>
-          <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
-            COURSE
-          </span>
-        </div>
-        <div className="font-semibold flex justify-between max-md:gap-2 max-md:mx-5 max-lg:mx-14 lg:mx-20 border-b-2 border-black ">
-          <span className="max-sm:text-sm w-1/2 text-lg">
-            We have an evening lab today. Don't forget to arrive on time.
-          </span>
-          <span className="max-sm:text-sm lg:pr-20 text-lg">
-            Csc 213 Database
-          </span>
-        </div>
-      </div>
 
-      <span className="max-md:text-sm font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
-        Upcoming events
-        <FontAwesomeIcon icon={faFile} className="ml-2" size="lg" />
-      </span>
-      <div className=" border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className="flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
-          <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
-            TIME
-          </span>
-          <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
-            COURSE
-          </span>
-        </div>
-        <div className="flex justify-between max-md:gap-2 max-md:mx-5 max-lg:mx-14 lg:mx-20 border-b-2 border-black ">
-          <span className="max-sm:text-sm font-semibold w-1/2 text-lg">
-            8:00AM-2PM
-          </span>
-          <span className="max-sm:text-sm font-semibold lg:pr-20 text-lg">
-            Csc 213 Database
-          </span>
-        </div>
-      </div>
-
-      <span className="max-md:text-sm font-bold max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52">
-        Today Class Schedule
-        <FontAwesomeIcon icon={faStar} className="ml-2" size="lg" />
-      </span>
-      <div className="border border-gray-400 rounded-md mb-5 mt-4 max-md:mx-20 md:mx-32 lg:mx-44 xl:mx-52 pb-3 overflow-y-auto">
-        <div className="flex justify-between max-sm:mx-10 max-md:mx-20 max-lg:mx-28 lg:mx-48">
-          <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
-            TIME
-          </span>
-          <span className="font-bold text-[#EC5A51] text-xl border-b-[1px] border-b-[#EC5A51]">
-            COURSE
-          </span>
-        </div>
-        <div className="flex justify-between max-md:gap-2 max-md:mx-5 max-lg:mx-14 lg:mx-20 border-b-2 border-black ">
-          <span className="max-sm:text-sm font-semibold w-1/2 text-lg">
-            8:00AM-2PM
-          </span>
-          <span className="max-sm:text-sm font-semibold lg:pr-20 text-lg">
-            Csc 213 Database
-          </span>
-        </div>
-      </div>
     </div>
   );
 };
