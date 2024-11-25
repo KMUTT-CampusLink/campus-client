@@ -34,6 +34,7 @@ export default function ProfessorOverallScoringPage() {
   const getParticipants = async () => {
     try {
       const response = await getExamParticipants(examId);
+      console.log(response)
       const participants = response.data.data;
       setFullMark(response.data.full_mark);
       setPassMark(response.data.pass_mark);
