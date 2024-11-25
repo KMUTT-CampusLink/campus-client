@@ -107,7 +107,7 @@ const StDiscussion = () => {
         /></div>
 
       {!isCommentPopupOpen && (
-        <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx">
+        <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx px-4 sm:px-6">
           <div className="flex justify-between items-center lg:w-3/4 mx-auto mb-6 relative pt-2">
             <h2 className="text-2xl font-bold text-[#ecb45e]">Create Discussion</h2>
             <div className="relative">
@@ -142,27 +142,42 @@ const StDiscussion = () => {
           </div>
 
           {/* Upload Section */}
-          <div className="flex justify-center items-center max-w-xs mx-auto mb-6">
-            <div className="border border-gray-300 rounded-md w-full h-48 flex flex-col items-center justify-center p-4">
-              <img src={gallery} alt="Upload Icon" className="w-12 h-12 mb-2" />
+          <div className="flex justify-center items-center max-w-sm mx-auto mb-6">
+            <div className="border rounded-lg w-full h-56 flex flex-col items-center justify-center p-6 bg-gray-50 shadow-md">
+              {/* Icon */}
+              <img
+                src={gallery}
+                alt="Upload Icon"
+                className="w-14 h-14 mb-4"
+              />
+              {/* Text Content */}
               <div className="text-center">
-                <h2 className="text-lg font-bold"># Title</h2>
-                <p className="text-gray-500">Upload here!</p>
+                <h2 className="text-xl font-semibold text-gray-700 mb-1">
+                  Upload File
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Share your files easily with just one click!
+                </p>
               </div>
+              {/* Upload Button */}
               <button
-                className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white py-2 mt-4 rounded-md flex items-center justify-center"
+                className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white font-medium py-2 mt-4 rounded-lg flex items-center justify-center transition duration-200 shadow-md"
                 onClick={openUploadPopup}
               >
-                <FontAwesomeIcon icon={faPlus} className="mr-1" /> Upload
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Upload
               </button>
             </div>
           </div>
 
+
+
           {/* Discussion Area */}
           <div className="lg:w-3/4 mx-auto">
-            <h2 className="text-2xl font-bold text-[#ecb45e] mb-4 text-center lg:text-left">
+            <h2 className="text-2xl font-bold text-[#ecb45e] mb-4 text-left lg:text-left">
               Discussion Area
             </h2>
+
             <div className="grid grid-cols-1 gap-4 max-w-4xl mx-auto">
               {posts?.map((discussion) => (
                 <div

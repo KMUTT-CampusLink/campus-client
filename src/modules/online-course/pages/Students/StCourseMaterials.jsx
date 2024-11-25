@@ -70,8 +70,10 @@ const StCourseMaterials = () => {
 
       <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx">
         <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto p-4">
-          <div className="my-2 flex items-center space-x-4 mb-4">
-            <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
+
+
+          <div className="text-2xl font-extrabold pb-7 text-[#ecb45e] ">
+            Materials
           </div>
           <div className="grid sm:grid-cols-7 mb-12">
             <div className="sm:col-span-5">
@@ -86,7 +88,7 @@ const StCourseMaterials = () => {
               )}
             </div>
             <div className="sm:col-span-2">
-              <div className="mx-auto mt-4 mb-6 sm:ml-6">
+              <div className="mx-5 mt-4 mb-6 sm:ml-5">
                 <label className="block mb-2 font-semibold font-georama">
                   Select Lecture Title
                 </label>
@@ -129,7 +131,7 @@ const StCourseMaterials = () => {
                     ))}
                   </ul>
                 ) : (
-                  <p>No files available.</p>
+                  <p className="px-5">No files available.</p>
                 )}
               </div>
             </div>

@@ -45,7 +45,7 @@ const StDashboard = () => {
         </div>
 
 
-        <div className="w-5/6 m-auto pt-4">
+        <div className="w-5/6 m-auto pt-8">
           <div className="flex justify-between items-center gap-2 lg:pr-10 mb-2">
 
             <span className="text-2xl sm:text-3xl font-bold pb-1 2xl:text-5xl ">
