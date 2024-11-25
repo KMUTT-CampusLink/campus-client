@@ -24,7 +24,7 @@ export default function StudentHomePage() {
     const res = await getStudentExamsById(sectionId);
     setExams(res.data.exam);
     setCourseTitle(res.data.courseTitle[0].name);
-  }
+  };
 
   const getInprogressExams = async () => {
     const res = await getInprogressExam(sectionId);
@@ -68,10 +68,14 @@ export default function StudentHomePage() {
         <div className=" flex justify-between pt-[20px]">
           <h3 className="font-bold text-[22px] xl:text-[30px]">Examination</h3>
         </div>
-        <div className={`${exams.length > 0 ? "block" : "hidden"}`}> 
+        <div className={`${exams.length > 0 ? "block" : "hidden"}`}>
           <div className="grid gap-4 py-[20px]">
-            {exams.map((examName) => (
-              <ExamCard examName={examName.title} Id={examName.id} />
+            {exams.map((examName, index) => (
+              <ExamCard
+                key={index}
+                examName={examName.title}
+                Id={examName.id}
+              />
             ))}
           </div>
         </div>
@@ -89,8 +93,9 @@ export default function StudentHomePage() {
             historyExams.length > 0 ? "block" : "hidden"
           } grid gap-4 py-[20px]`}
         >
-          {historyExams.map((examName) => (
+          {historyExams.map((examName, index) => (
             <HistoryCard
+              key={index}
               examName={examName.title}
               Id={examName.id}
               studentExamId={examName.studentexamid}

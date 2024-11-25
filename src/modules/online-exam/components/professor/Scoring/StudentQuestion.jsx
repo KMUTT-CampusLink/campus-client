@@ -50,22 +50,6 @@ export default function StudentQuestion({
     });
   };
 
-
-  // const updateEssayComment = (e) => {
-  //   const comment = e.target.value;
-  //   studentAnswer((prevEssayScore) => {
-  //     const updatedScoring = prevEssayScore.scoring.map((item) =>
-  //       item.question_id === questionid
-  //         ? { ...item, essay_comment: comment }
-  //         : item
-  //     );
-  //     return {
-  //       ...prevEssayScore,
-  //       scoring: updatedScoring,
-  //     };
-  //   });
-  // };
-
   const isAnswer = (choiceObj) => {
     return studentAnswer.some(
       (answer) =>

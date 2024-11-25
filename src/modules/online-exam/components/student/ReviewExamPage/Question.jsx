@@ -7,7 +7,9 @@ export default function Question({
   choice,
   type,
   studentAnswer,
-  questionId
+  comment,
+  mark,
+  score,
 }) {
   const [frontScore, setFrontScore] = useState(0);
   const [backScore,setBackScore] = useState(0);
@@ -38,7 +40,7 @@ export default function Question({
       <div className="flex justify-between items-center mb-[20px]">
         <h1>{question}</h1>
         <h1>
-          {frontScore}/{backScore}
+          {mark}/{score}
         </h1>
       </div>
       <div className="flex flex-col gap-[10px] pt-[20px]">
@@ -71,12 +73,20 @@ export default function Question({
           })}
         {/* Essay */}
         {type === "Essay" && (
-          <textarea
-            className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
-            placeholder="Type your Answer Here"
-            disabled
-            value={studentAnswer[0].answer}
-          ></textarea>
+          <div>
+            <textarea
+              className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
+              placeholder="Type your Answer Here"
+              disabled
+              value={studentAnswer[0].answer}
+            ></textarea>
+            <p className="font-bold">comment</p>
+            <textarea
+              className="textarea textarea-bordered border-[#BEBEBE] w-full h-[100px]"
+              disabled
+              value={comment}
+            />
+          </div>
         )}
       </div>
     </div>

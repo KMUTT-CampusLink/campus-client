@@ -1,27 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import NavBar from '../../../registration/components/NavBarComponents/NavBar'
-import Chip from '../../components/professor/Scoring/Chip'
-import Question from '../../components/student/ReviewExamPage/Question'
-import { getStudentReview } from "../../services/apis/studentApi";
-import { getStudentScore } from "../../services/apis/professerApi";
-import { getFullMark } from "../../services/apis/studentApi";
-
+import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+import Chip from "../../components/professor/Scoring/Chip";
+import Question from "../../components/student/ReviewExamPage/Question";
+import { getStudentExamReview } from "../../services/apis/studentApi";
 
 export default function StudentReviewExamPage() {
+  const [data, setData] = useState(null);
   const [permission, setPermission] = useState(1);
-  const [studentAns, setStudentAns] = useState([]);
   const { examId } = useParams();
   const studentExamId = useParams().studentExamId;
-  const [studentScore, setStudentScore] = useState(0);
-  const [fullMark,setFullMark] = useState(0);
-  const fetchStudentAnswer = async () => {
+  const fetchReview = async () => {
     try {
-      const res = await getStudentReview(examId);
-      setStudentAns(res.data);
-    } catch (error) {
-      console.error(error);
+      const res = await getStudentExamReview(examId, studentExamId);
+      setData(res);
+    } catch (e) {
+      console.log(e);
     }
   };
   const getScore = async () => {
@@ -41,10 +35,13 @@ export default function StudentReviewExamPage() {
     }
   };
   useEffect(() => {
-    fetchStudentAnswer();
-    getScore();
-    getStudentFullMark();
+    fetchReview();
   }, []);
+
+  if (!data) {
+    return;
+  }
+
   return (
     <>
       <NavBar />
@@ -52,13 +49,17 @@ export default function StudentReviewExamPage() {
       <div className="px-[26px] py-[35px] lg:px-[200px] pt-20">
         <div className="flex justify-between items-center pb-3">
           <p className="font-bold text-[#D4A015] text-[22px] lg:text-[30px]">
-            Exam 1
+            {data.title}
           </p>
           <div className="flex flex-col items-end">
-            <Chip />
+            <Chip
+              status={true}
+              passMark={data.pass_mark}
+              score={data.total_score}
+            />
             <div className="flex gap-1">
               <p className="text-[22px] lg:text-[30px]">
-                {studentScore}/{fullMark}
+                {data.total_score}/{data.full_mark}
               </p>
               {/* <p className="text-[30px]">/</p>
             <p className="text-[30px]">100</p> */}
@@ -68,17 +69,21 @@ export default function StudentReviewExamPage() {
         <div className={`${permission === 1 ? "block" : "hidden"}`}>
           <hr className="border" />
           <div className="my-10 flex flex-col gap-[20px]">
-            {studentAns.map((item, index) => (
-              <Question
-                key={index}
-                question={item.title}
-                choice={item.exam_choice}
-                type={item.type}
-                studentAnswer={item.student_answer}
-                questionId={item.id}
-                className="w-[67%] h-auto"
-              />
-            ))}
+            {data.studentAnswers &&
+              data.studentAnswers.map((item, index) => (
+                <Question
+                  key={index}
+                  question={item.title}
+                  choice={item.exam_choice}
+                  type={item.type}
+                  studentAnswer={item.student_answer}
+                  comment={item.student_answer[0].essay_comment}
+                  questionId={item.id}
+                  mark={item.mark}
+                  score={item.score}
+                  className="w-[67%] h-auto"
+                />
+              ))}
           </div>
         </div>
         <div
