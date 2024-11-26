@@ -5,15 +5,16 @@ import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import ExamCard from "../../components/student/HomePage/ExamCard";
 import InProgressCard from "../../components/student/HomePage/InProgressCard";
 import HistoryCard from "../../components/student/HomePage/HistoryCard";
-
+import BackBTN from "../../components/BackBTN";
 import {
   getStudentExamsById,
   getHistoryStudentExams,
   getInprogressExam,
 } from "../../services/apis/studentApi";
-import { faChessKing } from "@fortawesome/free-solid-svg-icons";
 
-export default function StudentHomePage() {
+import verifySection from "../../middleware/verifySection"
+
+function StudentHomePage() {
   const { sectionId } = useParams();
   const [exams, setExams] = useState([]);
   const [historyExams, setHistoryExams] = useState([]);
@@ -42,12 +43,11 @@ export default function StudentHomePage() {
     getHistoryExams();
   }, []);
 
-  // console.log(historyExams);
-
   return (
     <div className="w-auto">
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
+          <BackBTN />
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
           {courseTitle} : {sectionId}
         </h2>
@@ -80,18 +80,16 @@ export default function StudentHomePage() {
           </div>
         </div>
         <div
-          className={`${
-            exams.length > 0 ? "hidden" : "block"
-          } w-full flex justify-center`}
+          className={`${exams.length > 0 ? "hidden" : "block"
+            } w-full flex justify-center`}
         >
           <h3 className="text-[#798184] pt-[10px]">No Exam</h3>
         </div>
         <hr className="my-[20px] bg-[#798184]" />
         <h3 className="font-bold text-[22px] xl:text-[30px]">History</h3>
         <div
-          className={`${
-            historyExams.length > 0 ? "block" : "hidden"
-          } grid gap-4 py-[20px]`}
+          className={`${historyExams.length > 0 ? "block" : "hidden"
+            } grid gap-4 py-[20px]`}
         >
           {historyExams.map((examName, index) => (
             <HistoryCard
@@ -103,9 +101,8 @@ export default function StudentHomePage() {
           ))}
         </div>
         <div
-          className={`${
-            historyExams.length > 0 ? "hidden" : "block"
-          } w-full flex justify-center`}
+          className={`${historyExams.length > 0 ? "hidden" : "block"
+            } w-full flex justify-center`}
         >
           <h3 className="text-[#798184] pt-[10px]">No History</h3>
         </div>
@@ -113,3 +110,5 @@ export default function StudentHomePage() {
     </div>
   );
 }
+
+export default verifySection(StudentHomePage);

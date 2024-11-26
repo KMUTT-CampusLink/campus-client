@@ -138,9 +138,8 @@ export default function StudentQuestion({
           </div>
         ))}
         <h2
-          className={`text-[16px] pt-[10px] ${
-            type === "Essay" ? "hidden" : "flex"
-          }`}
+          className={`text-[16px] pt-[10px] ${type === "Essay" ? "hidden" : "flex"
+            }`}
         >
           Score : {studentScore}/{maxScore}
         </h2>
@@ -155,9 +154,8 @@ export default function StudentQuestion({
             <div className="flex items-center pt-[10px]">
               <h2 className="text-[16px]">Score :</h2>
               <input
-                className={`input input-bordered w-[55px] h-[40px] ml-[10px] text-center ${
-                  haveScore ? "hidden" : ""
-                }`}
+                className={`input input-bordered w-[55px] h-[40px] ml-[10px] text-center ${haveScore ? "hidden" : ""
+                  }`}
                 value={
                   essayScore.scoring.find(
                     (item) => item.question_id === questionid

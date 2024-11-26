@@ -6,14 +6,19 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import ExamCard from "../../components/professor/HomePage/ExamCard";
+import BackBTN from "../../components/BackBTN";
 
 import { getExams } from "../../services/apis/professerApi";
 
-export default function ProfessorHomePage() {
+import verifySection from "../../middleware/verifySection"
+
+function ProfessorHomePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { sectionId } = useParams();
-  const [exams, setExams] = useState([]);
+  const [pendingExam, setPendingExam] = useState([]);
+  const [publishExam, setPublishExam] = useState([]);
+  const [historyExam, setHistoryExam] = useState([]);
   const [courseTitle, setCourseTitle] = useState("");
 
   const [alertVisible, setAlertVisible] = useState(false);
@@ -21,9 +26,11 @@ export default function ProfessorHomePage() {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const getAllExams = async () => {
-    try{
+    try {
       const res = await getExams(sectionId);
-      setExams(res.data.exam);
+      setPendingExam(res.data.exam.filter((exams) => { !exams.publish_status }));
+      setPublishExam(res.data.exam.filter((exams) => { exams.publish_status }));
+      setHistoryExam(res.data.historyExam);
       setCourseTitle(res.data.courseTitle[0].name);
     } catch (error) {
       console.log(error);
@@ -39,16 +46,13 @@ export default function ProfessorHomePage() {
       setAlertVisible(true);
       setAlertMessage(location.state.alertMessage);
       setIsSubmit(location.state.isSettingSubmit);
-
-      // Clear the state to prevent re-triggering when navigating
       navigate(location.pathname, { replace: true });
-
       setTimeout(() => {
         setAlertVisible(false);
       }, 3000);
     }
   }, [location.state, navigate]);
-  
+
   useEffect(() => {
     getAllExams();
   }, []);
@@ -57,6 +61,7 @@ export default function ProfessorHomePage() {
     <div className="w-auto">
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
+        <BackBTN />
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
           {courseTitle}
         </h2>
@@ -72,27 +77,77 @@ export default function ProfessorHomePage() {
             Create Exam <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
-        <div
-          className={`grid gap-4 py-[20px] ${
-            exams && exams.length === 0 ? "hidden" : "block"
-          }`}
-        >
-          {exams &&
-            exams.map((examName) => (
-              <ExamCard
-                examName={examName.title}
-                examId={examName.id}
-                refresh={handleRefresh}
-                sectionId={sectionId}
-              ></ExamCard>
-            ))}
+        <div className="pt-[20px]">
+          <h1 className="text-[20px] font-bold">Pending Exam</h1>
+          <div
+            className={`grid gap-4 py-[20px] ${pendingExam && pendingExam.length === 0 ? "hidden" : "block"
+              }`}
+          >
+            {pendingExam &&
+              pendingExam.map((examName) => (
+                <ExamCard
+                  examName={examName.title}
+                  examId={examName.id}
+                  refresh={handleRefresh}
+                  sectionId={sectionId}
+                  expired={false}
+                ></ExamCard>
+              ))}
+          </div>
+          <div
+            className={`${pendingExam && pendingExam.length === 0 ? "flex" : "hidden"
+              } h-[20vh] w-auto justify-center items-center`}
+          >
+            <h1 className="text-[18px]">No Exam</h1>
+          </div>
         </div>
-        <div
-          className={`${
-            exams && exams.length === 0 ? "flex" : "hidden"
-          } h-[20vh] w-auto justify-center items-center`}
-        >
-          <h1 className="text-[18px]">No Exam</h1>
+        <div className="pt-[20px]">
+          <h1 className="text-[20px] font-bold">Published Exam</h1>
+          <div
+            className={`grid gap-4 py-[20px] ${publishExam && publishExam.length === 0 ? "hidden" : "block"
+              }`}
+          >
+            {publishExam &&
+              publishExam.map((examName) => (
+                <ExamCard
+                  examName={examName.title}
+                  examId={examName.id}
+                  refresh={handleRefresh}
+                  sectionId={sectionId}
+                  expired={false}
+                ></ExamCard>
+              ))}
+          </div>
+          <div
+            className={`${publishExam && publishExam.length === 0 ? "flex" : "hidden"
+              } h-[20vh] w-auto justify-center items-center`}
+          >
+            <h1 className="text-[18px]">No Exam</h1>
+          </div>
+        </div>
+        <div className="pt-[20px]">
+          <h1 className="text-[20px] font-bold">History Exam</h1>
+          <div
+            className={`grid gap-4 py-[20px] ${historyExam && historyExam.length === 0 ? "hidden" : "block"
+              }`}
+          >
+            {historyExam &&
+              historyExam.map((examName) => (
+                <ExamCard
+                  examName={examName.title}
+                  examId={examName.id}
+                  refresh={handleRefresh}
+                  sectionId={sectionId}
+                  expired={true}
+                ></ExamCard>
+              ))}
+          </div>
+          <div
+            className={`${historyExam && historyExam.length === 0 ? "flex" : "hidden"
+              } h-[20vh] w-auto justify-center items-center`}
+          >
+            <h1 className="text-[18px]">No Exam</h1>
+          </div>
         </div>
       </div>
       {alertVisible && (
@@ -107,3 +162,4 @@ export default function ProfessorHomePage() {
     </div>
   );
 }
+export default verifySection(ProfessorHomePage);
