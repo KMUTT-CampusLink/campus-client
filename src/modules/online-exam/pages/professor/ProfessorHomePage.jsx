@@ -28,8 +28,9 @@ function ProfessorHomePage() {
   const getAllExams = async () => {
     try {
       const res = await getExams(sectionId);
-      setPendingExam(res.data.exam.filter((exams) => { !exams.publish_status }));
-      setPublishExam(res.data.exam.filter((exams) => { exams.publish_status }));
+      const exam = res.data.exam;
+      setPendingExam(exam.filter((exams) =>  !exams.publish_status ));
+      setPublishExam(exam.filter((exams) =>  exams.publish_status ));
       setHistoryExam(res.data.historyExam);
       setCourseTitle(res.data.courseTitle[0].name);
     } catch (error) {
@@ -90,7 +91,7 @@ function ProfessorHomePage() {
                   examId={examName.id}
                   refresh={handleRefresh}
                   sectionId={sectionId}
-                  expired={false}
+                  status={"pending"}
                 ></ExamCard>
               ))}
           </div>
@@ -114,7 +115,7 @@ function ProfessorHomePage() {
                   examId={examName.id}
                   refresh={handleRefresh}
                   sectionId={sectionId}
-                  expired={false}
+                  status={"approved"}
                 ></ExamCard>
               ))}
           </div>
@@ -125,7 +126,7 @@ function ProfessorHomePage() {
             <h1 className="text-[18px]">No Exam</h1>
           </div>
         </div>
-        <div className="pt-[20px]">
+        <div>
           <h1 className="text-[20px] font-bold">History Exam</h1>
           <div
             className={`grid gap-4 py-[20px] ${historyExam && historyExam.length === 0 ? "hidden" : "block"
@@ -138,7 +139,7 @@ function ProfessorHomePage() {
                   examId={examName.id}
                   refresh={handleRefresh}
                   sectionId={sectionId}
-                  expired={true}
+                  status={"history"}
                 ></ExamCard>
               ))}
           </div>
