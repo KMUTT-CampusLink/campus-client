@@ -68,9 +68,19 @@ export const editAssignment = (assignmentID, updatedAssignment) =>
   put(`/courses/assignment/${assignmentID}/edit`, updatedAssignment);
 export const deleteAssignment = (assignmentID) =>
   remove(`/courses/assignment/${assignmentID}/delete`);
-
 export const createAssignment = (newAssignment) =>
   post("/courses/assignment/upload", newAssignment); // Update the endpoint to match the file-upload functionality
+
+//assignment Student
+
+export const addAssignmentSubmission = (formData) =>
+  post(`/courses/assignmentSubmission`, formData);
+
+export const editAssignmentSubmission = (assignmentID, updatedSubmission) =>
+  put(`/courses/assignment/${assignmentID}/submit/edit`, updatedSubmission);
+
+export const fetchAssignmentSubmissionFilePath = (assignmentID, studentID) =>
+  get(`/courses/assignment/submission/${assignmentID}/${studentID}`);
 
 
 

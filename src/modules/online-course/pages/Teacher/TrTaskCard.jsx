@@ -10,9 +10,8 @@ const AssignmentsList = ({
   isLoading,
   error,
 }) => {
-  const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
-  import.meta.env.VITE_MINIO_BUCKET_NAME
-}`;
+  const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME
+    }`;
   return (
     <div className="max-md:text-xs max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
       {isLoading ? (
@@ -36,7 +35,7 @@ const AssignmentsList = ({
               {assignment.description ? (
 
                 <a
-                href={`${MINIO_BASE_URL}/${assignment.description}`}
+                  href={`${MINIO_BASE_URL}/${assignment.description}`}
                   download={`Assignment-${assignment.title}.pdf`}
                   className="text-blue-500 underline"
                 >

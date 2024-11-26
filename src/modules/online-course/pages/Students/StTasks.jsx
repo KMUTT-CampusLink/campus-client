@@ -3,28 +3,70 @@ import { useLocation } from "react-router-dom";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import CourseHeader from "../../components/CourseHeader";
 import { useCourseHeaderBySectionIDForStudent, useAllAssignmentsBySectionID } from "../../services/queries";
+import { useEditAssignmentSubmission } from "../../services/mutations";
+import { FileUploadPopup } from "../../components/AssignmentSubmissionEditPopup";
 
 const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}`;
 
-const StTasks = () => {
+const StTasks = () => 
+  {
   const { state } = useLocation();
+  const [sec_id, setSec_id] = useState(() => state?.sec_id || localStorage.getItem("sec_id"));
+  const [student_id, setStudentId] = useState(() => localStorage.getItem("studentId")); // Get student_id from local storage
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
 
-  // Get sec_id from state or localStorage
-  const [sec_id, setSec_id] = useState(() => {
-    return state?.sec_id || localStorage.getItem("sec_id");
-  });
+  const { data: details } = useCourseHeaderBySectionIDForStudent(sec_id);
+  const { data: assignments, isLoading, isError } = useAllAssignmentsBySectionID(sec_id);
+  const editAssignmentSubmission = useEditAssignmentSubmission();
 
   useEffect(() => {
     if (sec_id) {
       localStorage.setItem("sec_id", sec_id);
     }
-  }, [sec_id]);
+    if (!student_id) {
+      console.error("Student ID is missing from local storage.");
+    }
+  }, [sec_id, student_id]);
 
-  // Fetch course details
-  const { data: details } = useCourseHeaderBySectionIDForStudent(sec_id);
+  const handleOpenPopup = (assignmentId) => {
+    console.log("Opening popup for assignment ID:", assignmentId); // Debugging
+    setSelectedAssignment(assignmentId);
+    setIsPopupOpen(true);
+  };
 
-  // Fetch assignments
-  const { data: assignments, isLoading, isError } = useAllAssignmentsBySectionID(sec_id);
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedAssignment(null);
+  };
+
+  const handleSubmitFile = (file) => {
+    if (!selectedAssignment || !student_id) {
+      alert("Missing assignment ID or student ID.");
+      console.error("Selected Assignment:", selectedAssignment);
+      console.error("Student ID:", student_id);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file_path", file); // Match key name with backend
+    formData.append("student_id", student_id); // Add student_id to the payload
+    formData.append("assignment_id", selectedAssignment); // Add assignment_id to the payload
+
+    editAssignmentSubmission.mutate(
+      { assignmentID: selectedAssignment, updatedSubmission: formData },
+      {
+        onSuccess: () => {
+          alert("Submission updated successfully!");
+          handleClosePopup();
+        },
+        onError: (error) => {
+          console.error("Error updating submission:", error);
+          alert("Failed to update submission. Please try again.");
+        },
+      }
+    );
+  };
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-gray-100">
@@ -66,10 +108,7 @@ const StTasks = () => {
               <div>No tasks available.</div>
             ) : (
               assignments.map((task) => (
-                <div
-                  key={task.id}
-                  className="grid grid-cols-3 sm:grid-cols-4 gap-4 py-4"
-                >
+                <div key={task.id} className="grid grid-cols-3 sm:grid-cols-4 gap-4 py-4">
                   <div>
                     <a
                       href={`${MINIO_BASE_URL}/${task.description}`}
@@ -88,7 +127,7 @@ const StTasks = () => {
                   <div className="flex flex-col justify-center items-center gap-2">
                     <button
                       className="flex sm:text-[18px] text-[14px] gap-4 w-[95%] items-center justify-center rounded-lg shadow-lg p-1 bg-[#FFFFFF]"
-                      onClick={() => console.log(task.id)}
+                      onClick={() => handleOpenPopup(task.id)}
                     >
                       Submit Assignment
                     </button>
@@ -99,6 +138,14 @@ const StTasks = () => {
           </div>
         </div>
       </div>
+
+      {isPopupOpen && (
+        <FileUploadPopup
+          assignmentId={selectedAssignment}
+          studentId={student_id}
+          onClose={handleClosePopup}
+        />
+      )}
     </div>
   );
 };
