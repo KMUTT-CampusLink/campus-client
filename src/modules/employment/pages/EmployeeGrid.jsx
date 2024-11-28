@@ -69,7 +69,6 @@ const EmployeeGrid = () => {
     fetchData();
   }, []);
 
-
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
@@ -128,11 +127,11 @@ const EmployeeGrid = () => {
           <div className="w-1/2">
             <select
               name="faculty"
-              value={selectedFaculty ? selectedFaculty : ""} 
+              value={selectedFaculty ? selectedFaculty : ""}
               onChange={handleFacultyChange}
               className="w-full border-b border-black focus:outline-none font-geologica text-[12px] md:text-[16px] text-center"
             >
-              <option value="" >All Faculties</option>
+              <option value="">All Faculties</option>
               {faculties.map((faculty) => (
                 <option key={faculty.id} value={faculty.id}>
                   {faculty.name}

@@ -6,7 +6,6 @@ import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 
 function AdminPage() {
-  const studentId = localStorage.getItem("studentId");
   const { data: semesters } = useAllSemesters();
 
   const [semester, setSemester] = useState(""); // Selected semester name
@@ -43,13 +42,13 @@ function AdminPage() {
     <div className={containerDivStyles}>
       <NavBar />
       <main className={mainStyles}>
-        <div className="bg-gray-500 text-black p-4 rounded-md">
-          <div className="text-xl font-bold mb-4">Select Period</div>
+        <div className="p-4 text-black bg-gray-500 rounded-md">
+          <div className="mb-4 text-xl font-bold">Select Period</div>
 
           {/* Registration Period Selector */}
           <div>
             <select
-              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs mb-4"
+              className="w-full max-w-xs p-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
               value={regis}
               onChange={handlePeriod}
             >
@@ -68,7 +67,7 @@ function AdminPage() {
               Select Semester
             </label>
             <select
-              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs"
+              className="w-full max-w-xs p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
               value={semester}
               onChange={handleSemesterChange}
             >

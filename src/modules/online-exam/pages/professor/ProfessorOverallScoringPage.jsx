@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Participant from "../../components/professor/overrallScoring/Participant";
 
 import { getExamDataById } from "../../services/apis/professerApi";
 import { getExamParticipants } from "../../services/apis/professerApi";
 import { updateExamAnnouncement } from "../../services/apis/professerApi";
-
+import { getAllStudentInSection } from "../../services/apis/professerApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn } from "@fortawesome/free-solid-svg-icons";
 
 export default function ProfessorOverallScoringPage() {
-  const { examId } = useParams();
+  const { examId, sectionId } = useParams();
   const [examTitle, setExamTitle] = useState("");
   const [participants, setParticipants] = useState([]);
   const [fullMark, setFullMark] = useState(0);
@@ -21,10 +20,21 @@ export default function ProfessorOverallScoringPage() {
   const [showModal, setShowModal] = useState(false);
   const [isAnnounced, setIsAnnounced] = useState();
   const [hasParticipants, setHasParticipants] = useState(false);
+  const [totalStudentInSection, setTotalStudentInSection] = useState();
+  const getNumberStudentInsection = async () => {
+    try {
+      const response = await getAllStudentInSection(sectionId);
+      setTotalStudentInSection(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getParticipants = async () => {
     try {
       const response = await getExamParticipants(examId);
-      console.log(response.data.data);
+      console.log(response)
       const participants = response.data.data;
       setFullMark(response.data.full_mark);
       setPassMark(response.data.pass_mark);
@@ -52,6 +62,7 @@ export default function ProfessorOverallScoringPage() {
   useEffect(() => {
     getParticipants();
     getExamTitle();
+    getNumberStudentInsection();
   }, []);
 
   const handleOpenModal = () => {
@@ -81,43 +92,64 @@ export default function ProfessorOverallScoringPage() {
       <NavBar />
       {/* Heading */}
       <div className="px-[26px] lg:px-[200px] pt-20">
-        <div className="flex justify-between items-center py-[35px]">
-          <div>
-            <p className="font-bold text-[#D4A015] text-[30px]">Scoring</p>
-            <p className="text-[16px]">{examTitle} Exam</p>
-          </div>
-          <div>
-            <div>
-              {/* Button to open the modal */}
-              <button
-                className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
-                onClick={handleOpenModal}
-                disabled={
-                  isAnnounced ||
-                  !hasParticipants ||
-                  scoringFinished != participants.length
-                } // Disable if already announced
-              >
-                <FontAwesomeIcon icon={faBullhorn} />
-                {isAnnounced ? "Scores Published" : "Publish Scores"}
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="flex justify-between items-center py-[35px]">
+  <div>
+    <p className="font-bold text-[#D4A015] text-[30px]">Scoring</p>
+    <p className="text-[16px]">{examTitle} Exam</p>
+  </div>
+
+  <div className="flex flex-col justify-end items-end"> 
+    {/* Button to open the modal */}
+    <button
+      className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
+      onClick={handleOpenModal}
+      disabled={
+        isAnnounced ||
+        !hasParticipants ||
+        scoringFinished != participants.length
+      } // Disable if already announced
+    >
+      <FontAwesomeIcon icon={faBullhorn} />
+      {isAnnounced ? "Scores Annouced" : "Annouce Scores"}
+    </button>
+    {isAnnounced && (
+      <p className="text-red-600 text-[12px] md:text-[14px] pt-1">
+        Score has already been announced
+      </p>
+    )}
+  </div>
+</div>
+
+
         <hr className="bg-[#bebebe]" />
         {/* content */}
         <div className=" py-[30px] ">
-          <p className="font-bold text-[#D4A015] text-[22px] ">Participants</p>
-          <div className="flex pb-[10px]">
-            <p className="text-[16px] font-bold">
-              Scoring finished:<span>&nbsp;</span>
-            </p>
-            <p className="">{scoringFinished}</p>
-            <p className="">/</p>
-            <p className="">{participants.length}</p>
-            <p className="">
-              <span>&nbsp;</span>student
-            </p>
+          <p className="font-bold text-[#D4A015] text-[22px] pb-[10px]">
+            Participants
+          </p>
+          <div className="pl-[14px] md:pl-[40px] lg:pl-[50px] text-[14px] md:text-[16px]">
+            <div className="flex">
+              <p className=" font-bold">
+                Students Completed:<span>&nbsp;</span>
+              </p>
+              <p className="">{participants.length}</p>
+              <p className="">/</p>
+              <p className="">{totalStudentInSection}</p>
+              <p className="">
+                <span>&nbsp;</span>student
+              </p>
+            </div>
+            <div className="flex pb-[10px]">
+              <p className=" font-bold">
+                Scoring Progress:<span>&nbsp;</span>
+              </p>
+              <p className="">{scoringFinished}</p>
+              <p className="">/</p>
+              <p className="">{participants.length}</p>
+              <p className="">
+                <span>&nbsp;</span>student
+              </p>
+            </div>
           </div>
 
           <p className="w-[100%] flex rounded-lg text-[12px] text-center lg:text-[14px] py-[15px] gap-[10px]">

@@ -2,24 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import CenteredBox from "../../components/CenteredBox";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
 export default function AdministratorMyBookingList() {
   const [booked, setBooked] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [error, setError] = useState(null); // Add error state if needed
 
   useEffect(() => {
     const fetchBooked = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/security/getBooked"
-        );
-        if (!response.ok) throw new Error("Failed to fetch bookings");
-
-        const data = await response.json();
-        setBooked(data);
+        const response = await axiosInstance.get("/security/getBooked");
+        setBooked(response.data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
+        setError("Failed to fetch bookings. Please try again.");
       }
     };
 
@@ -40,25 +38,19 @@ export default function AdministratorMyBookingList() {
     if (!selectedBooking) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/security/bookings/${selectedBooking.id}`,
-        {
-          method: "DELETE",
-        }
+      const response = await axiosInstance.delete(
+        `/security/bookings/${selectedBooking.id}`
       );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete booking");
+      if (response.status === 200) {
+        setBooked(booked.filter((b) => b.id !== selectedBooking.id));
+        console.log(
+          `Booking with ID ${selectedBooking.id} deleted successfully.`
+        );
       }
-
-      // Remove the deleted booking from the state
-      setBooked(booked.filter((b) => b.id !== selectedBooking.id));
-      console.log(
-        `Booking with ID ${selectedBooking.id} deleted successfully.`
-      );
     } catch (error) {
       console.error("Error deleting booking:", error);
+      setError("Failed to delete booking. Please try again.");
     } finally {
       handleCloseDialog();
     }
@@ -99,7 +91,6 @@ export default function AdministratorMyBookingList() {
           <p className="absolute text-sm top-12">List of all bookings</p>
           <hr className="w-full my-3" />
 
-          {/* Table Headers */}
           <div className="flex justify-between w-full p-3 mb-2 font-bold bg-gray-100 rounded-lg">
             <span className="flex-1">Room</span>
             <span className="flex-1">Date</span>
@@ -107,7 +98,6 @@ export default function AdministratorMyBookingList() {
             <span className="w-10"></span>
           </div>
 
-          {/* Table Content */}
           <div className="w-full overflow-y-auto max-h-96">
             {booked.length > 0 ? (
               booked.map((booking) => (
@@ -158,13 +148,12 @@ export default function AdministratorMyBookingList() {
                 </div>
               ))
             ) : (
-              <p>No bookings available</p>
+              <p>{error || "No bookings available"}</p>
             )}
           </div>
         </div>
       </CenteredBox>
 
-      {/* Dialog for confirming deletion */}
       {openDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-sm p-6 text-center bg-white rounded-lg shadow-lg">

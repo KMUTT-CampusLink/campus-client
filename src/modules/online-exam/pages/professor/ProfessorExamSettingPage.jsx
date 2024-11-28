@@ -217,7 +217,7 @@ export default function ProfessorExamSettingPage() {
               Exam password
             </label>
             <input
-              className="border-2 border-[#798184] rounded-xl  px-[10px] py-[7px] text-center w-[210px] appearance-none"
+              className="border-2 border-[#798184] rounded-xl  px-[10px] py-[7px] text-center w-[180px] appearance-none"
               name=""
               id=""
               value={exam.pin}
