@@ -8,8 +8,7 @@ import { FileUploadPopup } from "../../components/AssignmentSubmissionEditPopup"
 
 const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}`;
 
-const StTasks = () => 
-  {
+const StTasks = () => {
   const { state } = useLocation();
   const [sec_id, setSec_id] = useState(() => state?.sec_id || localStorage.getItem("sec_id"));
   const [student_id, setStudentId] = useState(() => localStorage.getItem("studentId")); // Get student_id from local storage
@@ -74,7 +73,7 @@ const StTasks = () =>
 
       <div className="max-md:pt-1 pt-6 pb-4">
         {/* Course Header */}
-        <div className="max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
+        <div className="max-md:pt-1 pt-12 pb-8">
           <CourseHeader
             c_code={details?.course_code}
             c_name={details?.course_name}
@@ -83,14 +82,14 @@ const StTasks = () =>
           />
         </div>
 
-        <div className="max-sm:text-sm max-md:pt-2 pt-6 pb-8 mb-3 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:px-4">
+        <div className="max-sm:text-sm max-md:pt-2 pt-6 pb-8 mb-3 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:px-4">
           <div className="max-md:w-full w-3/4 mx-auto">
-            <div className="text-2xl font-extrabold pb-3 text-[#ecb45e] border-b-2 border-[#ecb45e]">
+            <div className="text-2xl font-extrabold pb-3 text-[#ecb45e] border-b-2 border-[#ecb45e] mb-3">
               Tasks
             </div>
           </div>
 
-          <div className="w-full border-b-[1px] border-gray-300">
+          <div className="w-full">
             <div className="max-md:w-full w-3/4 mx-auto grid grid-cols-3 sm:grid-cols-4 gap-4 font-bold py-2 px-2">
               <div>Title</div>
               <div className="hidden sm:block">Publish Date</div>
@@ -99,7 +98,7 @@ const StTasks = () =>
             </div>
           </div>
 
-          <div className="max-md:w-full w-3/4 mx-auto">
+          <div className="max-md:w-full w-3/4 mx-auto border-b-1 border-gray-300">
             {isLoading ? (
               <div>Loading tasks...</div>
             ) : isError ? (

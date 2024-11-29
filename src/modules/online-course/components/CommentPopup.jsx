@@ -64,12 +64,15 @@ const CommentPopup = ({ closePopup, postDetails }) => {
             </span>
           </div>
         </div>
-        <div className="ml-[6%] mt-4">
-          <h2 className="font-bold mb-2">
-            {comments?.[0]?.topic_title || "Untitled Topic"}
-          </h2>
-          <p>{comments?.[0]?.topic_content || "No content available."}</p>
-        </div>
+        {comments?.[0]?.topic_title && (
+          <div className="ml-[6%] mt-4">
+            <h2 className="font-bold mb-2">
+              {comments[0].topic_title}
+            </h2>
+            <p>{comments[0].topic_content || "No content available."}</p>
+          </div>
+        )}
+
       </div>
 
       {/* Comments Section */}

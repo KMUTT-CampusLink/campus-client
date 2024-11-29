@@ -7,6 +7,7 @@ import {
   faFile,
   faUpload,
   faX,
+  faCloudUploadAlt
 } from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
@@ -176,168 +177,187 @@ const TrCourseMaterials = () => {
   };
 
   return (
-    <div className="">
+    <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
       <NavForIndvCourse page="materials" />
-      <CourseHeader
-        c_code={details?.course_code}
-        c_name={details?.course_name}
-        c_lecturer={details?.lecturer}
-        c_time={details?.time}
-      />
-      <div className="w-full px-28">
-        <div className="my-2 md:pl-4 flex items-center space-x-4 mb-4">
-          <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
+      <div className="py-8">
+        <CourseHeader
+          c_code={details?.course_code}
+          c_name={details?.course_name}
+          c_lecturer={details?.lecturer}
+          c_time={details?.time}
+        />
+      </div>
+      <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx">
+        <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto p-4">
+          <div className="text-2xl font-extrabold pb-3 text-[#ecb45e]">
+            Materials
+          </div>
           <button
             onClick={handleEditClick}
-            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${isEditing ? "bg-red-500" : "bg-blue-500"
-              } text-white`}
+            className={`px-6 py-2 mt-4 rounded-lg flex items-center font-medium justify-center transition duration-200 shadow-md ${isEditing
+              ? "bg-red-500 hover:bg-red-600 text-white"
+              : "bg-[#ecb45e] hover:bg-[#d9a24b] text-white"
+              }`}
           >
-            <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="" />
-            {isEditing ? (
-              <span>Cancel Upload</span>
-            ) : (
-              <span>Upload New Video</span>
-            )}
+            <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="mr-2" />
+            {isEditing ? "Cancel Upload" : "Upload New Video"}
           </button>
+
+
+        </div>
+
+        {isEditing && (
+          <div className="min-h-screen rounded-lg sm:p-5 px-6 sm:px-28 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="md:pl-20 px-10">
+                {/* Video Title */}
+                <div className="mb-6">
+                  <label className="block text-lg font-semibold mb-2 text-gray-700">
+                    Video Title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    placeholder="Enter video title"
+                    className="block w-full p-3 border rounded-md shadow-sm focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
+                  />
+                  {errors.title && <p className="text-red-500 mt-1">{errors.title}</p>}
+                </div>
+
+                {/* Upload Video */}
+                <div className="mb-6">
+                  <label className="block text-lg font-semibold mb-2 text-gray-700">
+                    Upload Video
+                  </label>
+                  <input
+                    type="file"
+                    id="videoFileInput"
+                    name="videoFile"
+                    onChange={handleInputChange}
+                    className="block w-full p-3 border rounded-md focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
+                    accept="video/mp4, video/ogg, video/webm, video/x-msvideo"
+                  />
+                  {formData.videoFile && (
+                    <p className="text-gray-700 mt-1">
+                      Selected Video: {formData.videoFile.name}
+                    </p>
+                  )}
+                  {errors.videoFile && (
+                    <p className="text-red-500 mt-1">{errors.videoFile}</p>
+                  )}
+                </div>
+
+                {/* Upload Additional Materials */}
+                <div className="mb-6">
+                  <label className="block text-lg font-semibold mb-2 text-gray-700">
+                    Upload Additional Materials
+                  </label>
+                  <input
+                    type="file"
+                    id="materialFilesInput"
+                    name="materialFiles"
+                    multiple
+                    onChange={handleInputChange}
+                    className="block w-full p-3 border rounded-md focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
+                    accept="application/pdf,image/*"
+                  />
+                  {formData.materialFiles.length > 0 && (
+                    <ul className="list-disc pl-5 mt-2">
+                      {formData.materialFiles.map((file, index) => (
+                        <li key={index} className="text-gray-700">
+                          {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {errors.materialFiles && (
+                    <p className="text-red-500 mt-1">{errors.materialFiles}</p>
+                  )}
+                </div>
+
+                {/* Submit Button */}
+                <div>
+                  <button
+                    onClick={handleSubmit}
+                    className="bg-[#ecb45e] hover:bg-[#d9a24b] text-white py-2 px-6 rounded-lg flex items-center justify-center font-medium shadow-md transition duration-200"
+                  >
+                    <FontAwesomeIcon icon={faCloudUploadAlt} className="mr-2" />
+                    Upload Files
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+        <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+          <div className="sm:col-span-5">
+            {videoDetails.videoURL && (
+              <div className="w-full">
+                <video
+                  controls
+                  className="max-w-full max-h-[400px] object-cover rounded-lg"
+                  src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
+                ></video>
+              </div>
+            )}{" "}
+          </div>
+          <div className="sm:col-span-2">
+            <div className="mx-auto mt-4 mb-6 sm:ml-6">
+              <label className="block mb-2 font-semibold font-georama">
+                Select Lecture Title
+              </label>
+              <select
+                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
+                value={videoDetails.video}
+                onChange={handleVideoSelectChange}
+              >
+                <option disabled>Select Lecture</option>
+                {videos?.map((vid, index) => (
+                  <option key={index} value={vid.title}>
+                    {vid.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <h3 className="p-4 font-bold text-xl">Class Materials</h3>
+            <div className="">
+              {videoDetails.attachments?.length > 0 ? (
+                <ul className="px-5 w-full">
+                  {videoDetails.attachments.map((file, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center border my-2 rounded-md overflow-hidden"
+                    >
+                      <FontAwesomeIcon
+                        icon={faFile}
+                        size="xl"
+                        style={{ color: "#e6700f" }}
+                        className="px-2"
+                      />
+                      <a
+                        className="p-2 mx-2 overflow-hidden whitespace-nowrap text-ellipsis block w-full"
+                        href={`${MINIO_BASE_URL}/${file.file_path}`}
+                        download
+                        title={file.file_name} // Shows full name on hover
+                      >
+                        {file.file_name}
+                      </a>
+                    </li>
+
+                  ))}
+                </ul>
+              ) : (
+                <p>No attachments available.</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-
-      {isEditing && (
-        <div className="min-h-screen rounded-lg sm:p-5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="md:pl-20 px-10">
-              <div className="mb-4">
-                <label className="block text-lg font-medium">Video Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="Enter video title"
-                  className="block w-full p-2 border rounded-md shadow-sm"
-                />
-                {errors.title && <p className="text-red-500">{errors.title}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium">Upload Video</label>
-                <input
-                  type="file"
-                  id="videoFileInput"
-                  name="videoFile"
-                  onChange={handleInputChange}
-                  className="block w-full border p-2 rounded-md"
-                  accept="video/mp4, video/ogg, video/webm, video/x-msvideo"
-                />
-                {formData.videoFile && (
-                  <p>Selected Video: {formData.videoFile.name}</p>
-                )}
-                {errors.videoFile && (
-                  <p className="text-red-500">{errors.videoFile}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium">
-                  Upload Additional Materials
-                </label>
-                <input
-                  type="file"
-                  id="materialFilesInput"
-                  name="materialFiles"
-                  multiple
-                  onChange={handleInputChange}
-                  className="block w-full border p-2 rounded-md"
-                  accept="application/pdf,image/*"
-                />
-                {formData.materialFiles.length > 0 && (
-                  <ul className="list-disc pl-5">
-                    {formData.materialFiles.map((file, index) => (
-                      <li key={index}>
-                        {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {errors.materialFiles && (
-                  <p className="text-red-500">{errors.materialFiles}</p>
-                )}
-              </div>
-
-              <div>
-                <button
-                  onClick={handleSubmit}
-                  className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition-all"
-                >
-                  <FontAwesomeIcon icon={faCloudUploadAlt} className="mr-2" />
-                  Upload Files
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
-        <div className="sm:col-span-5">
-          {videoDetails.videoURL && (
-            <div className="w-full">
-              <video
-                controls
-                className="max-w-full max-h-[400px] object-cover rounded-lg"
-                src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
-              ></video>
-            </div>
-          )}{" "}
-        </div>
-        <div className="sm:col-span-2">
-          <div className="mx-auto mt-4 mb-6 sm:ml-6">
-            <label className="block mb-2 font-semibold font-georama">
-              Select Lecture Title
-            </label>
-            <select
-              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
-              value={videoDetails.video}
-              onChange={handleVideoSelectChange}
-            >
-              <option disabled>Select Lecture</option>
-              {videos?.map((vid, index) => (
-                <option key={index} value={vid.title}>
-                  {vid.title}
-                </option>
-              ))}
-            </select>
-          </div>
-          <h3 className="p-4 font-bold text-xl">Class Materials</h3>
-          <div className="">
-            {videoDetails.attachments?.length > 0 ? (
-              <ul className="px-5 w-full">
-                {videoDetails.attachments.map((file, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center border my-2 rounded-md"
-                  >
-                    <FontAwesomeIcon
-                      icon={faFile}
-                      size="xl"
-                      style={{ color: "#e6700f" }}
-                      className="px-2"
-                    />
-                    <a
-                      className="p-2 mx-2"
-                      href={`${MINIO_BASE_URL}/${file.file_path}`}
-                      download
-                    >
-                      {file.file_name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No attachments available.</p>
-            )}
-          </div>
-        </div>
-      </div></div>
+    </div>
   );
 };
 

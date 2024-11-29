@@ -75,46 +75,53 @@ const TrTasks = () => {
   };
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden">
+    <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
       <NavForIndvCourse page={"tasks"} />
 
-      <CourseHeader
-        c_code={details?.course_code}
-        c_name={details?.course_name}
-        c_lecturer={details?.lecturer}
-        c_time={details?.time}
-      />
+      <div className="py-8">
 
-      <div className="py-8 w-full">
-        <div className="w-3/4 mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-[#ecb45e]">TASKS</div>
-          <button
-            className="bg-[#ecb45e] text-white py-2 px-4 rounded hover:bg-[#d9a24b] transition duration-200"
-            onClick={handleUploadClick}
-          >
-            <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Upload
-          </button>
-        </div>
+        <CourseHeader
+          c_code={details?.course_code}
+          c_name={details?.course_name}
+          c_lecturer={details?.lecturer}
+          c_time={details?.time}
+        />
       </div>
 
-      <AssignmentsList
-        assignments={assignments} // Pass fetched assignments
-        toSubmissionTr={toSubmissionTr}
-        handleEditClick={() => { }}
-        handleDeleteClick={handleDeleteClick}
-        isLoading={isLoading} // Pass loading state
-        error={error} // Pass error state
-      />
+      <div className="py-8 max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx">
+        <div className="py-8 w-full">
+          <div className="w-3/4 mx-auto flex justify-between items-center">
+            <div className="text-2xl font-bold text-[#ecb45e]">TASKS</div>
+            <button
+              className="bg-[#ecb45e] text-white py-2 px-4 rounded hover:bg-[#d9a24b] transition duration-200"
+              onClick={handleUploadClick}
+            >
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+              Upload
+            </button>
+          </div>
+        </div>
 
-
-      {isPopupOpen && (
-        <UploadPopup
-          onClose={handleClosePopup}
-          onSubmit={handleSubmitAssignment}
+        <AssignmentsList
+          assignments={assignments} // Pass fetched assignments
+          toSubmissionTr={toSubmissionTr}
+          handleEditClick={() => { }}
+          handleDeleteClick={handleDeleteClick}
+          isLoading={isLoading} // Pass loading state
+          error={error} // Pass error state
         />
-      )}
+
+
+        {isPopupOpen && (
+          <UploadPopup
+            onClose={handleClosePopup}
+            onSubmit={handleSubmitAssignment}
+          />
+        )}
+      </div>
     </div>
+
+
   );
 };
 

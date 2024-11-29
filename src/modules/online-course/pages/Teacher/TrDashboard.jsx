@@ -25,18 +25,18 @@ const TrDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />
-      <div className="w-full 2xl:pt-5">
+      <div className="w-full mt-12">
         <Searchbar
           search={search}
           setSearch={setSearch}
           searchFunction={searchFunction}
         />
-        <div className="w-5/6 m-auto pt-4">
-          <span className="text-3xl font-bold pb-4 2xl:text-5xl">
-            All Courses
-          </span>
+        <div className="w-5/6 m-auto pt-1">
+          <div className="flex justify-between items-center gap-2 pb-2 lg:pr-10">
+            <span className="text-2xl sm:text-3xl font-bold pb-1 2xl:text-5xl">All Courses</span>
+          </div>
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-2 sm:gap-8 lg:gap-10 justify-items-center mx-auto max-w-7xl 2xl:max-w-[90%]"
           >

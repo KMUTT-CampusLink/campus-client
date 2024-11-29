@@ -76,10 +76,16 @@ const UploadPopup = ({ onClose, onSubmit, material }) => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ecb45e] placeholder-gray-400"
               placeholder="Enter the assignment title"
               required
+              style={{
+                borderColor: "#d4e1f7", // Light border color
+                backgroundColor: "#f9fbfe", // Subtle background color
+                color: "#334e68", // Text color
+              }}
             />
+
           </div>
 
           {/* File Input */}
@@ -118,8 +124,8 @@ const UploadPopup = ({ onClose, onSubmit, material }) => {
                         file:mr-4 file:py-2 file:px-4
                         file:rounded file:border-0
                         file:text-sm file:font-semibold
-                        file:bg-blue-100 file:text-blue-700
-                        hover:file:bg-blue-200"
+                        file:bg-[#ecb45e] file:text-[#ffffff]
+                        hover:file:bg-[#ecb45e]"
             />
           </div>
 
@@ -137,7 +143,7 @@ const UploadPopup = ({ onClose, onSubmit, material }) => {
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-[#ecb45e] text-white px-4 py-2 rounded hover:bg-[#ecb45e]"
             >
               {material ? "Update" : "Upload"}
             </button>
