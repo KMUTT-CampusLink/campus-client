@@ -11,6 +11,7 @@ import {
   fetchAllCommentsByPostID,
   fetchCourseHeaderBySectionIDForStudent,
   fetchAllAssignmentsBySectionID,
+  fetchAssignmentSubmissionFilePath,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -115,6 +116,17 @@ export const useAllCommentsByPostID = (postId) => {
     enabled: !!postId, // Ensure postId is valid
     onError: (error) => {
       console.error("Error fetching comments:", error);
+    },
+  });
+};
+
+export const useAssignmentSubmissionFilePath = (assignmentID, studentID) => {
+  return useQuery({
+    queryKey: ["submissionFilePath", assignmentID, studentID],
+    queryFn: () => fetchAssignmentSubmissionFilePath(assignmentID, studentID),
+    enabled: !!assignmentID && !!studentID,
+    onError: (error) => {
+      console.error("Error fetching assignment submission file path:", error);
     },
   });
 };

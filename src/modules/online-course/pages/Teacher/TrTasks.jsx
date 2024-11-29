@@ -10,9 +10,7 @@ import CourseHeader from "../../components/CourseHeader";
 import AssignmentsList from "./TrTaskCard";
 
 const TrTasks = () => {
-  const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
-  import.meta.env.VITE_MINIO_BUCKET_NAME
-}`;
+
   const sec_id = localStorage.getItem("sec_id");
 
   // Fetch course details and assignments
@@ -33,16 +31,16 @@ const TrTasks = () => {
     navigate("/courses/Tr/tasks/submission", { state: { task: assignment } });
 
   // Add a function to handle delete
-const handleDeleteClick = (assignment) => {
-  deleteAssignment.mutate(assignment.id, {
-    onSuccess: () => {
-      console.log("Assignment deleted successfully!");
-    },
-    onError: (error) => {
-      console.error("Error deleting assignment:", error);
-    },
-  });
-};
+  const handleDeleteClick = (assignment) => {
+    deleteAssignment.mutate(assignment.id, {
+      onSuccess: () => {
+        console.log("Assignment deleted successfully!");
+      },
+      onError: (error) => {
+        console.error("Error deleting assignment:", error);
+      },
+    });
+  };
 
 
   // Open upload popup for new assignment
@@ -101,13 +99,13 @@ const handleDeleteClick = (assignment) => {
       </div>
 
       <AssignmentsList
-  assignments={assignments} // Pass fetched assignments
-  toSubmissionTr={toSubmissionTr}
-  handleEditClick={() => {}}
-  handleDeleteClick={handleDeleteClick}
-  isLoading={isLoading} // Pass loading state
-  error={error} // Pass error state
-/>
+        assignments={assignments} // Pass fetched assignments
+        toSubmissionTr={toSubmissionTr}
+        handleEditClick={() => { }}
+        handleDeleteClick={handleDeleteClick}
+        isLoading={isLoading} // Pass loading state
+        error={error} // Pass error state
+      />
 
 
       {isPopupOpen && (

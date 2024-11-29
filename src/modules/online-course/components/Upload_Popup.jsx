@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
-  import.meta.env.VITE_MINIO_BUCKET_NAME
-}`;
+
 
 const UploadPopup = ({ onClose, onSubmit, material }) => {
   const [title, setTitle] = useState(""); // Title of the assignment

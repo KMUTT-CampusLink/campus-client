@@ -7,8 +7,11 @@ import {
   editAssignment,
   deleteAssignment,
   createDiscussionReply,
+  editAssignmentSubmission,
+  addAssignmentSubmission,
 } from "./api";
 
+// Mutation to create a new discussion post
 export const useDiscussionPostBySectionID = () => {
   const queryClient = useQueryClient();
 
@@ -53,6 +56,7 @@ export const useDiscussionPostBySectionID = () => {
   });
 };
 
+// Mutation to edit a discussion post
 export const useEditDiscussionPost = () => {
   const queryClient = useQueryClient();
 
@@ -65,6 +69,7 @@ export const useEditDiscussionPost = () => {
   });
 };
 
+// Mutation to delete a discussion post
 export const useDeleteDiscussionPost = () => {
   const queryClient = useQueryClient();
 
@@ -75,6 +80,8 @@ export const useDeleteDiscussionPost = () => {
     },
   });
 };
+
+// Mutation to create a new discussion reply
 export const useCreateDiscussionReply = () => {
   const queryClient = useQueryClient();
 
@@ -92,20 +99,6 @@ export const useCreateDiscussionReply = () => {
 };
 
 // Mutation to create a new assignment
-// export const useCreateAssignment = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation({
-//     mutationFn: createAssignment,
-//     onSuccess: () => {
-//       // Invalidate the assignments cache to refetch data
-//       queryClient.invalidateQueries(["assignments"]);
-//     },
-//     onError: (error) => {
-//       console.log(error);
-//     },
-//   });
-// };
-
 export const useCreateAssignment = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -125,6 +118,7 @@ export const useCreateAssignment = () => {
 // Mutation to edit an existing assignment
 export const useEditAssignment = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ assignmentID, body }) => editAssignment(assignmentID, body),
     onSuccess: () => {
@@ -151,3 +145,34 @@ export const useDeleteAssignment = () => {
     },
   });
 };
+
+
+// Mutation to add an assignment submission
+export const useAddAssignmentSubmission = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData) => addAssignmentSubmission(formData),
+    onSuccess: () => {
+      // Invalidate related queries to refresh data
+      queryClient.invalidateQueries(["assignments"]);
+    },
+    onError: (error) => {
+      console.error("Error submitting assignment:", error);
+    },
+  });
+};
+
+// mutation to edit an assignment Submission
+export const useEditAssignmentSubmission = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: editAssignmentSubmission,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["assignments"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+}
