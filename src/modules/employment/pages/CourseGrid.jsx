@@ -2,23 +2,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import React, { useState, useEffect } from "react";
-import StudentCard from "../components/StudentCard";
+import CourseCard from "../components/CourseCard";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useNavigate } from "react-router-dom";
 import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-const ITEMS_PER_PAGE = 12;
-const StudentGrid = () => {
-  const [students, setStudents] = useState([]);
+const ITEMS_PER_PAGE = 9;
+const CourseGrid = () => {
+  const [courses, setCourses] = useState([{code: "CSC202", name: "d mha change like", semester: "1/2025"},
+                                          {code: "CSC32", name: "d nay change like", semester: "2/2025"},
+                                          {code: "LNG802", name: "d mhr change liked", semester: "1/2025"},
+                                          {code: "CSC101", name: "d mhr change likes", semester: "1/2025"},
+                                          {code: "CSC372", name: "change like", semester: "2/2025"},
+                                          {code: "LNG2", name: "d mhr", semester: "1/2025"},
+                                          {code: "CSC02", name: "d mha change like", semester: "1/2025"},
+                                          {code: "CSC72", name: "d nay change like", semester: "2/2025"},
+                                          {code: "LNG82", name: "d mhr change liked", semester: "1/2025"},
+                                          {code: "CSC10", name: "d mhr change likes", semester: "1/2025"},
+                                          {code: "CSC3", name: "change like", semester: "2/2025"},
+                                          {code: "LNG8", name: "d mhr", semester: "1/2025"}]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [programs, setPrograms] = useState([]);
-  const [selectedProgram, setSelectedProgram] = useState();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const filteredStudents = students.filter((student) => {
+
+  const filteredCourses = courses.filter((course) => {
     const searchQueryNormalized = searchQuery
       .trim()
       .replace(/\s+/g, " ")
@@ -28,26 +38,21 @@ const StudentGrid = () => {
 
     const nameMatches = searchWords.every(
       (word) =>
-        (student.firstname && student.firstname.toLowerCase().includes(word)) ||
-        (student.lastname && student.lastname.toLowerCase().includes(word))
+        (course.name && course.name.toLowerCase().includes(word))
     );
 
-    const idMatches = searchWords.every(
-      (word) => student.id && student.id.toLowerCase().includes(word)
+    const codeMatches = searchWords.every(
+      (word) => course.code && course.code.toLowerCase().includes(word)
     );
 
-    const programMatches = selectedProgram
-      ? student.degree_id === selectedProgram
-      : true;
-
-    return (nameMatches || idMatches) && programMatches;
+    return nameMatches || codeMatches;
   });
 
-  const selectedStudents = filteredStudents.slice(
+  const selectedCourses = filteredCourses.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
-  const totalPages = Math.ceil(filteredStudents.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -57,35 +62,11 @@ const StudentGrid = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axiosInstance.get(`employ/getStu`);
-      setStudents(result.data);
-    };
-    fetchData();
-  }, []);
 
 
-  useEffect(() => {
-    const fetchPrograms = async () => {
-      try {
-        const result = await axiosInstance.get(`employ/getProgramName`);
-        setPrograms(result.data);
-      } catch (error) {
-        console.error("Error fetching programs:", error);
-      }
-    };
-
-    fetchPrograms();
-  }, []);
-
-  const handleProgramChange = (e) => {
-    const faculty = parseInt(e.target.value);
-    setSelectedProgram(faculty);
-  };
 
   const handleClick = () => {
-    navigate(`/employ/studentAdd`);
+    navigate(`/employ/courseAdd`);
   };
   const handleClickback = () => {
     navigate(`/employ`);
@@ -94,16 +75,16 @@ const StudentGrid = () => {
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
       <NavBar />
-      <main className="pt-16 md:pt-20 px-5 md:px-20">
-        <div className=" flex justify-between mb-2 md:mb-4 px-1 md:px-2">
-          <div className="w-1/2 md:space-x-6 space-x-2 flex flex-row items-center">
+      <main className="pt-16 md:pt-20 px-7 sm:px-16 lg:px-40">
+        <div className=" mb-2 md:mb-4 px-1 md:px-2 space-y-3 sm:space-y-6">
+          <div className="md:space-x-7 space-x-3 flex flex-row items-center">
             <FontAwesomeIcon
               icon={faArrowLeft}
               className="hover:shadow-sm md:h-7 "
               onClick={handleClickback}
             />
             <input
-              className="bg-[#F2F2F2] outline-none transition hover:shadow-md w-3/5 md:w-3/4 text-[12px] md:text-[16px] font-georama  md:h-10 h-7 rounded-lg pl-3 "
+              className="bg-[#F2F2F2] outline-none transition hover:shadow-md text-[12px] md:text-[16px] font-georama  md:h-10 h-7 rounded-lg pl-3 w-1/3"
               type="text"
               id="search"
               placeholder="Search"
@@ -113,36 +94,27 @@ const StudentGrid = () => {
               }}
             ></input>
           </div>
-          <button
+
+          <div className="flex justify-between"> 
+            <h1 className="font-geologica text-xl sm:text-2xl">All courses</h1>
+            <button
             onClick={handleClick}
             className=" p-1 border border-black text-[12px] md:text-[16px]  rounded-md shadow-lg hover:shadow-xl transition font-opensans md:h-10 md:w-[140px] w-[105px] flex jusfiy-center items-center"
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1 md:h-5 " />
-            New Student
+            New Course
           </button>
+          </div>
+          
         </div>
 
-        <div className="flex justify-center">
-          <div className="w-1/2">
-            <select
-              name="faculty"
-              value={selectedProgram ? selectedProgram : ""}
-              onChange={handleProgramChange}
-              className="w-full border-b border-black focus:outline-none font-geologica text-[12px] md:text-[16px] text-center"
-            >
-              <option value="">All Programs</option>
-              {programs.map((program) => (
-                <option key={program.id} value={program.id}>
-                  {program.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        
+
+
 
         <div className="flex justify-center flex-wrap gap-x-7 gap-y-4 sm:gap-7 pt-4 md:pt-6 ">
-          {selectedStudents.map((student) => (
-            <StudentCard key={student.id} student={student} />
+          {selectedCourses.map((course) => (
+            <CourseCard key={course.code} course={course} />
           ))}
         </div>
 
@@ -172,4 +144,4 @@ const StudentGrid = () => {
   );
 };
 
-export default StudentGrid;
+export default CourseGrid;

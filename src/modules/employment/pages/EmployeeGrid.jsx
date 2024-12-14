@@ -97,8 +97,8 @@ const EmployeeGrid = () => {
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
       <NavBar />
-      <main className="pt-16 md:pt-20 px-5 md:px-20 mb-2">
-        <div className="border-none flex justify-between mb-2 md:mb-4 px-1 md:px-2">
+      <main className="pt-16 md:pt-20 px-5 md:px-20">
+        <div className="flex justify-between mb-2 md:mb-4 px-1 md:px-2">
           <div className="w-1/2 md:space-x-6 space-x-2 flex flex-row items-center">
             <FontAwesomeIcon
               icon={faArrowLeft}

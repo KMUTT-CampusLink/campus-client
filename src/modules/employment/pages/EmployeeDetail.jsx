@@ -50,9 +50,7 @@ const EmployeeDetail = () => {
   //console.log(employee);
 
   // if (!employee) return <p>Loading employee data...</p>;
-  if (!employee) {
-    return navigate(`/employ/employee`);
-  }
+  if (!employee) return <p>Loading student data...</p>;
 
   const dobS = employee.date_of_birth;
   const dob = new Date(dobS);
