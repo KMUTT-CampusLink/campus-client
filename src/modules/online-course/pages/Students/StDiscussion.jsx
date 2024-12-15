@@ -10,7 +10,9 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import CommentPopup from "../../components/CommentPopup";
-import PopupDiscussion from "../../components/PopupDiscussion"; // New popup component for upload
+import PopupDiscussion from "../../components/PopupDiscussion";
+import DEditPopup from "../../components/DEditPopup";
+import ConfirmationPopup from "../../components/ConfirmationPopup"; // Import ConfirmationPopup
 import {
   useAllDiscussionPostsBySectionID,
   useCourseHeaderBySectionID,
@@ -24,20 +26,27 @@ import CourseHeader from "../../components/CourseHeader";
 
 const StDiscussion = () => {
   const sec_id = localStorage.getItem("sec_id");
-  const loggedInUserId = localStorage.getItem("userId"); // Get logged-in user ID
+  const loggedInUserId = localStorage.getItem("userId");
 
   const { data: details } = useCourseHeaderBySectionID(sec_id);
   const { data: posts } = useAllDiscussionPostsBySectionID(sec_id);
 
-  const editMutation = useEditDiscussionPost(); // Mutation for editing
-  const deleteMutation = useDeleteDiscussionPost(); // Mutation for deleting
-  const createMutation = useDiscussionPostBySectionID(); // Mutation for creating a post
+  const editMutation = useEditDiscussionPost();
+  const deleteMutation = useDeleteDiscussionPost();
+  const createMutation = useDiscussionPostBySectionID();
 
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
   const [isUploadPopupOpen, setIsUploadPopupOpen] = useState(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false); // State for Delete Confirmation popup
+  const [selectedPost, setSelectedPost] = useState(null);
   const [dropDownOpen, setDropDownOpen] = useState(false);
 
-  const openCommentPopup = () => setIsCommentPopupOpen(true);
+  const openCommentPopup = (post) => {
+    setSelectedPost(post); // Pass the entire post object
+    setIsCommentPopupOpen(true);
+  };
+
   const closeCommentPopup = () => setIsCommentPopupOpen(false);
 
   const openUploadPopup = () => setIsUploadPopupOpen(true);
@@ -47,33 +56,34 @@ const StDiscussion = () => {
     try {
       await createMutation.mutateAsync(newTopic, {
         onSuccess: () => {
-          alert("Post created successfully!");
-          closeUploadPopup(); // Close the popup after successful submission
+          console.log("Post created successfully!");
+          closeUploadPopup();
         },
       });
     } catch (error) {
       console.error("Error creating discussion:", error);
-      alert("Failed to create post. Please try again.");
     }
   };
 
   const handleEdit = (post) => {
-    const updatedPost = { ...post, title: "Updated Title" }; // Example update logic
-    editMutation.mutate(
-      { topicId: post.id, updatedPost },
-      {
-        onSuccess: () => alert("Post updated successfully!"),
-        onError: (error) => console.error("Failed to update post:", error),
-      }
-    );
+    setSelectedPost(post);
+    setIsEditPopupOpen(true);
   };
 
   const handleDelete = (postId) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      deleteMutation.mutate(postId, {
-        onSuccess: () => alert("Post deleted successfully!"),
-        onError: (error) => console.error("Failed to delete post:", error),
-      });
+    setSelectedPost({ id: postId }); // Temporarily store the post to delete
+    setIsDeletePopupOpen(true); // Open confirmation popup
+  };
+
+  const confirmDelete = async () => {
+    if (selectedPost?.id) {
+      try {
+        await deleteMutation.mutateAsync(selectedPost.id);
+        console.log("Post deleted successfully!");
+        setIsDeletePopupOpen(false); // Close confirmation popup
+      } catch (error) {
+        console.error("Failed to delete post:", error);
+      }
     }
   };
 
@@ -87,7 +97,7 @@ const StDiscussion = () => {
         c_time={details?.time}
       />
 
-      {!isCommentPopupOpen && !isUploadPopupOpen && (
+      {!isCommentPopupOpen && !isUploadPopupOpen && !isEditPopupOpen && (
         <div className="py-8 w-full px-4">
           <div className="flex justify-between items-center lg:w-3/4 mx-auto mb-6 relative">
             <h2 className="text-2xl font-bold text-[#ecb45e]">Upload bar</h2>
@@ -171,7 +181,13 @@ const StDiscussion = () => {
                   </div>
                   <button
                     className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white py-2 rounded-md"
-                    onClick={openCommentPopup}
+                    onClick={() =>
+                      openCommentPopup({
+                        id: discussion.id,
+                        ownerName: discussion.owner_name,
+                        createdAt: discussion.create_at,
+                      })
+                    } // Pass post ID here
                   >
                     Comment
                   </button>
@@ -200,11 +216,30 @@ const StDiscussion = () => {
         </div>
       )}
 
-      {isCommentPopupOpen && <CommentPopup closePopup={closeCommentPopup} />}
+      {isCommentPopupOpen && (
+        <CommentPopup
+          closePopup={closeCommentPopup}
+          postDetails={selectedPost} // Pass the selected post details
+        />
+      )}
+
       {isUploadPopupOpen && (
         <PopupDiscussion
           closePopup={closeUploadPopup}
           onSubmit={handleSubmission}
+        />
+      )}
+      {isEditPopupOpen && (
+        <DEditPopup
+          post={selectedPost}
+          closePopup={() => setIsEditPopupOpen(false)}
+        />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmationPopup
+          message="Are you sure you want to delete this post?"
+          onConfirm={confirmDelete}
+          onCancel={() => setIsDeletePopupOpen(false)}
         />
       )}
     </div>
