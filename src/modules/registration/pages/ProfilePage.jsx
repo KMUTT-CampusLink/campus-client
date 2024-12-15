@@ -47,7 +47,7 @@ function ProfilePage() {
     <div className={containerDivStyles}>
       <NavBar />
       <main className={mainStyles}>
-        <div className="grid grid-cols-1 min-[1200px]:grid-cols-3 bg-gray-100 p-6 rounded-lg shadow-lg">
+        <div className="grid grid-cols-1 min-[1200px]:grid-cols-3 text-xs md:text-base bg-gray-100 p-6 rounded-lg shadow-lg">
           <div className="col-span-2 p-4">
             <h2 className="text-3xl font-bold">My Profile</h2>
             {/* Logo Section */}
@@ -96,11 +96,11 @@ function ProfilePage() {
               </div>
 
               <div className="mx-6 my-2">
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Identification Number</span>
                   <span>{profileData?.identification_no || "N/A"}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Date of Birth</span>
                   <span>
                     {new Date(profileData?.date_of_birth).toLocaleDateString()}
@@ -115,23 +115,23 @@ function ProfilePage() {
               </div>
 
               <div className="mx-6 my-2">
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Address</span>
                   <span>{profileData?.address}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Subdistrict</span>
                   <span>{profileData?.sub_district}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>District</span>
                   <span>{profileData?.district}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Province</span>
                   <span>{profileData?.province}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Postal Code</span>
                   <span>{profileData?.postal_code}</span>
                 </p>
