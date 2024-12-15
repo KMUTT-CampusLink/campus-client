@@ -19,6 +19,7 @@ import SInfoCard from "../components/SInfoCard";
 import LoadingPage from "../../dev/pages/LoadingPage";
 import { GiWallet } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import ClubCard from "../components/ClubCard";
 
 function ProfilePage() {
   const studentId = localStorage.getItem("studentId");
@@ -28,7 +29,7 @@ function ProfilePage() {
     isLoading,
     isProfileError,
   } = useStudentProfileData(studentId);
-
+  console.log(profileData);
   const [semester, setSemester] = useState("");
   const [semesterId, setSemesterId] = useState("");
 
@@ -149,6 +150,7 @@ function ProfilePage() {
                 <p>My Wallet</p>
               </button>
             </Link>
+            <ClubCard clubs={profileData?.clubs} />
             <GradeCard
               studentId={studentId}
               semester={semester}
