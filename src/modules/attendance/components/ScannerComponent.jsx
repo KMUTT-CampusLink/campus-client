@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
-import SuccessCard from "./SuccessCard"; // Import the SuccessCard component
+import SuccessCard from "./SuccessCard";
+import { axiosInstance } from "../../../utils/axiosInstance"; // Ensure this import is correct
 
 const QrScannerComponent = () => {
   const [scannedData, setScannedData] = useState(null);
-  const [showSuccessCard, setShowSuccessCard] = useState(false); // State to control the SuccessCard display
-  const [message, setMessage] = useState(""); // Message from backend
-  const [messageType, setMessageType] = useState("success"); // Type of message: success or error
+  const [showSuccessCard, setShowSuccessCard] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("success");
+  const [isCooldown, setIsCooldown] = useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
     const qrScanner = new QrScanner(
       videoRef.current,
-      (result) => handleScanSuccess(result),
+      (result) => {
+        if (!isCooldown) handleScanSuccess(result); // Prevent processing during cooldown
+      },
       { highlightScanRegion: true }
     );
 
@@ -21,9 +25,11 @@ const QrScannerComponent = () => {
     return () => {
       qrScanner.stop();
     };
-  }, []);
+  }, [isCooldown]);
 
   const handleScanSuccess = (result) => {
+    console.log("Scan detected:", result.data);
+
     let qrData = result.data;
 
     try {
@@ -35,30 +41,39 @@ const QrScannerComponent = () => {
 
     setScannedData(qrData);
     sendScannedDataToBackend(qrData);
+
+    // Set cooldown
+    setIsCooldown(true);
+    console.log("Cooldown started");
+    setTimeout(() => {
+      setIsCooldown(false);
+      console.log("Cooldown ended");
+    }, 5000); // Cooldown duration: 5 seconds
   };
 
   const sendScannedDataToBackend = async (qrData) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/attend/validate/${qrData}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      console.log("Sending request with qrData:", qrData); // Log qrData being sent
+      const response = await axiosInstance.get(`/attend/validate/${qrData}`);
 
-      const result = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
+        const result = response.data;
         setMessage(result.message);
         setMessageType("success");
       } else {
-        setMessage(result.message);
+        setMessage("Error validating QR code.");
         setMessageType("error");
       }
 
       setShowSuccessCard(true); // Show the success card
     } catch (error) {
-      setMessage("Failed to send QR data to backend.");
+      console.error("Error sending QR data:", error);
+      if (error.response) {
+        console.error("Error response from server:", error.response);
+        setMessage(`Error: ${error.response.data.message || 'Unknown error'}`);
+      } else {
+        setMessage("Failed to send QR data to backend.");
+      }
       setMessageType("error");
       setShowSuccessCard(true);
     }
@@ -70,10 +85,11 @@ const QrScannerComponent = () => {
 
   return (
     <div>
-            <video
-            ref={videoRef}
-            className="border-2 border-gray-500 rounded-lg max-w-full w-full max-h-[60vh] md:max-h-[80vh] object-contain"
-            autoPlay/>
+      <video
+        ref={videoRef}
+        className="border-2 border-gray-500 rounded-lg max-w-full w-full max-h-[60vh] md:max-h-[80vh] object-contain"
+        autoPlay
+      />
       {showSuccessCard && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <SuccessCard message={message} messageType={messageType} onClose={handleCloseCard} />

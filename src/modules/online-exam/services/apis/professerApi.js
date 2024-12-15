@@ -166,7 +166,7 @@ export const getStudentScoreById = async (questionId, studentId) => {
   }
 };
 
-export const updateStudentScore = async (finalEssayScore, studentExamId, studentId) => {
+export const updateStudentScore = async (finalEssayScore, finalComment, studentExamId, studentId) => {
   try {
     const response = await axiosInstance.put(
       "/exams/professor/updateStudentScore",
@@ -174,6 +174,7 @@ export const updateStudentScore = async (finalEssayScore, studentExamId, student
         studentId: studentId,
         studentExamId: studentExamId,
         finalEssayScore: finalEssayScore,
+        finalComment: finalComment,
       }
     );
     return response;
@@ -202,6 +203,24 @@ export const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     const response = await axiosInstance.post("/exams/professor/uploadFile", file);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
+export const getAllStudentInSection = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(`/exams/professor/getAllStudentInSection?sectionid=${sectionId}`);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
+export const checkHasParticiipant = async (examId) => {
+  try {
+    const response = await axiosInstance.get(`/exams/professor/checkHasParticiipant?examId=${examId}`);
     return response;
   } catch (error) {
     return error.response.data;

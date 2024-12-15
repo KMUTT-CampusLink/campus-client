@@ -3,8 +3,26 @@ import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import EditSubmissionPopup from "../../components/EditSubmission_Popup";
+import { useLocation } from "react-router-dom";
+import { useCourseHeaderBySectionIDForStudent } from "../../services/queries";
+import { useEffect } from "react";
+import CourseHeader from "../../components/CourseHeader";
 
 const StTasks = () => {
+  const {state } = useLocation();
+
+  const [sec_id, setSec_id] = useState(() => {
+    return state?.sec_id || localStorage.getItem("sec_id");
+  });
+
+  useEffect(() => {
+    if (sec_id) {
+      localStorage.setItem("sec_id", sec_id);
+    }
+  }, [sec_id]);
+  const { data: details } = useCourseHeaderBySectionIDForStudent(sec_id);
+  console.log(details);
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popUpData, setPopUpData] = useState(null);
   const [tasks, setTasks] = useState([
@@ -34,22 +52,12 @@ const StTasks = () => {
     <div className="min-h-screen overflow-x-hidden bg-gray-100">
       <NavForIndvCourse page={"tasks"} />
       <div className="max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
-          <h2 className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
-            About Classroom
-          </h2>
-          <div className="text-gray-800">
-            <span className="font-semibold">Course:</span> CSC-230 Computer
-            Architecture & Design
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Lecturer:</span> Arjan
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
-            (Thursday)
-          </div>
-        </div>
+        <CourseHeader 
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
       </div>
       <div className="py-8 w-full">
         <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center">

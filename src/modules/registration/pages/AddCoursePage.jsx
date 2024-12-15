@@ -12,7 +12,7 @@ import { ErrorSkeleton } from "../styles/Skeletons";
 import LoadingPage from "../../dev/pages/LoadingPage";
 function AddCoursePage() {
   const studentId = localStorage.getItem("studentId");
-  const currentSemesterId = 1016;
+  const currentSemesterId = localStorage.getItem("semesterId");
   const navigate = useNavigate();
 
   const [headId, setHeadId] = useState("");
@@ -59,19 +59,19 @@ function AddCoursePage() {
         <main className={mainStyles}>
           <HeadLineCard title="Add Courses" link="/regis/course/detail" />
           <div className="divider"></div>
-          <div className="bg-white p-6 shadow-md rounded-md">
-            <label className="mb-4 flex items-center gap-2 border px-2 rounded-lg">
+          <div className="p-6 bg-white rounded-md shadow-md">
+            <label className="flex items-center gap-2 px-2 mb-4 border rounded-lg">
               <FontAwesomeIcon icon={faMagnifyingGlass} />
               <input
                 value={searchTerm}
                 onChange={handleInputChange}
                 placeholder="Search by course name or code"
-                className="p-2 w-full max-w-md focus:outline-none"
+                className="w-full max-w-md p-2 focus:outline-none"
               />
             </label>
 
-            <div className="bg-gray-200 rounded-md p-4">
-              <div className="bg-blue-100 text-center p-4 rounded-md mb-4">
+            <div className="p-4 bg-gray-200 rounded-md">
+              <div className="p-4 mb-4 text-center bg-blue-100 rounded-md">
                 <p>
                   Welcome to the Course Search! Use the search bar above to find
                   courses.
@@ -79,18 +79,18 @@ function AddCoursePage() {
               </div>
 
               {hasSearched && courses?.length > 0 ? (
-                <div className="bg-gray-200 rounded-md p-4 grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-4 p-4 bg-gray-200 rounded-md">
                   {courses.map((course, index) => (
                     <div
                       key={index}
-                      className="bg-white shadow-md rounded-lg p-4 border border-gray-300 hover:bg-gray-100 cursor-pointer"
+                      className="p-4 bg-white border border-gray-300 rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
                       onClick={() => handleRowClick(course.code)}
                     >
-                      <div className="flex justify-between items-center mb-2">
+                      <div className="flex items-center justify-between mb-2">
                         <h3 className="text-lg font-bold text-[#DC5A52]">
                           Course Code: {course.code}
                         </h3>
-                        <span className="text-gray-600 text-sm">
+                        <span className="text-sm text-gray-600">
                           Credits: {course.credits}
                         </span>
                       </div>
@@ -104,7 +104,7 @@ function AddCoursePage() {
                   ))}
                 </div>
               ) : hasSearched && courses?.length === 0 ? (
-                <div className="bg-orange-300 text-blue-800 text-center p-4 rounded-md mt-4">
+                <div className="p-4 mt-4 text-center text-blue-800 bg-orange-300 rounded-md">
                   <p>
                     No courses found. Please try searching with a different
                     course name or course code.

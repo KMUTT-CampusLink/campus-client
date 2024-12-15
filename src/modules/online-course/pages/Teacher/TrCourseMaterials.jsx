@@ -1,230 +1,336 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
-  faTrash,
-  faVideo,
-  faPlus,
+  faCheck,
+  faFile,
+  faUpload,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
-import UploadPopup from "../../components/Upload_Popup";
-import DeleteConfirmationPopup from "../../components/DeleteConfirmationPopup";
+import CourseHeader from "../../components/CourseHeader";
+import {
+  useAllVideos,
+  useCourseHeaderBySectionID,
+} from "../../services/queries";
+import { axiosInstance } from "../../../../utils/axiosInstance";
+import { z } from "zod";
+import popToast from "../../../../utils/popToast";
+
+const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${
+  import.meta.env.VITE_MINIO_BUCKET_NAME
+}`;
 
 const TrCourseMaterials = () => {
-  const [materials, setMaterials] = useState([
-    {
-      title: "Lecture 1 - Introduction",
-      date: "12/4/2024",
-      attachments: ["name"],
-      quantity: 1,
-      videos: ["(3 hr 4 minutes)", "(2 hr 10 minutes)"], // Multiple recordings
-    },
-    {
-      title: "Lecture 2 - Data Representation",
-      date: "12/5/2024",
-      attachments: ["name"],
-      quantity: 1,
-      videos: ["(3 hr 4 minutes)"],
-    },
-  ]);
+  const sec_id = localStorage.getItem("sec_id") || 1001;
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [currentMaterial, setCurrentMaterial] = useState(null);
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
-  const [deleteContext, setDeleteContext] = useState(null);
-  const [materialToDelete, setMaterialToDelete] = useState(null);
-  const [recordingIndex, setRecordingIndex] = useState(null);
+  const schema = z.object({
+    title: z.string().min(1, { message: "Video Title is required" }),
+    videoFile: z
+      .instanceof(File)
+      .refine((file) => file?.size !== 0, "Video file is required")
+      .refine(
+        (file) => file?.size < 50 * 1024 * 1024,
+        "Video file must be at most 50MB"
+      )
+      .refine(
+        (file) =>
+          ["video/mp4", "video/ogg", "video/webm", "video/x-msvideo"].includes(
+            file.type
+          ),
+        "Invalid video file type. Allowed types: MP4, OGG, WebM, AVI."
+      ),
+    materialFiles: z
+      .array(
+        z
+          .instanceof(File)
+          .refine((file) => file?.size !== 0, "File is required")
+          .refine(
+            (file) => file?.size < 20 * 1024 * 1024,
+            "Each file must be at most 20MB"
+          )
+          .refine(
+            (file) =>
+              ![
+                "video/mp4",
+                "video/ogg",
+                "video/webm",
+                "video/x-msvideo",
+              ].includes(file.type),
+            "Video files are not allowed here."
+          )
+      )
+      .optional(),
+  });
 
-  // Sort materials by title in ascending order
-  const sortedMaterials = [...materials].sort((a, b) =>
-    a.title.localeCompare(b.title)
-  );
+  const [formData, setFormData] = useState({
+    title: "",
+    videoFile: null,
+    materialFiles: [],
+  });
+  const [errors, setErrors] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [videoDetails, setVideoDetails] = useState({
+    video: "",
+    videoId: "",
+    videoURL: "",
+    attachments: [],
+  });
 
-  const handleUploadClick = () => {
-    setIsPopupOpen(true);
-    setCurrentMaterial(null);
-  };
+  const { data: details } = useCourseHeaderBySectionID(sec_id);
+  const { data: videos } = useAllVideos(sec_id);
 
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  const handleSubmitMaterial = (newMaterial) => {
-    if (currentMaterial) {
-      setMaterials((prevMaterials) =>
-        prevMaterials.map((material) =>
-          material === currentMaterial ? newMaterial : material
-        )
-      );
-    } else {
-      setMaterials((prevMaterials) => [...prevMaterials, newMaterial]);
+  useEffect(() => {
+    if (videos && videos.length > 0) {
+      const firstVideo = videos[0];
+      setVideoDetails({
+        video: firstVideo.title,
+        videoId: firstVideo.id,
+        videoURL: firstVideo.video_url,
+        attachments: firstVideo.course_attachment,
+      });
     }
-    setIsPopupOpen(false);
+  }, [videos]);
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files
+        ? name === "videoFile"
+          ? files[0] // Single file input
+          : Array.from(files) // Multiple files input
+        : value,
+    }));
+
+    // Clear errors for the input field
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleDeleteAttachmentClick = (material) => {
-    setMaterialToDelete(material);
-    setDeleteContext("attachment");
-    setIsDeletePopupOpen(true);
+  const handleSubmit = async () => {
+    try {
+      schema.parse(formData);
+      setErrors({});
+      const submitData = new FormData();
+      submitData.append("title", formData.title);
+      submitData.append("sec_id", sec_id);
+
+      if (formData.videoFile)
+        submitData.append("videoFile", formData.videoFile);
+      formData.materialFiles.forEach((file) =>
+        submitData.append("materialFiles", file)
+      );
+
+      const response = await axiosInstance.post(
+        "/courses/addVideoMaterials",
+        submitData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.status === 200) {
+        setFormData({ title: "", videoFile: null, materialFiles: [] });
+        document.getElementById("videoFileInput").value = null; // Reset the video file input
+        document.getElementById("materialFilesInput").value = null; // Reset the material files input
+        popToast("Files uploaded successfully!", "success");
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const formErrors = error.errors.reduce((acc, err) => {
+          acc[err.path[0]] = err.message;
+          return acc;
+        }, {});
+        setErrors(formErrors);
+      } else {
+        console.error("Error uploading files:", error);
+        popToast("An error occurred while uploading the files.", "error");
+      }
+    }
   };
 
-  const handleDeleteRecordingClick = (material, index) => {
-    setMaterialToDelete(material);
-    setRecordingIndex(index);
-    setDeleteContext("recording");
-    setIsDeletePopupOpen(true);
-  };
+  const handleEditClick = () => setIsEditing((prev) => !prev);
 
-  const handleDeleteAttachments = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.map((material) =>
-        material === materialToDelete
-          ? { ...material, attachments: [], quantity: 0 }
-          : material
-      )
+  const handleVideoSelectChange = (event) => {
+    const selectedVideo = videos.find(
+      (vid) => vid.title === event.target.value
     );
-    setIsDeletePopupOpen(false);
-  };
-
-  const handleDeleteRow = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.filter((material) => material !== materialToDelete)
-    );
-    setIsDeletePopupOpen(false);
-  };
-
-  const handleDeleteRecording = () => {
-    setMaterials((prevMaterials) =>
-      prevMaterials.map((material) =>
-        material === materialToDelete
-          ? {
-              ...material,
-              videos: material.videos.filter((_, i) => i !== recordingIndex),
-            }
-          : material
-      )
-    );
-    setIsDeletePopupOpen(false);
-  };
-
-  const handleEditClick = (material) => {
-    setCurrentMaterial(material);
-    setIsPopupOpen(true);
+    if (selectedVideo) {
+      setVideoDetails({
+        video: selectedVideo.title,
+        videoId: selectedVideo.id,
+        videoURL: selectedVideo.video_url,
+        attachments: selectedVideo.course_attachment,
+      });
+    }
   };
 
   return (
     <div className="max-md:text-xs w-full min-h-screen overflow-x-hidden">
-      <NavForIndvCourse page={"materials"} />
-
-      <div className="max-sm:text-sm max-md:pt-1 pt-12 pb-8 border-b-2 border-gray-300">
-        <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
-          <div className="text-2xl font-bold pt-10 pb-3 text-[#ecb45e]">
-            About Classroom
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Course:</span> CSC-230 Computer
-            Architecture & Design
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Lecturer:</span> Arjan
-          </div>
-          <div className="text-gray-800">
-            <span className="font-semibold">Time:</span> 1:30 to 4:30 PM
-            (Thursday)
-          </div>
-        </div>
-      </div>
-
-      <div className="py-8 w-full">
-        <div className="max-md:w-full max-md:px-4 w-3/4 mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-[#ecb45e]">MATERIALS</div>
+      <NavForIndvCourse page="materials" />
+      <CourseHeader
+        c_code={details?.course_code}
+        c_name={details?.course_name}
+        c_lecturer={details?.lecturer}
+        c_time={details?.time}
+      />
+      <div className="w-full px-28">
+        <div className="my-2 md:pl-4 flex items-center space-x-4 mb-4">
+          <h2 className="font-bold text-[#ecb45e] text-2xl">Materials</h2>
           <button
-            className="bg-[#ecb45e] text-white py-2 px-4 rounded hover:bg-[#d9a24b] transition duration-200"
-            onClick={handleUploadClick}
+            onClick={handleEditClick}
+            className={`p-4 rounded-md flex items-center space-x-2 font-semibold ${
+              isEditing ? "bg-red-500" : "bg-blue-500"
+            } text-white`}
           >
-            <FontAwesomeIcon icon={faPlus} className="mr-2" size="xl" />
-            Upload
+            <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="" />
+            {isEditing ? (
+              <span>Cancel Upload</span>
+            ) : (
+              <span>Upload New Video</span>
+            )}
           </button>
         </div>
       </div>
 
-      <div className="w-full border-b-2 border-gray-300">
-        <div className="max-sm:text-sm max-md:w-full max-md:ml-1 w-3/4 mx-auto grid grid-cols-4 gap-4 font-bold py-2 px-2">
-          <div>Title</div>
-          <div>Date</div>
-          <div>Attachments</div>
-          <div>Recording</div>
-        </div>
-      </div>
+      {isEditing && (
+        <div className="min-h-screen rounded-lg sm:p-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="md:pl-20 px-10">
+              <div className="mb-4">
+                <label className="block text-lg font-medium">Video Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="Enter Video Title"
+                  className="block w-full px-3 py-2 border rounded-md"
+                />
+                {errors.title && <p className="text-red-500">{errors.title}</p>}
+              </div>
 
-      <div className="max-md:w-full w-3/4 max-md:px-4 max-lg:pr-8 mx-auto">
-        {sortedMaterials.map((material, index) => (
-          <div key={index} className="grid grid-cols-4 gap-4 py-4">
-            <div>{material.title}</div>
-            <div>{material.date}</div>
-            <div className="flex items-start gap-2 flex-col">
-              <div>{material.attachments.join(", ")}</div>
-              <div>{material.quantity} file(s)</div>
-              <div className="flex gap-2">
-                <button onClick={() => handleEditClick(material)}>
-                  <FontAwesomeIcon icon={faPenToSquare} color="red" />
-                </button>
-                <button onClick={() => handleDeleteAttachmentClick(material)}>
-                  <FontAwesomeIcon icon={faTrash} color="red" />
+              <div className="mb-4">
+                <label className="block text-lg font-medium">
+                  Upload Video
+                </label>
+                <input
+                  type="file"
+                  id="videoFileInput"
+                  name="videoFile"
+                  onChange={handleInputChange}
+                  className="block w-full px-3 py-2 border rounded-md"
+                  accept="video/mp4, video/ogg, video/webm, video/x-msvideo"
+                />
+                {formData.videoFile && (
+                  <p>Selected Video: {formData.videoFile.name}</p>
+                )}
+                {errors.videoFile && (
+                  <p className="text-red-500">{errors.videoFile}</p>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-lg font-medium">
+                  Upload Materials
+                </label>
+                <input
+                  type="file"
+                  id="materialFilesInput"
+                  name="materialFiles"
+                  multiple
+                  onChange={handleInputChange}
+                  className="block w-full px-3 py-2 border rounded-md"
+                  accept="application/pdf,image/*"
+                />
+                {formData.materialFiles.length > 0 && (
+                  <ul className="list-disc pl-5">
+                    {formData.materialFiles.map((file, index) => (
+                      <li key={index}>
+                        {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {errors.materialFiles && (
+                  <p className="text-red-500">{errors.materialFiles}</p>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <button
+                  onClick={handleSubmit}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                >
+                  Upload Files
                 </button>
               </div>
             </div>
-
-            <div className="flex flex-col gap-2">
-              {(material.videos || []).map((video, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <FontAwesomeIcon icon={faVideo} color="red" />
-                  {video}
-                  <button
-                    onClick={() => handleDeleteRecordingClick(material, i)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" />
-                  </button>
-                </div>
-              ))}
-            </div>
           </div>
-        ))}
+        </div>
+      )}
+      <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+        <div className="sm:col-span-5">
+          {videoDetails.videoURL && (
+            <div className="w-full">
+              <video
+                controls
+                className="max-w-full max-h-[400px] object-cover rounded-lg"
+                src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
+              ></video>
+            </div>
+          )}{" "}
+        </div>
+        <div className="sm:col-span-2">
+          <div className="mx-auto mt-4 mb-6 sm:ml-6">
+            <label className="block mb-2 font-semibold font-georama">
+              Select Lecture Title
+            </label>
+            <select
+              className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
+              value={videoDetails.video}
+              onChange={handleVideoSelectChange}
+            >
+              <option disabled>Select Lecture</option>
+              {videos?.map((vid, index) => (
+                <option key={index} value={vid.title}>
+                  {vid.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <h3 className="p-4 font-bold text-xl">Class Materials</h3>
+          <div className="">
+            {videoDetails.attachments?.length > 0 ? (
+              <ul className="px-5 w-full">
+                {videoDetails.attachments.map((file, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center border my-2 rounded-md"
+                  >
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      size="xl"
+                      style={{ color: "#e6700f" }}
+                      className="px-2"
+                    />
+                    <a
+                      className="p-2 mx-2"
+                      href={`${MINIO_BASE_URL}/${file.file_path}`}
+                      download
+                    >
+                      {file.file_name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No files available.</p>
+            )}
+          </div>
+        </div>
       </div>
-
-      {isPopupOpen && (
-        <UploadPopup
-          onClose={handleClosePopup}
-          onSubmit={handleSubmitMaterial}
-          material={currentMaterial}
-          showVideos={true}
-        />
-      )}
-
-      {isDeletePopupOpen && (
-        <DeleteConfirmationPopup
-          onClose={() => setIsDeletePopupOpen(false)}
-          onDeleteAction={
-            deleteContext === "attachment"
-              ? [handleDeleteAttachments, handleDeleteRow]
-              : [handleDeleteRecording, () => setIsDeletePopupOpen(false)]
-          }
-          message={
-            deleteContext === "attachment"
-              ? "Would you like to delete all attachments or the entire row?"
-              : "Would you like to delete this recording?"
-          }
-          action1Label={
-            deleteContext === "attachment"
-              ? "Delete All Attachments"
-              : "Delete Recording"
-          }
-          action2Label={
-            deleteContext === "attachment" ? "Delete Entire Row" : "Cancel"
-          }
-          showAction2={deleteContext === "attachment"}
-        />
-      )}
     </div>
   );
 };

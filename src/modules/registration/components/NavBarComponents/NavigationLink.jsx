@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const NavigationLink = ({ link, index }) => {
   return (
     <div className="dropdown dropdown-hover" key={index}>
-      <div tabIndex={index} className="hover:text-amber-400 px-3">
+      <div tabIndex={index} className="px-3 hover:text-amber-400">
         {link.sublinks.length === 0 ? (
           <NavLink
             to={link.href}

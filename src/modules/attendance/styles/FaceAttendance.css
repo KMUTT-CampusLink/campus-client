@@ -1,0 +1,16 @@
+button {
+    position: relative;
+    z-index: 2; /* Ensure button is above other elements */
+  }
+  
+  video {
+    z-index: 1; /* Ensure video is behind */
+    position: relative;
+  }
+  
+  canvas {
+    z-index: 0; /* Ensure canvas doesn't block anything */
+    position: relative;
+  }
+  
+  

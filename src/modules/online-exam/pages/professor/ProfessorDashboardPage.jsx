@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/professor/Dashboard/Question";
+import BackBTN from "../../components/BackBTN";
 
 import { dashboard } from "../../services/apis/professerApi";
 import { useParams } from "react-router-dom";
@@ -42,6 +43,7 @@ export default function ProfessorDashboardPage() {
     <>
       <NavBar />
       <div className="px-[26px] py-[35px] lg:px-[200px] pt-20">
+      <BackBTN />
         <p className="font-bold text-[#D4A015] text-[22px] lg:text-[30px] py-4 pb-7">
           Dashboard
         </p>
