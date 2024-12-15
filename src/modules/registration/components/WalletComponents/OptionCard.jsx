@@ -1,17 +1,20 @@
+import { BsQrCodeScan } from "react-icons/bs";
+import { RiQrScan2Line } from "react-icons/ri";
 function OptionCard() {
-  const options = [
-    { label: "Top Up", icon: "💰" },
-    { label: "Withdraw", icon: "🏧" },
-  ];
-
   return (
-    <div className="flex justify-around p-4 bg-white rounded-lg shadow-md">
-      {options.map((option, index) => (
-        <div key={index} className="text-center">
-          <div className="text-3xl">{option.icon}</div>
-          <p>{option.label}</p>
+    <div className="grid grid-cols-2 gap-4">
+      <button className="text-center p-4 my-4 bg-white rounded-lg shadow-md">
+        <div className="text-5xl text-orange-600 flex justify-center items-center">
+          <BsQrCodeScan />
         </div>
-      ))}
+        <p className="mt-4 font-semibold">Top Up</p>
+      </button>
+      <button className="text-center p-4 my-4 bg-white rounded-lg shadow-md">
+        <div className="text-5xl text-yellow-600 flex justify-center items-center">
+          <RiQrScan2Line />
+        </div>
+        <p className="mt-4 font-semibold">Withdraw</p>
+      </button>
     </div>
   );
 }
