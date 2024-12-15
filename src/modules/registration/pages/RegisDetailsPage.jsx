@@ -39,13 +39,13 @@ function RegisDetailsPage() {
     <div className={containerDivStyles}>
       <NavBar />
       <main className={mainStyles}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 shadow-md rounded-md">
+        <div className="grid grid-cols-1 gap-6 p-6 bg-white rounded-md shadow-md md:grid-cols-2">
           {sections.map((section, index) => (
             <section
               key={index}
               className="p-4 border border-gray-300 rounded-md"
             >
-              <h2 className="text-2xl font-bold mb-2">{section.title}</h2>
+              <h2 className="mb-2 text-2xl font-bold">{section.title}</h2>
               <p className="mb-4">{section.description}</p>
               <div className="divider"></div>
               <button className="text-blue-500 hover:underline">
