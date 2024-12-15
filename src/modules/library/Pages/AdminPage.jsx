@@ -27,8 +27,6 @@ function AdminPage() {
     if (duplicateStatus) {
       return {
         userId: "-",
-        startDate: "-",
-        endDate: "-",
         reservationStatus: "Available",
       };
     }
@@ -39,14 +37,10 @@ function AdminPage() {
     return reservation
       ? {
           userId: reservation.user_id,
-          startDate: new Date(reservation.start_date).toLocaleDateString(),
-          endDate: new Date(reservation.end_date).toLocaleDateString(),
           reservationStatus: reservation.reserve_status,
         }
       : {
           userId: "-",
-          startDate: "-",
-          endDate: "-",
           reservationStatus: "Unavailable",
         };
   };
@@ -62,82 +56,155 @@ function AdminPage() {
         {/* Secondary Navbar */}
         <MainNavbar />
 
-        <div className="p-8">
+        <div className="p-8 font-nunito">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
-            Books and Duplicates
+            Admin Dashboard
           </h1>
-          <p className="text-sm text-gray-500 mb-8">
-            Dashboard &gt; Books and Duplicates
-          </p>
+
+          {/* Statistic Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Total Books */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-gray-500 text-lg font-bold">Total Books</h2>
+              <p className="text-3xl font-bold mt-4">{books.length}</p>
+              <p className="text-sm text-green-500 mt-2">All unique books</p>
+            </div>
+
+            {/* Total Reserved Books */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-gray-500 text-lg font-bold">
+                Total Reserved Books
+              </h2>
+              <p className="text-3xl font-bold mt-4">
+                {
+                  reservations.filter(
+                    (item) => item.reserve_status === "Reserved"
+                  ).length
+                }
+              </p>
+              <p className="text-sm text-yellow-500 mt-2">Currently reserved</p>
+            </div>
+
+            {/* Total Available Books */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-gray-500 text-lg font-bold">
+                Total Available Books
+              </h2>
+              <p className="text-3xl font-bold mt-4">
+                {books.reduce(
+                  (acc, book) =>
+                    acc +
+                    book.book_duplicate.filter((dup) => dup.status).length,
+                  0
+                )}
+              </p>
+              <p className="text-sm text-blue-500 mt-2">
+                Available for borrowing
+              </p>
+            </div>
+
+            {/* Reservation Rate */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-gray-500 text-lg font-bold">
+                Reservation Rate
+              </h2>
+              <p className="text-3xl font-bold mt-4">
+                {books.length > 0
+                  ? (
+                      (reservations.filter(
+                        (item) => item.reserve_status === "Reserved"
+                      ).length /
+                        books.reduce(
+                          (acc, book) => acc + book.book_duplicate.length,
+                          0
+                        )) *
+                      100
+                    ).toFixed(2)
+                  : 0}
+                %
+              </p>
+              <p className="text-sm text-red-500 mt-2">Books reserved</p>
+            </div>
+          </div>
 
           {/* Books and Duplicates Table */}
           <div className="bg-white shadow-md rounded-lg mt-8 p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">
-              Books and Duplicates
+              Reservation Status
             </h2>
-            <table className="w-full mt-4 text-gray-800 border-collapse">
-              <thead>
-                <tr className="text-left bg-gray-100">
-                  <th className="border-b p-2">#</th>
-                  <th className="border-b p-2">Image</th>
-                  <th className="border-b p-2">Book Title</th>
-                  <th className="border-b p-2">ISBN</th>
-                  <th className="border-b p-2">Duplicate ID</th>
-                  <th className="border-b p-2">Status</th>
-                  <th className="border-b p-2">User ID</th>
-                  <th className="border-b p-2">Start Date</th>
-                  <th className="border-b p-2">End Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {books.length > 0 ? (
-                  books.map((book) =>
-                    book.book_duplicate.map((duplicate) => {
-                      rowNumber += 1; // Increment row number for each duplicate
 
-                      const { userId, startDate, endDate, reservationStatus } =
-                        getReservationDetails(duplicate.id, duplicate.status);
-
-                      return (
-                        <tr key={duplicate.id} className="hover:bg-gray-50">
-                          <td className="p-2 border-b">{rowNumber}</td>
-                          <td className="p-2 border-b">
-                            <img
-                              src={book.cover_image}
-                              alt={book.title}
-                              className="w-16 h-16 object-cover rounded"
-                            />
-                          </td>
-                          <td className="p-2 border-b">{book.title}</td>
-                          <td className="p-2 border-b">{book.isbn}</td>
-                          <td className="p-2 border-b">{duplicate.id}</td>
-                          <td className="p-2 border-b">
-                            <span
-                              className={`font-medium ${
-                                reservationStatus === "Available"
-                                  ? "text-green-500"
-                                  : "text-yellow-500"
-                              }`}
-                            >
-                              {reservationStatus}
-                            </span>
-                          </td>
-                          <td className="p-2 border-b">{userId}</td>
-                          <td className="p-2 border-b">{startDate}</td>
-                          <td className="p-2 border-b">{endDate}</td>
-                        </tr>
-                      );
-                    })
-                  )
-                ) : (
+            <div className="overflow-x-auto">
+              <table className="table">
+                {/* Table Head */}
+                <thead>
                   <tr>
-                    <td colSpan="9" className="p-4 text-center text-gray-500">
-                      No books found.
-                    </td>
+                    <th>#</th>
+                    <th>Book</th>
+                    <th>Book_ID</th>
+                    <th>Status</th>
+                    <th>User</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {books.length > 0 ? (
+                    books.map((book) =>
+                      book.book_duplicate.map((duplicate, index) => {
+                        const { userId, reservationStatus } =
+                          getReservationDetails(duplicate.id, duplicate.status);
+
+                        return (
+                          <tr key={duplicate.id}>
+                            <td>
+                              <h1 className="flex items-center gap-3 font-bold">
+                                {index + 1}
+                              </h1>
+                            </td>
+                            <td>
+                              <div className="flex items-center gap-3">
+                                <div className="avatar">
+                                  <div className="w-16 h-16 object-cover rounded">
+                                    <img
+                                      src={book.cover_image}
+                                      alt={book.title}
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="font-bold">{book.title}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>{duplicate.id}</td>
+                            <td>
+                              <span
+                                className={`font-medium ${
+                                  reservationStatus === "Available"
+                                    ? "text-green-500"
+                                    : "text-yellow-500"
+                                }`}
+                              >
+                                {reservationStatus}
+                              </span>
+                            </td>
+                            <td>
+                              <button className="btn btn-ghost btn-xs">
+                                {userId}
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center text-gray-500">
+                        No books found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </main>

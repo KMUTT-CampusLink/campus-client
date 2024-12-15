@@ -149,3 +149,14 @@ export const fetchEveryBook = async () => {
     return null; // Return null in case of an error
   }
 };
+
+export const fetchAllStudents = async () => {
+  try {
+    // Make a GET request to the `/library/student` endpoint
+    const response = await axiosInstance.get("/library/student");
+    return response.data; // Return the student data
+  } catch (error) {
+    console.error("Error fetching student data:", error);
+    return null; // Return null in case of an error
+  }
+};
