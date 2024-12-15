@@ -114,7 +114,7 @@ export default function EmployRoutes() {
       ),
     },
     {
-      path: "courseUpdate/:id",
+      path: "courseUpdate/:code",
       element: (
         <AuthRoute allowed_roles={["Management"]}>
           <CourseUpdate />
