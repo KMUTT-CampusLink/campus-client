@@ -96,14 +96,13 @@ const CourseGrid = () => {
           </div>
 
           <div className="flex justify-between"> 
-            <h1 className="font-geologica text-xl sm:text-2xl">All courses</h1>
+            <h1 className="font-geologica text-xl sm:text-3xl">All courses</h1>
             <button
             onClick={handleClick}
-            className=" p-1 border border-black text-[12px] md:text-[16px]  rounded-md shadow-lg hover:shadow-xl transition font-opensans md:h-10 md:w-[140px] w-[105px] flex jusfiy-center items-center"
-          >
+            className=" p-1 border border-black text-[12px] md:text-[16px]  rounded-md shadow-lg hover:shadow-xl transition font-opensans md:h-10 md:w-[130px] w-[100px] flex jusfiy-center items-center">
             <FontAwesomeIcon icon={faPlus} className="mx-1 md:h-5 " />
             New Course
-          </button>
+            </button>
           </div>
           
         </div>
