@@ -1,4 +1,15 @@
-function OverviewCard() {
+function OverviewCard({ refunds, deposits, others }) {
+  const formatBalance = (balance) => {
+    const num = parseFloat(balance);
+    if (num >= 1e6) {
+      return (num / 1e6).toFixed(2) + "M";
+    } else if (num >= 1e3) {
+      return (num / 1e3).toFixed(2) + "K";
+    } else {
+      return num.toFixed(2);
+    }
+  };
+
   return (
     <div className="grid grid-cols-3 bg-white p-4 rounded-lg shadow-md">
       <div>
@@ -6,8 +17,9 @@ function OverviewCard() {
           <p className="text-md font-bold">Deposits</p>
         </div>
         <div className="pl-2 mt-2">
-          <div className="text-gray-600 text-sm">Balance</div>
-          <div className="text-sm font-semibold">300 B</div>
+          <span className="text-sm font-semibold">
+            {formatBalance(deposits)} THB
+          </span>
         </div>
       </div>
       <div>
@@ -15,8 +27,9 @@ function OverviewCard() {
           <p className="text-md font-bold">Refunds</p>
         </div>
         <div className="pl-2 mt-2">
-          <div className="text-gray-600 text-sm">Balance</div>
-          <div className="text-sm font-semibold">300 B</div>
+          <span className="text-sm font-semibold">
+            {formatBalance(refunds)} THB
+          </span>
         </div>
       </div>
       <div>
@@ -24,8 +37,9 @@ function OverviewCard() {
           <p className="text-md font-bold">Others</p>
         </div>
         <div className="pl-2 mt-2">
-          <div className="text-gray-600 text-sm">Balance</div>
-          <div className="text-sm font-semibold">300 B</div>
+          <span className="text-sm font-semibold">
+            {formatBalance(others)} THB
+          </span>
         </div>
       </div>
     </div>

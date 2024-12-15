@@ -5,7 +5,18 @@ import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles } from "../styles/styles";
 import OverviewCard from "../components/WalletComponents/OverviewCard";
 import { GiWallet } from "react-icons/gi";
+import { useTransactions } from "../services/queries";
 function WalletPage() {
+  const userId = localStorage.getItem("userId");
+  const { data: transactions, isLoading, error } = useTransactions(userId);
+  console.log(transactions);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading transactions</div>;
+  }
   return (
     <div className={containerDivStyles}>
       <NavBar />
@@ -19,12 +30,16 @@ function WalletPage() {
           </div>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-4">
-              <BalanceCard />
+              <BalanceCard balance={transactions?.totalBalance} />
               <OptionCard />
             </div>
             <div className="space-y-4">
-              <OverviewCard />
-              <TransactionCard />
+              <OverviewCard
+                refunds={transactions?.refunds}
+                deposits={transactions?.deposits}
+                others={transactions?.others}
+              />
+              <TransactionCard transactions={transactions?.transactions} />
             </div>
           </div>
         </div>
