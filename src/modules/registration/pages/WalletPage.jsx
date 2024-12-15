@@ -22,7 +22,7 @@ function WalletPage() {
       <NavBar />
       <main className={mainStyles}>
         <div className="p-4">
-          <div className="mb-6 text-2xl font-bold flex items-center">
+          <div className="flex items-center mb-6 text-2xl font-bold">
             <div className="text-4xl text-orange-600">
               <GiWallet />
             </div>

@@ -11,10 +11,10 @@ function OverviewCard({ refunds, deposits, others }) {
   };
 
   return (
-    <div className="grid grid-cols-3 bg-white p-4 rounded-lg shadow-md">
+    <div className="grid grid-cols-3 p-4 bg-white rounded-lg shadow-md">
       <div>
         <div className="pl-2 border-l-4 border-orange-600">
-          <p className="text-md font-bold">Deposits</p>
+          <p className="font-bold text-md">Deposits</p>
         </div>
         <div className="pl-2 mt-2">
           <span className="text-sm font-semibold">
@@ -24,7 +24,7 @@ function OverviewCard({ refunds, deposits, others }) {
       </div>
       <div>
         <div className="pl-2 border-l-4 border-orange-600">
-          <p className="text-md font-bold">Refunds</p>
+          <p className="font-bold text-md">Refunds</p>
         </div>
         <div className="pl-2 mt-2">
           <span className="text-sm font-semibold">
@@ -34,7 +34,7 @@ function OverviewCard({ refunds, deposits, others }) {
       </div>
       <div>
         <div className="pl-2 border-l-4 border-orange-600">
-          <p className="text-md font-bold">Others</p>
+          <p className="font-bold text-md">Others</p>
         </div>
         <div className="pl-2 mt-2">
           <span className="text-sm font-semibold">

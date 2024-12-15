@@ -143,7 +143,7 @@ function ProfilePage() {
             <SInfoCard />
             <Link to="/regis/wallet">
               <button className={`${button} my-4`}>
-                <div className="text-5xl text-white flex justify-center items-center">
+                <div className="flex items-center justify-center text-5xl text-white">
                   <GiWallet />
                 </div>
                 <p>My Wallet</p>
