@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import gallery from "../../assets/gallery.png";
+import event from "../../assets/event.png";
 import profile from "../../assets/profile-circle.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import CommentPopup from "../../components/CommentPopup";
 import PopupDiscussion from "../../components/PopupDiscussion";
+import PopupEvent from "../../components/PopupEvent";
 import DEditPopup from "../../components/DEditPopup";
 import ConfirmationPopup from "../../components/ConfirmationPopup"; // Import ConfirmationPopup
 import {
@@ -39,6 +41,7 @@ const TrDiscussion = () => {
 
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
   const [isUploadPopupOpen, setIsUploadPopupOpen] = useState(false);
+  const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false); // State for Delete Confirmation popup
   const [selectedPost, setSelectedPost] = useState(null);
@@ -56,7 +59,23 @@ const TrDiscussion = () => {
   const openUploadPopup = () => setIsUploadPopupOpen(true);
   const closeUploadPopup = () => setIsUploadPopupOpen(false);
 
-  const handleSubmission = async (newTopic) => {
+  const openEventPopup = () => setIsEventPopupOpen(true);
+  const closeEventPopup = () => setIsEventPopupOpen(false);
+
+  const handleUploadSubmission = async (newTopic) => {
+    try {
+      await createMutation.mutateAsync(newTopic, {
+        onSuccess: () => {
+          console.log("Post created successfully!");
+          closeUploadPopup();
+        },
+      });
+    } catch (error) {
+      console.error("Error creating discussion:", error);
+    }
+  };
+
+  const handleEventSubmission = async (newTopic) => {
     try {
       await createMutation.mutateAsync(newTopic, {
         onSuccess: () => {
@@ -107,6 +126,41 @@ const TrDiscussion = () => {
         />
       </div>
 
+      <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx px-4 sm:px-6 mb-4">
+
+        <div className="flex justify-between items-center lg:w-3/4 mx-auto mb-6 relative pt-2">
+          <h2 className="text-2xl font-bold text-[#ecb45e]">Create Event</h2>
+
+        </div>
+        {/* Upload Section */}
+        <div className="flex justify-center items-center max-w-sm mx-auto mb-6">
+          <div className="border rounded-lg w-full h-56 flex flex-col items-center justify-center p-6 bg-gray-50 shadow-md">
+            {/* Icon */}
+            <img
+              src={event}
+              alt="Upload Icon"
+              className="w-14 h-14 mb-4"
+            />
+            {/* Text Content */}
+            <div className="text-center">
+              <h2 className="text-xl font-semibold text-gray-700 mb-1">
+                Upload Event
+              </h2>
+              <p className="text-sm text-gray-500">
+                Create Event easily with just one click!
+              </p>
+            </div>
+            {/* Upload Button */}
+            <button
+              className="w-full bg-[#ecb45e] hover:bg-[#d9a24b] text-white font-medium py-2 mt-4 rounded-lg flex items-center justify-center transition duration-200 shadow-md"
+              onClick={openEventPopup}
+            >
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+              Create Event
+            </button>
+          </div>
+        </div>
+      </div>
 
       {!isCommentPopupOpen && (
         <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx px-4 sm:px-6">
@@ -264,7 +318,13 @@ const TrDiscussion = () => {
       {isUploadPopupOpen && (
         <PopupDiscussion
           closePopup={closeUploadPopup}
-          onSubmit={handleSubmission}
+          onSubmit={handleUploadSubmission}
+        />
+      )}
+      {isEventPopupOpen && (
+        <PopupEvent
+          closePopup={closeEventPopup}
+          onSubmit={handleEventSubmission}
         />
       )}
       {isEditPopupOpen && (
