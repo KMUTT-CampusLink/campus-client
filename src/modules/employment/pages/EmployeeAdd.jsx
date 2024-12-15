@@ -3,6 +3,19 @@ import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { z } from "zod";
+
+const schema = z.object({
+  poster: z
+    .any()
+    .refine((file) => file?.length !== 0, "File is required")
+    .refine((file) => file[0]?.size < 10_485_760, "Poster file at most 5MB")
+    .refine((file) => {
+      const fileType = file[0]?.type.split("/").pop();
+      const allowedExtension = /^(jpe?g|png|gif|webp|avif)$/;
+      return allowedExtension.test(fileType);
+    }, "Invalid file type. Allowed types: JPEG, PNG, GIF, WebP, AVIF."),
+});
 
 const jobTitles = ["Professor", "Management", "Staff", "Driver"];
 
@@ -294,7 +307,6 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-
 
                 {/* 1 */}
                 <div className="mb-4">
@@ -589,7 +601,6 @@ const EmployeeAdd = () => {
                     )}
                   </div>
                 </div>
-
               </div>
             </div>
 
