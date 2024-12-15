@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
-import { mainStyles, containerDivStyles } from "../styles/styles";
+import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGraduationCap,
@@ -17,6 +17,8 @@ import {
 import { ErrorSkeleton } from "../styles/Skeletons";
 import SInfoCard from "../components/SInfoCard";
 import LoadingPage from "../../dev/pages/LoadingPage";
+import { GiWallet } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 function ProfilePage() {
   const studentId = localStorage.getItem("studentId");
@@ -139,6 +141,14 @@ function ProfilePage() {
 
           <div className="p-4 bg-white rounded-lg shadow-lg">
             <SInfoCard />
+            <Link to="/regis/wallet">
+              <button className={`${button} my-4`}>
+                <div className="text-5xl text-white flex justify-center items-center">
+                  <GiWallet />
+                </div>
+                <p>My Wallet</p>
+              </button>
+            </Link>
             <GradeCard
               studentId={studentId}
               semester={semester}
