@@ -217,3 +217,12 @@ export const getAllStudentInSection = async (sectionId) => {
     return error.response.data;
   }
 }
+
+export const checkHasParticiipant = async (examId) => {
+  try {
+    const response = await axiosInstance.get(`/exams/professor/checkHasParticiipant?examId=${examId}`);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
