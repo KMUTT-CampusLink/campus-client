@@ -6,7 +6,7 @@ import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useAllCommentsByPostID } from "../services/queries";
 import { useCreateDiscussionReply } from "../services/mutations";
-
+//conflict
 const CommentPopup = ({ closePopup, postDetails }) => {
   const [newComment, setNewComment] = useState("");
   const {
