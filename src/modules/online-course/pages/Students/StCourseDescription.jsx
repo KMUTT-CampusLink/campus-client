@@ -5,7 +5,7 @@ import { useCourseHeaderBySectionIDForStudent } from "../../services/queries";
 import CourseHeader from "../../components/CourseHeader";
 
 const StCourseDescription = () => {
-  const {state } = useLocation();
+  const { state } = useLocation();
 
   const [sec_id, setSec_id] = useState(() => {
     return state?.sec_id || localStorage.getItem("sec_id");
@@ -23,45 +23,44 @@ const StCourseDescription = () => {
   const description = details?.description;
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden">
+    <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
       <NavForIndvCourse page={"description"} />
 
       {/* About Classroom Section */}
-     <CourseHeader 
-        c_code={details?.course_code}
-        c_name={details?.course_name}
-        c_lecturer={details?.lecturer}
-        c_time={details?.time}
-      />
-      {/* Course Description Section */}
-      <div className="py-8 w-full max-md:text-xs">
-        <div className="max-md:w-full max-md:ml-2 w-3/4 mx-auto flex max-md:gap-3 gap-10 items-center mb-4">
-          <div className="text-2xl font-bold text-[#ecb45e]">
-            Course Description
-          </div>
-        </div>
-        <div className="max-md:w-full max-md:px-2 w-3/4 mx-auto text-gray-700 leading-relaxed">
-          <p>{description}</p>
-        </div>
+      <div className="py-8">
+        <CourseHeader
+          c_code={details?.course_code}
+          c_name={details?.course_name}
+          c_lecturer={details?.lecturer}
+          c_time={details?.time}
+        />
       </div>
 
-      {/* Learning Outcomes Section */}
-      <div className="py-8 bg-white max-md:text-xs px-2">
-        <div className="max-md:w-full w-3/4 mx-auto text-2xl font-bold text-[#ecb45e] mb-4">
-          Learning Outcomes
+      <div className="py-8 max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx">
+        {/* Course Description Section */}
+        <div className="py-8 max-md:w-full max-md:ml-2 w-3/4 mx-auto p-4">
+          <div className="text-2xl font-extrabold pb-3 text-[#ecb45e] border-b-2 border-[#ecb45e]">
+            Course Description
+          </div>
+          <div className="text-gray-800 mt-4 leading-relaxed">
+            <p>{description}</p>
+          </div>
         </div>
-        <div className="max-md:w-full w-3/4 mx-auto text-gray-700 leading-relaxed">
-          <ul className="list-disc list-inside">
-            <li>Understand the architecture of modern computer systems.</li>
-            <li>Analyze the functioning of the control unit and CPU.</li>
-            <li>
-              Apply Boolean algebra and digital logic in computing problems.
-            </li>
-            <li>Explore the design and organization of instruction sets.</li>
-            <li>
-              Evaluate the performance of different processor architectures.
-            </li>
-          </ul>
+
+        {/* Learning Outcomes Section */}
+        <div className="py-8 max-md:w-full max-md:ml-2 w-3/4 mx-auto p-4">
+          <div className="text-2xl font-extrabold pb-3 text-[#ecb45e] border-b-2 border-[#ecb45e]">
+            Learning Outcomes
+          </div>
+          <div className="text-gray-800 mt-4 leading-relaxed">
+            <ul className="list-disc list-inside space-y-2">
+              <li>Understand the architecture of modern computer systems.</li>
+              <li>Analyze the functioning of the control unit and CPU.</li>
+              <li>Apply Boolean algebra and digital logic in computing problems.</li>
+              <li>Explore the design and organization of instruction sets.</li>
+              <li>Evaluate the performance of different processor architectures.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
