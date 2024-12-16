@@ -18,22 +18,6 @@ export default function StudentReviewExamPage() {
       console.log(e);
     }
   };
-  const getScore = async () => {
-    try {
-      const response = await getStudentScore(studentExamId);
-      setStudentScore(response.data.data.total_score);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getStudentFullMark = async() => {
-    try {
-      const response = await getFullMark(examId);
-      setFullMark(response.data.data.full_mark);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
     fetchReview();
   }, []);
@@ -61,8 +45,6 @@ export default function StudentReviewExamPage() {
               <p className="text-[22px] lg:text-[30px]">
                 {data.total_score}/{data.full_mark}
               </p>
-              {/* <p className="text-[30px]">/</p>
-            <p className="text-[30px]">100</p> */}
             </div>
           </div>
         </div>
@@ -78,7 +60,7 @@ export default function StudentReviewExamPage() {
                   type={item.type}
                   studentAnswer={item.student_answer}
                   comment={item.student_answer[0].essay_comment}
-                  questionId={item.id}
+                  questionNo={item.id}
                   mark={item.mark}
                   score={item.score}
                   className="w-[67%] h-auto"

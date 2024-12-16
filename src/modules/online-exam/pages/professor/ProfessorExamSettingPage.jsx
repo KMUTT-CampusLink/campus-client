@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import DeleteExam from "../../components/professor/ExamSetting/DeleteExamButton";
+import BackBTN from "../../components/BackBTN";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faFileLines } from "@fortawesome/free-solid-svg-icons";
@@ -193,6 +194,7 @@ export default function ProfessorExamSettingPage() {
       <NavBar />
       {/* Heading */}
       <div className=" px-[35px]  lg:px-[100px] pt-20">
+      <BackBTN />
         <div className="flex justify-between pb-[35px] pt-[25px] items-center">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Exam Setting</p>
