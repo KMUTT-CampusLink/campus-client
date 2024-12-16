@@ -35,8 +35,9 @@ function ClubLandingPage() {
 
   return (
     <>
-      <div className="mx-auto w-full pt-10 pb-6 bg-white flex flex-col items-center justify-center">
-        <div className="flex items-center justify-between w-[65%] mb-4">
+      <div className=" w-full pt-10 pb-6 bg-white flex flex-col items-center justify-center">
+        <div className="w-[80%] flex items-center ml-auto mb-4">
+          {/*flex items-center justify-between */}
           {/* Search Bar */}
           <div className="relative flex-grow">
             <span className="absolute left-[0.8rem] top-1/2 transform -translate-y-1/2">
@@ -58,7 +59,7 @@ function ClubLandingPage() {
             <input
               type="text"
               placeholder="Search"
-              className="input input-bordered w-full pl-10"
+              className="w-[80%] input input-bordered pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -67,7 +68,7 @@ function ClubLandingPage() {
           {/* Create Club Button */}
           {isLoggedIn && (
             <button
-              className="ml-4 bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600"
+              className=" mr-28 bg-orange-400 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-yellow-600"
               onClick={() => navigate("/clubs/admin/club-create")}
             >
               Create Club
