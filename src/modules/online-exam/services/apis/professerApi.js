@@ -218,7 +218,7 @@ export const getAllStudentInSection = async (sectionId) => {
   }
 }
 
-export const checkHasParticiipant = async (examId) => {
+export const checkHasParticiipant = async (examId, sectionId) => {
   try {
     const response = await axiosInstance.get(`/exams/professor/checkHasParticiipant?examId=${examId}`);
     return response;
