@@ -20,7 +20,7 @@ function ProfileForm() {
     phoneNumber: "",
     lineID: "",
     joinedClubs: [],
-    profileImage: "", // Optional: You may want to fetch this from the backend if available
+    profileImage: "", // Optional:
   });
 
   const {
@@ -32,7 +32,7 @@ function ProfileForm() {
     resolver: zodResolver(schema),
     defaultValues: memberData,
   });
-  
+
   useEffect(() => {
     const fetchMemberData = async () => {
       try {
@@ -40,15 +40,20 @@ function ProfileForm() {
           `/clubs/member/${memberId}/clubs`
         );
 
+        const isEmployee = memberId?.startsWith("EMP");
+        const formattedName = isEmployee
+          ? `Prof. ${response.data.name || "N/A"}`
+          : response.data.name || "N/A";
+
         setMemberData({
-          name: response.data.name || "N/A",
+          name: formattedName,
           phoneNumber: response.data.phoneNumber || "N/A",
           lineID: response.data.lineID || "N/A",
           joinedClubs: response.data.joinedClubs || [],
           profileImage: response.data.profileImage || "", // Optional: profile image URL
         });
 
-        setValue("name", response.data.name || "N/A");
+        setValue("name", formattedName);
         setValue("phoneNumber", response.data.phoneNumber || "N/A");
         setValue("lineID", response.data.lineID || "N/A");
       } catch (error) {
