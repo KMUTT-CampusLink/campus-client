@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
+import BackBTN from "../../components/BackBTN";
 
 import { verifyExamPassword, getExamTitle } from "../../services/apis/studentApi";
 
@@ -43,6 +44,7 @@ export default function StudentExamPasswordPage() {
     <>
       <NavBar />
       <div className="mx-[35px] xl:mx-[100px] pt-20">
+          <BackBTN />
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
           {title}
         </h2>

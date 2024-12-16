@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/professor/EditedExam/Question";
 import StudentQuestion from "../../components/professor/EditedExam/StudentQuestion";
+import BackBTN from "../../components/BackBTN";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -158,6 +159,7 @@ export default function ProfessorEditExamPage() {
     <div className="w-auto">
       <Navbar />
       <div className="mx-[35px] xl:mx-[100px] pb-[30px] pt-20">
+      <BackBTN />
         <div className={`${viewAsStudent ? "hidden" : "block"}`}>
           <div className="flex flex-col justify-between gap-[20px]">
             <div className="flex flex-col xl:flex-row xl:justify-between  xl:items-center">
