@@ -14,6 +14,7 @@ export default function StudentReviewExamPage() {
     try {
       const res = await getStudentExamReview(examId, studentExamId);
       setData(res);
+      console.log(res)
     } catch (e) {
       console.log(e);
     }

@@ -10,6 +10,7 @@ import {
   getStudentExamsById,
   getHistoryStudentExams,
   getInprogressExam,
+  updateStudentGrade
 } from "../../services/apis/studentApi";
 
 import verifySection from "../../middleware/verifySection"
@@ -35,12 +36,19 @@ function StudentHomePage() {
   const getHistoryExams = async () => {
     const res = await getHistoryStudentExams(sectionId);
     setHistoryExams(res.data.data);
+    console.log(res)
+  };
+
+  const updateGrade = async () => {
+    const res = await updateStudentGrade(sectionId);
+    console.log(res)
   };
 
   useEffect(() => {
     getExams();
     getInprogressExams();
     getHistoryExams();
+    updateGrade();
   }, []);
 
   return (
@@ -49,7 +57,7 @@ function StudentHomePage() {
       <div className="mx-[35px] xl:mx-[100px] pt-20">
           <BackBTN />
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
-          {courseTitle} : {sectionId}
+          {courseTitle}
         </h2>
         <div className={`${inProgress.length > 0 ? "block" : "hidden"}`}>
           <hr className="mt-[20px] bg-[#798184] flex justify-center" />

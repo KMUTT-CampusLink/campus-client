@@ -200,3 +200,16 @@ export const getStudentExamReview = async (examId, studentExamId) => {
     return e.response.data;
   }
 };
+
+
+
+export const updateStudentGrade = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/updateStudentGrade?sectionid=${sectionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}

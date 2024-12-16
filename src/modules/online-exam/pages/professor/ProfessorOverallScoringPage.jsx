@@ -162,6 +162,7 @@ export default function ProfessorOverallScoringPage() {
             participants={participants}
             fullMark={fullMark}
             passMark={passMark}
+            sectionId={sectionId}
           />
         </div>
       </div>

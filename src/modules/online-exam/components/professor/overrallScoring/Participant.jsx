@@ -6,6 +6,7 @@ export default function Participant({
   participants,
   fullMark,
   passMark,
+  sectionId
 }) {
   const navigate = useNavigate();
   return (
@@ -16,7 +17,7 @@ export default function Participant({
           className="text-center w-[100%] text-[14px] flex rounded-lg px-[15px] py-[15px] gap-[10px] bg-white drop-shadow-md hover:bg-gray-50"
           onClick={() => {
             navigate(
-              `/exams/professor/scoring/${participant.id}/${participant.student_id}/${examId}`
+              `/exams/professor/scoring/${participant.id}/${participant.student_id}/${examId}/${sectionId}`
             );
           }}
         >
