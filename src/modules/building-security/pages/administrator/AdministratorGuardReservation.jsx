@@ -6,33 +6,18 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 
 export default function AdministratorGuardReservation() {
   const [buildingData, setBuildingData] = useState([]);
-  const [floorData, setFloorData] = useState([]);
-  const [roomData, setRoomData] = useState([]);
+  const [guardData, setGuardData] = useState([]);
   const [building, setBuilding] = useState("");
-  const [floor, setFloor] = useState("");
-  const [room, setRoom] = useState("");
-  const [date, setDate] = useState("");
-  const [availableStartTimes, setAvailableStartTimes] = useState([]);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [availableEndTimes, setAvailableEndTimes] = useState([]);
+  const [guard, setGuard] = useState("");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
-  // Define possible 30-minute time slots from 8:30 AM to 7:00 PM
-  const timeSlots = Array.from({ length: 23 }, (_, i) =>
-    new Date(0, 0, 0, 8, 30 + i * 30).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  );
-
-  // Fetch building data on component mount
   useEffect(() => {
-    const fetchBuildingData = async () => {
+    const fetchGBuildingData = async () => {
       try {
-        const response = await axiosInstance.get("/security/buildings");
+        const response = await axiosInstance.get("/security/gbuildings");
         const sortedBuildings = response.data.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
@@ -43,111 +28,48 @@ export default function AdministratorGuardReservation() {
       }
     };
 
-    fetchBuildingData();
+    fetchGBuildingData();
   }, []);
 
-  // Fetch floors based on selected building
   const handleBuildingChange = async (event) => {
     const selectedBuildingId = event.target.value;
     setBuilding(selectedBuildingId);
-    setFloor("");
-    setRoom("");
-    setRoomData([]);
-
-    try {
-      const response = await axiosInstance.get(
-        `/security/floors/${selectedBuildingId}`
-      );
-      const sortedFloors = response.data.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      setFloorData(sortedFloors);
-    } catch (error) {
-      console.error("Error fetching floors:", error);
-    }
+    setGuard("");
   };
 
-  // Fetch rooms based on selected floor
-  const handleFloorChange = async (event) => {
-    const selectedFloorId = event.target.value;
-    setFloor(selectedFloorId);
-    setRoom(""); // Reset room selection
-
-    try {
-      const response = await axiosInstance.get(
-        `/security/rooms/${selectedFloorId}`
-      );
-      console.log("Rooms API response:", response.data); // Log the response
-
-      const sortedRooms = response.data.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      setRoomData(sortedRooms);
-      console.log("Sorted rooms:", sortedRooms); // Log sorted rooms
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-    }
+  const handleGuardChange = async (event) => {
+    const selectedGuardId = event.target.value;
+    setGuard(selectedGuardId);
   };
 
-  const handleRoomChange = (event) => setRoom(event.target.value);
-
-  const handleDateChange = async (event) => {
-    const selectedDate = event.target.value;
-    setDate(selectedDate);
-    if (room && selectedDate) {
-      fetchAvailableTimes(room, selectedDate);
-    }
-  };
-
-  const fetchAvailableTimes = async (roomId, date) => {
-    try {
-      const response = await axiosInstance.get(`/security/getAvailableTimes`, {
-        params: { roomId, date },
-      });
-
-      if (
-        response.data.message === "No bookings available for this room and date"
-      ) {
-        setAvailableStartTimes(timeSlots);
-        setAvailableEndTimes([]);
-        return;
+  useEffect(() => {
+    const fetchGuardData = async () => {
+      try {
+        const response = await axiosInstance.get("/security/guards");
+        setGuardData(response.data);
+      } catch (error) {
+        console.error("Error fetching guard data:", error);
+        setError("Failed to load guard data. Please try again.");
       }
+    };
 
-      setAvailableStartTimes(response.data.availableTimes);
-    } catch (error) {
-      console.error("Error fetching available times:", error);
-      setError("An error occurred while fetching available times.");
-    }
-  };
-
-  const handleStartTimeChange = (event) => {
-    const selectedStart = event.target.value;
-    setStartTime(selectedStart);
-
-    // Find the selected start time index in the timeSlots array
-    const startIndex = timeSlots.indexOf(selectedStart);
-
-    // Set available end times from the selected start time onwards, up to 7:30 PM
-    setAvailableEndTimes(timeSlots.slice(startIndex + 1));
-  };
-
-  const handleEndTimeChange = (event) => setEndTime(event.target.value);
+    fetchGuardData();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const bookingData = {
-      roomId: room,
-      bookingDate: date,
-      startTime: `${date}T${startTime}`,
-      endTime: `${date}T${endTime}`,
+      buildingId: building,
+      guardId: guard,
+      details: description,
     };
 
-    console.log("Booking Data:", bookingData); // Log the data being sent to the server
+    console.log("Booking Data:", bookingData);
 
     try {
       const response = await axiosInstance.post(
-        "/security/bookings",
+        "/security/gbookings",
         bookingData
       );
 
@@ -198,7 +120,7 @@ export default function AdministratorGuardReservation() {
           {/* List Icon */}
           <button
             className="absolute p-2 bg-white rounded-full top-4 right-4 text-primary hover:bg-gray-100"
-            onClick={() => navigate("/security/administrator/mybookinglist")}
+            onClick={() => navigate("/security/administrator/guardreservationlist")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +138,9 @@ export default function AdministratorGuardReservation() {
             </svg>
           </button>
 
-          <h1 className="absolute text-2xl font-bold top-5">Guard Reservation</h1>
+          <h1 className="absolute text-2xl font-bold top-5">
+            Guard Reservation
+          </h1>
           <p className="absolute text-sm top-12">Detailed Information</p>
           <hr className="w-full my-3 mt-12" />
 
@@ -250,111 +174,47 @@ export default function AdministratorGuardReservation() {
               </select>
             </div>
 
-            {/* Floor Select */}
+            {/* Guard Select */}
             <div className="w-full form-control">
-              <label className="label" htmlFor="floor">
-                <span className="label-text">Floor</span>
+              <label className="label" htmlFor="guard">
+                <span className="label-text">Guard</span>
               </label>
               <select
-                id="floor"
-                value={floor}
-                onChange={handleFloorChange}
+                id="guard"
+                value={guard}
+                onChange={handleGuardChange}
                 className="w-full select select-bordered"
-                disabled={!building}
               >
                 <option value="" disabled>
-                  Select Floor
+                  Select Guard
                 </option>
-                {floorData.map((flr) => (
-                  <option key={flr.id} value={flr.id}>
-                    {flr.name}
-                  </option>
-                ))}
+                {guardData.length > 0 ? (
+                  guardData.map((guard) => (
+                    <option key={guard.id} value={guard.id}>
+                      {guard.fullName}{" "}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>Loading...</option>
+                )}
               </select>
             </div>
 
-            {/* Room Select */}
-            <div className="w-full form-control">
-              <label className="label" htmlFor="room">
-                <span className="label-text">Room No.</span>
-              </label>
-              <select
-                id="room"
-                value={room}
-                onChange={handleRoomChange}
-                className="w-full select select-bordered"
-                disabled={!floor}
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
               >
-                <option value="" disabled>
-                  Select Room
-                </option>
-                {roomData.map((rm) => (
-                  <option key={rm.id} value={rm.id}>
-                    {rm.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Date Input */}
-            <div className="w-full form-control">
-              <label className="label" htmlFor="date">
-                <span className="label-text">Date</span>
+                Description
               </label>
-              <input
-                type="date"
-                id="date"
-                value={date}
-                onChange={handleDateChange}
-                className="w-full input input-bordered"
-              />
-            </div>
-
-            {/* Time Inputs */}
-            <div className="flex justify-between gap-4">
-              <div className="w-1/2 form-control">
-                <label className="label" htmlFor="start-time">
-                  <span className="label-text">Start Time</span>
-                </label>
-                <select
-                  id="start-time"
-                  value={startTime}
-                  onChange={handleStartTimeChange}
-                  className="w-full select select-bordered"
-                  disabled={!date || availableStartTimes.length === 0} // Enable if there are start times
-                >
-                  <option value="" disabled>
-                    Select Start Time
-                  </option>
-                  {availableStartTimes.map((time) => (
-                    <option key={time} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="w-1/2 form-control">
-                <label className="label" htmlFor="end-time">
-                  <span className="label-text">End Time</span>
-                </label>
-                <select
-                  id="end-time"
-                  value={endTime}
-                  onChange={handleEndTimeChange}
-                  className="w-full select select-bordered"
-                  disabled={!startTime || !availableEndTimes.length}
-                >
-                  <option value="" disabled>
-                    Select End Time
-                  </option>
-                  {availableEndTimes.map((time) => (
-                    <option key={time} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Provide details about the lost or found item"
+                required
+              ></textarea>
             </div>
 
             {error && <p className="text-sm text-red-500">{error}</p>}
