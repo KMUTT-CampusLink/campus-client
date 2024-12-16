@@ -16,6 +16,7 @@ import {
   fetchAllSemesters,
   fetchStudentProfileById,
   fetchPeriodBySemesterId,
+  fetchTransactions,
 } from "./api";
 
 // Custom hook for authentication
@@ -204,6 +205,17 @@ export const useGetEnrollmentHead = ({ studentId, currentSemesterId }) => {
     enabled: !!studentId && !!currentSemesterId,
     onError: (error) => {
       console.error("Error fetching enrollment head:", error);
+    },
+  });
+};
+
+export const useTransactions = (userId) => {
+  return useQuery({
+    queryKey: ["transactions", userId],
+    queryFn: () => fetchTransactions(userId),
+    enabled: !!userId,
+    onError: (error) => {
+      console.error("Error fetching transactions:", error);
     },
   });
 };
