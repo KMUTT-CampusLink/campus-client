@@ -14,7 +14,7 @@ const useFace = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
-  const { sectionId } = useParams();
+  const {sectionId} = useParams();
   const COOLDOWN_PERIOD = 5000; // ms (5seconds)
 
   const refFaces = [
@@ -32,12 +32,13 @@ const useFace = () => {
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
-      navigate("/attendance");
+      navigate(`/attendance/professor/${sectionId}`);
     } else if (key === "QR CODE") {
-      navigate("/attendance/qr");
-    } else if (key === "Face Attendance") {
-      navigate("/attendance/faceAttendance");
+      navigate(`/attendance/professor/${sectionId}/profQr`);
+    } else if(key == "Face Attendance"){
+      navigate(`/attendance/professor/${sectionId}/faceAttendance`)
     }
+    console.log("HI");
   };
 
   const startVideo = async () => {
