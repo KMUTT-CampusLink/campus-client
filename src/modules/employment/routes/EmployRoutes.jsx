@@ -7,6 +7,10 @@ import StudentAdd from "../pages/StudentAdd";
 import StudentDetail from "../pages/StudentDetail";
 import StudentUpdate from "../pages/StudentUpdate";
 import StudentGrid from "../pages/StudentGrid";
+import CourseGrid from "../pages/CourseGrid";
+import CourseAdd from "../pages/CourseAdd";
+import CourseUpdate from "../pages/CourseUpdate";
+import CourseDetail from "../pages/CourseDetail";
 import AuthRoute from "../../registration/middleware/AuthRoute";
 export default function EmployRoutes() {
   return [
@@ -84,5 +88,40 @@ export default function EmployRoutes() {
         </AuthRoute>
       ),
     },
+
+    {
+      path: "course",
+      element: (
+        <AuthRoute allowed_roles={["Management"]}>
+          <CourseGrid />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "courseDetail/:code",
+      element: (
+        <AuthRoute allowed_roles={["Management"]}>
+          <CourseDetail />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "courseAdd",
+      element: (
+        <AuthRoute allowed_roles={["Management"]}>
+          <CourseAdd />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "courseUpdate/:code",
+      element: (
+        <AuthRoute allowed_roles={["Management"]}>
+          <CourseUpdate />
+        </AuthRoute>
+      ),
+    },
+
+
   ];
 }
