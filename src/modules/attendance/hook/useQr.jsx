@@ -16,11 +16,11 @@ const useQr = () => {
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
-      navigate("/attendance");
+      navigate(`/attendance/professor/${sectionId}`);
     } else if (key === "QR CODE") {
-      navigate("/attendance/qr");
+      navigate(`/attendance/professor/${sectionId}/profQr`);
     } else if(key == "Face Attendance"){
-      navigate("/attendance/faceAttendance")
+      navigate(`/attendance/professor/${sectionId}/faceAttendance`)
     }
     console.log("HI");
   };

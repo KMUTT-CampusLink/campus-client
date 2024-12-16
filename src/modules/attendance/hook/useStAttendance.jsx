@@ -174,7 +174,7 @@ const useStAttendance = () => {
           <tbody>
             {filteredStudents && filteredStudents.length > 0 ? (
               filteredStudents.map((item) => (
-                <tr key={item.id}>
+                <tr key={ `${item.student_id}-${item.created_at}`} >
                   <td>{item.created_at}</td>
                   <td>{`${item.firstname} ${item.midname ? item.midname : ""} ${item.lastname}`}</td>
                   <td>{item.student_id}</td>
