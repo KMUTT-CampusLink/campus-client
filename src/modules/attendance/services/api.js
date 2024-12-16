@@ -40,3 +40,21 @@ export const verifyFaceRecognition  = async(imageData) => {
     return error.response.data;
   }
 }
+
+export const getEnrollStudent = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/getStudentBySecId/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}
+
+export const getCourseHeader = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/course/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}

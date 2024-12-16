@@ -1,76 +1,109 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-/* import axios from "axios"; */
-
+import { axiosInstance } from "../../../utils/axiosInstance";
+import { getEnrollStudent } from "../services/api";
+import { getCourseHeader } from "../services/api";
 const useStAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statuses, ] = useState([
-    {
-      date: "2024-10-12",
-      studentName: "John Brown",
-      studentId: "S12345",
-      status: "Present",
-    },
-    {
-      date: "2024-10-12",
-      studentName: "Jim Green",
-      studentId: "S12346",
-      status: "Absent",
-    },
-  ]);
+  const [student, setStudents] = useState([]);
+  const [course, setCourse] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { sectionId } = useParams(); // Get sectionId from the URL
   const navigate = useNavigate();
 
-  /* // Fetch announcements from API
-useEffect(() => {
-  const getAnnouncements = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:3000/api/library/announce" // API endpoint
-      );
-      setAnnouncements(response.data); // Set fetched data to state
-      setFilteredAnnouncements(response.data); // Initialize filtered announcements
-    } catch (error) {
-      console.error("Error fetching announcements:", error); // Handle error
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await getCourseHeader(sectionId);
+        if (response.data.success) {
+          setCourse(response.data.data);
+        } else {
+          setError("Failed to fetch students");
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourse();
+  }, [sectionId]);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await getEnrollStudent(sectionId);
+        if (response.data.success) {
+          setStudents(response.data.data);
+        } else {
+          setError("Failed to fetch students");
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, [sectionId]);
+
+  const items = [
+    { label: "Attendance", key: "Attendance" },
+    { label: "Scanner", key: "Scanner" },
+  ];
+  const handleMenuClick = (key) => {
+    if (key === "Attendance") {
+      navigate(`/attendance/student/${sectionId}`);
+    } else if (key === "Scanner") {
+      navigate(`/attendance/student/${sectionId}/StQr`);
     }
   };
-  getAnnouncements(); // Call the function to fetch data
-}, []); */
-
-const items = [
-  { label: "Attendance", key: "Attendance" },
-  { label: "Scanner", key: "Scanner" },
-];
-
-const handleMenuClick = (key) => {
-  if (key === "Attendance") {
-    navigate("/attendance/statt");
-  } else if (key === "Scanner") {
-    navigate("/attendance/stQr");
-  }
-};
 
   const handleSearch = () => {
     console.log(`Searching for: ${searchQuery}`);
     // Add the actual search logic here
   };
-
-  const AttendanceDetail = () => (
-    <div className="flex flex-col">
-      <span className="text-2xl font-bold text-orange-500">
-        About Classroom
-      </span>
-      <div className="text-lg font-semibold">
-        <div>CSC-230 Computer Architecture & Design</div>
-        <div>Lecturer - Arjan xxxxxxxx</div>
-        <div>Time - 1:30 to 4:30 PM (Thursday)</div>
+  
+  const AttendanceDetail = () => {
+    if (loading) {
+      return <div>Loading course details...</div>;
+    }
+  
+    if (error) {
+      return <div>Error loading course details: {error}</div>;
+    }
+  
+    // Check if course data exists
+    if (!course || !course.course || !course.professor) {
+      return <div>No course data available</div>;
+    }
+  
+    return (
+      <div className="flex flex-col">
+        <span className="text-2xl font-bold text-orange-500">About Classroom</span>
+        <div className="text-lg font-semibold">
+          <div>
+            <div>{course.course.code} {course.course.name}</div>
+            {course.professor.map((prof, index) => (
+              <div key={index}>
+                Lecturer - {`${prof.employee.firstname} ${prof.employee.lastname}`}
+              </div>
+            ))}
+            <div>
+              Time - {moment(course.start_time).format("h:mm A")} to {moment(course.end_time).format("h:mm A")} ({course.day})
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  );
-
+    );
+  };
   const chooseDate = () => {
     const handleDateChange = (date) => {
       setSelectedDate(date);
@@ -108,29 +141,6 @@ const handleMenuClick = (key) => {
   };
 
   const table = () => {
-    // const data = [
-    //   {
-    //     date: "2024-10-12",
-    //     studentName: "John Brown",
-    //     studentId: "S12345",
-    //     status: "Present",
-    //   },
-    //   {
-    //     date: "2024-10-12",
-    //     studentName: "Jim Green",
-    //     studentId: "S12346",
-    //     status: "Absent",
-    //   },
-    // ];
-
-    // const [statuses, setStatuses] = useState(data);
-
-    // const handleStatusChange = (index, newStatus) => {
-    //   const updatedStatuses = [...statuses];
-    //   updatedStatuses[index].status = newStatus;
-    //   setStatuses(updatedStatuses);
-    // };
-
     return (
       <div className="flex flex-col mt-4">
         <span className="text-2xl font-bold text-orange-500">
@@ -146,24 +156,13 @@ const handleMenuClick = (key) => {
             </tr>
           </thead>
           <tbody>
-            {statuses.map((row, index) => (
-              <tr key={index}>
-                <td>{row.date}</td>
-                <td>{row.studentName}</td>
-                <td>{row.studentId}</td>
-                <td className="flex justify-between">
-                  {/* Show Status in corresponding color */}
-                  <span
-                    className={`${
-                      row.status === "Present"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {row.status}
-                  </span>
-
-                  
+            {student.map((item) => (
+              <tr key={item.student.id}>
+                <td>{moment().format("YYYY-MM-DD")}</td>
+                <td>{`${item.student.firstname} ${item.student.lastname}`}</td>
+                <td>{item.student.id}</td>
+                <td>
+                  <span className="text-green-500">Present</span>
                 </td>
               </tr>
             ))}
@@ -173,7 +172,7 @@ const handleMenuClick = (key) => {
     );
   };
 
-  return { items, handleMenuClick, AttendanceDetail, chooseDate, table };
+  return { items, handleMenuClick, AttendanceDetail, chooseDate, table, loading, error };
 };
 
 export default useStAttendance;

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QrScannerComponent from "../components/ScannerComponent";
 
 const useStQr = () => {
   const [h1] = useState("STQR Page");
   const navigate = useNavigate();
   const [isScannerOpen, setIsScannerOpen] = useState(false); // State for controlling scanner modal
-
+  const { sectionId } = useParams();
   const items = [
     { label: "Attendance", key: "Attendance" },
     { label: "Scanner", key: "Scanner" },
@@ -14,9 +14,9 @@ const useStQr = () => {
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
-      navigate("/attendance/statt");
+      navigate(`/attendance/student/${sectionId}`);
     } else if (key === "Scanner") {
-      navigate("/attendance/stQr");
+      navigate(`/attendance/student/${sectionId}/StQr`);
     }
   };
 
