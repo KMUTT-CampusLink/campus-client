@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import { getGuardReservationList } from "../../services/api";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function AdministratorGuardReservationList() {

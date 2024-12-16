@@ -13,7 +13,7 @@ import AdministratorMaintenanceRequest from "../pages/administrator/Administrato
 import AdministratorMyBookingList from "../pages/administrator/AdministratorMyBookingList";
 import AdministratorMyBookingSubmit from "../pages/administrator/AdministratorMyBookingSubmit";
 import AdministratorLostAndFoundForm from "../pages/administrator/AdministratorLostAndFoundForm";
-import AdministratorGuardReservation from "../pages/administrator/AdministratorGuardReservation";
+import AdministratorGuardReservationList from "../pages/administrator/AdministratorGuardReservationList";
 import AuthRoute from "../../registration/middleware/AuthRoute";
 
 // redirect page
@@ -136,7 +136,7 @@ export default function SecureRoutes() {
           path: "guardreservation",
           element: (
             <AuthRoute allowed_roles={["Professor", "Staff"]}>
-              <AdministratorGuardReservation />
+              <AdministratorGuardReservationList />
             </AuthRoute>
           ),
         },
