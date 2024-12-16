@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import gallery from "../../assets/gallery.png";
 import event from "../../assets/event.png";
@@ -16,6 +16,7 @@ import CommentPopup from "../../components/CommentPopup";
 import PopupDiscussion from "../../components/PopupDiscussion";
 import PopupEvent from "../../components/PopupEvent";
 import DEditPopup from "../../components/DEditPopup";
+import EventSessionTeacher from "../../components/EventSessionTeacher.jsx";
 import ConfirmationPopup from "../../components/ConfirmationPopup"; // Import ConfirmationPopup
 import {
   useAllDiscussionPostsBySectionID,
@@ -31,6 +32,8 @@ import CourseHeader from "../../components/CourseHeader";
 const TrDiscussion = () => {
   const sec_id = localStorage.getItem("sec_id");
   const loggedInUserId = localStorage.getItem("userId");
+
+  const [refresh, setRefresh] = useState(false);
 
   const { data: details } = useCourseHeaderBySectionID(sec_id);
   const { data: posts } = useAllDiscussionPostsBySectionID(sec_id);
@@ -62,30 +65,8 @@ const TrDiscussion = () => {
   const openEventPopup = () => setIsEventPopupOpen(true);
   const closeEventPopup = () => setIsEventPopupOpen(false);
 
-  const handleUploadSubmission = async (newTopic) => {
-    try {
-      await createMutation.mutateAsync(newTopic, {
-        onSuccess: () => {
-          console.log("Post created successfully!");
-          closeUploadPopup();
-        },
-      });
-    } catch (error) {
-      console.error("Error creating discussion:", error);
-    }
-  };
-
-  const handleEventSubmission = async (newTopic) => {
-    try {
-      await createMutation.mutateAsync(newTopic, {
-        onSuccess: () => {
-          console.log("Post created successfully!");
-          closeUploadPopup();
-        },
-      });
-    } catch (error) {
-      console.error("Error creating discussion:", error);
-    }
+  const handleEventSubmission = () => {
+    setRefresh(true);
   };
 
   const handleEdit = (post) => {
@@ -113,6 +94,12 @@ const TrDiscussion = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (refresh) {
+      setRefresh(false);
+    }
+  }, [refresh]);
 
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
@@ -160,6 +147,8 @@ const TrDiscussion = () => {
             </button>
           </div>
         </div>
+
+        <EventSessionTeacher refresh={refresh} />
       </div>
 
       {!isCommentPopupOpen && (
@@ -318,7 +307,7 @@ const TrDiscussion = () => {
       {isUploadPopupOpen && (
         <PopupDiscussion
           closePopup={closeUploadPopup}
-          onSubmit={handleUploadSubmission}
+
         />
       )}
       {isEventPopupOpen && (
