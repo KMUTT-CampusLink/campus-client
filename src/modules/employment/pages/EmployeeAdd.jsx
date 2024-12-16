@@ -45,7 +45,7 @@ const EmployeeAdd = () => {
       try {
         const result = await axiosInstance.get(`employ/getFaculty`);
         setFaculties(result.data);
-        console.log(result.data);
+        //console.log(result.data);
       } catch (error) {
         console.error("Error fetching faculties:", error);
       }
@@ -60,6 +60,7 @@ const EmployeeAdd = () => {
     const positionPattern = /^[a-zA-Z\s'-]+$/;
     const phonePattern = /^[0-9]{10,15}$/;
     const idPattern = /^[a-zA-Z0-9]+$/;
+    const postalCodePattern = /^[0-9]{5}$/;
 
     // Validate name fields
     if (!formData.firstname || !namePattern.test(formData.firstname)) {
@@ -128,6 +129,26 @@ const EmployeeAdd = () => {
         "Phone number is required and should contain 10-15 digits.";
     }
 
+    // --- New Address Field Validations ---
+    if (!formData.address) {
+      errors.address = "Address is required.";
+    }
+    if (!formData.sub_district) {
+      errors.sub_district = "Sub-district is required.";
+    }
+    if (!formData.district) {
+      errors.district = "District is required.";
+    }
+    if (!formData.province) {
+      errors.province = "Province is required.";
+    }
+    if (
+      !formData.postal_code ||
+      !postalCodePattern.test(formData.postal_code)
+    ) {
+      errors.postal_code = "Postal Code is required and must be 5 digits.";
+    }
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -151,13 +172,13 @@ const EmployeeAdd = () => {
   const handleSumbit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit button clicked");
+    //console.log("Submit button clicked");
     // Debugging: Check if this logs
     setShowPopup(false);
 
     //const facultyNumber = facultyMapping[formData.faculty_id];
     // console.log(facultyNumber);
-    console.log(formData.faculty_id);
+    //console.log(formData.faculty_id);
 
     const employeeData = {
       firstname: formData.firstname,
@@ -185,7 +206,7 @@ const EmployeeAdd = () => {
       );
 
       if (response.status === 200) {
-        console.log("Employee added successfully");
+        //console.log("Employee added successfully");
         setShowPopup(false);
         navigate("/employ/employee");
       } else {
@@ -389,7 +410,7 @@ const EmployeeAdd = () => {
                       {validationErrors.identification_no}
                     </p>
                   )}
-                </div>                
+                </div>
               </div>
 
               {/* Right side form inputs */}
@@ -481,6 +502,11 @@ const EmployeeAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.address && (
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.address}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -496,6 +522,11 @@ const EmployeeAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.sub_district && (
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.sub_district}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -511,6 +542,11 @@ const EmployeeAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.district && (
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.district}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -526,6 +562,11 @@ const EmployeeAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.province && (
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.province}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-6">
@@ -541,6 +582,11 @@ const EmployeeAdd = () => {
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
                     </div>
+                    {validationErrors.postal_code && (
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.postal_code}
+                      </p>
+                    )}
                   </div>
                 </div>
 

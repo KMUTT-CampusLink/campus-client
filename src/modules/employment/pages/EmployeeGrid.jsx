@@ -62,15 +62,12 @@ const EmployeeGrid = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch("http://localhost:3000/api/employ/getEmp");
-      const jsonResult = await result.json();
-      // console.log(jsonResult)
-      setEmployees(jsonResult);
+      const result = await axiosInstance.get(`employ/getEmp`);
+      setEmployees(result.data);
     };
 
     fetchData();
   }, []);
-
 
   useEffect(() => {
     const fetchFaculties = async () => {
@@ -100,8 +97,8 @@ const EmployeeGrid = () => {
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
       <NavBar />
-      <main className="pt-16 md:pt-20 px-5 md:px-20 mb-2">
-        <div className="border-none flex justify-between mb-2 md:mb-4 px-1 md:px-2">
+      <main className="pt-16 md:pt-20 px-5 md:px-20">
+        <div className="flex justify-between mb-2 md:mb-4 px-1 md:px-2">
           <div className="w-1/2 md:space-x-6 space-x-2 flex flex-row items-center">
             <FontAwesomeIcon
               icon={faArrowLeft}
@@ -130,11 +127,11 @@ const EmployeeGrid = () => {
           <div className="w-1/2">
             <select
               name="faculty"
-              value={selectedFaculty ? selectedFaculty : ""} 
+              value={selectedFaculty ? selectedFaculty : ""}
               onChange={handleFacultyChange}
               className="w-full border-b border-black focus:outline-none font-geologica text-[12px] md:text-[16px] text-center"
             >
-              <option value="" >All Faculties</option>
+              <option value="">All Faculties</option>
               {faculties.map((faculty) => (
                 <option key={faculty.id} value={faculty.id}>
                   {faculty.name}

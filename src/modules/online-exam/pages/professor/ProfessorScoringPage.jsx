@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Chip from "../../components/professor/Scoring/Chip";
 import StudentQuestion from "../../components/professor/Scoring/StudentQuestion";
+import BackBTN from "../../components/BackBTN";
 
 import {
   getStudentScore,
@@ -24,6 +25,7 @@ export default function ProfessorScoringPage() {
   const [studentScore, setStudentScore] = useState(0);
   const [studentAnswer, setStudentAnswer] = useState([]);
   const [studentExamData, setStudentExamData] = useState([]);
+  const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
 
   const [exam, setExam] = useState({
@@ -39,14 +41,31 @@ export default function ProfessorScoringPage() {
     scoring: [],
   });
 
+  const [essayComment, setEssayComment] = useState({
+    studentId: studentId,
+    examId: examId,
+    comment: [],
+  });
+
   const getParticipants = async () => {
     try {
       const response = await getExamParticipants(examId);
+      setParticipants(response.data.data[0]);
       setFullMark(response.data.full_mark);
       setPassMark(response.data.pass_mark);
     } catch (error) {
       console.log(error);
     }
+  };
+  console.log(participants);
+
+  const checkCompleteFillEssayScore = () => {
+    const essayQuestions = exam.questions.filter(
+      (question) => question.type === "Essay"
+    );
+    const isEssayScoringComplete =
+      essayQuestions.length === essayScore.scoring.length;
+    return isEssayScoringComplete;
   };
 
   const getExamData = async () => {
@@ -58,27 +77,27 @@ export default function ProfessorScoringPage() {
       const mappedQuestions =
         examQuestion && Array.isArray(examQuestion)
           ? examQuestion.map((question) => {
-              const questionChoices = allChoices.filter(
-                (choice) => choice.question_id === question.id
-              );
-              return {
-                questionText: question.title || "",
-                type: question.type
-                  ? question.type.replace("_", " ")
-                  : "Multiple Choice",
-                options: questionChoices.map((choice) => ({
-                  question_id: choice.question_id,
-                  choiceId: choice.id,
-                  choiceText: choice.choice_text || "",
-                  choiceImg: choice.choice_img || "",
-                })),
-                answer: questionChoices
-                  .filter((choice) => choice.correct_ans)
-                  .map((choice) => choice.choice_text || ""),
-                score: question.mark || null,
-                question_id: question.id || null,
-              };
-            })
+            const questionChoices = allChoices.filter(
+              (choice) => choice.question_id === question.id
+            );
+            return {
+              questionText: question.title || "",
+              type: question.type
+                ? question.type.replace("_", " ")
+                : "Multiple Choice",
+              options: questionChoices.map((choice) => ({
+                question_id: choice.question_id,
+                choiceId: choice.id,
+                choiceText: choice.choice_text || "",
+                choiceImg: choice.choice_img || "",
+              })),
+              answer: questionChoices
+                .filter((choice) => choice.correct_ans)
+                .map((choice) => choice.choice_text || ""),
+              score: question.mark || null,
+              question_id: question.id || null,
+            };
+          })
           : [];
 
       setExam({
@@ -88,12 +107,12 @@ export default function ProfessorScoringPage() {
         questions: mappedQuestions,
       });
     } catch (error) {
-      navigate("/exams/student/1");
       console.error("Failed to fetch exam data:", error);
     }
   };
 
   const getScore = async () => {
+    //total score
     try {
       const response = await getStudentScore(studentExamId);
       setStudentScore(response.data.data.total_score);
@@ -114,7 +133,6 @@ export default function ProfessorScoringPage() {
   const getStudentExamData = async () => {
     try {
       const response = await getStudentExam(studentExamId);
-
       setStudentExamData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -138,7 +156,19 @@ export default function ProfessorScoringPage() {
           score: parseFloat(item.score),
         })),
       };
-      const res = await updateStudentScore(finalEssayScore, studentExamId, studentId);
+      const finalComment = {
+        ...essayComment,
+        comment: essayComment.comment.map((item) => ({
+          ...item,
+          comment: item.comment,
+        })),
+      };
+      const res = await updateStudentScore(
+        finalEssayScore,
+        finalComment,
+        studentExamId,
+        studentId
+      );
       if (res.status === 200) {
         navigate(`/exams/professor/overallScoring/${examId}`);
       }
@@ -152,24 +182,25 @@ export default function ProfessorScoringPage() {
       <NavBar />
       {/* Heading */}
       <div className="px-[26px] py-[35px] lg:px-[200px] pt-20">
+        <BackBTN />
         <div className="flex justify-between items-center ">
           <div>
-            <p className="font-bold text-[#D4A015] text-[22px] lg:text-[30px]">
+            <p className="font-bold text-[#D4A015] text-[22px] lg:text-[30px] pb-3">
               Individual Scoring
             </p>
             <div className="text-[12px] lg:text-[16px]">
               <p className="">{studentId}</p>
-              <p className="">Nudhana Sarutipaisan</p>
+              <p className="">{participants.firstname}   {participants.lastname} </p>
             </div>
           </div>
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col items-end ite">
             <Chip
               status={studentExamData.is_checked}
               score={studentScore}
               passMark={passMark}
             />
-            <div className="flex gap-1">
-              <p className="text-[22px] lg:text-[30px]">
+            <div className="flex pt-2">
+              <p className="text-[22px] lg:text-[35px]">
                 {studentScore}/{fullMark}
               </p>
             </div>
@@ -178,17 +209,15 @@ export default function ProfessorScoringPage() {
         {/* exam type button group */}
         <div className="flex justify-evenly font-semibold text-[20px] pb-5">
           <button
-            className={`focus:underline decoration-[#D4A015] decoration-2 underline-offset-[5px] ${
-              activeButton === "Multiple Choice" ? "underline" : ""
-            }`}
+            className={`focus:underline decoration-[#D4A015] decoration-2 underline-offset-[5px] ${activeButton === "Multiple Choice" ? "underline" : ""
+              }`}
             onClick={() => setActiveButton("Multiple Choice")}
           >
             Multiple choice
           </button>
           <button
-            className={`focus:underline decoration-[#D4A015] decoration-2 underline-offset-[5px]  ${
-              activeButton === "Essay" ? "underline" : ""
-            }`}
+            className={`focus:underline decoration-[#D4A015] decoration-2 underline-offset-[5px]  ${activeButton === "Essay" ? "underline" : ""
+              }`}
             onClick={() => setActiveButton("Essay")}
           >
             Essay
@@ -210,6 +239,7 @@ export default function ProfessorScoringPage() {
                 studentId={studentId}
                 essayScore={essayScore}
                 setEssayScore={setEssayScore}
+                setEssayComment={setEssayComment}
                 studentAnswer={studentAnswer}
                 questionid={filteredItem.question_id}
                 questionNo={index}
@@ -221,7 +251,9 @@ export default function ProfessorScoringPage() {
         </div>
         <div className="w-full flex justify-end">
           <button
-            disabled={studentExamData.is_checked}
+            disabled={
+              studentExamData.is_checked || !checkCompleteFillEssayScore()
+            }
             className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
             onClick={() => document.getElementById("confirmModal").showModal()}
           >

@@ -31,23 +31,26 @@ const StudentDetail = () => {
 
   useEffect(() => {
     const fetchStudent = async () => {
+      //debugger;
       try {
         const result = await axiosInstance.get(`employ/getStu/${id}`);
         setStudents(result.data);
-        if (!result.data.uni_batch) {
+        // debugger;
+        if (!result.data.uni_batch || result.status == 404) {
           console.error("Faculty data missing. Redirecting to main page.");
           navigate(`/employ/student`);
         }
       } catch (error) {
-        console.error("Error fetching student data:", error);
+        //console.error("Error fetching student data:", error);
+        navigate(`/employ/student`);
       }
     };
     fetchStudent();
   }, [id, navigate]);
 
-  console.log(student);
+  //console.log(student);
 
-  if (!student) return <p>Loading student data...</p>;
+  if (!student) return <p className="pt-5 pl-5">Loading student data...</p>;
 
   const dobS = student.date_of_birth;
   const dob = new Date(dobS);
@@ -69,7 +72,7 @@ const StudentDetail = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`employ/deleteStu/${id}`);
-      console.log("Delete successful");
+     // console.log("Delete successful");
       setDeleteSuccess(true);
       setShowPopup(false);
       navigate(`/employ/student`);
@@ -192,7 +195,7 @@ const StudentDetail = () => {
           </article>
         </div>
 
-        <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
+        <div className="lg:mt-10 flex justify-around lg:justify-center pt-4 lg:gap-10">
           <button
             className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm"
             onClick={handleClick}

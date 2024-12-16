@@ -137,7 +137,7 @@ const EmployeeUpdate = () => {
       Object.entries(employeeData).filter(([key, value]) => value)
     );
 
-    console.log("Filtered Employee Data:", filteredEmployeeData);
+    //console.log("Filtered Employee Data:", filteredEmployeeData);
 
     try {
       const response = await axiosInstance.post(
@@ -145,7 +145,7 @@ const EmployeeUpdate = () => {
         filteredEmployeeData
       );
       if (response.status === 200) {
-        console.log("Employee updated successfully");
+      //  console.log("Employee updated successfully");
         navigate(`/employ/employeeDetail/${id}`);
       } else {
         console.error("Error updating employee:", response.data);
@@ -186,7 +186,6 @@ const EmployeeUpdate = () => {
                   <input
                     name="firstname"
                     type="text"
-                    placeholder={formData.firstname || "Enter FirstName"}
                     value={formData.firstname}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -204,7 +203,6 @@ const EmployeeUpdate = () => {
                     <input
                       name="midname"
                       type="text"
-                      placeholder={formData.midname || "Enter MidName"}
                       value={formData.midname}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -220,7 +218,6 @@ const EmployeeUpdate = () => {
                     <input
                       name="lastname"
                       type="text"
-                      placeholder={formData.lastname || "Enter lastName"}
                       value={formData.lastname}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -277,7 +274,6 @@ const EmployeeUpdate = () => {
                   <input
                     name="position"
                     type="text"
-                    placeholder={formData.position || "Enter Position"}
                     value={formData.position}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -294,7 +290,6 @@ const EmployeeUpdate = () => {
                   <input
                     name="salary"
                     type="number"
-                    placeholder={formData.salary || "Enter Salary"}
                     value={formData.salary}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -308,7 +303,6 @@ const EmployeeUpdate = () => {
                   <input
                     type="text"
                     name="identification_no"
-                    placeholder={formData.identification_no || "Enter ID"}
                     value={formData.identification_no}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -379,7 +373,6 @@ const EmployeeUpdate = () => {
                   <input
                     type="text"
                     name="phone"
-                    placeholder={formData.phone || "Enter Phone Number"}
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -398,7 +391,6 @@ const EmployeeUpdate = () => {
                       <input
                         type="text"
                         name="address"
-                        placeholder={employees.address || "Enter Address"}
                         value={formData.address || ""}
                         onChange={handleChange}
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
@@ -414,7 +406,7 @@ const EmployeeUpdate = () => {
                       <input
                         type="text"
                         name="sub_district"
-                        value={formData.sub_district || ""}
+                        value={formData.sub_district}
                         onChange={handleChange}
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
@@ -429,7 +421,7 @@ const EmployeeUpdate = () => {
                       <input
                         type="text"
                         name="district"
-                        value={formData.district || ""}
+                        value={formData.district}
                         onChange={handleChange}
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
@@ -444,7 +436,7 @@ const EmployeeUpdate = () => {
                       <input
                         type="text"
                         name="province"
-                        value={formData.province || ""}
+                        value={formData.province }
                         onChange={handleChange}
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />
@@ -459,7 +451,7 @@ const EmployeeUpdate = () => {
                       <input
                         type="text"
                         name="postal_code"
-                        value={formData.postal_code || ""}
+                        value={formData.postal_code}
                         onChange={handleChange}
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />

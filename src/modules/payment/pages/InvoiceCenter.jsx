@@ -3,11 +3,11 @@ import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import RecentTransactions from "../components/RecentTransactions";
 import AllTransactions from "../components/AllTransactions";
 import ReceiptImage from "../asset/receipt.svg";
-//import { transactions } from "../components/Transaction";
 import "../style/typography.css";
 import Money1 from "../asset/money1.png";
 import Money2 from "../asset/money2.png";
 import Money3 from "../asset/money3.png";
+import { getInvoice } from "../services/api";
 
 // at line 6 please comment that and line 16 uncomment that to use backend data 
 // update day 15 nov : now stuff probably use real database dont comment more stuff
@@ -21,24 +21,12 @@ const InvoiceCenter = () => {
   const [showMoney, setShowMoney] = useState(false);
   const [isTilting, setIsTilting] = useState(false);
 
+  const getData = async() => {
+    const response = await getInvoice();
+    setTransactions(response.data);
+  }
   useEffect(() => {
-    // Fetch transactions from the API
-    const fetchTransactions = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/payment/invoice"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch transactions");
-        }
-        const data = await response.json();
-        setTransactions(data);
-      } catch (error) {
-        console.error("Error fetching transactions:", error);
-      }
-    };
-
-    fetchTransactions();
+    getData();
   }, []);
 
   const handleImageClick = () => {
@@ -55,7 +43,7 @@ const InvoiceCenter = () => {
       <NavBar />
       <main className="mx-auto max-w-full lg:max-w-7xl pt-10 lg:pt-20 w-full px-4 lg:px-0 ">
         <div className="flex flex-col lg:flex-row h-auto ">
-          {/*Head UX/UI special request. i hope that she someday stub her pinky toe so hard🤗🤗🤗*/}
+          {/*Head UX/UI spcecial request. i hope that she someday stub her pinky toe so hard🤗🤗🤗*/}
           <div className="relative w-full lg:h-screen lg:w-1/2 flex items-center justify-center lg:pb-40 lg:mt-0 lg:mb-0 ">
             <img
               src={ReceiptImage}

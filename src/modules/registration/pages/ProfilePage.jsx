@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
-import { mainStyles, containerDivStyles } from "../styles/styles";
+import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGraduationCap,
@@ -17,6 +17,9 @@ import {
 import { ErrorSkeleton } from "../styles/Skeletons";
 import SInfoCard from "../components/SInfoCard";
 import LoadingPage from "../../dev/pages/LoadingPage";
+import { GiWallet } from "react-icons/gi";
+import { Link } from "react-router-dom";
+import ClubCard from "../components/ClubCard";
 
 function ProfilePage() {
   const studentId = localStorage.getItem("studentId");
@@ -26,7 +29,7 @@ function ProfilePage() {
     isLoading,
     isProfileError,
   } = useStudentProfileData(studentId);
-
+  console.log(profileData);
   const [semester, setSemester] = useState("");
   const [semesterId, setSemesterId] = useState("");
 
@@ -45,7 +48,7 @@ function ProfilePage() {
     <div className={containerDivStyles}>
       <NavBar />
       <main className={mainStyles}>
-        <div className="grid grid-cols-1 min-[1200px]:grid-cols-3 bg-gray-100 p-6 rounded-lg shadow-lg">
+        <div className="grid grid-cols-1 min-[1200px]:grid-cols-3 text-xs md:text-base bg-gray-100 p-6 rounded-lg shadow-lg">
           <div className="col-span-2 p-4">
             <h2 className="text-3xl font-bold">My Profile</h2>
             {/* Logo Section */}
@@ -53,10 +56,10 @@ function ProfilePage() {
               <img
                 src="/logos/profile-pic.png"
                 alt="Logo"
-                className="w-full h-full rounded-full object-cover border-4 border-gray-200"
+                className="object-cover w-full h-full border-4 border-gray-200 rounded-full"
               />
             </div>
-            <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
+            <div className="p-4 mt-4 bg-white rounded-lg shadow-md">
               <div className="flex items-center space-x-2">
                 <FontAwesomeIcon
                   icon={faGraduationCap}
@@ -67,7 +70,7 @@ function ProfilePage() {
                   <p className="font-semibold">{profileData?.degree_level}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="flex items-center mt-4 space-x-2">
                 <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
                 <div>
                   <p className="text-sm text-gray-500">Personal email</p>
@@ -76,29 +79,29 @@ function ProfilePage() {
               </div>
             </div>
 
-            <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
+            <div className="p-4 mt-6 bg-white rounded-lg shadow-md">
               <h3 className="text-lg font-semibold">Contact Information</h3>
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="flex items-center mt-4 space-x-2">
                 <FontAwesomeIcon icon={faPhone} className="text-gray-600" />
                 <p className="font-semibold">{profileData?.phone}</p>
               </div>
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="flex items-center mt-4 space-x-2">
                 <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
                 <p className="font-semibold">{profileData?.personal_email}</p>
               </div>
             </div>
-            <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
-              <div className="flex space-x-2 items-center">
-                <FontAwesomeIcon icon={faUser} className=" text-gray-600" />
+            <div className="p-4 mt-6 bg-white rounded-lg shadow-md ">
+              <div className="flex items-center space-x-2">
+                <FontAwesomeIcon icon={faUser} className="text-gray-600 " />
                 <h3 className="text-lg font-semibold">Personal Information</h3>
               </div>
 
               <div className="mx-6 my-2">
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Identification Number</span>
                   <span>{profileData?.identification_no || "N/A"}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Date of Birth</span>
                   <span>
                     {new Date(profileData?.date_of_birth).toLocaleDateString()}
@@ -106,30 +109,30 @@ function ProfilePage() {
                 </p>
               </div>
             </div>
-            <div className=" mt-6 bg-white p-4 rounded-lg shadow-md">
-              <div className="flex space-x-2 items-center">
-                <FontAwesomeIcon icon={faHome} className=" text-gray-600" />
+            <div className="p-4 mt-6 bg-white rounded-lg shadow-md ">
+              <div className="flex items-center space-x-2">
+                <FontAwesomeIcon icon={faHome} className="text-gray-600 " />
                 <h3 className="text-lg font-semibold">Current Address</h3>
               </div>
 
               <div className="mx-6 my-2">
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Address</span>
                   <span>{profileData?.address}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Subdistrict</span>
                   <span>{profileData?.sub_district}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>District</span>
                   <span>{profileData?.district}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Province</span>
                   <span>{profileData?.province}</span>
                 </p>
-                <p className="flex justify-between">
+                <p className="flex flex-wrap justify-between">
                   <span>Postal Code</span>
                   <span>{profileData?.postal_code}</span>
                 </p>
@@ -137,8 +140,17 @@ function ProfilePage() {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-lg">
+          <div className="p-4 bg-white rounded-lg shadow-lg">
             <SInfoCard />
+            <Link to="/regis/wallet">
+              <button className={`${button} my-4`}>
+                <div className="flex items-center justify-center text-5xl text-white">
+                  <GiWallet />
+                </div>
+                <p>My Wallet</p>
+              </button>
+            </Link>
+            <ClubCard clubs={profileData?.clubs} />
             <GradeCard
               studentId={studentId}
               semester={semester}
