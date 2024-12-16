@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import QrScannerComponent from "../components/ScannerComponent";
-
+import { getCourseHeader } from "../services/api";
+import moment from "moment";
 const useStQr = () => {
   const [h1] = useState("STQR Page");
   const navigate = useNavigate();
@@ -20,20 +21,66 @@ const useStQr = () => {
     }
   };
 
-  function stDetail() {
+  const stDetail = () => {
+    const [course, setCourse] = useState(null); // State to hold course data
+    const [loading, setLoading] = useState(true); // State to handle loading
+    const [error, setError] = useState(null); // State to handle errors
+
+    useEffect(() => {
+      const fetchCourse = async () => {
+        try {
+          const response = await getCourseHeader(sectionId);
+          if (response.data.success) {
+            setCourse(response.data.data);
+          } else {
+            setError("Failed to fetch students");
+          }
+        } catch (err) {
+          setError(err.response?.data?.message || "An error occurred");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchCourse();
+    }, [sectionId]);
+
+    if (loading) {
+      return <div>Loading course details...</div>;
+    }
+
+    if (error) {
+      return <div>Error loading course details: {error}</div>;
+    }
+
+    // Check if course data exists
+    if (!course || !course.course || !course.professor) {
+      return <div>No course data available</div>;
+    }
+
     return (
       <div className="flex flex-col p-4 space-y-2 md:space-y-4">
         <span className="text-xl md:text-2xl font-bold text-orange-500">
           About Classroom
         </span>
         <div className="text-base md:text-lg font-semibold">
-          <div>CSC-230 Computer Architecture & Design</div>
-          <div>Lecturer - Arjan xxxxxxxx</div>
-          <div>Time - 1:30 to 4:30 PM (Thursday)</div>
+          <div>
+            {course.course.code} {course.course.name}
+          </div>
+          {course.professor.map((prof, index) => (
+            <div key={index}>
+              Lecturer -{" "}
+              {`${prof.employee.firstname} ${prof.employee.lastname}`}
+            </div>
+          ))}
+          <div>
+            Time - {moment(course.start_time).format("h:mm A")} to{" "}
+            {moment(course.end_time).format("h:mm A")} ({course.day})
+          </div>
         </div>
       </div>
     );
-  }
+  };
 
   function StQrButton() {
     return (
@@ -57,14 +104,15 @@ const useStQr = () => {
             />
           </svg>
         </button>
-  
+
         {/* Modal for QR Scanner */}
         {isScannerOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white rounded-lg p-6 flex flex-col items-center justify-center w-1/2 max-w-md text-center">
               <h3 className="text-xl font-semibold mb-4">Scan QR Code</h3>
               <div className="flex items-center justify-center w-full h-auto mb-4">
-                <QrScannerComponent /> {/* QR Scanner component for live scanning */}
+                <QrScannerComponent />{" "}
+                {/* QR Scanner component for live scanning */}
               </div>
               <button
                 className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
@@ -78,7 +126,6 @@ const useStQr = () => {
       </div>
     );
   }
-  
 
   return {
     h1,
