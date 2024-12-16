@@ -79,7 +79,7 @@ const useStAttendance = () => {
     if (error) {
       return <div>Error loading course details: {error}</div>;
     }
-  
+      
     // Check if course data exists
     if (!course || !course.course || !course.professor) {
       return <div>No course data available</div>;
