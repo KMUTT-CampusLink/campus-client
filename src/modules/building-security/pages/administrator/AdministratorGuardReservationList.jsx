@@ -73,7 +73,7 @@ export default function AdministratorGuardReservationList() {
                       User ID
                     </th>
                     <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                      Guard ID
+                      Guard Name
                     </th>
                     <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
                       Description
@@ -90,8 +90,8 @@ export default function AdministratorGuardReservationList() {
                         {request.id}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
-                        {request.user?.username}{" "}
-                        {/* Display username from user */}
+                        {request.user?.employee?.firstname}{" "}
+                        {request.user?.employee?.lastname}{" "}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
                         {request.guard?.employee?.firstname}{" "}
