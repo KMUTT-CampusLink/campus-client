@@ -103,7 +103,7 @@ function EventPage() {
   );
 
   return (
-    <div className="min-h-screen font-nunito">
+    <div className="min-w-[850px] font-nunito">
       <NavBar />
       <main className="pt-20 pb-6 mx-auto">
         <MainNavbar />

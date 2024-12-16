@@ -74,7 +74,11 @@ export default function LibRoutes() {
     },
     {
       path: "/library/admin",
-      element: <AdminPage />,
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <AdminPage />
+        </AuthRoute>
+      ),
     },
   ];
 }

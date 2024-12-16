@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchEveryBook, fetchResData, fetchReservedBook, returnBook,  } from "../services/api"; // Adjust the path to your api.js
+import {
+  fetchEveryBook,
+  fetchResData,
+  fetchReservedBook,
+  returnBook,
+} from "../services/api"; // Adjust the path to your api.js
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -27,7 +32,7 @@ function AdminPage() {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -119,8 +124,9 @@ function AdminPage() {
 
   const handleScannedBookData = (scannedId) => {
     // Find the book whose duplicate matches the scanned ID
-    const bookData = books.find((book) =>
-       String(book.id) === String(scannedId));
+    const bookData = books.find(
+      (book) => String(book.id) === String(scannedId)
+    );
 
     if (bookData) {
       console.log("Matched Book:", bookData);
@@ -130,17 +136,17 @@ function AdminPage() {
       setScannedBookData(null); // Clear previous data if no match is found
     }
   };
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-w-[850px] bg-gray-50 font-sans">
       {/* Top Navbar */}
       <NavBar />
 
-      <main className="pt-16">
+      <main className="pt-16 min-w-[850px]">
         {/* Secondary Navbar */}
         <MainNavbar />
 
-        <div className="p-8 font-nunito">
+        <div className="p-8 font-nunito ">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             Admin Dashboard
           </h1>
@@ -168,9 +174,7 @@ function AdminPage() {
                     Total Books
                   </h2>
                   <p className="text-3xl font-bold mt-4">{books.length}</p>
-                  <p className="text-sm text-green-500 mt-2">
-                    All books
-                  </p>
+                  <p className="text-sm text-green-500 mt-2">All books</p>
                 </div>
 
                 {/* Total Reserved Books */}
@@ -179,11 +183,7 @@ function AdminPage() {
                     Total Reserved Books
                   </h2>
                   <p className="text-3xl font-bold mt-4">
-                    {
-                      books.filter(
-                        (book) => book.status === false
-                      ).length
-                    }
+                    {books.filter((book) => book.status === false).length}
                   </p>
                   <p className="text-sm text-yellow-500 mt-2">
                     Currently reserved
@@ -196,11 +196,7 @@ function AdminPage() {
                     Total Available Books
                   </h2>
                   <p className="text-3xl font-bold mt-4">
-                    {
-                      books.filter(
-                        (book) => book.status === true
-                      ).length
-                    }
+                    {books.filter((book) => book.status === true).length}
                   </p>
                   <p className="text-sm text-blue-500 mt-2">
                     Available for borrowing
@@ -213,12 +209,15 @@ function AdminPage() {
                     Reservation Rate
                   </h2>
                   <p className="text-3xl font-bold mt-4">
-                    {
-                      books.length > 0 ?
-                      (books.filter(
-                        (book) => book.status === false
-                      ).length/books.length * 100).toFixed(2) : 0
-                    } %
+                    {books.length > 0
+                      ? (
+                          (books.filter((book) => book.status === false)
+                            .length /
+                            books.length) *
+                          100
+                        ).toFixed(2)
+                      : 0}{" "}
+                    %
                   </p>
                   <p className="text-sm text-red-500 mt-2">Books reserved</p>
                 </div>
@@ -241,52 +240,54 @@ function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        books.map((book) => {
-                          rowNumber++;
-                          return (
-                            <tr key={book.id}>
-                                <td>
-                                  <h1 className="flex items-center gap-3 font-bold">
-                                    {rowNumber}
-                                  </h1>
-                                </td>
-                                <td>
-                                  <div className="flex items-center gap-3">
-                                    <div className="avatar">
-                                      <div className="w-16 h-16 object-cover rounded">
-                                        <img
-                                          src={book.cover_image}
-                                          alt={book.title}
-                                        />
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div className="font-bold">
-                                        {book.title}
-                                      </div>
-                                    </div>
+                      {books.map((book) => {
+                        rowNumber++;
+                        return (
+                          <tr key={book.id}>
+                            <td>
+                              <h1 className="flex items-center gap-3 font-bold">
+                                {rowNumber}
+                              </h1>
+                            </td>
+                            <td>
+                              <div className="flex items-center gap-3">
+                                <div className="avatar">
+                                  <div className="w-16 h-16 object-cover rounded">
+                                    <img
+                                      src={book.cover_image}
+                                      alt={book.title}
+                                    />
                                   </div>
-                                </td>
-                                <td>{book.id}</td>
-                                <td>
-                                  <span
-                                    className={`font-medium ${
-                                      book.status === true
-                                        ? "text-green-500"
-                                        : "text-yellow-500"
-                                    }`}
-                                  >
-                                    {book.status===true? "Available" : "Unavailable"}
-                                  </span>
-                                </td>
-                                <td>
-                                  <h1 className="">{ book.firstname && book.lastname? book.firstname+" "+book.lastname : "-"}</h1>
-                                </td>
-                              </tr>
-                          )
-                        })
-                      }
+                                </div>
+                                <div>
+                                  <div className="font-bold">{book.title}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>{book.id}</td>
+                            <td>
+                              <span
+                                className={`font-medium ${
+                                  book.status === true
+                                    ? "text-green-500"
+                                    : "text-yellow-500"
+                                }`}
+                              >
+                                {book.status === true
+                                  ? "Available"
+                                  : "Unavailable"}
+                              </span>
+                            </td>
+                            <td>
+                              <h1 className="">
+                                {book.firstname && book.lastname
+                                  ? book.firstname + " " + book.lastname
+                                  : "-"}
+                              </h1>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -312,91 +313,120 @@ function AdminPage() {
                 Upload an image or scan a photo of QR code to return the book
               </p>
               <div className="flex flex-col md:flex-row w-full p-6 gap-6">
-  {/* Left Section: QR Scanner */}
-  <div className="card rounded-lg flex flex-col items-center p-6 flex-grow bg-white shadow-lg">
-    {/* Video Element */}
-    <video
-      ref={videoRef}
-      className={`w-full max-h-64 mb-4 rounded-lg shadow ${
-        isCameraOpen ? "block" : "hidden"
-      }`}
-    />
+                {/* Left Section: QR Scanner */}
+                <div className="card rounded-lg flex flex-col items-center p-6 flex-grow bg-white shadow-lg">
+                  {/* Video Element */}
+                  <video
+                    ref={videoRef}
+                    className={`w-full max-h-64 mb-4 rounded-lg shadow ${
+                      isCameraOpen ? "block" : "hidden"
+                    }`}
+                  />
 
-    {/* Open Camera Button */}
-    {!isCameraOpen && (
-      <button
-        onClick={startQrScanner}
-        className="btn bg-gray-800 text-white px-6 py-2 rounded-lg shadow-md hover:bg-gray-700"
-      >
-        Open Camera
-      </button>
-    )}
+                  {/* Open Camera Button */}
+                  {!isCameraOpen && (
+                    <button
+                      onClick={startQrScanner}
+                      className="btn bg-gray-800 text-white px-6 py-2 rounded-lg shadow-md hover:bg-gray-700"
+                    >
+                      Open Camera
+                    </button>
+                  )}
 
-    {/* File Input */}
-    <input
-      type="file"
-      onChange={readCodeFromImage}
-      className="file-input file-input-bordered w-full max-w-xs mt-4"
-    />
-  </div>
+                  {/* File Input */}
+                  <input
+                    type="file"
+                    onChange={readCodeFromImage}
+                    className="file-input file-input-bordered w-full max-w-xs mt-4"
+                  />
+                </div>
 
-  {/* Divider */}
-  <div className="divider divider-horizontal hidden md:block"></div>
+                {/* Divider */}
+                <div className="divider divider-horizontal hidden md:block"></div>
 
-  {/* Right Section: Scanned Book Details */}
-  <div className="card rounded-lg flex flex-col items-center p-6 flex-grow bg-base-300 shadow-lg">
-    {scannedBookData ? (
-      <div className="text-center space-y-4">
-        {/* Book Details Header */}
-        <h3 className="text-xl font-bold text-gray-800">Book Details</h3>
+                {/* Right Section: Scanned Book Details */}
+                <div className="card rounded-lg flex flex-col items-center p-6 flex-grow bg-white shadow-lg">
+                  {scannedBookData ? (
+                    <div className="text-center space-y-4">
+                      {/* Book Details Header */}
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Book Details
+                      </h3>
 
-        {/* Book Title */}
-        <p className="text-gray-700">
-          <strong>Title:</strong> {scannedBookData.title}
-        </p>
+                      {/* Book Title */}
+                      <p className="text-gray-700">
+                        <strong>Title:</strong> {scannedBookData.title}
+                      </p>
 
-        {/* Book Cover Image */}
-        {scannedBookData.cover_image ? (
-          <img
-            src={scannedBookData.cover_image}
-            alt={scannedBookData.title}
-            className="w-32 h-48 object-cover rounded-md shadow-md mx-auto"
-          />
-        ) : (
-          <div className="w-32 h-48 bg-gray-200 flex items-center justify-center rounded-md shadow-md">
-            <p className="text-gray-500">No Image</p>
-          </div>
-        )}
+                      {/* Book Cover Image */}
+                      {scannedBookData.cover_image ? (
+                        <img
+                          src={scannedBookData.cover_image}
+                          alt={scannedBookData.title}
+                          className="w-32 h-48 object-cover rounded-md shadow-md mx-auto"
+                        />
+                      ) : (
+                        <div className="w-32 h-48 bg-gray-200 flex items-center justify-center rounded-md shadow-md">
+                          <p className="text-gray-500">No Image</p>
+                        </div>
+                      )}
 
-        {/* User Information */}
-        <p className="text-gray-700">
-          <strong>User:</strong>{" "}
-          {scannedBookData.firstname && scannedBookData.lastname
-            ? `${scannedBookData.firstname} ${scannedBookData.lastname}`
-            : "-"}
-        </p>
+                      {/* User Information */}
+                      <p className="text-gray-700">
+                        <strong>User:</strong>{" "}
+                        {scannedBookData.firstname && scannedBookData.lastname
+                          ? `${scannedBookData.firstname} ${scannedBookData.lastname}`
+                          : "No Reserved User"}
+                      </p>
 
-        {/* Return Button */}
-        <button
-          onClick={() => handleReturnBook(parseInt(scannedId))}
-          className={`btn px-6 py-2 font-semibold rounded-lg ${
-            loadingBook === scannedId
-              ? "bg-gray-400 cursor-not-allowed text-white"
-              : "bg-orange-500 hover:bg-orange-600 text-white"
-          } shadow-md transition duration-200`}
-          disabled={loadingBook === scannedId}
-        >
-          {loadingBook === scannedId ? "Processing..." : "Confirm Return"}
-        </button>
-      </div>
-    ) : (
-      <div className="text-center text-gray-600">
-        <p>No matching book found for scanned ID.</p>
-      </div>
-    )}
-  </div>
-</div>
+                      {/* Return Button */}
+                      <button
+                        onClick={async () => {
+                          if (isButtonDisabled) return; // Prevent multiple clicks
+                          setIsButtonDisabled(true); // Disable button immediately on click
 
+                          try {
+                            await handleReturnBook(parseInt(scannedId));
+                            // Update the book data to indicate "No Reserved User"
+                            setScannedBookData((prevData) => ({
+                              ...prevData,
+                              firstname: null,
+                              lastname: null,
+                            }));
+                            // Show success alert
+                            alert("Book returned successfully!");
+                          } catch (error) {
+                            console.error("Error returning the book:", error);
+                          } finally {
+                            setIsButtonDisabled(false); // Re-enable button after processing
+                          }
+                        }}
+                        className={`btn px-6 py-2 font-semibold rounded-lg ${
+                          loadingBook === scannedId ||
+                          isButtonDisabled ||
+                          !scannedBookData.firstname
+                            ? "bg-gray-400 cursor-not-allowed text-white"
+                            : "bg-orange-500 hover:bg-orange-600 text-white"
+                        } shadow-md transition duration-200`}
+                        disabled={
+                          loadingBook === scannedId ||
+                          isButtonDisabled ||
+                          !scannedBookData.firstname ||
+                          !scannedBookData.lastname
+                        }
+                      >
+                        {loadingBook === scannedId || isButtonDisabled
+                          ? "Processing..."
+                          : "Confirm Return"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="text-center text-gray-600">
+                      <p>No matching book found for scanned ID.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
