@@ -11,6 +11,7 @@ import PeriodPage from "../pages/PeriodPage";
 import ProfilePage from "../pages/ProfilePage";
 import AdminPage from "../pages/AdminPage";
 import WithdrawPage from "../pages/WithdrawPage";
+import WalletPage from "../pages/WalletPage";
 
 export default function RegisRoutes() {
   return [
@@ -95,6 +96,14 @@ export default function RegisRoutes() {
       element: (
         <AuthRoute allowed_roles={["Student"]}>
           <ProfilePage />
+        </AuthRoute>
+      ),
+    },
+    {
+      path: "wallet",
+      element: (
+        <AuthRoute allowed_roles={["Student"]}>
+          <WalletPage />
         </AuthRoute>
       ),
     },

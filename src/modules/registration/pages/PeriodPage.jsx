@@ -84,12 +84,12 @@ function PeriodPage() {
               )}
             </div>
           </div>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center text-xs md:text-base">
             <div className="w-3/4 p-2 rounded-lg bg-gradient-to-r from-orange-800 via-orange-500 to-orange-300">
               <div className="flex flex-col p-8 space-y-6 bg-white rounded-lg">
                 {registrationPeriod && (
                   <div className="pl-4 border-l-4 border-orange-600">
-                    <p className="text-xl font-bold">
+                    <p className="md:text-xl font-bold">
                       {registrationPeriod.event}
                     </p>
                     <p>{`${formatDate(
@@ -99,7 +99,7 @@ function PeriodPage() {
                 )}
                 {lateRegistrationPeriod && (
                   <div className="pl-4 border-l-4 border-orange-600">
-                    <p className="text-xl font-bold">
+                    <p className="md:text-xl font-bold">
                       {lateRegistrationPeriod.event}
                     </p>
                     <p>{`${formatDate(
@@ -109,7 +109,9 @@ function PeriodPage() {
                 )}
                 {withdrawPeriod && (
                   <div className="pl-4 border-l-4 border-orange-600">
-                    <p className="text-xl font-bold">{withdrawPeriod.event}</p>
+                    <p className="md:text-xl font-bold">
+                      {withdrawPeriod.event}
+                    </p>
                     <p>{`${formatDate(
                       withdrawPeriod.start_date
                     )} - ${formatDate(withdrawPeriod.end_date)}`}</p>
