@@ -19,7 +19,7 @@ function CourseRegisPage() {
   const currentSemesterId = localStorage.getItem("semesterId");
 
   const [headId, setHeadId] = useState("");
-  const [paymentStatus, setPaymentStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const regis = localStorage.getItem("event");
   const {
     data: enrollmentHeadData,
@@ -41,10 +41,9 @@ function CourseRegisPage() {
     isLoading: isPaymentLoading,
     isError: isPaymentError,
   } = usePaymentStatus(headId);
-
   useEffect(() => {
     if (enrollmentHeadData) setHeadId(enrollmentHeadData.head_id);
-    if (payment) setPaymentStatus(payment.data);
+    if (payment) setPaymentStatus(payment.status);
   }, [enrollmentHeadData, payment]);
 
   const [studentData, setStudentData] = useState(null);
@@ -101,12 +100,12 @@ function CourseRegisPage() {
                     Status:{" "}
                     <span
                       className={`font-bold ${
-                        paymentStatus === "paid"
+                        paymentStatus === "Paid"
                           ? "text-green-500"
                           : "text-red-500"
                       }`}
                     >
-                      {paymentStatus === "paid" ? "Successful" : "Unpaid"}
+                      {paymentStatus === "Paid" ? "Successful" : "Unpaid"}
                     </span>
                   </div>
                 </div>
