@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { generateNewQr } from "../services/api";
 
 const useQr = () => {
@@ -7,7 +7,7 @@ const useQr = () => {
   const navigate = useNavigate();
   const [qrData, setQrData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); //Model
-
+  const { sectionId } = useParams();
   const items = [
     { label: "Attendance", key: "Attendance" },
     { label: "QR CODE", key: "QR CODE" },
@@ -53,7 +53,7 @@ const useQr = () => {
       <div className="flex flex-col items-center">
         <button
           className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
-          onClick={() => handleGenerateQrButton(1001)}
+          onClick={() => handleGenerateQrButton(sectionId)}
         >
           Generate QR CODE
           <svg

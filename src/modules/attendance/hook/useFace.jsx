@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { generateFaceAttendance } from "../services/api";
 import { markAttendance } from "../services/api";
 import * as faceapi from "face-api.js";
@@ -14,14 +14,14 @@ const useFace = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
-
+  const { sectionId } = useParams();
   const COOLDOWN_PERIOD = 5000; // ms (5seconds)
 
   const refFaces = [
-    { image: "../mockUpDataSet/832.jpg", label: "STU00020" },
-    { image: "../mockUpDataSet/845.jpg", label: "STU00022" },
-    { image: "../mockUpDataSet/850.jpg", label: "STU00088" },
-    { image: "../mockUpDataSet/857.jpg", label: "STU00051" },
+    { image: "/mockUpDataSet/832.jpg", label: "STU00020" },
+    { image: "/mockUpDataSet/845.jpg", label: "STU00022" },
+    { image: "/mockUpDataSet/850.jpg", label: "STU00088" },
+    { image: "/mockUpDataSet/857.jpg", label: "STU00051" },
   ];
 
   const items = [
@@ -191,7 +191,7 @@ const useFace = () => {
       {!isStreaming && !loadingModels && (
         <button
           className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
-          onClick={() => handleGenerateAttendance(1001)}
+          onClick={() => handleGenerateAttendance(sectionId)}
         >
           Start Attendance
         </button>
