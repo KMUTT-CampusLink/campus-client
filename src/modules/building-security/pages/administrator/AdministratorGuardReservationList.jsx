@@ -1,206 +1,131 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../../../utils/axiosInstance";
-// import { getGuardReservationList } from "../../services/api.js";
+import { axiosInstance } from "../../../../utils/axiosInstance"; // Ensure axiosInstance is correctly configured
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function AdministratorGuardReservationList() {
-  const [reservations, setReservations] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingId, setEditingId] = useState(null);
-  const [newStatus, setNewStatus] = useState("");
   const navigate = useNavigate();
 
-  const fetchData = async () => {
-    try {
-      const response = await getGuardReservationList();
-      setReservations(response.data.data);
-      console.log(response.data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    const fetchGuardRequests = async () => {
+      try {
+        const response = await axiosInstance.get("/security/GuardList"); // Correct API endpoint
+        if (response.data.success) {
+          setRequests(response.data.data);
+        } else {
+          setError(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+        setError("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGuardRequests();
   }, []);
 
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case "Confirmed":
-        return { color: "green" };
-      case "Pending":
-        return { color: "orange" };
-      case "Cancelled":
-        return { color: "red" };
-      default:
-        return { color: "black" };
-    }
-  };
-
-  const handleEditClick = (id, currentStatus) => {
-    setEditingId(id);
-    setNewStatus(currentStatus);
-  };
-
-  const handleStatusChange = (e) => {
-    setNewStatus(e.target.value);
-  };
-
-  const handleStatusUpdate = async (id) => {
+  const handleDelete = async (id) => {
     try {
-      const response = await axiosInstance.patch(
-        `/security/updateGuardStatus/${id}`,
-        {
-          status: newStatus,
-        }
+      await axiosInstance.delete(`/security/deleteGuard/${id}`);
+      setRequests((prevRequests) =>
+        prevRequests.filter((request) => request.id !== id)
       );
-
-      if (response.data.success) {
-        setReservations((prevReservations) =>
-          prevReservations.map((reservation) =>
-            reservation.id === id
-              ? { ...reservation, status: newStatus }
-              : reservation
-          )
-        );
-        setEditingId(null);
-      } else {
-        alert("Failed to update status");
-      }
+      alert("Request deleted successfully!");
     } catch (error) {
-      console.error("Error updating status:", error);
-      alert("An error occurred. Please try again.");
+      console.error("Error deleting request:", error);
+      alert("Failed to delete the request.");
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
   return (
     <>
       <NavBar />
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-8">
         <br />
         <br />
-        <div className="relative bg-gray-50 min-h-screen py-8">
-          <div className="max-w-5xl mx-auto bg-gradient-to-r from-gray-100 to-white rounded-2xl shadow-lg p-8">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
-                Guard Reservation List
-              </h1>
-              <button
-                className="p-3 bg-gray-200 rounded-full shadow hover:bg-gray-300"
-                onClick={() => navigate("/security/administrator")}
-                type="button"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6 text-gray-600"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 011 12h-3"
-                  />
-                </svg>
-              </button>
-            </div>
+        <div className="max-w-5xl mx-auto bg-gradient-to-r from-gray-100 to-white rounded-2xl shadow-lg p-8">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+              Guard Reservation List
+            </h1>
+          </div>
 
-            <hr className="my-4 border-gray-300" />
+          <hr className="my-4 border-gray-300" />
 
-            {/* Table */}
+          {loading ? (
+            <p className="text-center text-gray-500 py-6">Loading...</p>
+          ) : error ? (
+            <p className="text-center text-red-500 py-6">{error}</p>
+          ) : (
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-lg">
-                <thead className="bg-gray-200 text-gray-700">
-                  <tr>
-                    <th className="p-4 text-left font-medium">Id</th>
-                    <th className="p-4 text-left font-medium">Username</th>
-                    <th className="p-4 text-left font-medium">Guardname</th>
-                    <th className="p-4 text-left font-medium">Start Time</th>
-                    <th className="p-4 text-left font-medium">End Time</th>
-                    <th className="p-4 text-left font-medium">Description</th>
+              <table className="min-w-full table-auto">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                      ID
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                      User ID
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                      Guard ID
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                      Description
+                    </th>
+                    <th className="py-3 px-4 text-center text-sm font-semibold text-gray-600">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {reservations.map((reservation) => (
-                    <tr
-                      key={reservation.id}
-                      className="bg-gray-50 border-b hover:bg-gray-100 transition-all duration-300"
-                    >
-                      <td className="p-4 text-sm md:text-base">
-                        {reservation.user_id}
+                  {requests.map((request) => (
+                    <tr key={request.id} className="border-b hover:bg-gray-50">
+                      <td className="py-3 px-4 text-sm text-gray-700">
+                        {request.id}
                       </td>
-                      <td className="p-4 text-sm md:text-base">
-                        {reservation.guard_id}
+                      <td className="py-3 px-4 text-sm text-gray-700">
+                        {request.user_id}
                       </td>
-                      <td
-                        className="p-4 text-sm md:text-base"
-                        style={getStatusStyle(reservation.status)}
-                      >
-                        {editingId === reservation.id ? (
-                          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-                            <select
-                              value={newStatus}
-                              onChange={handleStatusChange}
-                              className="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-green-500"
-                            >
-                              <option value="Confirmed">Confirmed</option>
-                              <option value="Pending">Pending</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
-                            <button
-                              onClick={() => handleStatusUpdate(reservation.id)}
-                              className="bg-green-500 text-white px-3 py-1 rounded shadow hover:bg-green-600 transition-all duration-300"
-                            >
-                              Save
-                            </button>
-                            <button
-                              onClick={() => setEditingId(null)}
-                              className="bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600 transition-all duration-300"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-between min-w-[90px]">
-                            <span>{reservation.status}</span>
-                            <button
-                              onClick={() =>
-                                handleEditClick(
-                                  reservation.id,
-                                  reservation.status
-                                )
-                              }
-                              className="text-blue-500 hover:text-blue-700 transition-all duration-300"
-                            >
-                              ✏️
-                            </button>
-                          </div>
-                        )}
+                      <td className="py-3 px-4 text-sm text-gray-700">
+                        {request.guard_id}
                       </td>
-                      <td className="p-4 text-sm md:text-base">
-                        {reservation.start_time}
+                      <td className="py-3 px-4 text-sm text-gray-700">
+                        {request.description}
                       </td>
-                      <td className="p-4 text-sm md:text-base">
-                        {reservation.end_time}
-                      </td>
-                      <td className="p-4 text-sm md:text-base">
-                        {reservation.description}
+                      <td className="py-3 px-4 text-center">
+                        <button
+                          onClick={() => handleDelete(request.id)}
+                          className="bg-red-100 hover:bg-red-200 rounded-full p-2 shadow-sm transition-all duration-300"
+                          title="Delete Request"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="red"
+                            className="w-5 h-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 2.25h6a2.25 2.25 0 0 1 2.25 2.25v.75M4.5 6.75h15m-1.5 0-.664 12.159a2.25 2.25 0 0 1-2.245 2.091H8.409a2.25 2.25 0 0 1-2.245-2.091L5.5 6.75m3.75 3v6m6-6v6"
+                            />
+                          </svg>
+                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

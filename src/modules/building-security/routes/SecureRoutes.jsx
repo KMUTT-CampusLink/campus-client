@@ -134,18 +134,18 @@ export default function SecureRoutes() {
           ),
         },
         {
-          path: "guardreservation",
-          element: (
-            <AuthRoute allowed_roles={["Professor", "Staff"]}>
-              <AdministratorGuardReservation />
-            </AuthRoute>
-          ),
-        },
-        {
           path: "guardreservationlist",
           element: (
             <AuthRoute allowed_roles={["Professor", "Staff"]}>
               <AdministratorGuardReservationList />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: "guardreservation",
+          element: (
+            <AuthRoute allowed_roles={["Professor", "Staff"]}>
+              <AdministratorGuardReservation />
             </AuthRoute>
           ),
         },
