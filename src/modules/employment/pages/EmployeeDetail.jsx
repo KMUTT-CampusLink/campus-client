@@ -47,7 +47,7 @@ const EmployeeDetail = () => {
     fetchEmployee();
   }, [id, navigate]);
 
-  //console.log(employee);
+  console.log(employee);
 
   // if (!employee) return <p>Loading employee data...</p>;
   if (!employee) return <p className="pt-5 pl-5">Loading employee data...</p>;
