@@ -97,3 +97,7 @@ export const fetchAllCommentsByPostID = (postId) =>
   get(`/courses/discussion/view/${postId}/comment`);
 export const createDiscussionReply = (topicId, newReply) =>
   post(`/courses/discussion/${topicId}/comment/create`, newReply);
+
+//announcement 
+export const fetchAllUpComingEvents = (studentID) =>
+  get(`/courses/announcement/${studentID}`);

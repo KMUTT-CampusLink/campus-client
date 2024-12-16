@@ -2,6 +2,7 @@ import React from "react";
 
 import Searchbar from "../../components/Searchbar";
 import CourseCard from "../../components/CourseCard";
+import EventSession from "../../components/EventSession.jsx";
 // import courses from "./dummyCourse.js";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +20,7 @@ const StDashboard = () => {
   const semesterId = 1010;
   const navigate = useNavigate();
   const { data: courses } = useCoursesByStudentID(studentId);
+
   return (
     <div className="bg-white min-h-screen overflow-y-auto">
       <NavBar />
@@ -70,24 +72,7 @@ const StDashboard = () => {
           </div>
 
 
-          <div className="pt-4">
-            <span className="font-semibold max-md:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
-              Important Announcement
-              <FontAwesomeIcon icon={faBell} className="ml-2" size="lg" />
-            </span>
-          </div>
 
-
-          <div className="border border-gray-300 rounded-lg mb-6 mt-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div className="flex flex-col justify-between items-start max-md:gap-4 max-md:mx-4 max-lg:mx-8 lg:mx-12 p-2 bg-gray-50 rounded-md">
-              <span className="font-semibold text-[#EC5A51] text-xs sm:text-sm md:text-base lg:text-lg mb-2">
-                CSC 213 Database
-              </span>
-              <span className="font-normal text-xs sm:text-sm md:text-base lg:text-lg text-gray-700">
-                We have an evening lab today. Don't forget to arrive on time.
-              </span>
-            </div>
-          </div>
 
           <div className="pt-4">
             <span className="font-semibold max-md:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
@@ -96,36 +81,16 @@ const StDashboard = () => {
             </span>
           </div>
 
-
-          <div className="border border-gray-300 rounded-lg mb-6 mt-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div className="flex flex-col justify-between items-start max-md:gap-4 max-md:mx-4 max-lg:mx-8 lg:mx-12 p-2 bg-gray-50 rounded-md">
-              <span className="font-semibold text-[#EC5A51] text-xs sm:text-sm md:text-base lg:text-lg mb-2">
-                CSC 213 Database
-              </span>
-              <span className="font-normal text-xs sm:text-sm md:text-base lg:text-lg text-gray-700">
-                8:00AM-2:00PM
-              </span>
-            </div>
-          </div>
-
-          <div className="pt-4">
-            <span className="font-semibold max-md:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
-              Today Class Schedule
-              <FontAwesomeIcon icon={faStar} className="ml-2" size="lg" />
-            </span>
-          </div>
+          <EventSession
+            studentId={studentId}
+          />
 
 
-          <div className="border border-gray-300 rounded-lg mb-6 mt-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div className="flex flex-col justify-between items-start max-md:gap-4 max-md:mx-4 max-lg:mx-8 lg:mx-12 p-2 bg-gray-50 rounded-md">
-              <span className="font-semibold text-[#EC5A51] text-xs sm:text-sm md:text-base lg:text-lg mb-2">
-                CSC 213 Database
-              </span>
-              <span className="font-normal text-xs sm:text-sm md:text-base lg:text-lg text-gray-700">
-                8:00AM-2:00PM
-              </span>
-            </div>
-          </div>
+
+
+
+
+
 
         </div>
       </div>
