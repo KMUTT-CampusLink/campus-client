@@ -1,4 +1,3 @@
-// import useAttendance from "../hook/useAttendance";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,7 +5,6 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { getAttendStudent, updateAttendance } from "../services/api";
 
 const AttendanceComponent = () => {
-  // const { chooseDate, table } = useAttendance();
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [student, setStudents] = useState([]);
@@ -98,31 +96,22 @@ const AttendanceComponent = () => {
     return matchesQuery && matchesDate;
   });
 
-
-    const handleDateChange = (date) => {
-      setSelectedDate(date);
-    };
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
     <div className="px-4 sm:px-0">
       <hr className="border-b border-gray-300 w-full" />
-      {/* <div className="p-4 sm:p-8 lg:p-12">
-        {chooseDate && chooseDate()}
-        <div className="mt-8">{table && table()}</div>
-      </div> */}
       <div className="p-4 sm:p-8 lg:p-12">
         <div className="flex flex-col">
-          <span className="text-2xl font-bold text-[#F69800]">
-            Choose Date
-          </span>
+          <span className="text-2xl font-bold text-[#F69800]">Choose Date</span>
           <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
             <input
               type="date"
               className="border border-gray-300 rounded-md p-2 w-full sm:w-1/2"
               onChange={(e) => handleDateChange(e.target.value)}
-              value={
-                selectedDate ? formatDate(selectedDate) : ""
-              }
+              value={selectedDate ? formatDate(selectedDate) : ""}
             />
             <div className="relative w-full sm:w-1/2">
               <input

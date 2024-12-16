@@ -105,7 +105,7 @@ const AttendancePage = () => {
             </div>
           </div>
 
-          <hr className="border-b border-black w-full" />
+          <hr className="border-b-1 border-black w-full" />
 
           <div className="flex flex-col p-4 sm:p-8 lg:p-12">
             <span className="text-2xl font-bold text-[#F69800]">
