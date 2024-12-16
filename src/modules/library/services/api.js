@@ -110,7 +110,7 @@ export const returnBook = async (reservationId, duplicateId) => {
   const returnedBookData = {
     status: "Returned",
     reservation_id: reservationId,
-    duplicateId: duplicateId,
+    duplicate_id: duplicateId,
   };
 
   try {

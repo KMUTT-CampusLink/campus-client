@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchEveryBook, fetchReservedBook, returnBook,  } from "../services/api"; // Adjust the path to your api.js
+import { fetchEveryBook, fetchResData, fetchReservedBook, returnBook,  } from "../services/api"; // Adjust the path to your api.js
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,42 +17,20 @@ function AdminPage() {
   const [scannedId, setScannedId] = useState(null);
 
   // Fetch books and reservations on component mount
+  const fetchData = async () => {
+    try {
+      const booksData = await fetchResData();
+      const reservationData = await fetchReservedBook();
+      setBooks(booksData || []); // Ensure data is an array
+      setReservations(reservationData || []); // Ensure reservation data is an array
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const booksData = await fetchEveryBook();
-        const reservationData = await fetchReservedBook();
-        setBooks(booksData || []); // Ensure data is an array
-        setReservations(reservationData || []); // Ensure reservation data is an array
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
-
-  const getReservationDetails = (duplicateId, duplicateStatus) => {
-    if (duplicateStatus) {
-      return {
-        userId: "-",
-        reservationStatus: "Available",
-      };
-    }
-
-    const reservation = reservations.find(
-      (item) => item.reserved_book === duplicateId
-    );
-    return reservation
-      ? {
-          userId: reservation.user_id,
-          reservationStatus: reservation.reserve_status,
-        }
-      : {
-          userId: "-",
-          reservationStatus: "Unavailable",
-        };
-  };
 
   let rowNumber = 0; // To keep track of the sequential numbering
 
@@ -60,7 +38,7 @@ function AdminPage() {
     setLoadingBook(bookId);
     try {
       const reservation = reservations.find(
-        (item) => item.reserved_book === bookId
+        (book) => book.reserved_book === bookId
       );
       if (!reservation) {
         throw new Error("No reservation found for the scanned book ID.");
@@ -142,8 +120,7 @@ function AdminPage() {
   const handleScannedBookData = (scannedId) => {
     // Find the book whose duplicate matches the scanned ID
     const bookData = books.find((book) =>
-      book.book_duplicate.some((dup) => String(dup.id) === String(scannedId))
-    );
+       String(book.id) === String(scannedId));
 
     if (bookData) {
       console.log("Matched Book:", bookData);
@@ -192,7 +169,7 @@ function AdminPage() {
                   </h2>
                   <p className="text-3xl font-bold mt-4">{books.length}</p>
                   <p className="text-sm text-green-500 mt-2">
-                    All unique books
+                    All books
                   </p>
                 </div>
 
@@ -203,8 +180,8 @@ function AdminPage() {
                   </h2>
                   <p className="text-3xl font-bold mt-4">
                     {
-                      reservations.filter(
-                        (item) => item.reserve_status === "Reserved"
+                      books.filter(
+                        (book) => book.status === false
                       ).length
                     }
                   </p>
@@ -219,12 +196,11 @@ function AdminPage() {
                     Total Available Books
                   </h2>
                   <p className="text-3xl font-bold mt-4">
-                    {books.reduce(
-                      (acc, book) =>
-                        acc +
-                        book.book_duplicate.filter((dup) => dup.status).length,
-                      0
-                    )}
+                    {
+                      books.filter(
+                        (book) => book.status === true
+                      ).length
+                    }
                   </p>
                   <p className="text-sm text-blue-500 mt-2">
                     Available for borrowing
@@ -237,19 +213,12 @@ function AdminPage() {
                     Reservation Rate
                   </h2>
                   <p className="text-3xl font-bold mt-4">
-                    {books.length > 0
-                      ? (
-                          (reservations.filter(
-                            (item) => item.reserve_status === "Reserved"
-                          ).length /
-                            books.reduce(
-                              (acc, book) => acc + book.book_duplicate.length,
-                              0
-                            )) *
-                          100
-                        ).toFixed(2)
-                      : 0}
-                    %
+                    {
+                      books.length > 0 ?
+                      (books.filter(
+                        (book) => book.status === false
+                      ).length/books.length * 100).toFixed(2) : 0
+                    } %
                   </p>
                   <p className="text-sm text-red-500 mt-2">Books reserved</p>
                 </div>
@@ -272,19 +241,11 @@ function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {books.length > 0 ? (
-                        books.map((book) =>
-                          book.book_duplicate.map((duplicate) => {
-                            const { userId, reservationStatus } =
-                              getReservationDetails(
-                                duplicate.id,
-                                duplicate.status
-                              );
-
-                            rowNumber++; // Increment row number for each row
-
-                            return (
-                              <tr key={duplicate.id}>
+                      {
+                        books.map((book) => {
+                          rowNumber++;
+                          return (
+                            <tr key={book.id}>
                                 <td>
                                   <h1 className="flex items-center gap-3 font-bold">
                                     {rowNumber}
@@ -307,32 +268,25 @@ function AdminPage() {
                                     </div>
                                   </div>
                                 </td>
-                                <td>{duplicate.id}</td>
+                                <td>{book.id}</td>
                                 <td>
                                   <span
                                     className={`font-medium ${
-                                      reservationStatus === "Available"
+                                      book.status === true
                                         ? "text-green-500"
                                         : "text-yellow-500"
                                     }`}
                                   >
-                                    {reservationStatus}
+                                    {book.status===true? "Available" : "Unavailable"}
                                   </span>
                                 </td>
                                 <td>
-                                  <h1 className="">{userId}</h1>
+                                  <h1 className="">{ book.firstname && book.lastname? book.firstname+" "+book.lastname : "-"}</h1>
                                 </td>
                               </tr>
-                            );
-                          })
-                        )
-                      ) : (
-                        <tr>
-                          <td colSpan="5" className="text-center text-gray-500">
-                            No books found.
-                          </td>
-                        </tr>
-                      )}
+                          )
+                        })
+                      }
                     </tbody>
                   </table>
                 </div>
@@ -357,76 +311,92 @@ function AdminPage() {
               <p className="text-gray-600">
                 Upload an image or scan a photo of QR code to return the book
               </p>
-              <div className="flex w-full p-3">
-                {/* Left Section: QR Scanner */}
-                <div className="card rounded-box grid p-6 flex-grow place-items-center bg-white shadow-xl">
-                  {/* Video Element */}
-                  <video
-                    ref={videoRef}
-                    className={`w-full ${isCameraOpen ? "block" : "hidden"}`}
-                  />
+              <div className="flex flex-col md:flex-row w-full p-6 gap-6">
+  {/* Left Section: QR Scanner */}
+  <div className="card rounded-lg flex flex-col items-center p-6 flex-grow bg-white shadow-lg">
+    {/* Video Element */}
+    <video
+      ref={videoRef}
+      className={`w-full max-h-64 mb-4 rounded-lg shadow ${
+        isCameraOpen ? "block" : "hidden"
+      }`}
+    />
 
-                  {/* Open Camera Button */}
-                  {!isCameraOpen && (
-                    <button
-                      onClick={startQrScanner}
-                      className="btn bg-gray-800 text-white"
-                    >
-                      Open Camera
-                    </button>
-                  )}
+    {/* Open Camera Button */}
+    {!isCameraOpen && (
+      <button
+        onClick={startQrScanner}
+        className="btn bg-gray-800 text-white px-6 py-2 rounded-lg shadow-md hover:bg-gray-700"
+      >
+        Open Camera
+      </button>
+    )}
 
-                  {/* File Input */}
-                  <input
-                    type="file"
-                    onChange={readCodeFromImage}
-                    className="file-input file-input-bordered w-[40%] mt-4   "
-                  />
-                </div>
+    {/* File Input */}
+    <input
+      type="file"
+      onChange={readCodeFromImage}
+      className="file-input file-input-bordered w-full max-w-xs mt-4"
+    />
+  </div>
 
-                {/* Divider */}
-                <div className="divider divider-horizontal"></div>
+  {/* Divider */}
+  <div className="divider divider-horizontal hidden md:block"></div>
 
-                {/* Right Section: Scanned Book Details */}
-                <div className="card bg-base-300 rounded-box grid h-20 flex-grow place-items-center">
-                  {scannedBookData ? (
-                    <div className="text-center">
-                      <h3 className="text-lg font-bold text-gray-800">
-                        Book Details
-                      </h3>
-                      <p>
-                        <strong>Title:</strong> {scannedBookData.title}
-                      </p>
-                      <p>
-                        <strong>Author:</strong> {scannedBookData.author}
-                      </p>
-                      <p>
-                        <strong>Publisher:</strong> {scannedBookData.publisher}
-                      </p>
-                      <p>
-                        <strong>ISBN:</strong> {scannedBookData.isbn}
-                      </p>
-                      <button
-                        onClick={() => handleReturnBook(scannedId)}
-                        className={`btn mt-4 ${
-                          loadingBook === scannedId
-                            ? "bg-gray-400 cursor-not-allowed"
-                            : "bg-orange-500 hover:bg-orange-600 text-white"
-                        }`}
-                        disabled={loadingBook === scannedId}
-                      >
-                        {loadingBook === scannedId
-                          ? "Processing..."
-                          : "Confirm Return"}
-                      </button>
-                    </div>
-                  ) : (
-                    <p className="text-gray-600">
-                      No matching book found for scanned ID.
-                    </p>
-                  )}
-                </div>
-              </div>
+  {/* Right Section: Scanned Book Details */}
+  <div className="card rounded-lg flex flex-col items-center p-6 flex-grow bg-base-300 shadow-lg">
+    {scannedBookData ? (
+      <div className="text-center space-y-4">
+        {/* Book Details Header */}
+        <h3 className="text-xl font-bold text-gray-800">Book Details</h3>
+
+        {/* Book Title */}
+        <p className="text-gray-700">
+          <strong>Title:</strong> {scannedBookData.title}
+        </p>
+
+        {/* Book Cover Image */}
+        {scannedBookData.cover_image ? (
+          <img
+            src={scannedBookData.cover_image}
+            alt={scannedBookData.title}
+            className="w-32 h-48 object-cover rounded-md shadow-md mx-auto"
+          />
+        ) : (
+          <div className="w-32 h-48 bg-gray-200 flex items-center justify-center rounded-md shadow-md">
+            <p className="text-gray-500">No Image</p>
+          </div>
+        )}
+
+        {/* User Information */}
+        <p className="text-gray-700">
+          <strong>User:</strong>{" "}
+          {scannedBookData.firstname && scannedBookData.lastname
+            ? `${scannedBookData.firstname} ${scannedBookData.lastname}`
+            : "-"}
+        </p>
+
+        {/* Return Button */}
+        <button
+          onClick={() => handleReturnBook(parseInt(scannedId))}
+          className={`btn px-6 py-2 font-semibold rounded-lg ${
+            loadingBook === scannedId
+              ? "bg-gray-400 cursor-not-allowed text-white"
+              : "bg-orange-500 hover:bg-orange-600 text-white"
+          } shadow-md transition duration-200`}
+          disabled={loadingBook === scannedId}
+        >
+          {loadingBook === scannedId ? "Processing..." : "Confirm Return"}
+        </button>
+      </div>
+    ) : (
+      <div className="text-center text-gray-600">
+        <p>No matching book found for scanned ID.</p>
+      </div>
+    )}
+  </div>
+</div>
+
             </div>
           </div>
         </div>
