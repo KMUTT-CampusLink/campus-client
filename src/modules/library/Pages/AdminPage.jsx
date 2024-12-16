@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchEveryBook, fetchReservedBook, returnBook,  } from "../services/api"; // Adjust the path to your api.js
+import { fetchEveryBook, fetchReservedBook, returnBook } from "../services/api"; // Adjust the path to your api.js
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import MainNavbar from "../components/MainNavbar";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -14,7 +14,6 @@ function AdminPage() {
   const videoRef = useRef(null);
   const qrScannerRef = useRef(null);
   const [scannedBookId, setScannedBookId] = useState(null);
-  const [scannedId, setScannedId] = useState(null);
 
   // Fetch books and reservations on component mount
   useEffect(() => {
@@ -89,14 +88,12 @@ function AdminPage() {
       const result = await QrScanner.scanImage(file, {
         returnDetailedScanResult: true,
       });
-      console.log("Scanned QR Code Result:", result.data); // Log scanned result
-      setScannedId(result.data); // Store scanned ID in state
-      handleScannedBookData(result.data); // Process the scanned book
+      setScannedBookId(result.data); // Update scanned book ID
+      handleScannedBookData(result.data);
     } catch (error) {
       console.error("Error scanning QR code from image:", error);
     }
   };
-
   useEffect(() => {
     return () => {
       if (qrScannerRef.current) {
@@ -117,15 +114,22 @@ function AdminPage() {
       videoRef.current,
       (result) => {
         console.log("QR Code Result:", result.data); // Log scanned result
-        setScannedId(result.data); // Store scanned ID in state
-        handleScannedBookData(result.data); // Process the scanned book
+        setScannedBookId(result.data);
+        handleScannedBookData(result.data);
         qrScannerRef.current.stop();
         setIsCameraOpen(false);
       },
       {
         returnDetailedScanResult: true,
-        highlightScanRegion: true,
-        highlightCodeOutline: true,
+        highlightScanRegion: true, // Adds visual feedback for the scan region
+        highlightCodeOutline: true, // Highlights detected QR codes
+        // Restrict scan area to a specific region
+        preferredScanArea: {
+          x: 0.25, // 25% from the left
+          y: 0.25, // 25% from the top
+          width: 0.5, // 50% of the video width
+          height: 0.5, // 50% of the video height
+        },
       }
     );
 
@@ -139,19 +143,11 @@ function AdminPage() {
     }
   };
 
-  const handleScannedBookData = (scannedId) => {
-    // Find the book whose duplicate matches the scanned ID
-    const bookData = books.find((book) =>
-      book.book_duplicate.some((dup) => String(dup.id) === String(scannedId))
-    );
-
-    if (bookData) {
-      console.log("Matched Book:", bookData);
-      setScannedBookData(bookData);
-    } else {
-      console.error("No matching book found for scanned ID:", scannedId);
-      setScannedBookData(null); // Clear previous data if no match is found
-    }
+  const handleScannedBookData = (bookId) => {
+    const bookData = books.flatMap((book) =>
+      book.book_duplicate.filter((dup) => String(dup.id) === bookId)
+    )[0];
+    setScannedBookData(bookData || null); // Update scanned book data
   };
 
   return (
@@ -394,36 +390,24 @@ function AdminPage() {
                       <h3 className="text-lg font-bold text-gray-800">
                         Book Details
                       </h3>
-                      <p>
-                        <strong>Title:</strong> {scannedBookData.title}
-                      </p>
-                      <p>
-                        <strong>Author:</strong> {scannedBookData.author}
-                      </p>
-                      <p>
-                        <strong>Publisher:</strong> {scannedBookData.publisher}
-                      </p>
-                      <p>
-                        <strong>ISBN:</strong> {scannedBookData.isbn}
-                      </p>
+                      <p>ID: {scannedBookData.id}</p>
+                      <p>Title: {scannedBookData.title}</p>
                       <button
-                        onClick={() => handleReturnBook(scannedId)}
+                        onClick={() => handleReturnBook(scannedBookData.id)}
                         className={`btn mt-4 ${
-                          loadingBook === scannedId
+                          loadingBook === scannedBookData.id
                             ? "bg-gray-400 cursor-not-allowed"
                             : "bg-orange-500 hover:bg-orange-600 text-white"
                         }`}
-                        disabled={loadingBook === scannedId}
+                        disabled={loadingBook === scannedBookData.id}
                       >
-                        {loadingBook === scannedId
+                        {loadingBook === scannedBookData.id
                           ? "Processing..."
                           : "Confirm Return"}
                       </button>
                     </div>
                   ) : (
-                    <p className="text-gray-600">
-                      No matching book found for scanned ID.
-                    </p>
+                    <p className="text-gray-600">No book scanned yet.</p>
                   )}
                 </div>
               </div>
