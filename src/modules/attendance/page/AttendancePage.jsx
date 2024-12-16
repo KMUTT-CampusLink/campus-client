@@ -7,7 +7,6 @@ const AttendancePage = () => {
     
     return (
         <>
-           
             <NavBar />
             <AttendanceComponent {...attendance} />
         </>

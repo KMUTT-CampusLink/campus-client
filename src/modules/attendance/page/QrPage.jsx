@@ -5,10 +5,10 @@ import Modal from "../components/Modal";
 import { useState } from "react";
 
 const QrPage = () => {
-
+  const Qr = useQr();
   return (
     <>
-      <QrComponent />
+      <QrComponent {...Qr}/>
     </>
   );
 };

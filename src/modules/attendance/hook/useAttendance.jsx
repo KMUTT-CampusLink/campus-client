@@ -1,28 +1,59 @@
-import { useState } from "react";
-import { useNavigate,useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { getAttendStudent, getCourseHeader } from "../services/api";
 
 const useAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [statuses, setStatuses] = useState([
-    {
-      date: "2024-10-12",
-      studentName: "John Brown",
-      studentId: "S12345",
-      status: "Present",
-    },
-    {
-      date: "2024-10-12",
-      studentName: "Jim Green",
-      studentId: "S12346",
-      status: "Absent",
-    },
-  ]);
+  const [student, setStudents] = useState([]);
+  const [course, setCourse] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { sectionId } = useParams();
   const navigate = useNavigate();
+
+  // Fetch course header data
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await getCourseHeader(sectionId);
+        if (response.data.success) {
+          setCourse(response.data.data);
+        } else {
+          setError("Failed to fetch course details");
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourse();
+  }, [sectionId]);
+
+  // Fetch student attendance data
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await getAttendStudent(sectionId);
+        if (response.data.success) {
+          setStudents(response.data.data);
+        } else {
+          setError("Failed to fetch students");
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, [sectionId]);
 
   const items = [
     { label: "Attendance", key: "Attendance" },
@@ -38,26 +69,44 @@ const useAttendance = () => {
     } else if(key == "Face Attendance"){
       navigate(`/attendance/professor/${sectionId}/faceAttendance`)
     }
-    console.log("HI");
   };
 
   const handleSearch = () => {
     console.log(`Searching for: ${searchQuery}`);
-    // Add the actual search logic here
   };
 
-  const AttendanceDetail = () => (
-    <div className="flex flex-col">
-      <span className="text-2xl font-bold text-orange-500">
-        About Classroom
-      </span>
-      <div className="text-lg font-semibold">
-        <div>CSC-230 Computer Architecture & Design</div>
-        <div>Lecturer - Arjan xxxxxxxx</div>
-        <div>Time - 1:30 to 4:30 PM (Thursday)</div>
+  const AttendanceDetail = () => {
+    if (loading) {
+      return <div>Loading course details...</div>;
+    }
+
+    if (error) {
+      return <div>Error loading course details: {error}</div>;
+    }
+
+    if (!course || !course.course || !course.professor) {
+      return <div>No course data available</div>;
+    }
+
+    return (
+      <div className="flex flex-col">
+        <span className="text-2xl font-bold text-orange-500">About Classroom</span>
+        <div className="text-lg font-semibold">
+          <div>
+            <div>{course.course.code} {course.course.name}</div>
+            {course.professor.map((prof, index) => (
+              <div key={index}>
+                Lecturer - {`${prof.employee.firstname} ${prof.employee.lastname}`}
+              </div>
+            ))}
+            <div>
+              Time - {moment(course.start_time).format("h:mm A")} to {moment(course.end_time).format("h:mm A")} ({course.day})
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const chooseDate = () => {
     const handleDateChange = (date) => {
@@ -99,6 +148,21 @@ const useAttendance = () => {
       updatedStatuses[index].status = newStatus;
       setStatuses(updatedStatuses);
     };
+    const filteredStudents = student.filter((item) => {
+      const fullName = `${item.firstname} ${item.midname ? item.midname : ""} ${item.lastname}`.toLowerCase();
+      const studentId = item.student_id.toLowerCase();
+      const query = searchQuery.toLowerCase();
+
+      // Check if the student's name or ID matches the search query
+      const matchesQuery = fullName.includes(query) || studentId.includes(query);
+
+      // Check if the student's attendance date matches the selected date
+      const matchesDate = selectedDate
+        ? moment(item.created_at).format("YYYY-MM-DD") === selectedDate
+        : true;
+
+      return matchesQuery && matchesDate;
+    });
 
     return (
       <div className="flex flex-col mt-4">
@@ -114,20 +178,19 @@ const useAttendance = () => {
               </tr>
             </thead>
             <tbody>
-              {statuses.map((row, index) => (
-                <tr key={index}>
-                  <td className="py-2">{row.date}</td>
-                  <td className="py-2">{row.studentName}</td>
-                  <td className="py-2">{row.studentId}</td>
-                  <td className="flex justify-between items-center py-2">
+            {filteredStudents && filteredStudents.length > 0 ? (
+              filteredStudents.map((item) => (
+                <tr key={ `${item.student_id}-${item.created_at}`} >
+                  <td>{item.created_at}</td>
+                  <td>{`${item.firstname} ${item.midname ? item.midname : ""} ${item.lastname}`}</td>
+                  <td>{item.student_id}</td>
+                  <td>
                     <span
-                      className={`${
-                        row.status === "Present"
-                          ? "text-green-500"
-                          : "text-red-500"
+                      className={`font-medium ${
+                        item.status === "Present" ? "text-green-500" : "text-red-500"
                       }`}
                     >
-                      {row.status}
+                      {item.status}
                     </span>
                     <div className="relative dropdown dropdown-left">
                       <label tabIndex={0} className="cursor-pointer">
@@ -171,15 +234,29 @@ const useAttendance = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center">
+                  No records found
+                </td>
+              </tr>
+            )}
             </tbody>
           </table>
         </div>
       </div>
     );
   };
-
-  return { items, handleMenuClick, AttendanceDetail, chooseDate, table };
+  return {
+    items,
+    handleMenuClick,
+    AttendanceDetail,
+    chooseDate,
+    table,
+    loading,
+    error,
+  };
 };
 
 export default useAttendance;

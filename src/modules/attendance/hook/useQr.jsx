@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate,useParams } from "react-router-dom";
 import { generateNewQr } from "../services/api";
+import { getCourseHeader } from "../services/api";
+import moment from "moment";
 
 const useQr = () => {
   const [h1] = useState("QR Page");
@@ -22,7 +24,6 @@ const useQr = () => {
     } else if(key == "Face Attendance"){
       navigate(`/attendance/professor/${sectionId}/faceAttendance`)
     }
-    console.log("HI");
   };
 
   const handleGenerateQrButton = async (sectionId) => {
@@ -32,21 +33,67 @@ const useQr = () => {
     setQrData(data.data.qrCode);
     setIsModalOpen(true); // Show Model
   };
+  
+  const detail = () => {
+    const [course, setCourse] = useState(null); // State to hold course data
+    const [loading, setLoading] = useState(true); // State to handle loading
+    const [error, setError] = useState(null); // State to handle errors
 
-  function detail() {
+    useEffect(() => {
+      const fetchCourse = async () => {
+        try {
+          const response = await getCourseHeader(sectionId);
+          if (response.data.success) {
+            setCourse(response.data.data);
+          } else {
+            setError("Failed to fetch students");
+          }
+        } catch (err) {
+          setError(err.response?.data?.message || "An error occurred");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchCourse();
+    }, [sectionId]);
+
+    if (loading) {
+      return <div>Loading course details...</div>;
+    }
+
+    if (error) {
+      return <div>Error loading course details: {error}</div>;
+    }
+
+    // Check if course data exists
+    if (!course || !course.course || !course.professor) {
+      return <div>No course data available</div>;
+    }
+
     return (
       <div className="flex flex-col p-4 space-y-2 md:space-y-4">
         <span className="text-xl md:text-2xl font-bold text-orange-500">
           About Classroom
         </span>
         <div className="text-base md:text-lg font-semibold">
-          <div>CSC-230 Computer Architecture & Design</div>
-          <div>Lecturer - Arjan xxxxxxxx</div>
-          <div>Time - 1:30 to 4:30 PM (Thursday)</div>
+          <div>
+            {course.course.code} {course.course.name}
+          </div>
+          {course.professor.map((prof, index) => (
+            <div key={index}>
+              Lecturer -{" "}
+              {`${prof.employee.firstname} ${prof.employee.lastname}`}
+            </div>
+          ))}
+          <div>
+            Time - {moment(course.start_time).format("h:mm A")} to{" "}
+            {moment(course.end_time).format("h:mm A")} ({course.day})
+          </div>
         </div>
       </div>
     );
-  }
+  };
 
   function qrButton() {
     return (
