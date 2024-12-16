@@ -58,3 +58,17 @@ export const getCourseHeader = async(sectionId) => {
     return error.response.data;
   }
 }
+
+export const updateAttendance = async(sectionId,studentId,status,created_at) => {
+  try{
+    const response = await axiosInstance.post(`attend/update`,{
+      sectionId,
+      studentId,
+      status,
+      created_at
+    });
+    return response;
+  } catch(error){
+    return error.response.data;
+  }
+}

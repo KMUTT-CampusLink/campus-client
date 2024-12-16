@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { getAttendStudent, getCourseHeader } from "../services/api";
+import { getAttendStudent, getCourseHeader, updateAttendance } from "../services/api";
 
 const useAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -143,10 +143,25 @@ const useAttendance = () => {
   };
 
   const table = () => {
-    const handleStatusChange = (index, newStatus) => {
-      const updatedStatuses = [...statuses];
-      updatedStatuses[index].status = newStatus;
-      setStatuses(updatedStatuses);
+    const handleStatusChange = async (sectionId, studentId, status, created_at) => {
+      try {
+        // update the status in the backend
+        const response = await updateAttendance(parseInt(sectionId), studentId, status, created_at);
+        if (response.data.success) {
+          // update the status locally
+          setStudents((prevStudents) =>
+            prevStudents.map((student) =>
+              student.student_id === studentId && student.created_at === created_at
+                ? { ...student, status } // Update status
+                : student // Keep others unchanged
+            )
+          );
+        } else {
+          console.error("Failed to update attendance status:", response.data.message);
+        }
+      } catch (err) {
+        console.error("Error updating attendance:", err.response?.data?.message || err.message);
+      }
     };
     const filteredStudents = student.filter((item) => {
       const fullName = `${item.firstname} ${item.midname ? item.midname : ""} ${item.lastname}`.toLowerCase();
@@ -217,7 +232,7 @@ const useAttendance = () => {
                         <li>
                           <a
                             className="text-green-500"
-                            onClick={() => handleStatusChange(index, "Present")}
+                            onClick={() => handleStatusChange(sectionId, item.student_id, "Present", item.created_at)}
                           >
                             Present
                           </a>
@@ -225,7 +240,7 @@ const useAttendance = () => {
                         <li>
                           <a
                             className="text-red-500"
-                            onClick={() => handleStatusChange(index, "Absent")}
+                            onClick={() => handleStatusChange(sectionId, item.student_id, "Absent", item.created_at)}
                           >
                             Absent
                           </a>
