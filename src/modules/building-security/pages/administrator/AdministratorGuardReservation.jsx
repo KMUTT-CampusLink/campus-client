@@ -75,7 +75,7 @@ export default function AdministratorGuardReservation() {
 
       if (response.status === 201) {
         alert("Booking successful!");
-        navigate("/security/administrator/mybookinglist");
+        navigate("/security/administrator/guardreservationlist");
       } else {
         setError(response.data.message || "An error occurred during booking.");
       }

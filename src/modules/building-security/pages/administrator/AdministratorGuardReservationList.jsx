@@ -90,10 +90,13 @@ export default function AdministratorGuardReservationList() {
                         {request.id}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
-                        {request.user_id}
+                        {request.user?.username}{" "}
+                        {/* Display username from user */}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
-                        {request.guard_id}
+                        {request.guard?.employee?.firstname}{" "}
+                        {request.guard?.employee?.lastname}{" "}
+                        {/* Display guard name */}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
                         {request.description}
