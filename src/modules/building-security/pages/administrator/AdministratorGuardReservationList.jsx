@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import { getGuardReservationList } from "../../services/api";
+// import { getGuardReservationList } from "../../services/api.js";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 
 export default function AdministratorGuardReservationList() {
@@ -14,7 +14,7 @@ export default function AdministratorGuardReservationList() {
 
   const fetchData = async () => {
     try {
-      const response = await getGuardReservationList(); //Put getGuardReservationList
+      const response = await getGuardReservationList();
       setReservations(response.data.data);
       console.log(response.data);
     } catch (err) {
