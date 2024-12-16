@@ -53,6 +53,27 @@ export default function AdministratorGuardReservationList() {
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
               Guard Reservation List
             </h1>
+            <button
+              className="bg-[#8b5b34] p-3 rounded-full shadow-lg hover:bg-[#6e3f35] transition-all duration-300"
+              onClick={() =>
+                navigate("/security/administrator/guardreservation")
+              }
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6 text-white"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
           </div>
 
           <hr className="my-4 border-gray-300" />
@@ -70,7 +91,10 @@ export default function AdministratorGuardReservationList() {
                       ID
                     </th>
                     <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                      User ID
+                      Building
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                      User Name
                     </th>
                     <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
                       Guard Name
@@ -88,6 +112,9 @@ export default function AdministratorGuardReservationList() {
                     <tr key={request.id} className="border-b hover:bg-gray-50">
                       <td className="py-3 px-4 text-sm text-gray-700">
                         {request.id}
+                      </td>
+                      <td className="py-3 px-4 text-sm text-gray-700">
+                        {request.building?.name}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
                         {request.user?.employee?.firstname}{" "}
