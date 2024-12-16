@@ -134,6 +134,9 @@ const PartialSelect = ({ setShowPartialSelect }) => {
                 <p>No installment preview available</p>
               )}
             </div>
+            <p className="text-center body-1 text-gray-600 mt-4">
+              Interest rate: 5% per year
+            </p>
             <button
               className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 rounded-md shadow-md body-1 mt-6 w-full"
               onClick={() => setShowWarning(true)}
