@@ -5,7 +5,7 @@ import { faHouse, faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import SideForIndvCourse from "./SideForIndvCourse";
 
-const NavForIndvCourse = ({page}) => {
+const NavForIndvCourse = ({page, sectionId}) => {
   const [sideOpen, setSideOpen] = useState(false);
   const toggleSidebar = () => setSideOpen(!sideOpen);
 

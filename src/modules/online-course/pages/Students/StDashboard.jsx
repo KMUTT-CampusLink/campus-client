@@ -17,7 +17,6 @@ import {
 
 const StDashboard = () => {
   const studentId = localStorage.getItem("studentId");
-  const semesterId = 1010;
   const navigate = useNavigate();
   const { data: courses } = useCoursesByStudentID(studentId);
 

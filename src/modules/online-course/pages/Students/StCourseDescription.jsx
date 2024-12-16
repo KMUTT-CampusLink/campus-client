@@ -24,7 +24,8 @@ const StCourseDescription = () => {
 
   return (
     <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
-      <NavForIndvCourse page={"description"} />
+      <NavForIndvCourse page={"description"}
+      sectionId={sec_id}/>
 
       {/* About Classroom Section */}
       <div className="py-8">
