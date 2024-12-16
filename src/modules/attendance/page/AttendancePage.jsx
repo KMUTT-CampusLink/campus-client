@@ -1,26 +1,8 @@
-// import AttendanceComponent from "../components/AttendanceComponent";
-// import useAttendance from "../hook/useAttendance";
-// import NavBar from '../../registration/components/NavBarComponents/NavBar';
-
-// const AttendancePage = () => {
-//     const attendance = useAttendance();
-
-//     return (
-//         <>
-//             <NavBar />
-//             <AttendanceComponent {...attendance} />
-//         </>
-//     );
-// };
-
-// export default AttendancePage;
 import React, { useState, useEffect } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import AttendanceComponent from "../components/AttendanceComponent";
 import QrComponent from "../components/QrComponent";
 import FaceComponent from "../components/faceAttendanceComponent";
-import useAttendance from "../hook/useAttendance";
-import useQr from "../hook/useQr";
 import useFace from "../hook/useFace";
 import { getCourseHeader } from "../services/api";
 import { useParams } from "react-router-dom";
@@ -31,16 +13,14 @@ const AttendancePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [course, setCourse] = useState({});
-  const attendance = useAttendance();
-  const qr = useQr();
   const face = useFace();
 
   const renderContent = () => {
     switch (activeTab) {
       case "Attendance":
-        return <AttendanceComponent {...attendance} />;
+        return <AttendanceComponent/>;
       case "QR CODE":
-        return <QrComponent {...qr} />;
+        return <QrComponent/>;
       case "Face Attendance":
         return <FaceComponent {...face} />;
       default:

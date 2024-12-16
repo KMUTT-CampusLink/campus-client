@@ -14,6 +14,11 @@ const AttendanceComponent = () => {
   const [error, setError] = useState(null);
   const { sectionId } = useParams();
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-CA").format(date);
+  };
+
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -87,7 +92,7 @@ const AttendanceComponent = () => {
 
     // Check if the student's attendance date matches the selected date
     const matchesDate = selectedDate
-      ? moment(item.created_at).format("YYYY-MM-DD") === selectedDate
+      ? formatDate(item.created_at) === selectedDate
       : true;
 
     return matchesQuery && matchesDate;
@@ -116,7 +121,7 @@ const AttendanceComponent = () => {
               className="border border-gray-300 rounded-md p-2 w-full sm:w-1/2"
               onChange={(e) => handleDateChange(e.target.value)}
               value={
-                selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : ""
+                selectedDate ? formatDate(selectedDate) : ""
               }
             />
             <div className="relative w-full sm:w-1/2">
