@@ -12,7 +12,9 @@ const schema = z.object({
 });
 
 function ProfileForm() {
+  const [joinedEvents, setJoinedEvents] = useState([]);
   const { memberId } = useParams(); // Get memberId from URL params
+  console.log(memberId);
   const [memberData, setMemberData] = useState({
     name: "",
     phoneNumber: "",
@@ -30,7 +32,7 @@ function ProfileForm() {
     resolver: zodResolver(schema),
     defaultValues: memberData,
   });
-
+  
   useEffect(() => {
     const fetchMemberData = async () => {
       try {
@@ -56,6 +58,20 @@ function ProfileForm() {
 
     fetchMemberData();
   }, [memberId, setValue]);
+
+  useEffect(() => {
+    const fetchJoinedEvents = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/clubs/member/${memberId}/joined-events`
+        );
+        setJoinedEvents(response.data.data || []);
+      } catch (error) {
+        console.error("Error fetching joined events:", error);
+      }
+    };
+    fetchJoinedEvents(); // New fetch for joined events
+  }, [memberId]);
 
   const onSubmit = async (data) => {
     try {
@@ -104,12 +120,6 @@ function ProfileForm() {
             className="hidden"
             id="profileImageInput"
           />
-          <label
-            htmlFor="profileImageInput"
-            className="bg-orange-500 text-white p-2 rounded-md cursor-pointer hover:bg-orange-600 transition-all duration-200"
-          >
-            Update Profile Pic
-          </label>
         </div>
 
         <form
@@ -157,18 +167,6 @@ function ProfileForm() {
           <div className="flex flex-col">
             <label className="font-medium">Joined Clubs</label>
             <div className="border border-gray-300 p-4 rounded-lg">
-              {/* {memberData.joinedClubs && memberData.joinedClubs.length > 0 ? (
-                <ul className="space-y-2">
-                  {memberData.joinedClubs.map((club, index) => (
-                    <li key={index} className="p-2 bg-gray-100 rounded-md">
-                      {club.clubName}
-                      {club.isAdmin && <span className="ml-2 text-xs text-blue-500">(Admin)</span>}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500">No joined clubs available.</p>
-              )} */}
               {memberData.joinedClubs && memberData.joinedClubs.length > 0 ? (
                 <ul className="space-y-2">
                   {memberData.joinedClubs.map((club, index) => (
@@ -192,6 +190,29 @@ function ProfileForm() {
               )}
             </div>
           </div>
+          <div className="flex flex-col">
+            <label className="font-medium">Joined Events</label>
+            <div className="border border-gray-300 p-4 rounded-lg">
+              {joinedEvents.length > 0 ? (
+                <ul className="space-y-2">
+                  {joinedEvents.map((event) => (
+                    <li key={event.id} className="p-2 bg-gray-100 rounded-md">
+                      <p className="font-medium">{event.title}</p>
+                      <p className="text-sm text-gray-500">
+                        {event.date
+                          ? new Date(event.date).toLocaleDateString()
+                          : "No Date Available"}
+                      </p>
+                      <p className="text-sm text-gray-500">{event.location}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">No joined events available.</p>
+              )}
+            </div>
+          </div>
+
           <div className="text-center">
             <button
               type="submit"
