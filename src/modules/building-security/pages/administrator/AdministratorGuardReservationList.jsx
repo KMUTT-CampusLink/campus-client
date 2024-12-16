@@ -48,6 +48,7 @@ export default function AdministratorGuardReservationList() {
       <div className="container mx-auto px-4 py-8">
         <br />
         <br />
+
         <div className="max-w-5xl mx-auto bg-gradient-to-r from-gray-100 to-white rounded-2xl shadow-lg p-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
