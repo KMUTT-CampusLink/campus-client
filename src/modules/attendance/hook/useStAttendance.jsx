@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { getAttendStudent } from "../services/api";
-import { getCourseHeader } from "../services/api";
+import { getAttendStudent, getCourseHeader } from "../services/api";
+
 const useStAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,9 +12,10 @@ const useStAttendance = () => {
   const [course, setCourse] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { sectionId } = useParams(); // Get sectionId from the URL
+  const { sectionId } = useParams();
   const navigate = useNavigate();
 
+  // Fetch course header data
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -22,7 +23,7 @@ const useStAttendance = () => {
         if (response.data.success) {
           setCourse(response.data.data);
         } else {
-          setError("Failed to fetch students");
+          setError("Failed to fetch course details");
         }
       } catch (err) {
         setError(err.response?.data?.message || "An error occurred");
@@ -34,11 +35,11 @@ const useStAttendance = () => {
     fetchCourse();
   }, [sectionId]);
 
+  // Fetch student attendance data
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const response = await getAttendStudent(sectionId);
-        console.log(response.data.data);
         if (response.data.success) {
           setStudents(response.data.data);
         } else {
@@ -50,6 +51,7 @@ const useStAttendance = () => {
         setLoading(false);
       }
     };
+
     fetchStudents();
   }, [sectionId]);
 
@@ -57,6 +59,7 @@ const useStAttendance = () => {
     { label: "Attendance", key: "Attendance" },
     { label: "Scanner", key: "Scanner" },
   ];
+
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
       navigate(`/attendance/student/${sectionId}`);
@@ -67,23 +70,21 @@ const useStAttendance = () => {
 
   const handleSearch = () => {
     console.log(`Searching for: ${searchQuery}`);
-    // Add the actual search logic here
   };
-  
+
   const AttendanceDetail = () => {
     if (loading) {
       return <div>Loading course details...</div>;
     }
-  
+
     if (error) {
       return <div>Error loading course details: {error}</div>;
     }
-      
-    // Check if course data exists
+
     if (!course || !course.course || !course.professor) {
       return <div>No course data available</div>;
     }
-  
+
     return (
       <div className="flex flex-col">
         <span className="text-2xl font-bold text-orange-500">About Classroom</span>
@@ -103,6 +104,7 @@ const useStAttendance = () => {
       </div>
     );
   };
+
   const chooseDate = () => {
     const handleDateChange = (date) => {
       setSelectedDate(date);
@@ -140,11 +142,26 @@ const useStAttendance = () => {
   };
 
   const table = () => {
+    // Filter students based on search query and selected date
+    const filteredStudents = student.filter((item) => {
+      const fullName = `${item.firstname} ${item.midname ? item.midname : ""} ${item.lastname}`.toLowerCase();
+      const studentId = item.student_id.toLowerCase();
+      const query = searchQuery.toLowerCase();
+
+      // Check if the student's name or ID matches the search query
+      const matchesQuery = fullName.includes(query) || studentId.includes(query);
+
+      // Check if the student's attendance date matches the selected date
+      const matchesDate = selectedDate
+        ? moment(item.created_at).format("YYYY-MM-DD") === selectedDate
+        : true;
+
+      return matchesQuery && matchesDate;
+    });
+
     return (
       <div className="flex flex-col mt-4">
-        <span className="text-2xl font-bold text-orange-500">
-          Attendance Check
-        </span>
+        <span className="text-2xl font-bold text-orange-500">Attendance Check</span>
         <table className="table w-full mt-4 rounded-lg ">
           <thead className="bg-[#F69800]">
             <tr>
@@ -155,24 +172,45 @@ const useStAttendance = () => {
             </tr>
           </thead>
           <tbody>
-            {student&&student.map((item) => (
-              <tr key={item.id}>
-                <td>{item.created_at}</td>
-                <td>{`${item.firstname} ${item.midname?item.midname:""} ${item.lastname}`}</td>
-                <td>{item.student_id}</td>
-                <td>
-                  <span className={`font-medium ${ item.status === "Present" ? "text-green-500":"text-red-500"}`}>
-                    {item.status}</span>
+            {filteredStudents && filteredStudents.length > 0 ? (
+              filteredStudents.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.created_at}</td>
+                  <td>{`${item.firstname} ${item.midname ? item.midname : ""} ${item.lastname}`}</td>
+                  <td>{item.student_id}</td>
+                  <td>
+                    <span
+                      className={`font-medium ${
+                        item.status === "Present" ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center">
+                  No records found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
     );
   };
 
-  return { items, handleMenuClick, AttendanceDetail, chooseDate, table, loading, error };
+  return {
+    items,
+    handleMenuClick,
+    AttendanceDetail,
+    chooseDate,
+    table,
+    loading,
+    error,
+  };
 };
 
 export default useStAttendance;
