@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useDiscussionPostBySectionID } from "../services/mutations";
+import { useCreateEvents } from "../services/mutations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the styles
 
 const PopupEvent = ({ closePopup, onSubmit }) => {
-    const mutation = useDiscussionPostBySectionID();
+    const mutation = useCreateEvents();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [startDate, setStartDate] = useState(new Date()); // Start Date
@@ -35,7 +35,7 @@ const PopupEvent = ({ closePopup, onSubmit }) => {
 
         const newTopic = {
             section_id: localStorage.getItem("sec_id"),
-            user_id: localStorage.getItem("userId"),
+            emp_id: localStorage.getItem("empId"),
             title,
             content,
             start_date: startDate.toISOString(),
@@ -43,7 +43,9 @@ const PopupEvent = ({ closePopup, onSubmit }) => {
         };
 
         try {
-            // await mutation.mutateAsync(newTopic);
+            console.log(newTopic);
+            await mutation.mutateAsync(newTopic);
+            onSubmit();
             closePopup();
         } catch (error) {
             console.error("Error submitting discussion:", error);
