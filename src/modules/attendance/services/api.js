@@ -41,9 +41,9 @@ export const verifyFaceRecognition  = async(imageData) => {
   }
 }
 
-export const getEnrollStudent = async(sectionId) => {
+export const getAttendStudent = async(sectionId) => {
   try{
-    const response = await axiosInstance.get(`attend/getStudentBySecId/${sectionId}`)
+    const response = await axiosInstance.get(`attend/attendData/${sectionId}`)
     return response
   }catch (error){
     return error.response.data;

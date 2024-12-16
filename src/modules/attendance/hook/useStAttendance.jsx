@@ -3,8 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { axiosInstance } from "../../../utils/axiosInstance";
-import { getEnrollStudent } from "../services/api";
+import { getAttendStudent } from "../services/api";
 import { getCourseHeader } from "../services/api";
 const useStAttendance = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -38,7 +37,8 @@ const useStAttendance = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await getEnrollStudent(sectionId);
+        const response = await getAttendStudent(sectionId);
+        console.log(response.data.data);
         if (response.data.success) {
           setStudents(response.data.data);
         } else {
@@ -50,7 +50,6 @@ const useStAttendance = () => {
         setLoading(false);
       }
     };
-
     fetchStudents();
   }, [sectionId]);
 
@@ -156,13 +155,14 @@ const useStAttendance = () => {
             </tr>
           </thead>
           <tbody>
-            {student.map((item) => (
-              <tr key={item.student.id}>
-                <td>{moment().format("YYYY-MM-DD")}</td>
-                <td>{`${item.student.firstname} ${item.student.lastname}`}</td>
-                <td>{item.student.id}</td>
+            {student&&student.map((item) => (
+              <tr key={item.id}>
+                <td>{item.created_at}</td>
+                <td>{`${item.firstname} ${item.midname?item.midname:""} ${item.lastname}`}</td>
+                <td>{item.student_id}</td>
                 <td>
-                  <span className="text-green-500">Present</span>
+                  <span className={`font-medium ${ item.status === "Present" ? "text-green-500":"text-red-500"}`}>
+                    {item.status}</span>
                 </td>
               </tr>
             ))}
