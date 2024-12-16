@@ -31,8 +31,11 @@ const DEditPopup = ({ post, closePopup }) => {
         { topicId: post.id, updatedPost },
         {
           onSuccess: () => {
-            alert("Post updated successfully!");
-            closePopup(); // Close the popup after a successful update
+
+            closePopup();// Close the popup after a successful update
+            setTimeout(() => {
+              alert("Post updated successfully!"); // Show the alert after the popup closes
+            }, 100);
           },
         }
       );

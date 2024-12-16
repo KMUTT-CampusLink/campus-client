@@ -76,3 +76,6 @@ export const deleteEnrollmentDetail = (enrollment) => {
 };
 export const fetchPaymentStatus = (headId) =>
   get(`/regis/enroll/payment/${headId}`);
+
+export const fetchTransactions = (userId) =>
+  get(`/regis/student/transactions/${userId}`);
