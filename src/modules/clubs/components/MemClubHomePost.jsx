@@ -66,9 +66,12 @@ const MemClubHomePost = (props) => {
           `Status for announcement ${announcement.id}:`,
           statusResponse.data
         ); // Debug log
-        return { id: announcement.id, status: statusResponse.data.status, invoiceId: statusResponse.data.invoiceId };
+        return {
+          id: announcement.id,
+          status: statusResponse.data.status,
+          invoiceId: statusResponse.data.invoiceId,
+        };
       });
-
 
       const statuses = await Promise.all(statusPromises);
       const statusMap = statuses.reduce((acc, { id, status, invoiceId }) => {
@@ -241,13 +244,13 @@ const MemClubHomePost = (props) => {
                       import.meta.env.VITE_MINIO_BUCKET_NAME
                     }/${item.post_img}`}
                     alt="Post image"
-                    className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl md:mt-0 sm:mt-4 sm:mb-4"
+                    className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl mt-4 sm:mb-4"
                   />
                 )}
-                <div className="md:ml-10 inline-flex items-start">
+                <div className="md:ml-10 mt-4 inline-flex items-start">
                   <div className="text-left mr-2 text-lg md:text-xl font-semibold">
                     {item.title}
-                    <p className="md:mt-3 sm:mt-0 text-base">
+                    <p className="md:mt-4 sm:mt-0 text-base">
                       • {item.content}
                     </p>
                   </div>
