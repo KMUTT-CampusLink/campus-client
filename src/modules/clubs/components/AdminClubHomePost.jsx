@@ -555,7 +555,7 @@ const ClubHomePost = (props) => {
                   }}
                   className="bg-[#F69800] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg mr-3 md:mr-8"
                 >
-                  View
+                  Participants
                 </button>
               )}
               <button
