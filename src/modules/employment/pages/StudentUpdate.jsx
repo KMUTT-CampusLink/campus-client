@@ -4,6 +4,8 @@ import SUpdatePopUp from "../components/SUpdatePopUp";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const StudentUpdate = () => {
   const navigate = useNavigate();
@@ -163,21 +165,21 @@ const StudentUpdate = () => {
               alt="Student Avatar"
               className="rounded-full w-36 h-36 md:w-42 md:h-42 object-cover"
             />
+            <label
+            htmlFor="fileInput"
+            >
+              <FontAwesomeIcon icon={faPenToSquare}  className="hover:text-blue-700"/>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden hover:shadow-lg"
+                onChange={onFileChange}
+              />
+            </label>
           </div>
 
-          <label
-            htmlFor="fileInput"
-            className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600 focus:outline-none"
-          >
-            +
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={onFileChange}
-            />
-          </label>
+          
           <form className=" text-[#7F483C]">
             <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
