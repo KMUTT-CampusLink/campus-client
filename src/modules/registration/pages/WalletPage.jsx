@@ -6,12 +6,13 @@ import { mainStyles, containerDivStyles } from "../styles/styles";
 import OverviewCard from "../components/WalletComponents/OverviewCard";
 import { GiWallet } from "react-icons/gi";
 import { useTransactions } from "../services/queries";
+import LoadingPage from "../../dev/pages/LoadingPage";
 function WalletPage() {
   const userId = localStorage.getItem("userId");
   const { data: transactions, isLoading, error } = useTransactions(userId);
   console.log(transactions);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   if (error) {
