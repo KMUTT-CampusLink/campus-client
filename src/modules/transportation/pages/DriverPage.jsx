@@ -20,17 +20,17 @@ const DriverPage = () => {
       <NavBar />
       <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
         {/* Dashboard Header */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">
-          Shuttle Bus Transport Service, Driver
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">
+          Campuslink Transport Service, Hello Driver
         </h2>
 
         {/* Trip Scan Button */}
         <div className="mb-6 flex justify-center">
           <Link
-            to="/QrcodePage"
+            to="/transport/trip"
             className="bg-orange-500 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-orange-600 transition"
           >
-            Go to Trip Scan
+            Scan Trip
           </Link>
         </div>
 

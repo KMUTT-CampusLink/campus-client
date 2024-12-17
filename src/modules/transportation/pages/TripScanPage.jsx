@@ -35,8 +35,8 @@ const DriverPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Driver Page</h1>
-      <p className="text-gray-600 mb-8">Scan students' QR codes below</p>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Driver, Scan students QR Code to Allow Bus Access</h1>
+
 
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
         <video

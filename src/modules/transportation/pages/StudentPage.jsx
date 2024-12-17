@@ -34,7 +34,7 @@ const StudentPage = () => {
       <div className="mx-auto max-w-4xl pt-20 pb-10 px-4 lg:px-8">
         {/* Dashboard Header */}
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-orange-300 pb-4">
-          Shuttle buss transport service
+          Campuslink transport service
         </h2>
 
         {/* Search for Routes Link */}
