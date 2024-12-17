@@ -19,7 +19,6 @@ export default function ProfessorScoringPage() {
   const examId = useParams().examId;
   const studentId = useParams().studentId;
   const studentExamId = useParams().studentExamId;
-  const sectionId = useParams().sectionId;
   const [activeButton, setActiveButton] = useState("Multiple Choice");
   const [passMark, setPassMark] = useState(0);
   const [fullMark, setFullMark] = useState(0);
@@ -171,7 +170,7 @@ export default function ProfessorScoringPage() {
         studentId
       );
       if (res.status === 200) {
-        navigate(`/exams/professor/overallScoring/${examId}/${sectionId}`);
+        navigate(`/exams/professor/overallScoring/${examId}`);
       }
     } catch (error) {
       console.log(error);
