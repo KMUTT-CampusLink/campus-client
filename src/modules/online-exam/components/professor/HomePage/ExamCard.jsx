@@ -31,9 +31,8 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
           <button disabled={hasParticipant}>
             <FontAwesomeIcon
               icon={faTrash}
-              className={`text-[20px] ${
-                hasParticipant ? "text-gray-400" : "text-[#C3554E]"
-              }`}
+              className={`text-[20px] ${hasParticipant ? "text-gray-400" : "text-[#C3554E]"
+                }`}
               onClick={() => {
                 if (!hasParticipant) {
                   deleteExamById(examId);
@@ -45,7 +44,7 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
         </div>
         <div className="flex flex-wrap gap-1 xl:gap-4 pt-[12px]">
           <button
-            className={`btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b] ${status === "history" || "approved" ? "hidden" : "block"}`}
+            className={`btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b] ${status === "approved" ? "hidden" : "block"}`}
             onClick={() => {
               navigate(`/exams/professor/edit/${examId}`);
             }}
