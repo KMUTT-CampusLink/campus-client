@@ -10,6 +10,16 @@ export const getBuildingById = async (id) => {
   return response.data;
 };
 
+export const getHistoryData = async () => {
+  const response = await axiosInstance.get("/parking/getHistory");
+  return response.data;
+};
+
+export const getCheckingData = async () => {
+  const response = await axiosInstance.get("/parking/getChecking");
+  return response.data;
+};
+
 export const postCheckin = async (requestData) => {
   const response = await axiosInstance.post(
     "/parking/postCheckin",
