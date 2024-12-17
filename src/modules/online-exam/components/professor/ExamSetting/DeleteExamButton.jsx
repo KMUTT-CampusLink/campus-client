@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteExamById } from "../../../services/apis/professerApi";
 
-export default function DeleteExamButton({ sectionId, examId, status }) {
+export default function DeleteExamButton({ sectionId, examId, status, participant }) {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
@@ -49,7 +49,7 @@ export default function DeleteExamButton({ sectionId, examId, status }) {
                     type="button"
                     className="btn bg-red-500 ml-[10px] text-white hover:bg-red-700"
                     onClick={() => {
-                      if (!hasParticipant) {
+                      if (!participant) {
                         deleteExamById(examId);
                         navigate(`/exams/professor/${sectionId}`);
                       }
