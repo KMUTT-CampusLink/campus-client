@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ModalDetailOption from "./modalDetailOption";
+import ModalDetailOption from "./ModalDetailOption";
 import ModalLostAndFound from "./ModalLostAndFound";
 import ModalParking from "./ModalParking";
 import ModalClub from "./ModalClub";
@@ -59,57 +59,52 @@ const DepartmentDetailModel = ({ isOpen, onClose, data }) => {
         style={{ maxWidth: "none", maxHeight: "none" }}
       >
         <div className="flex h-[10vh] mx-[5%] my-auto mx-auto">
-        <div
-              className={`${
-                data.zone.includes("S") ? "bg-[#FF4612]" : "bg-[#DCC625]"
+          <div
+            className={`${data.zone.includes("S") ? "bg-[#FF4612]" : "bg-[#DCC625]"
               } rounded-full p-1 px-2 md:p-0 z-20  h-full aspect-square flex text-white `}
-            >
-              <h1 className="m-auto text-base md:text-2xl ">{data?.zone}</h1>
-            </div>
+          >
+            <h1 className="m-auto text-base md:text-2xl ">{data?.zone}</h1>
+          </div>
           <div className="flex -ml-10 -mr-10 bg-gray-400/20 rounded-xl w-[90%] my-auto mx-auto h-max pl-[17%] md:pl-[10%] py-2 relative">
-              <h2 className="font-semibold md:text-base text-[0.55rem] text-center flex my-auto  mx-auto">
-                {data?.name}
-              </h2>
+            <h2 className="font-semibold md:text-base text-[0.55rem] text-center flex my-auto  mx-auto">
+              {data?.name}
+            </h2>
           </div>
         </div>
         <div className="flex border-b-2 mt-12 mb-1 text-gray-500/85 text-xs md:text-base font-semibold overflow-x-scroll">
           <button
             onClick={() => handleButtonClick(0)}
-            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${
-              activeIndex === 0
+            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${activeIndex === 0
                 ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
                 : ""
-            }`}
+              }`}
           >
             Details
           </button>
           <button
             onClick={() => handleButtonClick(1)}
-            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${
-              activeIndex === 1
+            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${activeIndex === 1
                 ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
                 : ""
-            }`}
+              }`}
           >
             Lost and Found
           </button>
           <button
             onClick={() => handleButtonClick(2)}
-            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${
-              activeIndex === 2
+            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${activeIndex === 2
                 ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
                 : ""
-            }`}
+              }`}
           >
             Parking
           </button>
           <button
             onClick={() => handleButtonClick(3)}
-            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${
-              activeIndex === 3
+            className={`px-6 py-2 pb-6 align-middle leading-[1] transition-all duration-300 md:flex-grow lg:flex-none ${activeIndex === 3
                 ? "text-[#FF4612] border-b-[#FF4612] border-b-4"
                 : ""
-            }`}
+              }`}
           >
             Clubs
           </button>
