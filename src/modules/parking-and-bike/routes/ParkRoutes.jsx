@@ -1,49 +1,48 @@
+import AuthRoute from "../../registration/middleware/AuthRoute";
 import MainPage from "../page/MainPage"
-import Reserfailed from "../page/Reserfailed"
-import CheckIn from "../page/CheckIn"
 import RegisCar from "../page/RegisCar";
-import Parkingslot from "../page/Parkingslot";
-import ScannedCheckIn from "../page/ScannedCheckIn";
-import CheckOut from "../page/CheckOut";
-import ScannedCheckOut from "../page/ScannedCheckOut";
-import AuthRoute from "../../registration/middleware/AuthRoute"; 
+import ParkingSpot from "../page/ParkingSpot";
+import Process from "../page/Process";
+import Checking from "../page/Checking";
+import History from "../page/History";
+import ScanIn from "../page/ScanIn";
+import ScanOut from "../page/ScanOut";
+
 export default function ParkRoutes() {
   return [
     {
       path: "",
       element: (
-        <AuthRoute>
           <MainPage />
-        </AuthRoute>
       ),
     },
     {
-      path:"parkingslot/",
-      element:<Parkingslot/>,
-    },
-    {
-      path:"checkin/",
-      element:<CheckIn/>
-    },
-    {
-      path:"regis/",
+      path:"regis",
       element:<RegisCar/>
     },
     {
-      path:"failed/",
-      element:<Reserfailed/>,
+      path:"parkingspot",
+      element:<ParkingSpot/>
     },
     {
-      path:"scannedcheckin/:id",
-      element:<ScannedCheckIn/>,
+      path:"process",
+      element:<Process/>
     },
     {
-      path:"scannedcheckout/:id",
-      element:<ScannedCheckOut/>,
+      path:"checking",
+      element:<Checking/>
     },
     {
-      path:"checkout",
-      element:<CheckOut/>
-    }
+      path:"history",
+      element:<History/>
+    },
+    {
+      path:"scanin/:id",
+      element:<ScanIn/>
+    },
+    {
+      path:"scanout/:id",
+      element:<ScanOut/>
+    },
   ];
 }

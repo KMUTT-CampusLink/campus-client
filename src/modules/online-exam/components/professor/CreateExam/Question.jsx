@@ -162,21 +162,11 @@ export default function Question({
                   {option}
                 </div>
                 <div className="flex items-center">
-                  <ChoiceImageUploader
-                    setChoiceImage={(file) => setChoiceImage(i, file)}
-                  />
                   <button onClick={() => deleteChoice(option)} className="ml-[30px]">
                     <FontAwesomeIcon icon={faMinus} className="text-[20px]" />
                   </button>
                 </div>
               </div>
-              {question.choiceImages && question.choiceImages[i] && (
-                <img
-                  src={URL.createObjectURL(question.choiceImages[i])}
-                  alt="Choice Image"
-                  className="w-[300px] h-auto mt-2"
-                />
-              )}
             </div>
           ))}
           <Choice onAddChoice={addChoice} />

@@ -56,11 +56,13 @@ const TrTasks = () => {
 
   // Submit a new assignment
   const handleSubmitAssignment = (newAssignment) => {
-    const { title, attachments } = newAssignment;
+    const { title,startDate,endDate, attachments } = newAssignment;
 
     const formData = new FormData();
     formData.append("section_id", sec_id);
     formData.append("title", title);
+    formData.append("start_date",startDate);
+    formData.append("end_date",endDate);
     formData.append("description", attachments[0]); // Attach the file
 
     createAssignmentMutation.mutate(formData, {
