@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import UpdatePopUp from "../components/UpdatePopUp";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const jobTitles = ["Professor", "Management", "Staff", "Driver"];
 
@@ -195,21 +197,20 @@ const EmployeeUpdate = () => {
               alt="Employee Avatar"
               className="rounded-full w-36 h-36 md:w-42 md:h-42 object-cover"
             />
+            <label
+            htmlFor="fileInput"
+            >
+              <FontAwesomeIcon icon={faPenToSquare}  className="hover:text-blue-700"/>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden hover:shadow-lg"
+                onChange={onFileChange}
+              />
+            </label>
           </div>
 
-          <label
-            htmlFor="fileInput"
-            className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600 focus:outline-none"
-          >
-            +
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={onFileChange}
-            />
-          </label>
 
           <div className="flex justify-center">{id}</div>
 

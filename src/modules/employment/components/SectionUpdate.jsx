@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
-import { useParams, useNavigate } from "react-router-dom";
-import CourseUpdatePopUp from "./CourseUpdatePopUp";
+import { useParams } from "react-router-dom";
 
-const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
+const SectionUpdate = ({ section, professor, onClose }) => {
   const { code } = useParams();
+<<<<<<< HEAD
   const [showPopup, setShowPopup] = useState(false);
   const [p, setP] = useState([]);
+=======
+
+  const [p, setP] = useState([]);
+  const [pro, setPro] = useState(null); // Final selected professor
+  const [filteredProfessors, setFilteredProfessors] = useState([]);
+  const [professorName, setProfessorName] = useState(""); // Input field for Professor Name
+>>>>>>> 65935f2166a3e2ed4979269be8fa4d77ca8cc0b3
   const [formData, setFormData] = useState({
     firstname: "",
     midname: "",
@@ -18,7 +25,7 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
     room_name: "",
     id: section.id,
   });
-  console.log(section);
+
   useEffect(() => {
     setFormData({
       firstname: professor?.firstname || "",
@@ -29,22 +36,44 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
       start_time: section?.start_time || "",
       end_time: section?.end_time || "",
       room_name: section?.room?.name || "",
-      id: section.id, // Ensure room_id is an ID
+      id: section.id,
     });
+
+    setPro(professor || null);
+    setProfessorName(
+      professor
+        ? `${professor.firstname} ${professor.midname} ${professor.lastname}`
+        : ""
+    );
   }, [professor, section]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleClosePopup = () => {
-    setShowPopup(false);
+
+  const handleProfessorNameChange = (e) => {
+    const value = e.target.value;
+    setProfessorName(value);
+    setFilteredProfessors(
+      p.filter((prof) =>
+        `${prof.firstname} ${prof.middlename} ${prof.lastname}`
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      )
+    );
   };
-  const handleUpdateClick = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setShowPopup(true);
-    }
+
+  const handleProfessorSelect = (prof) => {
+    setFormData({
+      ...formData,
+      firstname: prof.firstname,
+      midname: prof.middlename,
+      lastname: prof.lastname,
+    });
+    setPro(prof);
+    setProfessorName(`${prof.firstname} ${prof.middlename} ${prof.lastname}`);
+    setFilteredProfessors([]);
   };
 
   useEffect(() => {
@@ -57,22 +86,16 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
       }
     };
     fetchEmployeeData();
+<<<<<<< HEAD
   },);
 
   
+=======
+  }, []);
+>>>>>>> 65935f2166a3e2ed4979269be8fa4d77ca8cc0b3
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // const payload = {
-    //   emp_id: formData.emp_id, // Ensure this is available
-    //   name: formData.name,
-    //   day: formData.day,
-    //   start_time: formData.start_time,
-    //   end_time: formData.end_time,
-    //   room_name: formData.room_id,
-    //   id: formData.id,
-    // };
 
     const payload = { ...formData };
     const filteredSectionData = Object.fromEntries(
@@ -85,17 +108,13 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
         filteredSectionData
       );
       console.log("Update Response:", response.data);
-      onUpdate(response.data); // Pass the updated data to the parent component
+
       onClose(); // Close the popup
     } catch (error) {
       console.error("Error updating section:", error.response?.data || error);
     }
   };
-
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
+  console.log(pro)
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
@@ -105,32 +124,28 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 font-geologica">
-            <input
-              type="text"
-              name="firstname"
-              value={formData.firstname}
-              onChange={handleInputChange}
-              placeholder="First Name"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
-
-            <input
-              type="text"
-              name="midname"
-              value={formData.midname}
-              onChange={handleInputChange}
-              placeholder="Middle Name"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
-
-            <input
-              type="text"
-              name="lastname"
-              value={formData.lastname}
-              onChange={handleInputChange}
-              placeholder="Last Name"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Professor Name"
+                value={professorName}
+                onChange={handleProfessorNameChange}
+                className="border border-gray-300 rounded-md p-2 w-full"
+              />
+              {filteredProfessors.length > 0 && (
+                <ul className="absolute z-10 bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-y-auto w-full">
+                  {filteredProfessors.map((prof) => (
+                    <li
+                      key={prof.id}
+                      className="p-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleProfessorSelect(prof)}
+                    >
+                      {prof.firstname} {prof.middlename} {prof.lastname}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
             <input
               type="text"
@@ -153,9 +168,7 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
             <input
               type="text"
               name="start_time"
-              value={
-                formData.date_of_birth ? formatTime(formData.start_time) : ""
-              }
+              value={formData.start_time}
               onChange={handleInputChange}
               placeholder="Start Time"
               className="border border-gray-300 rounded-md p-2 w-full"
@@ -164,9 +177,7 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
             <input
               type="text"
               name="end_time"
-              value={
-                formatTime(formData.end_time)
-              }
+              value={formData.end_time}
               onChange={handleInputChange}
               placeholder="End Time"
               className="border border-gray-300 rounded-md p-2 w-full"
@@ -193,7 +204,6 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
 
             <button
               type="submit"
-              //onClick={handleUpdateClick}
               className="w-[45%] py-2 text-white font-opensans bg-[#D4A015] font-semibold rounded-md hover:shadow-lg"
             >
               Update
@@ -201,9 +211,6 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
           </div>
         </form>
       </div>
-      {/* {showPopup && (
-        <CourseUpdatePopUp a={handleSubmit} onClose={handleClosePopup} />
-      )} */}
     </div>
   );
 };

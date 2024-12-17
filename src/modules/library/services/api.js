@@ -110,7 +110,7 @@ export const returnBook = async (reservationId, duplicateId) => {
   const returnedBookData = {
     status: "Returned",
     reservation_id: reservationId,
-    duplicateId: duplicateId,
+    duplicate_id: duplicateId,
   };
 
   try {
@@ -136,5 +136,61 @@ export const makeReservation = async (reservationData) => {
   } catch (error) {
     console.error("Error during reservation:", error);
     throw error; // Re-throw the error for the caller to handle
+  }
+};
+// Function to handle the new endpoint
+export const fetchResData = async () => {
+  try {
+    const response = await axiosInstance.get("/library/res");
+    return response.data; // Return the data from the API
+  } catch (error) {
+    console.error("Error fetching data from /library/res:", error);
+    return null; // Return null in case of an error
+  }
+};
+
+// Function to fetch books with duplicates
+export const fetchEveryBook = async () => {
+  try {
+    const response = await axiosInstance.get("/library/everyBook");
+    return response.data; // Return the data from the API
+  } catch (error) {
+    console.error("Error fetching books with duplicates:", error);
+    return null; // Return null in case of an error
+  }
+};
+
+export const fetchAllStudents = async () => {
+  try {
+    // Make a GET request to the `/library/student` endpoint
+    const response = await axiosInstance.get("/library/student");
+    return response.data; // Return the student data
+  } catch (error) {
+    console.error("Error fetching student data:", error);
+    return null; // Return null in case of an error
+  }
+};
+
+// Function to fetch event reservations
+export const fetchEventReservations = async () => {
+  try {
+    const response = await axiosInstance.get("/library/eventReservation");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching event reservations:", error);
+    return null;
+  }
+};
+
+// Function to reserve a seat for an event
+export const reserveEventSeat = async (libraryEventId) => {
+  try {
+    const response = await axiosInstance.post("/library/event/reserve", {
+      library_event_id: libraryEventId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error reserving event seat:", error);
+    throw error;
   }
 };

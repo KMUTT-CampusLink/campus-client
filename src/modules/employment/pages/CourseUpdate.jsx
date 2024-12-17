@@ -4,6 +4,8 @@ import CourseUpdatePopUp from "../components/CourseUpdatePopUp";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const CourseUpdate = () => {
   const { code } = useParams();
@@ -129,20 +131,20 @@ const CourseUpdate = () => {
             alt="course picture"
             className="rounded-lg w-52 h-32 md:w-64 md:h-40 object-cover"
           />
+          <label
+            htmlFor="fileInput"
+            >
+              <FontAwesomeIcon icon={faPenToSquare}  className="hover:text-blue-700 ml-2 md:ml-3"/>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden hover:shadow-lg"
+                onChange={onFileChange}
+              />
+            </label>
         </div>
-        <label
-          htmlFor="fileInput"
-          className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600 focus:outline-none"
-        >
-          +
-          <input
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={onFileChange}
-          />
-        </label>
+        
         <div className=" space-y-5 md:space-y-7">
           <form>
             <div className="grid grid-cols-2 gap-6 mt-4 md:mt-8">
