@@ -19,7 +19,7 @@ const AddPopUp = ({ onClose, a }) => {
               onClick = {a}
               className="w-1/2 text-center py-2 text-white bg-[#D4A015] font-semibold"
             >
-              ADD
+              Add
             </button>
           </div>
         </div>

@@ -13,7 +13,7 @@ import {
   fetchAllAssignmentsBySectionID,
   fetchAssignmentSubmissionFilePath,
   fetchAllUpComingEvents,
-  fetchUpComingEventsByTeacher
+  fetchUpComingEventsByTeacher,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -110,7 +110,6 @@ export const useAllAssignmentsBySectionID = (sectionID) => {
   });
 };
 
-
 export const useAllCommentsByPostID = (postId) => {
   return useQuery({
     queryKey: ["allComment", postId],
@@ -142,7 +141,7 @@ export const useUpComingEvents = (studentID) => {
       console.error("Error fetching up coming events:", error);
     },
   });
-}
+};
 
 export const useUpComingEventsByTeacher = (empID, sectionID) => {
   return useQuery({

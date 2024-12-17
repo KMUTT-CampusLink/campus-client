@@ -33,9 +33,11 @@ const put = async (url, payload) => {
   }
 };
 
-const remove = async (url) => {
+const remove = async (url, body) => {
+  console.log("remove", url);
+  console.log(body);
   try {
-    const { data } = await axiosInstance.delete(url);
+    const { data } = await axiosInstance.delete(url, { data: body });
     return data;
   } catch (error) {
     handleApiError(error);
@@ -63,7 +65,7 @@ export const fetchCourseHeaderBySectionIDForStudent = (sectionID) =>
 export const fetchAllAssignmentsBySectionID = (sectionID) =>
   get(`/courses/assignment/${sectionID}/all`);
 //export const createAssignment = (newAssignment) =>
-  //post("/courses/assignment/create", newAssignment);
+//post("/courses/assignment/create", newAssignment);
 export const editAssignment = (assignmentID, updatedAssignment) =>
   put(`/courses/assignment/${assignmentID}/edit`, updatedAssignment);
 export const deleteAssignment = (assignmentID) =>
@@ -82,8 +84,6 @@ export const editAssignmentSubmission = (assignmentID, updatedSubmission) =>
 export const fetchAssignmentSubmissionFilePath = (assignmentID, studentID) =>
   get(`/courses/assignment/submission/${assignmentID}/${studentID}`);
 
-
-
 // discussion Teacher
 export const fetchAllDiscussionPostsBySectionID = (sectionID) =>
   get(`/courses/discussion/${sectionID}`);
@@ -98,7 +98,7 @@ export const fetchAllCommentsByPostID = (postId) =>
 export const createDiscussionReply = (topicId, newReply) =>
   post(`/courses/discussion/${topicId}/comment/create`, newReply);
 
-//announcement 
+//announcement
 export const fetchAllUpComingEvents = (studentID) =>
   get(`/courses/announcement/${studentID}`);
 
@@ -108,5 +108,6 @@ export const fetchUpComingEventsByTeacher = (empID, sectionID) =>
 export const createUpComingEvents = (eventInfo) =>
   post(`/courses/announcement/`, eventInfo);
 
-export const deleteUpComingEvents = (deleteInfo) => 
-  remove(`/courses/announcement/`, deleteInfo);
+export const deleteUpComingEvents = (deleteInfo) => {
+  return remove(`/courses/announcement/`, deleteInfo);
+};

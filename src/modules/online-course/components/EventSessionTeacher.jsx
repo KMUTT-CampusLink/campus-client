@@ -36,7 +36,7 @@ const EventSessionTeacher = ({ refresh }) => {
 
             const newEvent = { announcementID: selectedEvent.id, empID: empID, };
 
-
+            
             try {
                 await deleteEvent.mutateAsync(newEvent);
                 setIsDeletePopupOpen(false);
