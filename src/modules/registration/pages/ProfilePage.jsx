@@ -54,10 +54,12 @@ function ProfilePage() {
             {/* Logo Section */}
             <div className="relative w-20 h-20 mx-auto mt-4">
               <img
-                src="/logos/profile-pic.png"
-                alt="Logo"
+                src={`${import.meta.env.VITE_MINIO_URL +
+                  import.meta.env.VITE_MINIO_BUCKET_NAME
+                  }/${profileData.image}`} alt="Logo"
                 className="object-cover w-full h-full border-4 border-gray-200 rounded-full"
               />
+
             </div>
             <div className="p-4 mt-4 bg-white rounded-lg shadow-md">
               <div className="flex items-center space-x-2">
