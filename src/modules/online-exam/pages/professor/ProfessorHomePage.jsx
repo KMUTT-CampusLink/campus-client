@@ -12,7 +12,7 @@ import {
   getExams,
   getGradingDate,
   updateExpandDays,
-  updateAnnouceGrades
+  updateStudentGradeManually
 } from "../../services/apis/professerApi";
 
 import verifySection from "../../middleware/verifySection";
@@ -57,7 +57,6 @@ function ProfessorHomePage() {
   const getSectionGradingDate = async () => {
     try {
       const res = await getGradingDate(sectionId);
-      console.log(res)
       const { gradingDate, semesterEndDate, gradeAnnounceStatus } = res.data;
       setGradingDate(gradingDate);
       setSemesterEndDate(semesterEndDate);
@@ -84,6 +83,7 @@ function ProfessorHomePage() {
       console.log(error);
     }
   };
+
   console.log(notifyDate);
   const handleRefresh = () => {
     window.location.reload();
@@ -109,15 +109,17 @@ function ProfessorHomePage() {
       console.error("Error updating Expand Days:", error);
     }
   };
-  const handleAnnoucrGradeClick = async () => {
+
+  console.log(sectionId)
+  const updateGradeManually = async () => {
     try {
-      const response = await updateAnnouceGrades(sectionId, true);
-      console.log(response); 
-      setIsAnnounced(true);
-    } catch (error) {
-      console.error("Error updating Expand Days:", error);
+      const res = await updateStudentGradeManually(sectionId);
+      setGradeStatus(true);
+      console.log(res);
+    } catch (error){
+      console.log(erorr)
     }
-  };
+  }
   useEffect(() => {
     getAllExams();
     getSectionGradingDate();
@@ -133,7 +135,7 @@ function ProfessorHomePage() {
             <p>Grade have been announced</p>
           </div>
         )}
-        {(gradingAlertVisible && !isAnnounced) && (
+        {gradingAlertVisible && !isAnnounced && (
           <div className="py-10  px-10 bg-[#7F483C] text-white rounded-md mb-5">
             <div className="flex items-center gap-3">
               <FontAwesomeIcon
@@ -170,7 +172,7 @@ function ProfessorHomePage() {
               </button>
               <button
                 disabled={!isExpanded}
-                onClick={handleAnnoucrGradeClick}
+                onClick={updateGradeManually}
                 className="btn border-none xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b]"
               >
                 Announce Grade
