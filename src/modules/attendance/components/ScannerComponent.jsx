@@ -3,7 +3,7 @@ import QrScanner from "qr-scanner";
 import SuccessCard from "./SuccessCard";
 import { axiosInstance } from "../../../utils/axiosInstance"; // Ensure this import is correct
 
-const QrScannerComponent = () => {
+const ScannerComponent = () => {
   const [scannedData, setScannedData] = useState(null);
   const [showSuccessCard, setShowSuccessCard] = useState(false);
   const [message, setMessage] = useState("");
@@ -99,4 +99,4 @@ const QrScannerComponent = () => {
   );
 };
 
-export default QrScannerComponent;
+export default ScannerComponent;
