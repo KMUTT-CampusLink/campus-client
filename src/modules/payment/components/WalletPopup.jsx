@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { payInvoice, fetchUserWallet } from "../services/api"; // Import fetchUserWallet from api.js
+import { payInvoice, fetchUserWallet, useWalletPayment } from "../services/api"; // Import the new API function
 import { GiWallet } from "react-icons/gi"; // Wallet Icon
 
 const WalletPopup = ({ onClose, invoiceId, invoiceAmount }) => {
@@ -23,22 +23,21 @@ const WalletPopup = ({ onClose, invoiceId, invoiceAmount }) => {
       alert("Insufficient wallet balance to complete this payment.");
       return;
     }
-
+  
     try {
       console.log("Attempting to pay using wallet balance...");
-      const response = await payInvoice({ inv: invoiceId, useWallet: true });
-      if (response?.data?.status === "success") {
-        alert("Payment successful using wallet!");
+      const response = await useWalletPayment({ invoiceId }); // Correct payload sent here
+      if (response?.message) {
+        setWalletBalance(response.remaining_wallet);
         window.location.reload(); // Or navigate as needed
       } else {
         alert("Failed to process wallet payment.");
       }
     } catch (error) {
       console.error("Error during wallet payment:", error);
-      alert("An error occurred. Please try again.");
     }
   };
-
+  
   const handleStripePayment = async () => {
     try {
       console.log("Invoice ID being sent:", invoiceId); // Debugging Invoice ID

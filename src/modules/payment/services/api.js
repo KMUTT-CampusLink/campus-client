@@ -73,3 +73,14 @@ export const fetchUserWallet = async () => {
     throw error; // Propagate the error
   }
 };
+
+export const useWalletPayment = async (data) => {
+  try {
+    const response = await axiosInstance.post("/payment/useWallet", { inv: data.invoiceId }); // Correct payload
+    return response.data;
+  } catch (error) {
+    console.error("Error processing wallet payment:", error);
+    throw error;
+  }
+};
+
