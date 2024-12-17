@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 // the component for uploading an image for a question
-export default function QuestionImageUploader({ setImage }) {
+export default function QuestionImageUploader({ setImage, imgURL }) {
     const hiddenFileInput = useRef(null);
     const [imageURL, setImageURL] = useState(null);
 
@@ -19,6 +19,10 @@ export default function QuestionImageUploader({ setImage }) {
         setImage(fileUploaded);
         setImageURL(URL.createObjectURL(fileUploaded));
     };
+
+    useEffect(() => {
+        setImageURL(imgURL);
+    }, [imgURL]);
 
     return (
         <>
@@ -35,7 +39,7 @@ export default function QuestionImageUploader({ setImage }) {
                 />
             </div>
             {/* display the image */}
-            {imageURL && <img src={imageURL} alt="Question Image" />}
+            {imageURL && <img src={imageURL} alt="Question Image" className='w-[300px] h-auto'/>}
         </>
     );
 }

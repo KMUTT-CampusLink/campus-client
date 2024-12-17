@@ -20,9 +20,9 @@ export default function StudentExamPage() {
   const [timeLeft, setTimeLeft] = useState("00:00:00");
   const navigate = useNavigate();
   
-  if (!useIsTabActive()) {
-    navigate("/exams/student/exam");
-  }
+  // if (!useIsTabActive()) {
+  //   navigate("/exams/student/exam");
+  // }
 
   const [exam, setExam] = useState({
     title: '',
@@ -51,12 +51,12 @@ export default function StudentExamPage() {
           const questionChoices = allChoices.filter(choice => choice.question_id === question.id);
           return {
             questionText: question.title || '',
+            questionImg: question.question_img || '',
             type: question.type ? question.type.replace('_', ' ') : 'Multiple Choice',
             options: questionChoices.map(choice => ({
               question_id: choice.question_id,
               choiceId: choice.id,
               choiceText: choice.choice_text || '',
-              choiceImg: choice.choice_img || ''
             })),
             answer: questionChoices
               .filter(choice => choice.correct_ans)
@@ -162,6 +162,8 @@ export default function StudentExamPage() {
     handleSubmit();
   }
 
+  console.log(exam)
+
   return (
     <div className="w-auto">
       <NavBar />
@@ -179,6 +181,7 @@ export default function StudentExamPage() {
                 questionid={question.question_id}
                 questionNo={studentQuestion}
                 question={question.questionText}
+                questionImg={question.questionImg}
                 choice={question.options}
                 type={question.type}
                 handleAnswer={handleAnswer}

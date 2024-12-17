@@ -28,6 +28,8 @@ export default function StudentReviewExamPage() {
     return;
   }
 
+  console.log(data)
+
   return (
     <>
       <NavBar />
@@ -67,6 +69,7 @@ export default function StudentReviewExamPage() {
                     questionNo={item.id}
                     mark={item.mark}
                     score={item.score}
+                    questionImg={item.question_img}
                     className="w-[67%] h-auto"
                   />
                 ))}
