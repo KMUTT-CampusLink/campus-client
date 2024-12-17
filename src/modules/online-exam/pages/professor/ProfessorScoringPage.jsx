@@ -57,7 +57,6 @@ export default function ProfessorScoringPage() {
       console.log(error);
     }
   };
-  console.log(participants);
 
   const checkCompleteFillEssayScore = () => {
     const essayQuestions = exam.questions.filter(
@@ -170,7 +169,7 @@ export default function ProfessorScoringPage() {
         studentId
       );
       if (res.status === 200) {
-        navigate(`/exams/professor/overallScoring/${examId}`);
+        navigate(`/exams/professor/overallScoring/${examId}/${res.data.data}`);
       }
     } catch (error) {
       console.log(error);

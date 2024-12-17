@@ -6,17 +6,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
   faCalendarDays,
+  faBolt,
+  faUsers,
+  faCheck,
+  faExclamation,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { fetchEvents } from "../services/api";
+import { fetchEvents, reserveEventSeat } from "../services/api";
 function EventPage() {
   const scrollToTicket = () => {
     const ticketSection = document.querySelector(".ticket-section");
     ticketSection?.scrollIntoView({ behavior: "smooth" });
   };
+  const [reservationStatus, setReservationStatus] = useState(null);
 
   const [libraryEvents, setLibraryEvents] = useState([]);
   const location = useLocation();
@@ -76,8 +82,28 @@ function EventPage() {
     return () => clearInterval(timer); // Cleanup the timer on unmount
   }, [eventDate]);
 
+  const handleReserveSeat = async () => {
+    try {
+      const response = await reserveEventSeat(event.id);
+      setReservationStatus({
+        type: "success",
+        message: "Seat reserved successfully!",
+      });
+    } catch (error) {
+      console.error("Error reserving seat:", error);
+      setReservationStatus({
+        type: "error",
+        message: error.response?.data?.error || "Failed to reserve seat.",
+      });
+    }
+  };
+
+  const [remainingSeats, setRemainingSeats] = useState(
+    event.total_seat - event.reserve_seat
+  );
+
   return (
-    <div className="min-h-screen font-nunito">
+    <div className="min-w-[850px] font-nunito">
       <NavBar />
       <main className="pt-20 pb-6 mx-auto">
         <MainNavbar />
@@ -95,12 +121,12 @@ function EventPage() {
               <h1 className="text-xl underline-offset-[19px] underline decoration-2 decoration-orange-500">
                 INFO
               </h1>
-              <button
+              {/* <button
                 onClick={scrollToTicket}
                 className="btn bg-orange-500 hover:bg-orange-600 text-white rounded-full px-7"
               >
                 Get Ticket
-              </button>
+              </button> */}
             </div>
             {/* Event Title */}
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 text-center">
@@ -222,7 +248,10 @@ function EventPage() {
               </Swiper>
             </div>
             {/* Ticket */}
-            <div className="ticket-section border-l-4 border-orange-500 p-6 my-12 bg-white rounded-lg shadow-xl hover:scale-105 active:scale-95 duration-300">
+            <div
+              onClick={() => document.getElementById("my_modal_1").showModal()}
+              className="ticket-section border-l-4 border-orange-500 p-6 my-12 bg-white rounded-lg shadow-xl hover:scale-105 active:scale-95 duration-300"
+            >
               {/* Badge Section */}
               <div className="inline-block mb-4">
                 <span className="badge text-orange-500 border border-orange-500 bg-orange-100 px-3 py-1 rounded-full text-sm font-medium">
@@ -231,7 +260,7 @@ function EventPage() {
               </div>
 
               {/* Title and Location Section */}
-              <div className="mb-6">
+              <div className="mb-6 ">
                 <h1 className="text-lg font-bold text-gray-800">
                   {event.title}
                 </h1>
@@ -244,13 +273,62 @@ function EventPage() {
               {/* Footer Section */}
               <div className="flex justify-between items-center">
                 <h1 className="text-sm font-medium text-gray-600">
-                  100 seats left
+                  {remainingSeats} Seats Left
                 </h1>
                 <h1 className="text-sm font-bold text-orange-500">
                   Free Ticket
                 </h1>
               </div>
             </div>
+            <dialog id="my_modal_1" className="modal">
+              <div className="modal-box">
+                {reservationStatus && (
+                  <div
+                    role="alert"
+                    className={`alert ${
+                      reservationStatus.type === "success"
+                        ? "alert-success bg-green-400"
+                        : "alert-error"
+                    }`}
+                  >
+                    <span>
+                      {reservationStatus.type === "success" ? (
+                        <FontAwesomeIcon icon={faCheck} />
+                      ) : (
+                        <FontAwesomeIcon icon={faTriangleExclamation} />
+                      )}
+                    </span>
+                    <span>
+                      {reservationStatus.type === "success"
+                        ? "Success!"
+                        : "Error!"}{" "}
+                      {reservationStatus.message}
+                    </span>
+                  </div>
+                )}
+                <FontAwesomeIcon
+                  style={{ width: "8rem", height: "8rem" }}
+                  className="flex items-center justify-center mx-auto py-6 "
+                  icon={faUsers}
+                />
+                <h3 className="font-bold text-2xl text-center">Join Event</h3>
+                <p className="py-4 text-xl text-center">
+                  Are you sure you want to join <strong>{event.title}</strong>{" "}
+                  event? By joining this event, you cannot cancel later.
+                </p>
+                <div className="modal-action flex justify-center">
+                  <button
+                    onClick={handleReserveSeat}
+                    className="btn bg-orange-500 text-white hover:bg-orange-600 mx-4"
+                  >
+                    Confirm
+                  </button>
+                  <form method="dialog">
+                    <button className="btn">Close</button>
+                  </form>
+                </div>
+              </div>
+            </dialog>
           </div>
         </div>
       </main>

@@ -28,8 +28,8 @@ export default function Question({
                       type={type === "Checklist" ? "checkbox" : "radio"}
                       name={`radio-${questionNo}`}
                       className={`${
-                        type === "Checklist" ? "checkbox" : "radio"
-                      } checked:bg-[#C76650] border-[1px] border-black`}
+                        type === "Checklist" ? "checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]" : "radio checked:bg-[#C76650] border-[1px] border-gray-500"
+                      }`}
                       checked={
                         studentAnswer.find(
                           (sa) => sa.answer == choiceObj.choice_text
@@ -45,7 +45,7 @@ export default function Question({
           })}
         {/* Essay */}
         {type === "Essay" && (
-          <div>
+          <div className="flex flex-col gap-[10px]">
             <textarea
               className="textarea textarea-bordered border-[#BEBEBE] w-full h-[220px]"
               placeholder="Type your Answer Here"
