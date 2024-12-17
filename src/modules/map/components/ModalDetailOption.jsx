@@ -3,7 +3,7 @@ import BuildingImage from "/map/buldingImage.jpg";
 function ModalDetailOption({ subData }) {
   console.log("Subdata : ", subData)
   return (
-    <div className="flex h-max md:h-full w-full">
+    <div className="flex h-max md:h-[90%] w-full">
       <div className="grid md:flex h-max w-full mt-10 md:my-auto">
       <img
         src={subData.building_img}
