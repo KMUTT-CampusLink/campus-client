@@ -258,3 +258,15 @@ export const updateAnnouceGrades = async (sectionId, gradeAnnouceStatus) => {
     return error.response.data;
   }
 }
+export const updateStudentGradeManually = async (sectionId) => {
+  try {
+    const response = await axiosInstance.put(
+      `/exams/student/updateStudentGradeManually?sectionid=`, {
+        sectionId: sectionId
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}

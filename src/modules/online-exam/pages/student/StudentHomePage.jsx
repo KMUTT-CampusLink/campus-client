@@ -9,8 +9,7 @@ import BackBTN from "../../components/BackBTN";
 import {
   getStudentExamsById,
   getHistoryStudentExams,
-  getInprogressExam,
-  updateStudentGrade
+  getInprogressExam
 } from "../../services/apis/studentApi";
 
 import verifySection from "../../middleware/verifySection"
