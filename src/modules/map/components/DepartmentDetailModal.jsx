@@ -58,7 +58,7 @@ const DepartmentDetailModel = ({ isOpen, onClose, data }) => {
         className="modal-box relative xl:p-10 lg:p-8 lg:px-10 xl:px-14 w-[70%] h-[75%] md:h-[65vh] md:w-[75%]  lg:w-[75%] xl:w-[50vw] overflow-hidden flex flex-col transition-all duration-700 ease-in-out transform scale-90 animate-modal-fade"
         style={{ maxWidth: "none", maxHeight: "none" }}
       >
-        <div className="flex h-[10vh] mx-[5%] my-auto mx-auto">
+        <div className="flex h-[10vh] mx-[5%] my-auto mx-auto w-[90%]">
           <div
             className={`${data.zone.includes("S") ? "bg-[#FF4612]" : "bg-[#DCC625]"
               } rounded-full p-1 px-2 md:p-0 z-20  h-full aspect-square flex text-white `}
