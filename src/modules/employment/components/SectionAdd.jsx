@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const SectionAdd = ({ onClose, onAdd }) => {
+  const [p, setP] = useState([]);
+  const [professor, setProfessor] = useState(null);
+  const [filteredProfessors, setFilteredProfessors] = useState([]);
+  const [professorName, setProfessorName] = useState(""); // New state for input field
   const [formData, setFormData] = useState({
     firstname: "",
-    midname:  "",
-    lastname:"",
+    midname: "",
+    lastname: "",
     name: "",
     day: "",
     start_time: "",
@@ -17,11 +22,48 @@ const SectionAdd = ({ onClose, onAdd }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleProfessorNameChange = (e) => {
+    const value = e.target.value;
+    setProfessorName(value);
+    setFilteredProfessors(
+      p.filter((prof) =>
+        `${prof.firstname} ${prof.middlename} ${prof.lastname}`
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      )
+    );
+  };
+
+  const handleProfessorSelect = (prof) => {
+    setFormData({
+      ...formData,
+      firstname: prof.firstname,
+      midname: prof.middlename,
+      lastname: prof.lastname,
+    });
+    setProfessor(prof);
+    setProfessorName(`${prof.firstname} ${prof.middlename} ${prof.lastname}`); // Update input field
+    setFilteredProfessors([]); // Hide suggestions
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onAdd(formData);
     onClose();
   };
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const result = await axiosInstance.get(`employ/fetchProfessor`);
+        setP(result.data);
+      } catch (error) {
+        console.error("Error fetching professor data:", error);
+      }
+    };
+    fetchEmployeeData();
+  }, []);
+  console.log(professor)
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
@@ -29,32 +71,28 @@ const SectionAdd = ({ onClose, onAdd }) => {
         <h2 className="text-center text-xl text-[#D4A015] md:text-2xl font-semibold mb-4 font-geologica">Add Section</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 font-geologica">
-            <input
-              type="text"
-              name="firstname"
-              value={formData.firstname}
-              onChange={handleInputChange}
-              placeholder="First Name"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
-
-            <input
-              type="text"
-              name="midname"
-              value={formData.midname}
-              onChange={handleInputChange}
-              placeholder="Middle Name"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
-
-            <input
-              type="text"
-              name="lastname"
-              value={formData.lastname}
-              onChange={handleInputChange}
-              placeholder="Last Name"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Professor Name"
+                value={professorName} // Bind input value to professorName state
+                onChange={handleProfessorNameChange}
+                className="border border-gray-300 rounded-md p-2 w-full"
+              />
+              {filteredProfessors.length > 0 && (
+                <ul className="absolute z-10 bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-y-auto w-full">
+                  {filteredProfessors.map((prof) => (
+                    <li
+                      key={prof.id}
+                      className="p-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleProfessorSelect(prof)}
+                    >
+                      {prof.firstname} {prof.middlename} {prof.lastname}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
             <input
               type="text"
