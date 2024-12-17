@@ -14,12 +14,27 @@ const TrTaskSubmission = () => {
   const { data: details, isLoading: isHeaderLoading, error: headerError } = useCourseHeaderBySectionID(sec_id);
   const { data: submittedStudents, isLoading: isStudentsLoading, error: studentsError } = useStudentSubmission(sec_id, task?.id);
 
-  const getStatusColor = (status) => {
-    if (status === "On Time") return "#6ae65f";
-    if (status === "Late") return "#e5d35b";
-    if (status === "Absent") return "red";
-    return "gray";
+  const deadLine = task?.end_date;
+
+  const getStatusColor = (createdAt) => {
+
+    if (createdAt == null) {
+      return "red";
+    }
+    // Ensure the deadline and submission times are comparable by converting to Date objects
+    const deadline = new Date(task?.end_date); // Deadline of the task
+    const submissionDate = new Date(createdAt); // Submission date from student data
+
+    // Compare the dates
+    if (submissionDate <= deadline) {
+      return "#6ae65f"; // Green for "On Time"
+    } else if (submissionDate > deadline) {
+      return "#e5d35b"; // Yellow for "Late"
+    } else {
+      return "gray"; // Default for unknown status
+    }
   };
+
 
   if (!task?.id) {
     return (
@@ -84,23 +99,23 @@ const TrTaskSubmission = () => {
         <div className="text-center py-4">Loading submissions...</div>
       ) : studentsError ? (
         <div className="text-center text-red-500 py-4">Error loading submissions: {studentsError.message}</div>
-      ) : submittedStudents?.length > 0 ? (
-        submittedStudents.map((student) => (
+      ) : submittedStudents?.data?.length > 0 ? (
+        submittedStudents?.data?.map((student) => (
           <div
-            key={student.id}
-            className="max-md:pl-3 font-bold max-md:text-sm max-sm:text-xs text-lg grid max-md:grid-cols-5 max-md:gap-5 justify-items-center grid-cols-6 justify-center "
+            key={student.student_id}
+            className="max-md:pl-3 max-md:text-sm max-sm:text-xs grid max-md:grid-cols-5 max-md:gap-5 justify-items-center grid-cols-6 justify-center pt-2 pb-2"
           >
             <div className="max-md:hidden justify-self-start">
-              <div className="max-lg:pl-1 lg:pl-14">{student.name}</div>
+              <div className="max-lg:pl-1 lg:pl-14 ">{student.name}</div>
             </div>
-            <div className="">{student.id}</div>
+            <div className="">{student.student_id}</div>
             <div className="text-[#ecb45e] lg:max-w-[16rem] max-md:max-w-12">
               <FontAwesomeIcon icon={faFile} color="red" className="pr-2" />
               {student.file}
               <FontAwesomeIcon icon={faDownload} color="red" className="pl-2" />
             </div>
             <div className="">
-              <FontAwesomeIcon icon={faSquare} color={getStatusColor(student.status)} />
+              <FontAwesomeIcon icon={faSquare} color={getStatusColor(student.create_at)} />
             </div>
             <div className="">{student.score}/10</div>
             <div>{student.feedback}</div>

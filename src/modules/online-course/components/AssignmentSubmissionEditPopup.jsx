@@ -10,11 +10,13 @@ export const FileUploadPopup = ({ assignmentId, studentId, onClose }) => {
   // Fetch existing assignment submission file path
   const { data: submissionFilePath, isLoading, isError } = useAssignmentSubmissionFilePath(assignmentId, studentId);
 
+
   const addAssignmentSubmission = useAddAssignmentSubmission();
 
   useEffect(() => {
     // Check if submission exists
-    if (submissionFilePath?.file_path) {
+    if (submissionFilePath?.data?.file_path) {
+
       setIsSubmissionAvailable(true);
     } else {
       setIsSubmissionAvailable(false);
@@ -79,41 +81,41 @@ export const FileUploadPopup = ({ assignmentId, studentId, onClose }) => {
           <div className="text-center">Loading submission status...</div>
         ) : isError ? (
           <div className="text-red-500 text-center">Error fetching submission status.</div>
-        ) : isSubmissionAvailable ? (
+        ) : isSubmissionAvailable && (
           <div className="text-center">
             <p className="text-green-500 mb-4">You have already submitted this assignment.</p>
             <a
               href={`${MINIO_BASE_URL}/${submissionFilePath.file_path}`}
-              download={`Assignment-${assignmentId}.pdf`}
+              download
               className="text-blue-500 underline"
             >
-              View Submitted File
+              {submissionFilePath?.data?.file_path}
             </a>
           </div>
-        ) : (
-          <div>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              accept=".pdf,.doc,.docx,.txt"
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
         )}
+
+        <div>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            accept=".pdf,.doc,.docx,.txt"
+          />
+          <div className="flex justify-end gap-2 mt-4">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
