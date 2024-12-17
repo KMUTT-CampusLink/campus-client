@@ -7,8 +7,8 @@ import SectionDeletePopUp from "./SectionDeletePopUp";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { useParams, useNavigate } from "react-router-dom";
 
-const SectionCard = ({ section, employees }) => {
-  const { name, day, start_time, end_time, room, id } = section;
+const SectionCard = ({ section }) => {
+  const { name, day, start_time, end_time, room, id, professor } = section;
   const navigate = useNavigate;
   const { code } = useParams();
   const [showDeletePopUp, setShowDelete] = useState(false);
@@ -34,14 +34,14 @@ const SectionCard = ({ section, employees }) => {
     return date.toTimeString().slice(0, 5); // Extract "HH:mm" part
   };
 
-  const professor = employees?.[0];
+  const assignedProfessor = professor?.[0]?.employee;
 
   const handleDeleteConfirm = async () => {
     try {
       await axiosInstance.delete(`employ/deleteSection/${code}/${id}`);
       setShowDelete(false);
       setCurrentSectionId(null);
-      navigate(`/employ/courseDetail/${code}`);
+      location.reload();
     } catch (error) {
       console.error("Error deleting section:", error);
     }
@@ -57,16 +57,15 @@ const SectionCard = ({ section, employees }) => {
           </h2>
           <p className="md:text-md text-sm text-gray-500">
             <strong>Professor:</strong>{" "}
-            {professor
-              ? `${professor.firstname} ${professor.lastname}`
+            {assignedProfessor
+              ? `${assignedProfessor.firstname} ${assignedProfessor.lastname}`
               : "No professor assigned"}
           </p>
           <p className="md:text-md text-sm text-gray-500">
             <strong>Day:</strong> {day}
           </p>
           <p className="md:text-md text-sm text-gray-500">
-            <strong>Time:</strong> {formatTime(start_time)} -{" "}
-            {formatTime(end_time)}
+            <strong>Time:</strong> {start_time} - {end_time}
           </p>
           <p className="md:text-md text-sm text-gray-500">
             <strong>Room:</strong> {room.name}
