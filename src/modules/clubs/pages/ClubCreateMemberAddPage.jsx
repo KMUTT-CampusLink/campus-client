@@ -98,9 +98,11 @@ function ClubCreateMemberAddPage({
                 <div className="flex items-center">
                   <img
                     src={
-                      `${import.meta.env.VITE_MINIO_URL}bucket-02/${
-                        member.image
-                      }` || "https://img.placeholder.com/50"
+                      member.image
+                        ? `${import.meta.env.VITE_MINIO_URL}bucket-02/${
+                            member.image
+                          }`
+                        : "https://img.placeholder.com/50"
                     }
                     alt={member.name}
                     className="w-12 h-12 rounded-full mr-3"
