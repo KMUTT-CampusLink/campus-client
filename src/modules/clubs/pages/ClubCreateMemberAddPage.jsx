@@ -99,7 +99,7 @@ function ClubCreateMemberAddPage({
                   <img
                     src={
                       member.image
-                        ? `${import.meta.env.VITE_MINIO_URL}bucket-02/${
+                        ? `${import.meta.env.VITE_MINIO_URL}nutshell/${
                             member.image
                           }`
                         : "https://img.placeholder.com/50"
