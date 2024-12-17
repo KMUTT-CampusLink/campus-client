@@ -18,7 +18,7 @@ function TransactionCard({ transactions }) {
               <span className="font-medium">{t.amount} THB</span>
             </div>
             <span className="text-sm text-gray-500">
-              {new Date(t.issued_date).toLocaleDateString()}
+              {new Date(t.paid_date).toLocaleDateString()}
             </span>
           </li>
         ))}

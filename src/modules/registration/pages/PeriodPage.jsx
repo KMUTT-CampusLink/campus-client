@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import NavBar from "../components/NavBarComponents/NavBar";
 import { mainStyles, containerDivStyles, button } from "../styles/styles";
 import HeadLineCard from "../components/HeadLineCard";
@@ -7,38 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { usePeriodBySemesterId } from "../services/queries";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function PeriodPage() {
   const regis = localStorage.getItem("event");
   const semesterId = localStorage.getItem("semesterId");
-  const { data: periods } = usePeriodBySemesterId(semesterId);
-  const [registrationPeriod, setRegistrationPeriod] = useState(null);
-  const [lateRegistrationPeriod, setLateRegistrationPeriod] = useState(null);
-  const [withdrawPeriod, setWithdrawPeriod] = useState(null);
-
-  useEffect(() => {
-    if (periods) {
-      // Find the "Late Registration" and "Withdraw Period"
-      const registration = periods.find(
-        (period) => period.event === "Registration"
-      );
-      const lateRegistration = periods.find(
-        (period) => period.event === "Late Registration"
-      );
-      const withdraw = periods.find((period) => period.event === "Withdraw");
-
-      setRegistrationPeriod(registration);
-      setLateRegistrationPeriod(lateRegistration);
-      setWithdrawPeriod(withdraw);
-    }
-  }, [periods]);
+  const { data: periods, isLoading, error } = usePeriodBySemesterId(semesterId);
 
   const Button = ({ to, disabled, icon, text }) => (
     <Link to={to}>
       <button
-        className={`${button} ${
-          disabled ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`${button} ${disabled ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         disabled={disabled}
       >
         {icon && <FontAwesomeIcon icon={faLock} className="px-2" />}
@@ -53,7 +32,13 @@ function PeriodPage() {
     const options = { day: "2-digit", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   };
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
+  if (error) {
+    return <div>Error loading periods</div>;
+  }
   return (
     <div className={containerDivStyles}>
       <NavBar />
@@ -64,7 +49,7 @@ function PeriodPage() {
           <div className="">
             <SInfoCard />
             <div className="grid w-1/2 gap-4 mx-auto mt-8">
-              {regis === "Withdraw" ? (
+              {regis === "Withdraw" || regis === "Early Withdraw" ? (
                 <Button to="/regis/course" text="Withdraw Courses" />
               ) : (
                 <>
@@ -87,35 +72,15 @@ function PeriodPage() {
           <div className="flex items-center justify-center text-xs md:text-base">
             <div className="w-3/4 p-2 rounded-lg bg-gradient-to-r from-orange-800 via-orange-500 to-orange-300">
               <div className="flex flex-col p-8 space-y-6 bg-white rounded-lg">
-                {registrationPeriod && (
-                  <div className="pl-4 border-l-4 border-orange-600">
-                    <p className="md:text-xl font-bold">
-                      {registrationPeriod.event}
-                    </p>
-                    <p>{`${formatDate(
-                      registrationPeriod.start_date
-                    )} - ${formatDate(registrationPeriod.end_date)}`}</p>
-                  </div>
-                )}
-                {lateRegistrationPeriod && (
-                  <div className="pl-4 border-l-4 border-orange-600">
-                    <p className="md:text-xl font-bold">
-                      {lateRegistrationPeriod.event}
-                    </p>
-                    <p>{`${formatDate(
-                      lateRegistrationPeriod.start_date
-                    )} - ${formatDate(lateRegistrationPeriod.end_date)}`}</p>
-                  </div>
-                )}
-                {withdrawPeriod && (
-                  <div className="pl-4 border-l-4 border-orange-600">
-                    <p className="md:text-xl font-bold">
-                      {withdrawPeriod.event}
-                    </p>
-                    <p>{`${formatDate(
-                      withdrawPeriod.start_date
-                    )} - ${formatDate(withdrawPeriod.end_date)}`}</p>
-                  </div>
+                {periods && periods.length > 0 ? (
+                  periods.map((period, index) => (
+                    <div key={index} className="pl-4 border-l-4 border-orange-600 my-2">
+                      <p className="md:text-xl font-bold">{period.event}</p>
+                      <p>{`${formatDate(period.start_date)} - ${formatDate(period.end_date)}`}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-600">No periods available.</p>
                 )}
               </div>
             </div>
