@@ -15,7 +15,7 @@ export const FileUploadPopup = ({ assignmentId, studentId, onClose }) => {
 
   useEffect(() => {
     // Check if submission exists
-    if (submissionFilePath?.data?.file_path) {
+    if (submissionFilePath?.data?.data?.file_path) {
 
       setIsSubmissionAvailable(true);
     } else {

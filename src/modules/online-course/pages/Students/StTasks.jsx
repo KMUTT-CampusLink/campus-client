@@ -137,7 +137,7 @@ const StTasks = () => {
                   <div>
                     <a
                       href={`${MINIO_BASE_URL}/${task.description}`}
-                      download={`Assignment-${task.title}.pdf`}
+                      download
                       className="text-blue-500 underline"
                     >
                       {task.title}
