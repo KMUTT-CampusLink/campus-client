@@ -81,6 +81,7 @@ export default function ProfessorScoringPage() {
             );
             return {
               questionText: question.title || "",
+              questionImg: question.question_img || "",
               type: question.type
                 ? question.type.replace("_", " ")
                 : "Multiple Choice",
@@ -243,6 +244,7 @@ export default function ProfessorScoringPage() {
                 questionid={filteredItem.question_id}
                 questionNo={index}
                 question={filteredItem.questionText}
+                questionImg={filteredItem.questionImg}
                 choice={filteredItem.options}
                 type={filteredItem.type}
               />
