@@ -96,7 +96,6 @@ export default function Question({
           </button>
         </div>
       </div>
-
       <textarea
         className="border rounded-xl h-[100px] p-[10px] w-full"
         type="text"
@@ -108,9 +107,7 @@ export default function Question({
           setExam({ ...exam, questions: updatedQuestions });
         }}
       />
-
-      <QuestionImageUploader setImage={setImage} />
-
+      <QuestionImageUploader setImage={setImage} imgURL={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${question.questionImg}`}/>
       <select
         className="w-[200px] border rounded-lg p-[7px]"
         value={question.type}
