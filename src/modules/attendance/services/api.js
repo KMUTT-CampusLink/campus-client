@@ -81,3 +81,12 @@ export const getStudentAttendance = async(sectionId) => {
     return error.response.data;
   }
 }
+
+export const getFaceData = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/getFaceData/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}

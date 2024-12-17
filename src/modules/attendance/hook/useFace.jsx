@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate,useParams } from "react-router-dom";
-import { markAttendance, getCourseHeader, generateFaceAttendance } from "../services/api";
-import moment from "moment";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  generateFaceAttendance,
+  getCourseHeader,
+  getFaceData,
+} from "../services/api";
+import { markAttendance } from "../services/api";
 import * as faceapi from "face-api.js";
 
 const useFace = () => {
@@ -11,18 +15,40 @@ const useFace = () => {
   const [loadingModels, setLoadingModels] = useState(true);
   const [faceMatcher, setFaceMatcher] = useState(null);
   const [detectedIds, setDetectedIds] = useState({});
+  const [studentData, setStudentData] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
+  const [refFaces, setRefFaces] = useState([]);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
-  const {sectionId} = useParams();
+  const { sectionId } = useParams();
   const COOLDOWN_PERIOD = 5000; // ms (5seconds)
+  useEffect(() => {
+    const fetchFaceData = async () => {
+      try {
+        const response = await getFaceData(sectionId);
+        const data = response.data.data;
+        console.log("Fetched Data:", data);
 
-  const refFaces = [
-    { image: "/mockUpDataSet/832.jpg", label: "STU00020" },
-    { image: "/mockUpDataSet/845.jpg", label: "STU00022" },
-    { image: "/mockUpDataSet/850.jpg", label: "STU00088" },
-    { image: "/mockUpDataSet/857.jpg", label: "STU00051" },
-  ];
+        const updatedRefFaces = data.map((student) => ({
+          image: `${import.meta.env.VITE_MINIO_URL}${
+            import.meta.env.VITE_MINIO_BUCKET_NAME
+          }/${student.student.image}`,
+          label: student.student.id,
+          name: `${student.student.firstname} ${student.student.lastname}`,
+        }));
+
+        // console.log("Updated RefFaces:", updatedRefFaces);
+        setRefFaces(updatedRefFaces);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchFaceData();
+  }, [sectionId]);
+
+  console.log(refFaces);
 
   const items = [
     { label: "Attendance", key: "Attendance" },
@@ -32,11 +58,11 @@ const useFace = () => {
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
-      navigate(`/attendance/professor/${sectionId}`);
+      navigate("/attendance");
     } else if (key === "QR CODE") {
-      navigate(`/attendance/professor/${sectionId}/profQr`);
-    } else if(key == "Face Attendance"){
-      navigate(`/attendance/professor/${sectionId}/faceAttendance`)
+      navigate("/attendance/qr");
+    } else if (key === "Face Attendance") {
+      navigate("/attendance/faceAttendance");
     }
   };
 
@@ -84,20 +110,27 @@ const useFace = () => {
 
   const generateLabeledDescriptors = async () => {
     const labeledDescriptors = [];
-
+    if (!refFaces || refFaces.length === 0) {
+      console.error("No reference faces to generate labeled descriptors.");
+      return;
+    }
     for (const refFace of refFaces) {
-      const img = await faceapi.fetchImage(refFace.image);
-      const fullFaceDescription = await faceapi
-        .detectSingleFace(img)
-        .withFaceLandmarks()
-        .withFaceDescriptor();
+      try {
+        const img = await faceapi.fetchImage(refFace.image);
+        const fullFaceDescription = await faceapi
+          .detectSingleFace(img)
+          .withFaceLandmarks()
+          .withFaceDescriptor();
 
-      if (fullFaceDescription) {
-        labeledDescriptors.push(
-          new faceapi.LabeledFaceDescriptors(refFace.label, [
-            fullFaceDescription.descriptor,
-          ])
-        );
+        if (fullFaceDescription) {
+          labeledDescriptors.push(
+            new faceapi.LabeledFaceDescriptors(refFace.label, [
+              fullFaceDescription.descriptor,
+            ])
+          );
+        }
+      } catch (error) {
+        console.error(`Error processing image for ${refFace.label}:`, error);
       }
     }
 
@@ -121,40 +154,67 @@ const useFace = () => {
       faceapi.matchDimensions(canvas, displaySize);
       const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-      if (detections.length > 0) {
-        detections.forEach((detection) => {
-          const bestMatch = faceMatcher.findBestMatch(detection.descriptor);
-          const studentId = bestMatch.label;
+      // Clear the canvas
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          if (studentId !== "unknown") {
-            const now = Date.now();
+      // Loop through each detection and handle it
+      resizedDetections.forEach((detection) => {
+        const bestMatch = faceMatcher.findBestMatch(detection.descriptor);
+        const studentId =
+          bestMatch.distance <= 0.45 ? bestMatch.label : "unknown";
+        const studentData = refFaces.find(
+          (refFace) => refFace.label === studentId
+        );
+        const studentName = studentData ? studentData.name : "Unknown";
 
-            // Add Cooldown logic
-            if (
-              !detectedIds[studentId] ||
-              now - detectedIds[studentId] > COOLDOWN_PERIOD
-            ) {
-              console.log(`Matched: ${studentId}`);
+        // Draw the bounding box and text for each face detection
+        const box = detection.detection.box;
+        ctx.strokeStyle = bestMatch.distance <= 0.45 ? "green" : "red";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(box.x, box.y, box.width, box.height);
+        const text =
+          bestMatch.distance <= 0.45
+            ? `${studentName} (${studentId})`
+            : "Unknown";
+        ctx.fillStyle = bestMatch.distance <= 0.45 ? "green" : "red";
+        ctx.font = "16px Arial";
 
-              // Send attendance to backend
-              if (attendanceId) {
-                markAttendance(attendanceId, studentId)
-                  .then((response) => {
-                    console.log(`Attendance marked for ${studentId}`);
-                  })
-                  .catch((error) => {
-                    console.error(`Failed to mark attendance for ${studentId}`);
-                  });
-              }
+        const textX = box.x;
+        const textY = box.y + box.height + 20;
+        const textWidth = ctx.measureText(text).width;
+        ctx.fillStyle =
+          bestMatch.distance <= 0.45
+            ? "rgba(0, 128, 0, 0.7)"
+            : "rgba(255, 0, 0, 0.7)";
+        ctx.fillRect(box.x, box.y + box.height + 5, textWidth + 10, 30);
+        ctx.fillStyle = "white";
+        ctx.fillText(text, textX, textY);
 
-              // Update cooldown timestamp
-              setDetectedIds((prev) => ({ ...prev, [studentId]: now }));
-            } else {
-              console.log(`Cooldown active for: ${studentId}`);
-            }
+        // Handle attendance marking if the face is recognized
+        if (bestMatch.distance <= 0.45 && studentId !== "unknown") {
+          const now = Date.now();
+          if (
+            !detectedIds[studentId] ||
+            now - detectedIds[studentId] > COOLDOWN_PERIOD
+          ) {
+            markAttendance(attendanceId, studentId)
+              .then(() => {
+                console.log(
+                  `Attendance marked for ${studentName} (${studentId})`
+                );
+              })
+              .catch(() => {
+                console.error(
+                  `Failed to mark attendance for ${studentName} (${studentId})`
+                );
+              });
+            setDetectedIds((prev) => ({ ...prev, [studentId]: now }));
+          } else {
+            console.log(`Cooldown active for: ${studentId}`);
           }
-        });
-      }
+        }
+      });
 
       faceapi.draw.drawDetections(canvas, resizedDetections);
     }
@@ -194,7 +254,7 @@ const useFace = () => {
           setLoading(false);
         }
       };
-  
+
       fetchCourse();
     }, [sectionId]);
 
