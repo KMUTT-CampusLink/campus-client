@@ -49,7 +49,7 @@ function StudentHomePage() {
       <div className="mx-[35px] xl:mx-[100px] pt-20">
           <BackBTN />
         <h2 className="font-black text-[25px] xl:text-[40px] text-[#D4A015]">
-          {courseTitle} : {sectionId}
+          {courseTitle}
         </h2>
         <div className={`${inProgress.length > 0 ? "block" : "hidden"}`}>
           <hr className="mt-[20px] bg-[#798184] flex justify-center" />

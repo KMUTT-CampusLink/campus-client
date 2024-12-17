@@ -40,7 +40,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
       navigate(`/courses/tr/${subPath}`);
     }
   };
-
+  
   return (
     <div
       className={`z-10 max-sm:w-40 text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
@@ -136,7 +136,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
 
             {/* Attendance Link */}
             <li
-              // onClick={() => handleNavigation("attendance")}
+              onClick={() => navigate(`/attendance/student/1001`)}
               className="mb-4 p-2 border-b-2"
             >
               <span

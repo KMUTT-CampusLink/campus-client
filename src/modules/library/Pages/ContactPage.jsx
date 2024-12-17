@@ -4,7 +4,7 @@ import MainNavbar from "../components/MainNavbar";
 
 function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-w-[850px] bg-gray-50">
       <NavBar />
       <main className="pt-20 pb-6 mx-auto">
         <MainNavbar />
