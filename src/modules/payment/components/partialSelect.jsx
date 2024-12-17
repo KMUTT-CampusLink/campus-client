@@ -7,6 +7,7 @@ import { previewInstallment, createInstallment } from "../services/api";
 const PartialSelect = ({ setShowPartialSelect }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [installmentsPreview, setInstallmentsPreview] = useState([]);
+  const [interestRate, setInterestRate] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const { id: invoiceId } = useParams(); // Get invoiceId from route parameters
@@ -23,6 +24,7 @@ const PartialSelect = ({ setShowPartialSelect }) => {
         try {
           const response = await previewInstallment(invoiceId, numInstallments);
           setInstallmentsPreview(response.data.installment_preview || []); // Store data in state
+          setInterestRate(response.data.interest_rate || 0); // Set interest rate
         } catch (error) {
           console.error("Error fetching installment preview:", error);
         }
@@ -88,10 +90,11 @@ const PartialSelect = ({ setShowPartialSelect }) => {
               {["Two Times", "Three Times"].map((option, index) => (
                 <div
                   key={index}
-                  className={`flex items-center p-4 border rounded-lg cursor-pointer ${selectedOption === option
+                  className={`flex items-center p-4 border rounded-lg cursor-pointer ${
+                    selectedOption === option
                       ? "border-payment-red bg-gray-100"
                       : "border-gray-300"
-                    }`}
+                  }`}
                   onClick={() => setSelectedOption(option)}
                 >
                   <input
@@ -135,7 +138,7 @@ const PartialSelect = ({ setShowPartialSelect }) => {
               )}
             </div>
             <p className="text-center body-1 text-gray-600 mt-4">
-              Interest rate: 5% per year
+              Interest rate: {(interestRate * 100).toFixed(2)}% per year
             </p>
             <button
               className="btn bg-payment-red hover:bg-red-500 text-white px-10 py-2 rounded-md shadow-md body-1 mt-6 w-full"
