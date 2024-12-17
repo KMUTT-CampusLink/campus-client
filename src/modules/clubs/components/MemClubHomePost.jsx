@@ -135,6 +135,43 @@ const MemClubHomePost = (props) => {
     }
   };
 
+  const cancelReservation = async (reservationId, clubAnnouncementId) => {
+    try {
+      const response = await axiosInstance.post("/clubs/events/cancel", {
+        reservationId,
+      });
+  
+      if (response.data.success) {
+        alert("Reservation cancelled successfully!");
+  
+        // Update reserved seats and reservation status
+        setClubAnnouncement((prevAnnouncements) =>
+          prevAnnouncements.map((announcement) =>
+            announcement.id === clubAnnouncementId
+              ? {
+                  ...announcement,
+                  reserved_seats: Math.max(
+                    (announcement.reserved_seats || 0) - 1,
+                    0
+                  ),
+                }
+              : announcement
+          )
+        );
+  
+        // Reset status in the reservationStatus state
+        setReservationStatus((prevState) => ({
+          ...prevState,
+          [clubAnnouncementId]: { status: "Cancelled", invoiceId: null },
+        }));
+      } else {
+        console.error("Error cancelling reservation:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error cancelling reservation:", error);
+    }
+  };  
+  
   const handlePendingPayment = (invoiceId) => {
     navigate(`/payment/payment-invoice/${invoiceId}`); // Navigate to the payment page
   };
@@ -142,16 +179,26 @@ const MemClubHomePost = (props) => {
   const getButton = (statusObj, announcementId) => {
     console.log(statusObj, announcementId);
     const { status, invoiceId } = statusObj || {};
-    if (status === "Unreserved") {
+    // if (status === "Unreserved") {
+    //   return (
+    //     <button
+    //       onClick={() => reserveSeat(announcementId)}
+    //       className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+    //     >
+    //       Reserve
+    //     </button>
+    //   );
+    // }
+    if (status === "Unreserved" || status === "Cancelled") {
       return (
         <button
           onClick={() => reserveSeat(announcementId)}
           className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
         >
-          Reserve
+          {status === "Cancelled" ? "Reserve Again" : "Reserve"}
         </button>
       );
-    }
+    }    
     if (status === "Unpaid") {
       if (!invoiceId) {
         console.error(`Missing invoiceId for announcement ${announcementId}`);
