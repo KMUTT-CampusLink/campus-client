@@ -17,6 +17,7 @@ const ChatPage = () => {
   const [dummyAns, setDummyAns] = useState([]);
   const [startChat, setStartChat] = useState(false);
   const [trips, setTrips] = useState([]);
+  const [bookdata, setBookdata] = useState([]);
   const textRef = useRef(null);
   const botImage = "chatbot/G12_Bot_Logo_Transparent.png";
 
@@ -60,6 +61,8 @@ const ChatPage = () => {
         const ans = reply.data.replyText;
         const nextQuestions = reply.data.nextQuestions;
         setTrips(reply.data.trips);
+        setBookdata(reply.data.book[0]);
+        // console.log(bookdata);
         if (nextQuestions.length > 0) {
           setDummyFaqs(nextQuestions.map(que => que.next_question));
         }
@@ -103,7 +106,7 @@ const ChatPage = () => {
             </div>
           )}
           {/* messaging area */}
-          {startChat && <MessageArea questions={questions} dummyAns={dummyAns} profilePic={botImage} trips={trips}/>}
+          {startChat && <MessageArea questions={questions} dummyAns={dummyAns} profilePic={botImage} trips={trips} bookdata={bookdata}/>}
         </div>
         {/* chat input area */}
         <div className="w-full h-fit flex flex-col justify-center items-center pb-0 lg:pb-2 mb-0">
