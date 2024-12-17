@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { useParams } from "react-router-dom";
 
 const SectionAdd = ({ onClose, onAdd }) => {
+  const { code } = useParams();
   const [p, setP] = useState([]);
   const [professor, setProfessor] = useState(null);
   const [filteredProfessors, setFilteredProfessors] = useState([]);
@@ -15,11 +17,19 @@ const SectionAdd = ({ onClose, onAdd }) => {
     start_time: "",
     end_time: "",
     room_name: "",
+    id: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "start_time" || name === "end_time") {
+      const formattedTime = value.length === 5 ? `${value}:00` : value; // Ensure HH:MM:SS
+      setFormData({ ...formData, [name]: formattedTime });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleProfessorNameChange = (e) => {
@@ -40,16 +50,37 @@ const SectionAdd = ({ onClose, onAdd }) => {
       firstname: prof.firstname,
       midname: prof.middlename,
       lastname: prof.lastname,
+      id: prof.id,
     });
     setProfessor(prof);
-    setProfessorName(`${prof.firstname} ${prof.middlename} ${prof.lastname}`); // Update input field
+    setProfessorName(`${prof.firstname}  ${prof.lastname}`); // Update input field
     setFilteredProfessors([]); // Hide suggestions
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAdd(formData);
-    onClose();
+
+    try {
+      // Make a POST request to the backend with formData
+      const response = await axiosInstance.post(
+        `employ/postSection/${code}`,
+        formData
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        console.log("Section added successfully:", response.data); // Optional: Notify parent component about the new section
+        onClose(); // Close the form modal
+        location.reload();
+      } else {
+        console.error("Failed to add section. Status:", response.status);
+        alert("Failed to add section. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding section:", error);
+      alert(
+        "An error occurred while adding the section. Please check the inputs and try again."
+      );
+    }
   };
 
   useEffect(() => {
@@ -63,12 +94,14 @@ const SectionAdd = ({ onClose, onAdd }) => {
     };
     fetchEmployeeData();
   }, []);
-  console.log(professor)
+  console.log(professor);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white rounded-lg shadow-lg p-6 lg:w-[450px] md:w-[400px] sm:w-[350px] max-h-[75vh] lg:max-h-[100vh] overflow-y-scroll">
-        <h2 className="text-center text-xl text-[#D4A015] md:text-2xl font-semibold mb-4 font-geologica">Add Section</h2>
+        <h2 className="text-center text-xl text-[#D4A015] md:text-2xl font-semibold mb-4 font-geologica">
+          Add Section
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 font-geologica">
             <div className="relative">
@@ -132,7 +165,7 @@ const SectionAdd = ({ onClose, onAdd }) => {
 
             <input
               type="text"
-              name="room_id"
+              name="room_name"
               value={formData.room_name}
               onChange={handleInputChange}
               placeholder="Classroom"
@@ -151,6 +184,7 @@ const SectionAdd = ({ onClose, onAdd }) => {
 
             <button
               type="submit"
+              onClick={handleSubmit}
               className="w-[45%] py-2 text-white font-opensans bg-[#D4A015] font-semibold rounded-md hover:shadow-lg"
             >
               Add

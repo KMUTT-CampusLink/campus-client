@@ -2,75 +2,49 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 
-const SectionUpdate = ({ section, professor, onClose }) => {
+const SectionUpdate = ({ section, onClose }) => {
   const { code } = useParams();
+  const { name, day, start_time, end_time, room, id, professor } = section;
 
-  const [p, setP] = useState([]);
-  const [pro, setPro] = useState(null); // Final selected professor
-  const [filteredProfessors, setFilteredProfessors] = useState([]);
-  const [professorName, setProfessorName] = useState(""); // Input field for Professor Name
+  const [p, setP] = useState([]); // List of professors
+  const [filteredProfessors, setFilteredProfessors] = useState([]); // Filtered list for suggestions
+  const [professorName, setProfessorName] = useState(""); // Professor input field
   const [formData, setFormData] = useState({
     firstname: "",
     midname: "",
     lastname: "",
+    emp_id: "", // Add professor_id for backend mapping
     name: "",
     day: "",
     start_time: "",
     end_time: "",
     room_name: "",
-    id: section.id,
   });
 
+  // Initialize formData with section data
   useEffect(() => {
+    const assignedProfessor = professor?.[0]?.employee || {};
+
     setFormData({
-      firstname: professor?.firstname || "",
-      midname: professor?.midname || "",
-      lastname: professor?.lastname || "",
+      firstname: assignedProfessor.firstname || "",
+      midname: assignedProfessor.midname || "",
+      lastname: assignedProfessor.lastname || "",
+      emp_id: assignedProfessor.id || "", // Store professor ID
       name: section?.name || "",
       day: section?.day || "",
       start_time: section?.start_time || "",
       end_time: section?.end_time || "",
       room_name: section?.room?.name || "",
-      id: section.id,
     });
 
-    setPro(professor || null);
     setProfessorName(
-      professor
-        ? `${professor.firstname} ${professor.midname} ${professor.lastname}`
+      assignedProfessor.firstname && assignedProfessor.lastname
+        ? `${assignedProfessor.firstname} ${assignedProfessor.lastname}`
         : ""
     );
-  }, [professor, section]);
+  }, [section, professor]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleProfessorNameChange = (e) => {
-    const value = e.target.value;
-    setProfessorName(value);
-    setFilteredProfessors(
-      p.filter((prof) =>
-        `${prof.firstname} ${prof.middlename} ${prof.lastname}`
-          .toLowerCase()
-          .includes(value.toLowerCase())
-      )
-    );
-  };
-
-  const handleProfessorSelect = (prof) => {
-    setFormData({
-      ...formData,
-      firstname: prof.firstname,
-      midname: prof.middlename,
-      lastname: prof.lastname,
-    });
-    setPro(prof);
-    setProfessorName(`${prof.firstname} ${prof.middlename} ${prof.lastname}`);
-    setFilteredProfessors([]);
-  };
-
+  // Fetch list of professors
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
@@ -83,36 +57,71 @@ const SectionUpdate = ({ section, professor, onClose }) => {
     fetchEmployeeData();
   }, []);
 
+  // Input changes handler
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle professor search input
+  const handleProfessorNameChange = (e) => {
+    const value = e.target.value;
+    setProfessorName(value);
+    setFilteredProfessors(
+      p.filter((prof) =>
+        `${prof.firstname} ${prof.middlename} ${prof.lastname}`
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      )
+    );
+  };
+
+  // Select professor from suggestions
+  const handleProfessorSelect = (prof) => {
+    setFormData((prev) => ({
+      ...prev,
+      firstname: prof.firstname,
+      midname: prof.middlename,
+      lastname: prof.lastname,
+      emp_id: prof.id, // Set professor ID
+    }));
+    setProfessorName(`${prof.firstname} ${prof.lastname}`);
+    setFilteredProfessors([]);
+  };
+
+  // Submit updated section data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = { ...formData };
-    const filteredSectionData = Object.fromEntries(
-      Object.entries(payload).filter(([key, value]) => value)
-    );
-
     try {
+      // Send updated data to backend
       const response = await axiosInstance.post(
-        `/employ/updateSection/${code}/${id}`,
-        filteredSectionData
+        `employ/updateSection/${code}/${section.id}`,
+        formData
       );
-      console.log("Update Response:", response.data);
 
-      onClose(); // Close the popup
+      if (response.status === 200 || response.status === 201) {
+        console.log("Section updated successfully:", response.data);
+        onClose(); // Close the modal
+        location.reload(); // Reload the page
+      } else {
+        console.error("Failed to update section:", response.status);
+      }
     } catch (error) {
-      console.error("Error updating section:", error.response?.data || error);
+      console.error("Error updating section:", error);
+      alert("Failed to update the section. Please try again.");
     }
   };
-  console.log(pro)
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-lg shadow-lg p-6 lg:w-[450px] md:w-[400px] sm:w-[350px] max-h-[75vh] lg:max-h-[100vh] overflow-y-scroll">
-        <h2 className="text-center text-xl text-[#D4A015] md:text-2xl font-semibold mb-4 font-geologica">
+      <div className="bg-white rounded-lg shadow-lg p-6 lg:w-[450px] md:w-[400px] sm:w-[350px]">
+        <h2 className="text-center text-xl text-[#D4A015] font-semibold mb-4">
           Update Section
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-4 font-geologica">
+          <div className="flex flex-col gap-4">
+            {/* Professor Name Input */}
             <div className="relative">
               <input
                 type="text"
@@ -122,7 +131,7 @@ const SectionUpdate = ({ section, professor, onClose }) => {
                 className="border border-gray-300 rounded-md p-2 w-full"
               />
               {filteredProfessors.length > 0 && (
-                <ul className="absolute z-10 bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-y-auto w-full">
+                <ul className="absolute z-10 bg-white border rounded-md shadow-lg mt-1 max-h-40 overflow-y-auto w-full">
                   {filteredProfessors.map((prof) => (
                     <li
                       key={prof.id}
@@ -141,8 +150,8 @@ const SectionUpdate = ({ section, professor, onClose }) => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Section"
-              className="border border-gray-300 rounded-md p-2 w-full"
+              placeholder="Section Name"
+              className="border border-gray-300 rounded-md p-2"
             />
 
             <input
@@ -151,7 +160,7 @@ const SectionUpdate = ({ section, professor, onClose }) => {
               value={formData.day}
               onChange={handleInputChange}
               placeholder="Day"
-              className="border border-gray-300 rounded-md p-2 w-full"
+              className="border border-gray-300 rounded-md p-2"
             />
 
             <input
@@ -159,8 +168,8 @@ const SectionUpdate = ({ section, professor, onClose }) => {
               name="start_time"
               value={formData.start_time}
               onChange={handleInputChange}
-              placeholder="Start Time"
-              className="border border-gray-300 rounded-md p-2 w-full"
+              placeholder="Start Time (e.g., 16:00:00)"
+              className="border border-gray-300 rounded-md p-2"
             />
 
             <input
@@ -168,8 +177,8 @@ const SectionUpdate = ({ section, professor, onClose }) => {
               name="end_time"
               value={formData.end_time}
               onChange={handleInputChange}
-              placeholder="End Time"
-              className="border border-gray-300 rounded-md p-2 w-full"
+              placeholder="End Time (e.g., 18:00:00)"
+              className="border border-gray-300 rounded-md p-2"
             />
 
             <input
@@ -177,8 +186,8 @@ const SectionUpdate = ({ section, professor, onClose }) => {
               name="room_name"
               value={formData.room_name}
               onChange={handleInputChange}
-              placeholder="Classroom"
-              className="border border-gray-300 rounded-md p-2 w-full"
+              placeholder="Room Name"
+              className="border border-gray-300 rounded-md p-2"
             />
           </div>
 
@@ -186,14 +195,13 @@ const SectionUpdate = ({ section, professor, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="w-[45%] py-2 text-black font-opensans font-semibold border border-gray-300 rounded-md hover:shadow-lg"
+              className="w-[45%] py-2 text-black border border-gray-300 rounded-md"
             >
               Cancel
             </button>
-
             <button
               type="submit"
-              className="w-[45%] py-2 text-white font-opensans bg-[#D4A015] font-semibold rounded-md hover:shadow-lg"
+              className="w-[45%] py-2 text-white bg-[#D4A015] rounded-md"
             >
               Update
             </button>

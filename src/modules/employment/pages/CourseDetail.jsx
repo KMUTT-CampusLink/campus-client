@@ -54,10 +54,15 @@ const CourseDetail = () => {
         const response = await axiosInstance.get(
           `employ/fetchCourseOnly/${code}`
         );
-        setC(response.data);
-        console.log("THIS",c[0]);
+        if (response.data && response.data.length > 0) {
+          setC(response.data); // Set the array from backend
+        } else {
+          console.warn("No course data received");
+          setC([]); // Set an empty array if no data
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
+        setC([]); // Fallback to empty array on error
       }
     };
 
@@ -113,7 +118,9 @@ const CourseDetail = () => {
               onClick={handleClickback}
             />
             <h1 className="text-[#D4A015] font-georama text-xl font-semibold md:text-3xl ml-3 md:ml-9">
-              {c[0].code} - {c[0].name}
+              {c?.[0]?.code
+                ? `${c[0].code} - ${c[0].name}`
+                : "Course details unavailable"}
             </h1>
           </div>
 
