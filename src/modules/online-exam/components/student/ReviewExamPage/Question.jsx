@@ -1,6 +1,7 @@
 export default function Question({
   questionNo,
   question,
+  questionImg,
   choice,
   type,
   studentAnswer,
@@ -17,6 +18,7 @@ export default function Question({
         </h1>
       </div>
       <div className="flex flex-col gap-[10px] pt-[20px]">
+      <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto pb-[10px]" />
         {type !== "Essay" &&
           choice.map((choiceObj, index) => {
             return (
@@ -27,9 +29,8 @@ export default function Question({
                     <input
                       type={type === "Checklist" ? "checkbox" : "radio"}
                       name={`radio-${questionNo}`}
-                      className={`${
-                        type === "Checklist" ? "checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]" : "radio checked:bg-[#C76650] border-[1px] border-gray-500"
-                      }`}
+                      className={`${type === "Checklist" ? "checkbox [--chkbg:#C76650] [--chkfg:white] checked:border-[#C76650]" : "radio checked:bg-[#C76650] border-[1px] border-gray-500"
+                        }`}
                       checked={
                         studentAnswer.find(
                           (sa) => sa.answer == choiceObj.choice_text

@@ -12,7 +12,7 @@ import {
   getFullMark,
   updateExamSettings,
   getExamDataById,
-  checkHasParticiipant
+  checkHasParticipant
 } from "../../services/apis/professerApi";
 
 export default function ProfessorExamSettingPage() {
@@ -66,7 +66,7 @@ export default function ProfessorExamSettingPage() {
 
   const getCheckHasParticipant = async () => {
     try {
-      const response = await checkHasParticiipant(examId);
+      const response = await checkHasParticipant(examId);
       setHasParticipant(response.data.hasParticipant);
     } catch (error) {
       console.log(error);
@@ -168,7 +168,7 @@ export default function ProfessorExamSettingPage() {
         pin: exam.pin,
         title: exam.title,
         is_publish_immediately: exam.is_publish_immediately,
-        publish_score_status: exam.is_publish_immediately,
+        publish_score_status: exam.publish_score_status,
       };
 
       try {
@@ -210,7 +210,7 @@ export default function ProfessorExamSettingPage() {
       <NavBar />
       {/* Heading */}
       <div className=" px-[35px]  lg:px-[100px] pt-20">
-      <BackBTN />
+        <BackBTN />
         <div className="flex justify-between pb-[35px] pt-[25px] items-center">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Exam Setting</p>
@@ -403,12 +403,12 @@ export default function ProfessorExamSettingPage() {
             <div className="flex flex-col items-center">
               <span className="label-text pb-[2px]">Current stage</span>
               <button
-                className={`btn ${
-                  exam.publish_status
+                className={`btn ${exam.publish_status
                     ? "bg-green-500 hover:bg-green-700"
                     : "bg-red-500 hover:bg-red-700"
-                } text-white`}
+                  } text-white`}
                 onClick={() => setShowModal(true)}
+                disabled={hasParticipant}
               >
                 {exam.publish_status ? "Published" : "Unpublished"}
               </button>
@@ -422,12 +422,12 @@ export default function ProfessorExamSettingPage() {
                 <dialog id="my_modal_1" className="modal modal-open">
                   <div className="modal-box relative z-50">
                     <h3 className="font-bold text-lg">
-                      {exam.publish_status
+                      {!exam.publish_status
                         ? "Are you sure you want to publish the exam?"
                         : "Are you sure you want to unpublish the exam?"}
                     </h3>
                     <p className="py-4">
-                      {exam.publish_status
+                      {!exam.publish_status
                         ? "Publishing this exam will make it accessible."
                         : "Unpublishing this exam will make it inaccessible"}
                     </p>
@@ -457,7 +457,7 @@ export default function ProfessorExamSettingPage() {
         </div>
         {/* Delete exam button*/}
         <div className="flex justify-center mb-[60px] gap-[10px] px-[100]">
-          <DeleteExam sectionId={exam.sectionId} examId={examId} status={exam.publish_status}/>
+          <DeleteExam sectionId={exam.sectionId} examId={examId} status={exam.publish_status} participant={hasParticipant} />
           {/* Submit change button */}
           <form>
             <button
@@ -473,9 +473,8 @@ export default function ProfessorExamSettingPage() {
           {alertVisible && (
             <div className="toast toast-center">
               <div
-                className={`alert ${
-                  isCopied ? "alert-success" : "alert-error"
-                }`}
+                className={`alert ${isCopied ? "alert-success" : "alert-error"
+                  }`}
               >
                 <span className="text-white">{alertMessage}</span>
               </div>

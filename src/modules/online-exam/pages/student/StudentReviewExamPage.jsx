@@ -9,7 +9,7 @@ import { getStudentExamReview } from "../../services/apis/studentApi";
 export default function StudentReviewExamPage() {
   const [data, setData] = useState(null);
   const [permission, setPermission] = useState(false);
-  const { examId } = useParams();
+  const examId = useParams().examId;
   const studentExamId = useParams().studentExamId;
   const fetchReview = async () => {
     try {
@@ -27,6 +27,8 @@ export default function StudentReviewExamPage() {
   if (!data) {
     return;
   }
+
+  console.log(data)
 
   return (
     <>
@@ -67,6 +69,7 @@ export default function StudentReviewExamPage() {
                     questionNo={item.id}
                     mark={item.mark}
                     score={item.score}
+                    questionImg={item.question_img}
                     className="w-[67%] h-auto"
                   />
                 ))}

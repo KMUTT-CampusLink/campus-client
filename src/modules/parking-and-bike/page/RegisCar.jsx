@@ -1,60 +1,50 @@
-import { useState } from 'react';
-import Image from '../component/Help/Image';
-import Info from '../component/Help/Info';
-import NavBar from '../../registration/components/NavBarComponents/NavBar';
-import { postRegisterCar } from '../services/api';
+import NavBar from "../../registration/components/NavBarComponents/NavBar";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCar } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { postRegisterCar } from "../services/api";
 
 function RegisCar() {
-  const [name, setName] = useState('');
-  const [license, setLicense] = useState('');
-  const [errors, setErrors] = useState({ name: '', license: '' });
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [brand, setBrand] = useState('');
+  const [licenseNo, setLicenseNo] = useState('');
+  const [confirmLicenseNo, setConfirmLicenseNo] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let valid = true;
-    const newErrors = { name: '', license: '' };
-
-    if (!name.trim()) {
-      newErrors.name = 'Name is required';
-      valid = false;
+  const checkError = () => {
+    if (licenseNo !== confirmLicenseNo) {
+      setError('License numbers do not match');
+      return false;
+    } else if (licenseNo === '' || confirmLicenseNo === '' || brand === '') {
+      setError('Please fill in all fields');
+      return false;
+    } else {
+      return true;
     }
+  }
 
-    if (!license.trim()) {
-      newErrors.license = 'License is required';
-      valid = false;
-    }
-
-    setErrors(newErrors);
-
-    if (valid) {
+  const handleRegister = async () => {
+    if (checkError()) {
       try {
-
         const requestData = {
-          name: name,
-          license_no: license
+          name: brand,
+          license_no: licenseNo
         };
+
         const response = await postRegisterCar(requestData);
-        console.log(response);
+
         
+
         if (response.message === "Register Car successfully!") {
-          setSuccessMessage('Car registered successfully!');
-          setErrorMessage('');
-          setName('');
-          setLicense('');
-        } else if(response.message === "Each user can only register one car.") {
-          setErrorMessage("Each user can only register one car.")
-          setSuccessMessage('');
-        } else {
-          setErrorMessage('Failed to register car.');
-          setSuccessMessage('');
+          alert('Car registered successfully!');
+          navigate('/parking');
+        } else if (response.message === "Each user can only register one car.") {
+          setError("Each user can only register one car.");
         }
       } catch (error) {
-        console.error("Error reserving slot:", error);
-        setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
-        setSuccessMessage('');
-
+        console.error('Error registering car:', error);
+        setError('Failed to register car. Please try again.');
       }
     }
   };
@@ -62,55 +52,26 @@ function RegisCar() {
   return (
     <>
       <NavBar />
-      <div className='flex justify-center items-center pt-40'>
-        <div className="bg-white min-w-96 w-3/5 pb-24 rounded-2xl shadow-2xl">
-          <div className='flex flex-row justify-evenly flex-wrap'>
-            <div className="flex flex-col p-1 shadow-purple-300 shadow-md max-w-72 m-10 rounded-lg gap-10 justify-center items-center">
-              <Image />
-              <div>
-                <Info />
-                <br /><br />
-              </div>
-            </div>
-            <div className='flex flex-col justify-center items-center'>
-              <div className="flex flex-col justify-center items-center w-max-24">
-                <h1 className="text-red-500 font-bold text-3xl">Registration</h1>
-                <br />
-                <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    placeholder="Enter your Name and Surname"
-                    className="max-w-56 text-sm p-2 border border-gray-300 rounded-lg w-80 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                  {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
-
-                  <input
-                    type="text"
-                    placeholder="Enter your Car License"
-                    className="max-w-56 text-sm p-2 border border-gray-300 rounded-lg w-80 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    value={license}
-                    onChange={(e) => setLicense(e.target.value)}
-                  />
-                  {errors.license && <span className="text-red-500 text-sm">{errors.license}</span>}
-
-                  <button
-                    type="submit"
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-                  >
-                    Submit
-                  </button>
-                </form>
-                {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
-                {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
-              </div>
-            </div>
+      <div className="flex flex-col w-full h-full items-center justify-center pt-24 mb-20 gap-4">
+        <div className="flex flex-col justify-center items-center w-80 sm:w-96 shadow-md rounded-2xl py-8 px-4 gap-10">
+          <div className="bg-red-500 px-4 py-3 rounded-full">
+            <FontAwesomeIcon className="w-8 h-8 text-white" icon={faCar} />
+          </div>
+          <h1 className="text-xl font-bold">Register Your Vehicle</h1>
+          <div className="flex flex-col gap-7">
+            <input onChange={(e) => setBrand(e.target.value)} className="w-72 py-1 border-b border-gray-300" type="text" placeholder="   Vehicle Brand" />
+            <input onChange={(e) => setLicenseNo(e.target.value)} className="w-72 py-1 border-b border-gray-300" type="text" placeholder="   License No" />
+            <input onChange={(e) => setConfirmLicenseNo(e.target.value)} className="w-72 py-1 border-b border-gray-300" type="text" placeholder="   Confirm License No" />
+          </div>
+          <div className="flex flex-col justify-center items-center gap-1">
+            {error && <p className="text-xs text-red-500">{error}</p>}
+            <button onClick={handleRegister} className="px-14 py-2 bg-red-500 shadow-md drop-shadow-md rounded-md text-white font-light text-sm hover:bg-red-600 active:bg-red-700">Register</button>
           </div>
         </div>
+        <p className="mx-6 text-xs">By registering you agree to <span className="text-red-500">Terms & Conditions</span> and <span className="text-red-500">Privacy Policy</span>.</p>
       </div>
     </>
-  );
+  )
 }
 
 export default RegisCar;
