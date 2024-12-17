@@ -54,6 +54,10 @@ function ClubCreatePage() {
   const navigate = useNavigate(); // Initialize useNavigate
   const MIN_MEMBERS = 3;
 
+  const empId = localStorage.getItem("empId");
+  const stdId = localStorage.getItem("studentId");
+  const memberId = empId === "null" ? stdId : empId;
+
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
@@ -86,10 +90,16 @@ function ClubCreatePage() {
             name: `Prof. ${professor.firstname ?? ""} ${
               professor.midname ?? ""
             } ${professor.lastname ?? ""}`.trim(),
+            image: professor.image,
           })),
         ];
 
-        setMemberList(formattedMembers);
+        // Filter out the logged-in user
+        const filteredMembers = formattedMembers.filter(
+          (member) => member.id !== memberId
+        );
+
+        setMemberList(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
