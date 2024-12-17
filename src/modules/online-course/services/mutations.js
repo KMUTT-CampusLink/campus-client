@@ -12,7 +12,8 @@ import {
   createUpComingEvents,
   deleteUpComingEvents,
   editCourseMaterial,
-  deleteCourseMaterial
+  deleteCourseMaterial,
+  feedbackSubmission
 } from "./api";
 
 // Mutation to create a new discussion post
@@ -228,6 +229,18 @@ export const useDeleteCourseMaterial = () => {
     },
     onError: (error) => {
       console.error("Error deleting course material:", error);
+    },
+  });
+};
+
+export const useFeedbackSubmission = () => {
+  return useMutation({
+    mutationFn: feedbackSubmission,
+    onError: (error) => {
+      console.error("Error creating upcoming event:", error);
+    },
+    onSuccess: (data) => {
+      console.log("Event created successfully:", data);
     },
   });
 };
