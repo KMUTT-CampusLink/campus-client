@@ -27,7 +27,7 @@ const MessageArea = ({questions, dummyAns, profilePic, trips, bookdata}) => {
               questions = {questions} 
               answer = {dummyAns[i]} 
               profilePic = {profilePic} 
-              trips = {trips[i]} 
+              trips = {trips[i]}
               bookdata = {bookdata[i]}/>
             </div>
             : 
