@@ -40,3 +40,44 @@ export const verifyFaceRecognition  = async(imageData) => {
     return error.response.data;
   }
 }
+
+export const getAttendStudent = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/attendData/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}
+
+export const getCourseHeader = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/course/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}
+
+export const updateAttendance = async(sectionId,studentId,status,created_at) => {
+  try{
+    const response = await axiosInstance.post(`attend/update`,{
+      sectionId,
+      studentId,
+      status,
+      created_at
+    });
+    return response;
+  } catch(error){
+    return error.response.data;
+  }
+}
+
+export const getStudentAttendance = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/student/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}

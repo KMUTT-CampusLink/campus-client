@@ -47,12 +47,10 @@ const EmployeeDetail = () => {
     fetchEmployee();
   }, [id, navigate]);
 
-  //console.log(employee);
+  console.log(employee);
 
   // if (!employee) return <p>Loading employee data...</p>;
-  if (!employee) {
-    return navigate(`/employ/employee`);
-  }
+  if (!employee) return <p className="pt-5 pl-5">Loading employee data...</p>;
 
   const dobS = employee.date_of_birth;
   const dob = new Date(dobS);
@@ -210,7 +208,7 @@ const EmployeeDetail = () => {
           </article>
         </div>
 
-        <div className="lg:mt-10 flex justify-around lg:justify-center pb-2 pt-4 lg:gap-10">
+        <div className="lg:mt-10 flex justify-around lg:justify-center pt-4 lg:gap-10">
           <button
             className="bg-[#D4A015] text-white font-opensans rounded-md w-20 h-8 lg:w-25 lg:h-11 transition hover:shadow-xl shadow-sm"
             onClick={handleClick}

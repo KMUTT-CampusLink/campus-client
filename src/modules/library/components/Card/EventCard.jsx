@@ -41,7 +41,7 @@ function EventCard({ event }) {
           {/* Event Date and Time */}
           <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
             <FontAwesomeIcon
-              icon="faCalendarDays"
+              icon={faCalendarDays}
               className="text-neutral-600"
             />
             <span>{formatDate(event.event_date)}</span>
@@ -50,7 +50,7 @@ function EventCard({ event }) {
           {/* Event Location */}
           <div className="flex items-center gap-2 text-sm text-neutral-600">
             <FontAwesomeIcon
-              icon="faLocationDot"
+              icon={faLocationDot}
               className="text-neutral-600"
             />
             <span>{event.location}</span>

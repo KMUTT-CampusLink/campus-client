@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 import QuestionImageUploader from '../CreateExam/QuestionImageUploader';
-import ChoiceImageUploader from '../CreateExam/ChoiceImageUploader';
 import Choice from '../EditedExam/Choice'
 
 export default function Question({
@@ -77,19 +76,6 @@ export default function Question({
     setExam({ ...exam, questions: updatedQuestions });
   };
 
-  //set image for each choice
-  // const setChoiceImage = (questionIndex, choiceIndex, file) => {
-  //   setFileUploads((prevUploads) => ({
-  //     ...prevUploads,
-  //     [`${questionIndex}-${choiceIndex}`]: file, // Store file by question and choice index
-  //   }));
-  
-  //   // Update the choiceImg property in the exam state for preview purposes
-  //   const updatedQuestions = [...exam.questions];
-  //   updatedQuestions[questionIndex].options[choiceIndex].choiceImg = URL.createObjectURL(file);
-  //   setExam({ ...exam, questions: updatedQuestions });
-  // };
-
   return (
     <div className="grid gap-[10px]">
       <div className="flex justify-between align-middle pt-[20px]">
@@ -161,21 +147,11 @@ export default function Question({
                   {option.choiceText ? option.choiceText : option}
                 </div>
                 <div className="flex items-center">
-                  {/* <ChoiceImageUploader
-                    setChoiceImage={(file) => setChoiceImage(i, file)}
-                  /> */}
                   <button onClick={() => deleteChoice(option)} className="ml-[30px]">
                     <FontAwesomeIcon icon={faMinus} className="text-[20px]" />
                   </button>
                 </div>
               </div>
-              {/* {question.choiceImages && question.choiceImages[i] && (
-                <img
-                  src={URL.createObjectURL(question.choiceImages[i])}
-                  alt="Choice Image"
-                  className="w-[300px] h-auto mt-2"
-                />
-              )} */}
             </div>
           ))}
           <Choice onAddChoice={addChoice} />
@@ -197,21 +173,11 @@ export default function Question({
                   {option.choiceText ? option.choiceText : option}
                 </div>
                 <div className="flex items-center">
-                  {/* <ChoiceImageUploader
-                    setChoiceImage={(file) => setChoiceImage(i, file)}
-                  /> */}
                   <button onClick={() => deleteChoice(option)} className="ml-[30px]">
                     <FontAwesomeIcon icon={faMinus} className="text-[20px]" />
                   </button>
                 </div>
               </div>
-              {/* {question.choiceImages && question.choiceImages[i] && (
-                <img
-                  src={URL.createObjectURL(question.choiceImages[i])}
-                  alt="Choice Image"
-                  className="w-[300px] h-auto mt-2"
-                />
-              )} */}
             </div>
           ))}
           <Choice onAddChoice={addChoice} />

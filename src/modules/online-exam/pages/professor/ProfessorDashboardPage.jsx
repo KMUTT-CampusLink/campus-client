@@ -20,7 +20,6 @@ export default function ProfessorDashboardPage() {
   const getData = async () => {
     try {
       const response = (await dashboard(examId)).data.data;
-      console.log(response);
       setParticipant(response.participant);
       setMin(response.min);
       setMax(response.max);
@@ -39,6 +38,7 @@ export default function ProfessorDashboardPage() {
   useEffect(() => {
     getData();
   }, []);
+
   return (
     <>
       <NavBar />
@@ -54,7 +54,7 @@ export default function ProfessorDashboardPage() {
           <div>Fetching Error (No participant)</div>
         ) : (
           <div className=" my-10 flex flex-col gap-[50px]">
-            <div className="mx-[50px]">
+            <div>
               <p>Total participant : {participant}</p>
               <p>Min : {min}</p>
               <p>Max : {max}</p>

@@ -1,25 +1,29 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import Navbar from '../../../registration/components/NavBarComponents/NavBar';
-import Question from '../../components/professor/CreateExam/Question';
-import StudentQuestion from '../../components/professor/EditedExam/StudentQuestion';
-import BackBTN from '../../components/BackBTN';
+import Navbar from "../../../registration/components/NavBarComponents/NavBar";
+import Question from "../../components/professor/CreateExam/Question";
+import StudentQuestion from "../../components/professor/EditedExam/StudentQuestion";
+import BackBTN from "../../components/BackBTN";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPlus, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPlus,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { createNewExam } from '../../services/apis/professerApi';
+import { createNewExam } from "../../services/apis/professerApi";
 
 export default function ProfessorCreateExamPage() {
   const { sectionId } = useParams();
   const navigate = useNavigate();
   const [viewAsStudent, setViewAsStudent] = useState(false);
-  
+
   //exam data all stored in here
   const [exam, setExam] = useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     questions: [],
   });
 
@@ -42,7 +46,7 @@ export default function ProfessorCreateExamPage() {
     if (score <= 0) {
       setDefaultScore(1);
       return;
-    };
+    }
     setDefaultScore(score);
     const updatedQuestions = exam.questions.map((question) => ({
       ...question,
@@ -59,10 +63,10 @@ export default function ProfessorCreateExamPage() {
       questions: [
         ...exam.questions,
         {
-          questionText: '',
-          type: 'Multiple Choice',
+          questionText: "",
+          type: "Multiple Choice",
           options: [],
-          answer: '',
+          answer: "",
           score: null,
         },
       ],
@@ -75,15 +79,17 @@ export default function ProfessorCreateExamPage() {
     setExam({ ...exam, questions: updatedQuestions });
   };
 
-  // submit exam function
   const handleSubmit = async () => {
+    const formData = new FormData();
     const finalExam = {
       ...exam,
       questions: exam.questions.map((question) => ({
         ...question,
         score: question.score || defaultScore,
+        choiceImages: question.choiceImages || [],
       })),
     };
+    console.log(finalExam);
     try {
       const res = await createNewExam(finalExam, sectionId);
       const id = res.data.data;
@@ -96,16 +102,25 @@ export default function ProfessorCreateExamPage() {
   };
 
   return (
-    <div className='w-auto'>
+    <div className="w-auto">
       <Navbar />
-      <div className='mx-[35px] xl:mx-[100px] pb-[30px] pt-20'>
-      <BackBTN />
+      <div className="mx-[35px] xl:mx-[100px] pb-[30px] pt-20">
+        <BackBTN />
         <div className={`${viewAsStudent ? "hidden" : "block"}`}>
-          <div className='flex flex-col justify-between gap-[20px]'>
-            <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
-              <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">Create Exam</h1>
+          <div className="flex flex-col justify-between gap-[20px]">
+            <div className="flex flex-col xl:flex-row xl:justify-between  xl:items-center">
+              <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">
+                Create Exam
+              </h1>
               {/* view as student button */}
-              <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(true) }}><FontAwesomeIcon icon={faEye} /> View as student</button>
+              <button
+                className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
+                onClick={() => {
+                  setViewAsStudent(true);
+                }}
+              >
+                <FontAwesomeIcon icon={faEye} /> View as student
+              </button>
             </div>
             {/* exam details */}
             <h4>Exam Name</h4>
@@ -124,7 +139,7 @@ export default function ProfessorCreateExamPage() {
               onChange={handleDescriptionChange}
             ></textarea>
             {/* set default score for all questions */}
-            <div className='flex gap-[10px] items-center'>
+            <div className="flex gap-[10px] items-center">
               <h4>Set Default Score: </h4>
               <input
                 type="number"
@@ -134,27 +149,39 @@ export default function ProfessorCreateExamPage() {
               />
             </div>
             {/* Map question */}
-            {exam && exam.questions.map((question, index) => (
-              <>
-                <hr className='mt-[20px] border-[1px] bg-[#BEBEBE]' />
-                <Question
-                  key={index}
-                  question={question}
-                  index={index}
-                  setExam={setExam}
-                  exam={exam}
-                  onDeleteQuestion={deleteQuestion}
-                  defaultScore={defaultScore}
-                />
-              </>
-            ))}
+            {exam &&
+              exam.questions.map((question, index) => (
+                <>
+                  <hr className="mt-[20px] border-[1px] bg-[#BEBEBE]" />
+                  <Question
+                    key={index}
+                    question={question}
+                    index={index}
+                    setExam={setExam}
+                    exam={exam}
+                    onDeleteQuestion={deleteQuestion}
+                    defaultScore={defaultScore}
+                  />
+                </>
+              ))}
             {/* Add question button */}
-            <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white' onClick={addQuestion}><FontAwesomeIcon icon={faPlus} /> Add Question</button>
+            <button
+              className="btn bg-[#864E41] hover:bg-[#6e4339] text-white"
+              onClick={addQuestion}
+            >
+              <FontAwesomeIcon icon={faPlus} /> Add Question
+            </button>
           </div>
-          <hr className='mt-[30px] border' />
+          <hr className="mt-[30px] border" />
           {/* subnit exam button */}
-          <div className='flex justify-end pt-[30px]'>
-            <button className='btn bg-[#27AE60] hover:bg-[#3f9060] text-white' onClick={() => document.getElementById("confirmModal").showModal()}>Submit Exam
+          <div className="flex justify-end pt-[30px]">
+            <button
+              className="btn bg-[#27AE60] hover:bg-[#3f9060] text-white"
+              onClick={() =>
+                document.getElementById("confirmModal").showModal()
+              }
+            >
+              Submit Exam
             </button>
             <dialog id="confirmModal" className="p-[30px] rounded-xl">
               <h3 className="font-bold text-lg">Confirm Submit the Exam?</h3>
@@ -178,9 +205,19 @@ export default function ProfessorCreateExamPage() {
           </div>
         </div>
         <div className={`${viewAsStudent ? "block" : "hidden"}`}>
-          <div className='flex flex-col xl:flex-row xl:justify-between  xl:items-center'>
-            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">{exam.title}</h1>
-            <button className='btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]' onClick={() => { setViewAsStudent(false) }}> <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam</button>
+          <div className="flex flex-col xl:flex-row xl:justify-between  xl:items-center">
+            <h1 className="text-[30px] xl:text-[40px] font-extrabold text-[#D4A015]">
+              {exam.title}
+            </h1>
+            <button
+              className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
+              onClick={() => {
+                setViewAsStudent(false);
+              }}
+            >
+              {" "}
+              <FontAwesomeIcon icon={faChevronLeft} /> Back To Edit Exam
+            </button>
           </div>
           <div className="my-[20px] flex flex-col gap-[20px]">
             {exam.questions.map((question, index) => (
@@ -197,5 +234,5 @@ export default function ProfessorCreateExamPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

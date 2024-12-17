@@ -19,7 +19,7 @@ function CourseRegisPage() {
   const currentSemesterId = localStorage.getItem("semesterId");
 
   const [headId, setHeadId] = useState("");
-  const [paymentStatus, setPaymentStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const regis = localStorage.getItem("event");
   const {
     data: enrollmentHeadData,
@@ -41,10 +41,9 @@ function CourseRegisPage() {
     isLoading: isPaymentLoading,
     isError: isPaymentError,
   } = usePaymentStatus(headId);
-
   useEffect(() => {
     if (enrollmentHeadData) setHeadId(enrollmentHeadData.head_id);
-    if (payment) setPaymentStatus(payment.data);
+    if (payment) setPaymentStatus(payment.status);
   }, [enrollmentHeadData, payment]);
 
   const [studentData, setStudentData] = useState(null);
@@ -100,32 +99,31 @@ function CourseRegisPage() {
                   <div>
                     Status:{" "}
                     <span
-                      className={`font-bold ${
-                        paymentStatus === "paid"
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
+                      className={`font-bold ${paymentStatus === "Paid"
+                        ? "text-green-500"
+                        : "text-red-500"
+                        }`}
                     >
-                      {paymentStatus === "paid" ? "Successful" : "Unpaid"}
+                      {paymentStatus === "Paid" ? "Successful" : "Unpaid"}
                     </span>
                   </div>
                 </div>
                 {(regis === "Registration" ||
                   regis === "Late Registration") && (
-                  <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2">
-                    <Link to="add">
-                      <button className={`${button} h-full`}>Add Course</button>
-                    </Link>
-                    <Link to="drop">
-                      <button className={`${button} h-full`}>
-                        Drop Course
-                      </button>
-                    </Link>
-                    <Link to="/payment" className="sm:col-span-2">
-                      <button className={`${button}`}>Payment</button>
-                    </Link>
-                  </div>
-                )}
+                    <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2">
+                      <Link to="add">
+                        <button className={`${button} h-full`}>Add Course</button>
+                      </Link>
+                      <Link to="drop">
+                        <button className={`${button} h-full`}>
+                          Drop Course
+                        </button>
+                      </Link>
+                      <Link to="/payment" className="sm:col-span-2">
+                        <button className={`${button}`}>Payment</button>
+                      </Link>
+                    </div>
+                  )}
                 {regis === "no" && (
                   <>
                     <div className="p-4 mt-10 font-bold text-center text-white bg-red-500 rounded-md">
@@ -142,6 +140,16 @@ function CourseRegisPage() {
                       Withdraw Course
                     </button>
                   </Link>
+                )}
+                {regis === "Early Withdraw" && (
+                  <>
+                    <Link to="withdraw">
+                      <button className={`${button} my-10`}>
+                        Withdraw Course
+                      </button>
+                    </Link>
+                    <p className="text-sm text-gray-600">If you withdraw in early withdraw period, 2000 B will be refunded.</p>
+                  </>
                 )}
               </div>
             </div>
