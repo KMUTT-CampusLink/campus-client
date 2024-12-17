@@ -4,6 +4,7 @@ import ClubHomePostEditModal from "./ClubHomePostEditModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import ParticipantsModal from "./ParticipantsModal";
 
 const ClubHomePost = (props) => {
   const { clubId } = useParams();
@@ -14,6 +15,10 @@ const ClubHomePost = (props) => {
 
   const [clubPost, setClubPost] = useState([]);
   const [clubAnnouncement, setClubAnnouncement] = useState([]);
+
+  const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+
 
   // Fetch posts
   const fetchClubPost = async () => {
@@ -164,7 +169,7 @@ const ClubHomePost = (props) => {
 
   return (
     <div
-      className={` ${
+      className={`${
         toggleLeft ? "grid" : "hidden"
       } md:grid border-[1px] md:rounded-r-none p-4 md:h-[60vh] md:border-b-0`}
     >
@@ -191,6 +196,7 @@ const ClubHomePost = (props) => {
           View Event
         </button>
       </div>
+  
       {itemsToDisplay.length === 0 ? (
         <p className="text-center text-gray-500 mt-6">
           There are no {toggleVisiblity ? "announcements" : "posts"} available.
@@ -215,10 +221,8 @@ const ClubHomePost = (props) => {
                   }`}
                 />
               </button>
-              {/* <div className="text-left mr-2 text-lg md:text-xl mt-3 font-semibold mb-4">
-              {item.title}
-            </div> */}
             </div>
+  
             <div className="flex flex-col md:flex-row text-left md:w-3/5">
               {!toggleVisiblity && (
                 <img
@@ -226,16 +230,17 @@ const ClubHomePost = (props) => {
                     import.meta.env.VITE_MINIO_BUCKET_NAME
                   }/${item.post_img}`}
                   alt="Post image"
-                  className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl md:mt-0 sm:mt-4 sm:mb-4"
+                  className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl mt-4 sm:mb-4"
                 />
               )}
-              <div className="md:ml-10 inline-flex items-start">
+              <div className="md:ml-10 mt-4 inline-flex items-start">
                 <div className="text-left mr-2 text-lg md:text-xl font-semibold">
                   {item.title}
-                  <p className="md:mt-3 sm:mt-0 text-base">• {item.content}</p>
+                  <p className="md:mt-4 sm:mt-0 text-base">• {item.content}</p>
                 </div>
               </div>
             </div>
+  
             {toggleVisiblity && (
               <div className="mt-3 mb-3">
                 <p>Date: {getFormattedDate(item.date)}</p>
@@ -244,9 +249,23 @@ const ClubHomePost = (props) => {
                   {getFormattedTime(item.end_time)}
                 </p>
                 <p>Location: {item.location}</p>
+                <p>Seats: {item.max_seats}</p>
+                <p>Ticket Amount: {item.price}</p>
               </div>
             )}
+  
             <div className="flex items-end w-max ml-auto">
+              {toggleVisiblity && (
+                <button
+                  onClick={() => {
+                    setSelectedEventId(item.id);
+                    setIsParticipantsModalOpen(true);
+                  }}
+                  className="bg-[#F69800] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg mr-3 md:mr-8"
+                >
+                  Participants
+                </button>
+              )}
               <button
                 onClick={() => openModal(item)}
                 className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg mr-3 md:mr-8"
@@ -263,6 +282,14 @@ const ClubHomePost = (props) => {
           </div>
         ))
       )}
+  
+      {/* Participant Modal */}
+      <ParticipantsModal
+        isOpen={isParticipantsModalOpen}
+        onClose={() => setIsParticipantsModalOpen(false)}
+        eventId={selectedEventId}
+      />
+  
       <ClubHomePostEditModal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -271,7 +298,7 @@ const ClubHomePost = (props) => {
         toggleVisibility={toggleVisiblity}
       />
     </div>
-  );
+  );  
 };
 
 export default ClubHomePost;

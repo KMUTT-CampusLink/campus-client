@@ -18,6 +18,7 @@ const ClubHomeMemLis = (props) => {
       } catch (error) {
         console.error("Error fetching club members:", error);
       }
+      console.log(response.data.data);
     };
     fetchMembers();
   }, [clubId]);
@@ -57,6 +58,19 @@ const ClubHomeMemLis = (props) => {
     return "Unknown";
   };
 
+  const renderImage = (member) => {
+    if (member.student && member.student.image) {
+      return `${import.meta.env.VITE_MINIO_URL}${
+        import.meta.env.VITE_MINIO_BUCKET_NAME
+      }/${member.student.image}`;
+    } else if (member.employee && member.employee.image) {
+      return `${import.meta.env.VITE_MINIO_URL}${
+        import.meta.env.VITE_MINIO_BUCKET_NAME
+      }/${member.employee.image}`;
+    }
+    return "https://i.imgur.com/xKf7cjo.png";
+  };
+
   return (
     <div
       className={` ${
@@ -74,7 +88,7 @@ const ClubHomeMemLis = (props) => {
           >
             <img
               className="w-[10%] aspect-square rounded-full"
-              src="https://i.imgur.com/xKf7cjo.png"
+              src={renderImage(admins)}
               alt="avatar"
             />
             <h5
@@ -95,9 +109,10 @@ const ClubHomeMemLis = (props) => {
             key={key}
             className="ml-[7%] mr-auto p-0.5 flex items-center space-x-2"
           >
+            {console.log(members)}
             <img
               className=" w-[10%] aspect-square rounded-full"
-              src="https://i.imgur.com/xKf7cjo.png"
+              src={renderImage(members)}
               alt="avatar"
             />
             <h5
@@ -134,10 +149,10 @@ const ClubHomeMemLis = (props) => {
                 <div>
                   <img
                     className="w-[25%] aspect-square rounded-full m-auto"
-                    src="https://i.imgur.com/xKf7cjo.png"
+                    src={renderImage(selectedItem)}
                     alt="avatar"
                   />
-                  <h2 className="text-center text-xl font-bold mt-3">
+                  <h2 className="text-center text-xl font-bold mt-3 mb-4">
                     Student Details
                   </h2>
                   <p>
@@ -149,26 +164,47 @@ const ClubHomeMemLis = (props) => {
                     {selectedItem.student.firstname}{" "}
                     {selectedItem.student.lastname}
                   </p>
-                  <p className="mb-2">
-                    <strong>Line ID:</strong>{" "}
-                    {selectedItem.student.line_id || "Not provided"}
-                  </p>
+                  {/* p className="mb-2"*/}
+                  {selectedItem.line_id && (
+                    <p>
+                      <strong>Line ID:</strong> {selectedItem.line_id}
+                    </p>
+                  )}
                 </div>
               )}
               {selectedItem.employee && (
-                <div className="text-center border-t-2 border-gray-300 pt-4">
+                <div className=" border-t-2 border-gray-300 pt-4">
                   <img
                     className="w-[20%] aspect-square rounded-full m-auto"
-                    src="https://i.imgur.com/xKf7cjo.png"
+                    src={renderImage(selectedItem)}
                     alt="avatar"
                   />
-                  <h2 className="text-xl font-bold mt-3">Professor Details</h2>
-                  <p>Employee ID: {selectedItem.employee.id}</p>
+                  <h2 className="text-center text-xl font-bold mt-3 mb-4">
+                    Professor Details
+                  </h2>
                   <p>
-                    Name: Prof. {selectedItem.employee.firstname}{" "}
+                    {" "}
+                    <strong> Employee ID: </strong> {selectedItem.employee.id}
+                  </p>
+                  <p>
+                    <strong> Name: </strong>Prof.{" "}
+                    {selectedItem.employee.firstname}{" "}
                     {selectedItem.employee.lastname}
                   </p>
-                  <p>Department: Add department info here</p>
+                  {selectedItem.line_id && (
+                    <p>
+                      {" "}
+                      <strong> Line ID: </strong>
+                      {selectedItem.line_id}
+                    </p>
+                  )}
+                  {selectedItem.employee.faculty && (
+                    <p>
+                      {" "}
+                      <strong> Department: </strong>
+                      {selectedItem.employee.faculty.name}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
