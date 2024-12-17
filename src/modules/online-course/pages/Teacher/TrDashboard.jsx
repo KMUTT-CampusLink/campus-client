@@ -38,7 +38,7 @@ const TrDashboard = () => {
             <span className="text-2xl sm:text-3xl font-bold pb-1 2xl:text-5xl">All Courses</span>
           </div>
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-2 sm:gap-8 lg:gap-10 justify-items-center mx-auto max-w-7xl 2xl:max-w-[90%]"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-2 sm:gap-8 lg:gap-10 justify-items-center mx-auto max-w-7xl 2xl:max-w-[90%] mb-2"
           >
             {filteredCourses && filteredCourses.length > 0 ? (
               filteredCourses.map((course) => (

@@ -18,7 +18,7 @@ import {
 import {
   useDeleteCourseMaterial,
   useEditCourseMaterial
-}from "../../services/mutations"
+} from "../../services/mutations"
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { z } from "zod";
 import popToast from "../../../../utils/popToast";
@@ -124,7 +124,7 @@ const TrCourseMaterials = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  
+
 
   const handleSubmit = async () => {
     try {
@@ -151,6 +151,8 @@ const TrCourseMaterials = () => {
         setFormData({ title: "", videoFile: null, materialFiles: [] });
         document.getElementById("videoFileInput").value = null;
         document.getElementById("materialFilesInput").value = null;
+
+        handleEditClick();
 
         // Trigger a refetch of the video list
         await refetchVideos();
@@ -229,7 +231,7 @@ const TrCourseMaterials = () => {
           <div className="text-2xl font-extrabold pb-3 text-[#ecb45e]">
             Materials
           </div>
-          
+
           <button
             onClick={handleEditClick}
             className={`px-6 py-2 mt-4 rounded-lg flex items-center font-medium justify-center transition duration-200 shadow-md ${isEditing
@@ -340,69 +342,77 @@ const TrCourseMaterials = () => {
         )}
 
 
-        <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
-          <div className="sm:col-span-5">
-            {videoDetails.videoURL && (
-              <div className="w-full">
-                <video
-                  controls
-                  className="max-w-full max-h-[400px] object-cover rounded-lg"
-                  src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
-                ></video>
+        {
+          !isEditing && (
+            <div className="px-6 sm:px-28 grid sm:grid-cols-7 mb-12">
+              <div className="sm:col-span-5">
+                {videoDetails.videoURL && (
+                  <div className="w-full">
+                    <video
+                      controls
+                      className="max-w-full max-h-[400px] object-cover rounded-lg"
+                      src={`${MINIO_BASE_URL}/${videoDetails.videoURL}`}
+                    ></video>
+                  </div>
+                )}{" "}
               </div>
-            )}{" "}
-          </div>
-          <div className="sm:col-span-2">
-            <div className="mx-auto mt-4 mb-6 sm:ml-6">
-              <label className="block mb-2 font-semibold font-georama">
-                Select Lecture Title
-              </label>
-              <select
-                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
-                value={videoDetails.video}
-                onChange={handleVideoSelectChange}
-              >
-                <option disabled>Select Lecture</option>
-                {videos?.map((vid, index) => (
-                  <option key={index} value={vid.title}>
-                    {vid.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <h3 className="p-4 font-bold text-xl">Class Materials</h3>
-            <div className="">
-              {videoDetails.attachments?.length > 0 ? (
-                <ul className="px-5 w-full">
-                  {videoDetails.attachments.map((file, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center border my-2 rounded-md overflow-hidden"
-                    >
-                      <FontAwesomeIcon
-                        icon={faFile}
-                        size="xl"
-                        style={{ color: "#e6700f" }}
-                        className="px-2"
-                      />
-                      <a
-                        className="p-2 mx-2 overflow-hidden whitespace-nowrap text-ellipsis block w-full"
-                        href={`${MINIO_BASE_URL}/${file.file_path}`}
-                        download
-                        title={file.file_name} // Shows full name on hover
+              {
+                !isEditing && (
+                  <div className="sm:col-span-2">
+                    <div className="mx-auto mt-4 mb-6 sm:ml-6">
+                      <label className="block mb-2 font-semibold font-georama">
+                        Select Lecture Title
+                      </label>
+                      <select
+                        className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full max-w-xs overflow-visible"
+                        value={videoDetails.video}
+                        onChange={handleVideoSelectChange}
                       >
-                        {file.file_name}
-                      </a>
-                    </li>
+                        <option disabled>Select Lecture</option>
+                        {videos?.map((vid, index) => (
+                          <option key={index} value={vid.title}>
+                            {vid.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <h3 className="p-4 font-bold text-xl">Class Materials</h3>
+                    <div className="">
+                      {videoDetails.attachments?.length > 0 ? (
+                        <ul className="px-5 w-full">
+                          {videoDetails.attachments.map((file, index) => (
+                            <li
+                              key={index}
+                              className="flex items-center border my-2 rounded-md overflow-hidden"
+                            >
+                              <FontAwesomeIcon
+                                icon={faFile}
+                                size="xl"
+                                style={{ color: "#e6700f" }}
+                                className="px-2"
+                              />
+                              <a
+                                className="p-2 mx-2 overflow-hidden whitespace-nowrap text-ellipsis block w-full"
+                                href={`${MINIO_BASE_URL}/${file.file_path}`}
+                                download
+                                title={file.file_name} // Shows full name on hover
+                              >
+                                {file.file_name}
+                              </a>
+                            </li>
 
-                  ))}
-                </ul>
-              ) : (
-                <p>No attachments available.</p>
-              )}
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No attachments available.</p>
+                      )}
+                    </div>
+                  </div>
+                )
+              }
             </div>
-          </div>
-        </div>
+          )
+        }
       </div>
     </div>
   );
