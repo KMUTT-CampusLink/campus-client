@@ -9,6 +9,10 @@ import {
   createDiscussionReply,
   editAssignmentSubmission,
   addAssignmentSubmission,
+  createUpComingEvents,
+  deleteUpComingEvents,
+  editCourseMaterial,
+  deleteCourseMaterial
 } from "./api";
 
 // Mutation to create a new discussion post
@@ -113,8 +117,6 @@ export const useCreateAssignment = () => {
   });
 };
 
-
-
 // Mutation to edit an existing assignment
 export const useEditAssignment = () => {
   const queryClient = useQueryClient();
@@ -146,7 +148,6 @@ export const useDeleteAssignment = () => {
   });
 };
 
-
 // Mutation to add an assignment submission
 export const useAddAssignmentSubmission = () => {
   const queryClient = useQueryClient();
@@ -175,4 +176,58 @@ export const useEditAssignmentSubmission = () => {
       console.log(error);
     },
   });
-}
+};
+
+export const useCreateEvents = () => {
+  return useMutation({
+    mutationFn: createUpComingEvents,
+    onError: (error) => {
+      console.error("Error creating upcoming event:", error);
+    },
+    onSuccess: (data) => {
+      console.log("Event created successfully:", data);
+    },
+  });
+};
+
+export const useDeleteEvent = () => {
+  return useMutation({
+    mutationFn:deleteUpComingEvents,
+    onError: (error) => {
+      console.error("Error deleting upcoming event:", error);
+    },
+    onSuccess: (data) => {
+      console.log("Event deleted successfully:", data);
+    },
+  });
+};
+
+// Mutation to edit course material
+export const useEditCourseMaterial = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, formData }) => editCourseMaterial(id, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries("allVideos");
+    },
+    onError: (error) => {
+      console.error("Error editing course material:", error);
+    },
+  });
+};
+
+// Mutation to delete course material
+export const useDeleteCourseMaterial = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id) => deleteCourseMaterial(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries("allVideos");
+    },
+    onError: (error) => {
+      console.error("Error deleting course material:", error);
+    },
+  });
+};

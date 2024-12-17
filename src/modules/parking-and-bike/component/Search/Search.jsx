@@ -30,10 +30,10 @@ function Search({ setResults }) {
 
   return (
     <>
-      <div className="flex items-center min-w-96 min-h-70 shadow-gray shadow-xl bg-white rounded-lg p-2">
+      <div className="flex items-center w-64 md:w-80 shadow-md drop-shadow-md bg-white rounded-lg py-px md:py-1 px-2">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search here.."
           className="bg-transparent focus:outline-none flex-grow px-4"
           value={input}
           onChange={(e) => handleChange(e.target.value)}

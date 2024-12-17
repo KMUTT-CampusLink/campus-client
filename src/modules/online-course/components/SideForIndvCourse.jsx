@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
+const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage}) => {
   const sidebarRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,7 +40,25 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
       navigate(`/courses/tr/${subPath}`);
     }
   };
-  
+
+
+  const sectionId = localStorage.getItem("sec_id")
+  const navToExam = (toSection) => {
+    if (location.pathname.includes("/courses/st")) {
+      navigate(`/exams/student/${toSection}`)
+    } else {
+      navigate(`/exams/professor/${toSection}`)
+    }
+  }
+
+  const navToAttendance = (toSection) => {
+    if (location.pathname.includes("/courses/st")) {
+      navigate(`/attendance/student/${toSection}`)
+    } else {
+      navigate(`/attendance/professor/${toSection}`)
+    }
+  }
+
   return (
     <div
       className={`z-10 max-sm:w-40 text-lg fixed top-0 left-0 w-64 h-full bg-[#ecb45e] text-black transform transition-transform duration-350 ${
@@ -120,7 +138,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
             </li>
             {/* Online Exam Link */}
             <li
-              // onClick={() => handleNavigation("online_exam")}
+              onClick={() => navToExam(sectionId)}
               className="mb-4 p-2 border-b-2"
             >
               <span
@@ -136,7 +154,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage }) => {
 
             {/* Attendance Link */}
             <li
-              onClick={() => navigate(`/attendance/student/1001`)}
+              onClick={() => navToAttendance(sectionId)}
               className="mb-4 p-2 border-b-2"
             >
               <span

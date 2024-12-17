@@ -33,9 +33,11 @@ const put = async (url, payload) => {
   }
 };
 
-const remove = async (url) => {
+const remove = async (url, body) => {
+  console.log("remove", url);
+  console.log(body);
   try {
-    const { data } = await axiosInstance.delete(url);
+    const { data } = await axiosInstance.delete(url, { data: body });
     return data;
   } catch (error) {
     handleApiError(error);
@@ -63,7 +65,7 @@ export const fetchCourseHeaderBySectionIDForStudent = (sectionID) =>
 export const fetchAllAssignmentsBySectionID = (sectionID) =>
   get(`/courses/assignment/${sectionID}/all`);
 //export const createAssignment = (newAssignment) =>
-  //post("/courses/assignment/create", newAssignment);
+//post("/courses/assignment/create", newAssignment);
 export const editAssignment = (assignmentID, updatedAssignment) =>
   put(`/courses/assignment/${assignmentID}/edit`, updatedAssignment);
 export const deleteAssignment = (assignmentID) =>
@@ -74,7 +76,7 @@ export const createAssignment = (newAssignment) =>
 //assignment Student
 
 export const addAssignmentSubmission = (formData) =>
-  post(`/courses/assignmentSubmission`, formData);
+  post(`/courses/assignment/assignmentSubmission`, formData);
 
 export const editAssignmentSubmission = (assignmentID, updatedSubmission) =>
   put(`/courses/assignment/${assignmentID}/submit/edit`, updatedSubmission);
@@ -82,7 +84,8 @@ export const editAssignmentSubmission = (assignmentID, updatedSubmission) =>
 export const fetchAssignmentSubmissionFilePath = (assignmentID, studentID) =>
   get(`/courses/assignment/submission/${assignmentID}/${studentID}`);
 
-
+export const fetchStudentSubmission = (sectionID, assignmentID) =>
+  get(`/courses/assignment/studentSubmission/${sectionID}/${assignmentID}`);
 
 // discussion Teacher
 export const fetchAllDiscussionPostsBySectionID = (sectionID) =>
@@ -97,3 +100,25 @@ export const fetchAllCommentsByPostID = (postId) =>
   get(`/courses/discussion/view/${postId}/comment`);
 export const createDiscussionReply = (topicId, newReply) =>
   post(`/courses/discussion/${topicId}/comment/create`, newReply);
+
+//announcement
+export const fetchAllUpComingEvents = (studentID) =>
+  get(`/courses/announcement/${studentID}`);
+
+export const fetchUpComingEventsByTeacher = (empID, sectionID) =>
+  get(`/courses/announcement/teacher/${empID}/${sectionID}`);
+
+export const createUpComingEvents = (eventInfo) =>
+  post(`/courses/announcement/`, eventInfo);
+
+export const deleteUpComingEvents = (deleteInfo) => {
+  return remove(`/courses/announcement/`, deleteInfo);
+};
+
+// Edit Course Material
+export const editCourseMaterial = (id, formData) =>
+  post(`/courses/editVideo/${id}`, formData);
+
+// Delete Course Material
+export const deleteCourseMaterial = (id) =>
+  remove(`/courses/deleteVideo/${id}`);

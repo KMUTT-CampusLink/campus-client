@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/CampusLogo.png";
-
+import { userRole } from "../services/api";
 function MainNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [isAdmin, setIsAdmin] = useState(false); // State to track admin access
   // Function to check if the link is active
   const isActive = (path) =>
     location.pathname === path
@@ -19,6 +19,17 @@ function MainNavbar() {
       navigate(`/library/search/${searchTerm}`);
     }
   };
+  // Fetch user role to determine if the user is "Staff"
+  useEffect(() => {
+    const checkUserRole = async () => {
+      const result = await userRole();
+      if (result?.success) {
+        setIsAdmin(true); // If API returns success: true, set isAdmin to true
+      }
+    };
+
+    checkUserRole();
+  }, []);
 
   return (
     <div className="navbar bg-white rounded-t-lg w-[100%] drop-shadow-xl mx-auto min-w-[541px] z-50 sticky top-0">
@@ -77,14 +88,16 @@ function MainNavbar() {
             MyBook
           </Link>
 
-          <Link
-            to="/library/contact"
-            className={`btn btn-ghost hover:text-black hover:bg-white hover:underline underline-offset-[33px] decoration-2 decoration-orange-500 normal-case text-lg font-semibold ${isActive(
-              "/library/contact"
-            )}`}
-          >
-            Contact Us
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/library/admin"
+              className={`btn btn-ghost hover:text-black hover:bg-white hover:underline underline-offset-[33px] decoration-2 decoration-orange-500 normal-case text-lg font-semibold ${isActive(
+                "/library/admin"
+              )}`}
+            >
+              Admin
+            </Link>
+          )}
         </div>
       </div>
 

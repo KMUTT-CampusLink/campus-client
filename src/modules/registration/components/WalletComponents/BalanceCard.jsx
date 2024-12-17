@@ -1,6 +1,9 @@
 function BalanceCard({ balance }) {
   const formatBalance = (balance) => {
     const num = parseFloat(balance);
+    if (isNaN(num)) {
+      return "0.00";
+    }
     if (num >= 1e6) {
       return (num / 1e6).toFixed(2) + "M";
     } else if (num >= 1e3) {

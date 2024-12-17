@@ -194,3 +194,13 @@ export const reserveEventSeat = async (libraryEventId) => {
     throw error;
   }
 };
+
+export const userRole = async () => {
+  try {
+    const response = await axiosInstance.get("/library/userRole");
+    return response.data; // Return the data from the API
+  } catch (error) {
+    console.error("Error fetching data from /library/userRole:", error);
+    return null; // Return null in case of an error
+  }
+};
