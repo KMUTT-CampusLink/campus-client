@@ -9,7 +9,7 @@ import { getStudentExamReview } from "../../services/apis/studentApi";
 export default function StudentReviewExamPage() {
   const [data, setData] = useState(null);
   const [permission, setPermission] = useState(false);
-  const { examId } = useParams();
+  const examId = useParams().examId;
   const studentExamId = useParams().studentExamId;
   const fetchReview = async () => {
     try {
