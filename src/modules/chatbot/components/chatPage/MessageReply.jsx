@@ -3,6 +3,7 @@ import TripList from '../../../transportation/components/ScheduleList';
 import Booking from '../LibraryBooking/Booking';
 
 const MessageReply = ({dummyAns, questions, answer, profilePic, trips, bookdata}) => {
+  console.log(bookdata);
   return (
     <>  
         {/* profile  */}
@@ -21,12 +22,12 @@ const MessageReply = ({dummyAns, questions, answer, profilePic, trips, bookdata}
               </div>
             : answer.trim() === "book" && bookdata ?
               <div className='w-full h-full flex flex-col'>
-                <p>The book <strong>"{bookdata.title}"</strong>, edition {bookdata.edition} written by <strong>{bookdata.author}</strong> is available at the library.
+                <p>The book <strong>"{bookdata[0].title}"</strong>, edition {bookdata[0].edition} written by <strong>{bookdata[0].author}</strong> is available at the library.
                   <br />
-                  <strong>Description:</strong> {bookdata.description} <br />
+                  <strong>Description:</strong> {bookdata[0].description} <br />
                   <span className='w-full h-full self-center justify-center text-center'><b>If you want to reserve the book, click below.</b></span>
                 </p>
-                <Booking bookdata={bookdata}/>
+                <Booking bookdata={bookdata[0]}/>
               </div>
             :
               <div className=' max-w-[22rem] sm:max-w-[25rem] md:max-w-[30rem] lg:max-w-[45rem] xl:max-w-[50rem] p-1'>
