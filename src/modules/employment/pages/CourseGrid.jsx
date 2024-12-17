@@ -11,18 +11,7 @@ import { axiosInstance } from "../../../utils/axiosInstance";
 
 const ITEMS_PER_PAGE = 9;
 const CourseGrid = () => {
-  const [courses, setCourses] = useState([{code: "CSC202", name: "d mha change like", semester: "1/2025"},
-                                          {code: "CSC32", name: "d nay change like", semester: "2/2025"},
-                                          {code: "LNG802", name: "d mhr change liked", semester: "1/2025"},
-                                          {code: "CSC101", name: "d mhr change likes", semester: "1/2025"},
-                                          {code: "CSC372", name: "change like", semester: "2/2025"},
-                                          {code: "LNG2", name: "d mhr", semester: "1/2025"},
-                                          {code: "CSC02", name: "d mha change like", semester: "1/2025"},
-                                          {code: "CSC72", name: "d nay change like", semester: "2/2025"},
-                                          {code: "LNG82", name: "d mhr change liked", semester: "1/2025"},
-                                          {code: "CSC10", name: "d mhr change likes", semester: "1/2025"},
-                                          {code: "CSC3", name: "change like", semester: "2/2025"},
-                                          {code: "LNG8", name: "d mhr", semester: "1/2025"}]);
+  const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +51,14 @@ const CourseGrid = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axiosInstance.get(`employ/getCourse`);
+      setCourses(result.data);
+    };
 
+    fetchData();
+  }, []);
 
 
   const handleClick = () => {

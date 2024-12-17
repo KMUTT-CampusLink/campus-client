@@ -83,7 +83,7 @@ function LoginForm() {
 
         {/* Submit Button */}
         <button type="submit" className={`${button}`}>
-          Sign in
+          Sign In
         </button>
 
         <SmallNavText to="/regis/activation" name="Activate Your Account?" />

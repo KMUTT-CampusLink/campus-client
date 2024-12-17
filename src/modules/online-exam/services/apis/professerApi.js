@@ -239,4 +239,48 @@ export const checkHasParticipant = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-};
+}
+
+export const getGradingDate = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(`/exams/professor/getGradingDate?sectionid=${sectionId}`);
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
+export const updateExpandDays = async (sectionId, isGradingExpand) => {
+  try {
+    const response = await axiosInstance.put(`/exams/professor/updateExpandDays`, {
+      sectionId: sectionId,
+      isGradingExpand: isGradingExpand,
+    });
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+export const updateAnnouceGrades = async (sectionId, gradeAnnouceStatus) => {
+  try {
+    const response = await axiosInstance.put(`/exams/professor/updateAnnouceGrades`, {
+      sectionId: sectionId,
+      gradeAnnouceStatus: gradeAnnouceStatus,
+    });
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+export const updateStudentGradeManually = async (sectionId) => {
+  try {
+    const response = await axiosInstance.put(
+      `/exams/student/updateStudentGradeManually?sectionid=`, {
+        sectionId: sectionId
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}
