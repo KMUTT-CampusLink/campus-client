@@ -194,7 +194,7 @@ function ProfessorHomePage() {
           </button>
         </div>
         <div className="pt-[20px]">
-          <h1 className="text-[20px] font-bold">Pending Exam</h1>
+          <h1 className="text-[20px] font-bold">Pending Approve Exam</h1>
           <div
             className={`grid gap-4 py-[20px] ${
               pendingExam && pendingExam.length === 0 ? "hidden" : "block"

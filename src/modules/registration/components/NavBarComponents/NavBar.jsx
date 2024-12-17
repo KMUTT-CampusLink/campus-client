@@ -52,42 +52,42 @@ const NavBar = () => {
     },
   ];
 
-  const role = localStorage.getItem("userRole");
+  // const role = localStorage.getItem("userRole");
 
   // Define removal logic for each role
-  const roleBasedFilter = (link, role) => {
-    switch (role) {
-      case "Student":
-        return link.name !== "Employ";
-      case "Professor":
-        return (
-          link.name !== "Registration" &&
-          link.name !== "Grade" &&
-          link.name !== "Employ"
-        );
-      case "Management":
-        return link.name !== "Registration" && link.name !== "Grade";
-      case "Staff":
-        return (
-          link.name === "Help & Tools" ||
-          link.name === "Payment" ||
-          link.name === "Campus Services"
-        );
-      case "Driver":
-        return (
-          link.name === "Help & Tools" ||
-          link.name === "Payment" ||
-          link.name === "Campus Services"
-        );
-      default:
-        return false;
-    }
-  };
+  // const roleBasedFilter = (link, role) => {
+  //   switch (role) {
+  //     case "Student":
+  //       return link.name !== "Employ";
+  //     case "Professor":
+  //       return (
+  //         link.name !== "Registration" &&
+  //         link.name !== "Grade" &&
+  //         link.name !== "Employ"
+  //       );
+  //     case "Management":
+  //       return link.name !== "Registration" && link.name !== "Grade";
+  //     case "Staff":
+  //       return (
+  //         link.name === "Help & Tools" ||
+  //         link.name === "Payment" ||
+  //         link.name === "Campus Services"
+  //       );
+  //     case "Driver":
+  //       return (
+  //         link.name === "Help & Tools" ||
+  //         link.name === "Payment" ||
+  //         link.name === "Campus Services"
+  //       );
+  //     default:
+  //       return false;
+  //   }
+  // };
 
   // Apply the filter
-  const filteredNavigationLinks = navigationLinks.filter((link) =>
-    roleBasedFilter(link, role)
-  );
+  // const filteredNavigationLinks = navigationLinks.filter((link) =>
+  //   roleBasedFilter(link, role)
+  // );
 
   const mobileNavRef = useRef(null); // mobile nav reference
   const [isOpen, setIsOpen] = useState(false);
@@ -133,9 +133,8 @@ const NavBar = () => {
 
   return (
     <nav
-      className={`w-full fixed font-georama z-[100] transition-transform duration-300 ${
-        isNavVisible ? "transform translate-y-0" : "transform -translate-y-full"
-      } ${isOpen && " overflow-y-auto h-full"}`}
+      className={`w-full fixed font-georama z-[100] transition-transform duration-300 ${isNavVisible ? "transform translate-y-0" : "transform -translate-y-full"
+        } ${isOpen && " overflow-y-auto h-full"}`}
     >
       {/* Desktop Nav Bar */}
       <div
@@ -146,7 +145,7 @@ const NavBar = () => {
             <div className="text-xl font-bold">CampusLink</div>
           </Link>
           <div className="flex-wrap flex-grow ml-6">
-            {filteredNavigationLinks.map((link, index) => (
+            {navigationLinks.map((link, index) => (
               <NavigationLink key={index} link={link} index={index} />
             ))}
           </div>
@@ -156,9 +155,8 @@ const NavBar = () => {
 
       {/* Mobile Nav Bar */}
       <div
-        className={`min-[990px]:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r from-[#c2544d] to-[#f09107]  ${
-          isOpen && "w-3/4 h-full rounded-e-2xl"
-        }`}
+        className={`min-[990px]:hidden text-white py-2 px-4 flex flex-col justify-between bg-gradient-to-r from-[#c2544d] to-[#f09107]  ${isOpen && "w-3/4 h-full rounded-e-2xl"
+          }`}
         ref={mobileNavRef}
       >
         <div className="flex items-center justify-between">
@@ -175,7 +173,7 @@ const NavBar = () => {
 
           {!isOpen && <ProfileButton />}
         </div>
-        {isOpen && <MobileNav navigationLinks={filteredNavigationLinks} />}
+        {isOpen && <MobileNav navigationLinks={navigationLinks} />}
       </div>
     </nav>
   );

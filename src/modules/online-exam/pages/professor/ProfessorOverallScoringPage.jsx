@@ -112,7 +112,7 @@ export default function ProfessorOverallScoringPage() {
               {isAnnounced ? "Scores Annouced" : "Annouce Scores"}
             </button>
             {isAnnounced && (
-              <p className="text-red-600 text-[12px] md:text-[14px] pt-1">
+              <p className="text-red-600 text-[11px] md:text-[14px] pt-1">
                 Score has already been announced
               </p>
             )}
