@@ -12,6 +12,7 @@ import BookSearchPage from "../Pages/BookSearchPage";
 import ViewallBookPage from "../Pages/ViewallBookPage";
 import AuthRoute from "../../registration/middleware/AuthRoute";
 import AllEventPage from "../Pages/AllEventPage";
+import AdminPage from "../Pages/AdminPage";
 
 export default function LibRoutes() {
   return [
@@ -70,6 +71,14 @@ export default function LibRoutes() {
     {
       path: "/library/viewall/:category",
       element: <ViewallBookPage />,
+    },
+    {
+      path: "/library/admin",
+      element: (
+        <AuthRoute allowed_roles={["Staff"]}>
+          <AdminPage />
+        </AuthRoute>
+      ),
     },
   ];
 }

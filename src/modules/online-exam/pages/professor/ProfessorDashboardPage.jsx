@@ -39,6 +39,7 @@ export default function ProfessorDashboardPage() {
   useEffect(() => {
     getData();
   }, []);
+
   return (
     <>
       <NavBar />
@@ -54,7 +55,7 @@ export default function ProfessorDashboardPage() {
           <div>Fetching Error (No participant)</div>
         ) : (
           <div className=" my-10 flex flex-col gap-[50px]">
-            <div className="mx-[50px]">
+            <div>
               <p>Total participant : {participant}</p>
               <p>Min : {min}</p>
               <p>Max : {max}</p>

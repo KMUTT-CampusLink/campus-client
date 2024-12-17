@@ -3,6 +3,19 @@ import { useNavigate } from "react-router-dom";
 import AddPopUp from "../components/AddPopUp";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { z } from "zod";
+
+const schema = z.object({
+  poster: z
+    .any()
+    .refine((file) => file?.length !== 0, "File is required")
+    .refine((file) => file[0]?.size < 10_485_760, "Poster file at most 5MB")
+    .refine((file) => {
+      const fileType = file[0]?.type.split("/").pop();
+      const allowedExtension = /^(jpe?g|png|gif|webp|avif)$/;
+      return allowedExtension.test(fileType);
+    }, "Invalid file type. Allowed types: JPEG, PNG, GIF, WebP, AVIF."),
+});
 
 const jobTitles = ["Professor", "Management", "Staff", "Driver"];
 
@@ -10,6 +23,9 @@ const EmployeeAdd = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [faculties, setFaculties] = useState([]);
+  const [empImage, setempImage] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [imgURL, setimgURL] = useState(null);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -169,41 +185,42 @@ const EmployeeAdd = () => {
     setShowPopup(false);
   };
 
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    setempImage(file || null); // Set to null if no file is selected
+    if (file) {
+      console.log("File selected:", file); // Debugging info
+      const a = URL.createObjectURL(file); // Create a temporary URL for the image
+      setimgURL(a);
+    }
+    //setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" })); // Clear errors
+  };
+
   const handleSumbit = async (e) => {
     e.preventDefault();
-
-    //console.log("Submit button clicked");
-    // Debugging: Check if this logs
     setShowPopup(false);
 
-    //const facultyNumber = facultyMapping[formData.faculty_id];
-    // console.log(facultyNumber);
-    //console.log(formData.faculty_id);
-
-    const employeeData = {
-      firstname: formData.firstname,
-      midname: formData.midname,
-      lastname: formData.lastname,
-      faculty_id: formData.faculty_id,
-      job_title: formData.job_title,
-      position: formData.position,
-      salary: formData.salary,
-      gender: formData.gender,
-      date_of_birth: formData.date_of_birth,
-      identification_no: formData.identification_no,
-      phone: formData.phone,
-      address: formData.address,
-      sub_district: formData.sub_district,
-      province: formData.province,
-      district: formData.district,
-      postal_code: formData.postal_code,
-    };
+    const form = new FormData();
+    form.append("firstname", formData.firstname);
+    form.append("midname", formData.midname);
+    form.append("lastname", formData.lastname);
+    form.append("faculty_id", formData.faculty_id);
+    form.append("job_title", formData.job_title);
+    form.append("position", formData.position);
+    form.append("salary", formData.salary);
+    form.append("gender", formData.gender);
+    form.append("date_of_birth", formData.date_of_birth);
+    form.append("identification_no", formData.identification_no);
+    form.append("phone", formData.phone);
+    form.append("address", formData.address);
+    form.append("sub_district", formData.sub_district);
+    form.append("province", formData.province);
+    form.append("district", formData.district);
+    form.append("postal_code", formData.postal_code);
+    form.append("empImage", empImage);
 
     try {
-      const response = await axiosInstance.post(
-        "/employ/postEmp",
-        employeeData
-      );
+      const response = await axiosInstance.postForm("/employ/postEmp", form);
 
       if (response.status === 200) {
         //console.log("Employee added successfully");
@@ -226,11 +243,29 @@ const EmployeeAdd = () => {
           {/* Employee Avatar */}
           <div className="flex justify-center">
             <img
-              src="https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
+              src={
+                imgURL ||
+                "https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
+              }
               alt="Employee Avatar"
               className="rounded-full w-36 h-36 md:w-42 md:h-42 object-cover"
             />
           </div>
+
+          <label
+            htmlFor="fileInput"
+            className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600 focus:outline-none"
+          >
+            +
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={onFileChange}
+            />
+          </label>
+
           <form className=" text-[#7F483C]">
             <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
@@ -294,7 +329,6 @@ const EmployeeAdd = () => {
                     </p>
                   )}
                 </div>
-
 
                 {/* 1 */}
                 <div className="mb-4">
@@ -589,7 +623,6 @@ const EmployeeAdd = () => {
                     )}
                   </div>
                 </div>
-
               </div>
             </div>
 
