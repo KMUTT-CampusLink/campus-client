@@ -11,6 +11,8 @@ import {
   addAssignmentSubmission,
   createUpComingEvents,
   deleteUpComingEvents,
+  editCourseMaterial,
+  deleteCourseMaterial
 } from "./api";
 
 // Mutation to create a new discussion post
@@ -200,3 +202,32 @@ export const useDeleteEvent = () => {
   });
 };
 
+// Mutation to edit course material
+export const useEditCourseMaterial = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, formData }) => editCourseMaterial(id, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries("allVideos");
+    },
+    onError: (error) => {
+      console.error("Error editing course material:", error);
+    },
+  });
+};
+
+// Mutation to delete course material
+export const useDeleteCourseMaterial = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id) => deleteCourseMaterial(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries("allVideos");
+    },
+    onError: (error) => {
+      console.error("Error deleting course material:", error);
+    },
+  });
+};
