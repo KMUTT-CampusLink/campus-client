@@ -15,7 +15,7 @@ export const FileUploadPopup = ({ assignmentId, studentId, onClose }) => {
 
   useEffect(() => {
     // Check if submission exists
-    if (submissionFilePath?.data?.data?.file_path) {
+    if (submissionFilePath?.data?.file_path) {
 
       setIsSubmissionAvailable(true);
     } else {
@@ -85,7 +85,7 @@ export const FileUploadPopup = ({ assignmentId, studentId, onClose }) => {
           <div className="text-center">
             <p className="text-green-500 mb-4">You have already submitted this assignment.</p>
             <a
-              href={`${MINIO_BASE_URL}/${submissionFilePath.file_path}`}
+              href={`${MINIO_BASE_URL}/${submissionFilePath.data.file_path}`}
               download
               className="text-blue-500 underline"
             >
