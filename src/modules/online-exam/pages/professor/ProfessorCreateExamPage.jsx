@@ -13,7 +13,10 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { createNewExam } from "../../services/apis/professerApi";
+import {
+  createNewExam,
+  uploadExamQuestionImage,
+} from "../../services/apis/professerApi";
 
 export default function ProfessorCreateExamPage() {
   const { sectionId } = useParams();
@@ -86,14 +89,18 @@ export default function ProfessorCreateExamPage() {
       questions: exam.questions.map((question) => ({
         ...question,
         score: question.score || defaultScore,
-        choiceImages: question.choiceImages || [],
       })),
     };
-    console.log(finalExam);
+    finalExam.questions.forEach((q, index) => {
+      if (q.image) {
+        formData.append("file", new File([q.image], `${index + 1}`, { type: q.image.type }));
+      }
+    });
     try {
       const res = await createNewExam(finalExam, sectionId);
       const id = res.data.data;
-      if (res.status === 200) {
+      const imageResponse = await uploadExamQuestionImage(id, formData);
+      if (res.status === 200 && imageResponse.status === 200) {
         navigate(`/exams/professor/setting/${id}`);
       }
     } catch (error) {

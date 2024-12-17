@@ -14,7 +14,7 @@ import {
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { getExamDataById, updateExam, uploadFile } from '../../services/apis/professerApi';
+import { getExamDataById, updateExam, uploadExamQuestionImage } from '../../services/apis/professerApi';
 
 export default function ProfessorEditExamPage() {
   const { examId } = useParams();
@@ -132,26 +132,27 @@ export default function ProfessorEditExamPage() {
 
   // Submit exam function
   const handleSubmit = async () => {
+    const formData = new FormData();
     const finalExam = {
       ...exam,
       questions: exam.questions.map((question) => ({
         ...question,
         score: question.score || defaultScore,
-        options: question.options.map((option) => ({
-          choiceText: option.choiceText,
-          // choiceImg: option.choiceImg,
-          isCorrect: option.isCorrect,
-          choiceId: option.choiceId,
-        })),
       })),
     };
-    // const results = await Promise.all(finalExam.questions.map(async (question) => {
-    //   console.log(question.image);
-    //   // const uploadImage = await uploadFile(question.image);
-    // }));
-    const res = await updateExam(finalExam);
-    if (res.status === 200) {
-      navigate(`/exams/professor/setting/${examId}`);
+    finalExam.questions.forEach((q, index) => {
+      if (q.image) {
+        formData.append("file", new File([q.image], `${index + 1}`, { type: q.image.type }));
+      }
+    });
+    try {
+      const res = await updateExam(finalExam);
+      const imageResponse = await uploadExamQuestionImage(exam.examId, formData);
+      if (res.status === 200 && imageResponse.status === 200) {
+        navigate(`/exams/professor/setting/${exam.examId}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -159,7 +160,7 @@ export default function ProfessorEditExamPage() {
     <div className="w-auto">
       <Navbar />
       <div className="mx-[35px] xl:mx-[100px] pb-[30px] pt-20">
-      <BackBTN />
+        <BackBTN />
         <div className={`${viewAsStudent ? "hidden" : "block"}`}>
           <div className="flex flex-col justify-between gap-[20px]">
             <div className="flex flex-col xl:flex-row xl:justify-between  xl:items-center">

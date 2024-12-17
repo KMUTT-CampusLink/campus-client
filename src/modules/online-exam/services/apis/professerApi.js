@@ -205,13 +205,16 @@ export const updateExamAnnouncement = async (examId, isAnnounced) => {
   }
 };
 
-export const uploadFile = async (file) => {
+export const uploadExamQuestionImage = async (id, formdata) => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
     const response = await axiosInstance.post(
-      "/exams/professor/uploadFile",
-      file
+      `/exams/professor/addExamImage/${id}`,
+      formdata,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return response;
   } catch (error) {
@@ -239,7 +242,7 @@ export const checkHasParticipant = async (examId) => {
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const getGradingDate = async (sectionId) => {
   try {
