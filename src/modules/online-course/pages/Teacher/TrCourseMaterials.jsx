@@ -7,16 +7,22 @@ import {
   faFile,
   faUpload,
   faX,
-  faCloudUploadAlt
+  faCloudUploadAlt,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import {
   useAllVideos,
   useCourseHeaderBySectionID,
 } from "../../services/queries";
+import {
+  useDeleteCourseMaterial,
+  useEditCourseMaterial
+}from "../../services/mutations"
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { z } from "zod";
 import popToast from "../../../../utils/popToast";
+import EditPopup from "../../components/EditPopup";
 
 const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME
   }`;
@@ -78,7 +84,7 @@ const TrCourseMaterials = () => {
   });
 
   const { data: details } = useCourseHeaderBySectionID(sec_id);
-  const { data: videos } = useAllVideos(sec_id);
+  const { data: videos, refetch: refetchVideos } = useAllVideos(sec_id);
 
   // Preload video details when videos are available
   useEffect(() => {
@@ -118,16 +124,18 @@ const TrCourseMaterials = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+  
+
   const handleSubmit = async () => {
     try {
       schema.parse(formData);
       setErrors({});
+
       const submitData = new FormData();
       submitData.append("title", formData.title);
       submitData.append("sec_id", sec_id);
 
-      if (formData.videoFile)
-        submitData.append("videoFile", formData.videoFile);
+      if (formData.videoFile) submitData.append("videoFile", formData.videoFile);
       formData.materialFiles.forEach((file) =>
         submitData.append("materialFiles", file)
       );
@@ -135,15 +143,18 @@ const TrCourseMaterials = () => {
       const response = await axiosInstance.post(
         "/courses/addVideoMaterials",
         submitData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       if (response.status === 200) {
+        // Clear form state
         setFormData({ title: "", videoFile: null, materialFiles: [] });
-        document.getElementById("videoFileInput").value = null; // Reset the video file input
-        document.getElementById("materialFilesInput").value = null; // Reset the material files input
+        document.getElementById("videoFileInput").value = null;
+        document.getElementById("materialFilesInput").value = null;
+
+        // Trigger a refetch of the video list
+        await refetchVideos();
+
         popToast("Files uploaded successfully!", "success");
       }
     } catch (error) {
@@ -159,6 +170,7 @@ const TrCourseMaterials = () => {
       }
     }
   };
+
 
   const handleEditClick = () => setIsEditing((prev) => !prev);
 
@@ -176,6 +188,31 @@ const TrCourseMaterials = () => {
     }
   };
 
+  const { mutate: deleteMaterial } = useDeleteCourseMaterial();
+
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this material?")) {
+      deleteMaterial(videoDetails.videoId, {
+        onSuccess: () => {
+          popToast("Material deleted successfully!", "success");
+          refetchVideos(); // Refetch updated list of videos
+          // Clear the videoDetails state if the deleted video was selected
+          setVideoDetails({
+            video: "",
+            videoId: "",
+            videoURL: "",
+            attachments: [],
+          });
+        },
+        onError: (error) => {
+          console.error("Error deleting material:", error);
+          popToast("Failed to delete material.", "error");
+        },
+      });
+    }
+  };
+
+
   return (
     <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
       <NavForIndvCourse page="materials" />
@@ -192,6 +229,7 @@ const TrCourseMaterials = () => {
           <div className="text-2xl font-extrabold pb-3 text-[#ecb45e]">
             Materials
           </div>
+          
           <button
             onClick={handleEditClick}
             className={`px-6 py-2 mt-4 rounded-lg flex items-center font-medium justify-center transition duration-200 shadow-md ${isEditing
@@ -202,7 +240,16 @@ const TrCourseMaterials = () => {
             <FontAwesomeIcon icon={isEditing ? faX : faUpload} className="mr-2" />
             {isEditing ? "Cancel Upload" : "Upload New Video"}
           </button>
+          {/* Edit Button */}
+          <button
+            onClick={handleDelete} // Replace this with your edit logic
+            className={`px-6 py-2 mt-4 rounded-lg flex items-center font-medium justify-center transition duration-200 shadow-md ${isEditing || (videoDetails.attachments.length === 0 && videoDetails.videoURL.length === 0) ? 'hidden' : ''
+              } bg-red-500 hover:bg-red-600 text-white`}
 
+          >
+            <FontAwesomeIcon icon={faTrash} className="mr-2" />
+            Delete
+          </button>
 
         </div>
 

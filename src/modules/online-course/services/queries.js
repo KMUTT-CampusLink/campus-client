@@ -12,6 +12,9 @@ import {
   fetchCourseHeaderBySectionIDForStudent,
   fetchAllAssignmentsBySectionID,
   fetchAssignmentSubmissionFilePath,
+  fetchAllUpComingEvents,
+  fetchUpComingEventsByTeacher,
+  fetchStudentSubmission,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -108,7 +111,6 @@ export const useAllAssignmentsBySectionID = (sectionID) => {
   });
 };
 
-
 export const useAllCommentsByPostID = (postId) => {
   return useQuery({
     queryKey: ["allComment", postId],
@@ -127,6 +129,39 @@ export const useAssignmentSubmissionFilePath = (assignmentID, studentID) => {
     enabled: !!assignmentID && !!studentID,
     onError: (error) => {
       console.error("Error fetching assignment submission file path:", error);
+    },
+  });
+};
+
+export const useStudentSubmission = (sectionID, assignmentID) => {
+  return useQuery({
+    queryKey: ["submissionSectionID", sectionID,assignmentID],
+    queryFn: () => fetchStudentSubmission(sectionID,assignmentID),
+    enabled: !!sectionID && !!assignmentID,
+    onError: (error) => {
+      console.error("Error fetching student submission :", error);
+    },
+  });
+};
+
+export const useUpComingEvents = (studentID) => {
+  return useQuery({
+    queryKey: ["events", studentID],
+    queryFn: () => fetchAllUpComingEvents(studentID),
+    enabled: !!studentID,
+    onError: (error) => {
+      console.error("Error fetching up coming events:", error);
+    },
+  });
+};
+
+export const useUpComingEventsByTeacher = (empID, sectionID) => {
+  return useQuery({
+    queryKey: ["allevents", { empID, sectionID }],
+    queryFn: () => fetchUpComingEventsByTeacher(empID, sectionID),
+    enabled: !!empID && !!sectionID,
+    onError: (error) => {
+      console.error("Error fetching up coming events:", error);
     },
   });
 };

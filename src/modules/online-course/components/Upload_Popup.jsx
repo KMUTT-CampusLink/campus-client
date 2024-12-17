@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import DatePicker from "react-datepicker";
 
 
 
@@ -8,6 +9,8 @@ const UploadPopup = ({ onClose, onSubmit, material }) => {
   const [title, setTitle] = useState(""); // Title of the assignment
   const [newAttachments, setNewAttachments] = useState([]); // Files selected for upload
   const [warning, setWarning] = useState(""); // For warnings or errors
+  const [startDate, setStartDate] = useState(new Date()); // Start Date
+  const [endDate, setEndDate] = useState(new Date());
 
   // Populate existing data if editing an assignment
   useEffect(() => {
@@ -41,8 +44,17 @@ const UploadPopup = ({ onClose, onSubmit, material }) => {
       return;
     }
 
+
+    // Ensure endDate is greater than startDate
+    if (endDate <= startDate) {
+      alert("End Date must be greater than Start Date.");
+      return;
+    }
+
     onSubmit({
       title,
+      startDate,
+      endDate,
       attachments: newAttachments, // Pass the selected files to the parent component
     });
 
@@ -86,6 +98,42 @@ const UploadPopup = ({ onClose, onSubmit, material }) => {
               }}
             />
 
+          </div>
+
+          {/* Start Date Picker */}
+          <div className="mb-4">
+            <label
+              htmlFor="startDate"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Start Date & Time
+            </label>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              showTimeSelect
+              dateFormat="Pp"
+              minDate={new Date()} // Ensure start date is today or later
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
+            />
+          </div>
+
+          {/* End Date Picker */}
+          <div className="mb-4">
+            <label
+              htmlFor="endDate"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              End Date & Time
+            </label>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              showTimeSelect
+              dateFormat="Pp"
+              minDate={startDate} // Ensure end date is not before start date
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
+            />
           </div>
 
           {/* File Input */}
