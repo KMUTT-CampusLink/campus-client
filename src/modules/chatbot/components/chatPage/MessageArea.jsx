@@ -3,7 +3,7 @@ import MessageContainer from './MessageContainer';
 import MessageReply from './MessageReply';
 import "../../style/style.css";
 
-const MessageArea = ({questions, dummyAns, profilePic}) => {
+const MessageArea = ({questions, dummyAns, profilePic, trips, bookdata}) => {
 
   const messageendref = useRef(null);
 
@@ -22,7 +22,13 @@ const MessageArea = ({questions, dummyAns, profilePic}) => {
           {
             dummyAns[i] ?
             <div className='flex flex-row gap-6'>
-              <MessageReply dummyAns = {dummyAns} questions = {questions} answer = {dummyAns[i]} profilePic = {profilePic} />
+              <MessageReply 
+              dummyAns = {dummyAns} 
+              questions = {questions} 
+              answer = {dummyAns[i]} 
+              profilePic = {profilePic} 
+              trips = {trips[i]} 
+              bookdata = {bookdata[i]}/>
             </div>
             : 
             <div className='flex flex-row gap-4 sm:gap-8'>
