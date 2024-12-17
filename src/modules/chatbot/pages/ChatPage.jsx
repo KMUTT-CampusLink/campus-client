@@ -59,7 +59,7 @@ const ChatPage = () => {
       try {
         const reply = await axiosInstance.post("/botastra/message", {message : input});
         const ans = reply.data.replyText;
-        // console.log(reply);
+        console.log(reply);
         const nextQuestions = reply.data.nextQuestions;
         setTrips([...trips, reply.data.trips]);
         setBookdata([...bookdata, reply.data.book[0]]);
