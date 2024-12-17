@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { generateFaceAttendance } from "../services/api";
-import { markAttendance } from "../services/api";
+import { useNavigate,useParams } from "react-router-dom";
+import { markAttendance, getCourseHeader, generateFaceAttendance } from "../services/api";
+import moment from "moment";
 import * as faceapi from "face-api.js";
 
 const useFace = () => {
@@ -14,14 +14,14 @@ const useFace = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
-
+  const {sectionId} = useParams();
   const COOLDOWN_PERIOD = 5000; // ms (5seconds)
 
   const refFaces = [
-    { image: "../mockUpDataSet/832.jpg", label: "STU00020" },
-    { image: "../mockUpDataSet/845.jpg", label: "STU00022" },
-    { image: "../mockUpDataSet/850.jpg", label: "STU00088" },
-    { image: "../mockUpDataSet/857.jpg", label: "STU00051" },
+    { image: "/mockUpDataSet/832.jpg", label: "STU00020" },
+    { image: "/mockUpDataSet/845.jpg", label: "STU00022" },
+    { image: "/mockUpDataSet/850.jpg", label: "STU00088" },
+    { image: "/mockUpDataSet/857.jpg", label: "STU00051" },
   ];
 
   const items = [
@@ -32,11 +32,11 @@ const useFace = () => {
 
   const handleMenuClick = (key) => {
     if (key === "Attendance") {
-      navigate("/attendance");
+      navigate(`/attendance/professor/${sectionId}`);
     } else if (key === "QR CODE") {
-      navigate("/attendance/qr");
-    } else if (key === "Face Attendance") {
-      navigate("/attendance/faceAttendance");
+      navigate(`/attendance/professor/${sectionId}/profQr`);
+    } else if(key == "Face Attendance"){
+      navigate(`/attendance/professor/${sectionId}/faceAttendance`)
     }
   };
 
@@ -174,24 +174,72 @@ const useFace = () => {
     }
   }, [isStreaming, faceMatcher, detectedIds]);
 
-  const detail = () => (
-    <div className="flex flex-col p-4 space-y-2 md:space-y-4">
-      <span className="text-xl md:text-2xl font-bold text-orange-500">
-        About Classroom
-      </span>
-      <div className="text-base md:text-lg font-semibold">
-        <div>CSC-230 Computer Architecture & Design</div>
-        <div>Lecturer - Arjan xxxxxxxx</div>
-        <div>Time - 1:30 to 4:30 PM (Thursday)</div>
+  const detail = () => {
+    const [course, setCourse] = useState(null); // State to hold course data
+    const [loading, setLoading] = useState(true); // State to handle loading
+    const [error, setError] = useState(null); // State to handle errors
+
+    useEffect(() => {
+      const fetchCourse = async () => {
+        try {
+          const response = await getCourseHeader(sectionId);
+          if (response.data.success) {
+            setCourse(response.data.data);
+          } else {
+            setError("Failed to fetch students");
+          }
+        } catch (err) {
+          setError(err.response?.data?.message || "An error occurred");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchCourse();
+    }, [sectionId]);
+
+    if (loading) {
+      return <div>Loading course details...</div>;
+    }
+
+    if (error) {
+      return <div>Error loading course details: {error}</div>;
+    }
+
+    // Check if course data exists
+    if (!course || !course.course || !course.professor) {
+      return <div>No course data available</div>;
+    }
+
+    return (
+      <div className="flex flex-col p-4 space-y-2 md:space-y-4">
+        <span className="text-xl md:text-2xl font-bold text-orange-500">
+          About Classroom
+        </span>
+        <div className="text-base md:text-lg font-semibold">
+          <div>
+            {course.course.code} {course.course.name}
+          </div>
+          {course.professor.map((prof, index) => (
+            <div key={index}>
+              Lecturer -{" "}
+              {`${prof.employee.firstname} ${prof.employee.lastname}`}
+            </div>
+          ))}
+          <div>
+            Time - {moment(course.start_time).format("h:mm A")} to{" "}
+            {moment(course.end_time).format("h:mm A")} ({course.day})
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
   const faceButton = () => (
     <div className="flex flex-col items-center">
       {!isStreaming && !loadingModels && (
         <button
           className="flex items-center justify-center text-white bg-[#F69800] font-open-sans font-normal text-lg h-[5vh] rounded-lg w-full md:w-1/3 lg:w-1/4"
-          onClick={() => handleGenerateAttendance(1001)}
+          onClick={() => handleGenerateAttendance(sectionId)}
         >
           Start Attendance
         </button>

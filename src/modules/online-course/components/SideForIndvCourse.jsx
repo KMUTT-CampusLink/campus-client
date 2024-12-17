@@ -154,7 +154,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage}) => {
 
             {/* Attendance Link */}
             <li
-              // onClick={() => handleNavigation("attendance")}
+              onClick={() => navigate(`/attendance/student/1001`)}
               className="mb-4 p-2 border-b-2"
             >
               <span

@@ -54,6 +54,20 @@ export default function AdministratorMainPage() {
       marginTop: "100px",
       marginLeft: "50px",
     },
+    guardbutton: {
+      padding: "20px 40px",
+      backgroundColor: "rgba(255, 255, 255, 0.8)", // Same background color
+      borderRadius: "20px",
+      border: "2px solid rgba(90, 60, 46, 0.8)", // Same border color for both
+      fontSize: "24px",
+      cursor: "pointer",
+      fontWeight: "bold",
+      color: "#5a3c2e", // Same text color for both
+      boxShadow: "0 8px 15px rgba(0, 0, 0, 0.1)",
+      transition: "transform 0.2s ease-in-out",
+      marginTop: "20px", // Slightly less spacing between Room Booking and Guard Reservation
+      marginLeft: "50px",
+    },
     title: {
       textAlign: "center",
       fontSize: "48px",
@@ -108,7 +122,9 @@ export default function AdministratorMainPage() {
                 (e.currentTarget.style.transform = "scale(1.05)")
               }
               onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              onClick={() => navigate("/security/administrator/lostandfoundform")}
+              onClick={() =>
+                navigate("/security/administrator/lostandfoundform")
+              }
             >
               Lost and Found
             </button>
@@ -123,6 +139,18 @@ export default function AdministratorMainPage() {
               onClick={() => navigate("/security/administrator/mybooking")}
             >
               Room Booking
+            </button>
+            <button
+              style={styles.guardbutton}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onClick={() =>
+                navigate("/security/administrator/guardreservation")
+              }
+            >
+              Guard Reservation
             </button>
           </div>
         </div>
