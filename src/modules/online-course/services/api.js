@@ -101,3 +101,12 @@ export const createDiscussionReply = (topicId, newReply) =>
 //announcement 
 export const fetchAllUpComingEvents = (studentID) =>
   get(`/courses/announcement/${studentID}`);
+
+export const fetchUpComingEventsByTeacher = (empID, sectionID) =>
+  get(`/courses/announcement/teacher/${empID}/${sectionID}`);
+
+export const createUpComingEvents = (eventInfo) =>
+  post(`/courses/announcement/`, eventInfo);
+
+export const deleteUpComingEvents = (deleteInfo) => 
+  remove(`/courses/announcement/`, deleteInfo);

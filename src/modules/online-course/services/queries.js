@@ -13,6 +13,7 @@ import {
   fetchAllAssignmentsBySectionID,
   fetchAssignmentSubmissionFilePath,
   fetchAllUpComingEvents,
+  fetchUpComingEventsByTeacher
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -142,3 +143,14 @@ export const useUpComingEvents = (studentID) => {
     },
   });
 }
+
+export const useUpComingEventsByTeacher = (empID, sectionID) => {
+  return useQuery({
+    queryKey: ["allevents", { empID, sectionID }],
+    queryFn: () => fetchUpComingEventsByTeacher(empID, sectionID),
+    enabled: !!empID && !!sectionID,
+    onError: (error) => {
+      console.error("Error fetching up coming events:", error);
+    },
+  });
+};

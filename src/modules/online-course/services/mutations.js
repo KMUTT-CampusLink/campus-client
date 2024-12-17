@@ -9,6 +9,8 @@ import {
   createDiscussionReply,
   editAssignmentSubmission,
   addAssignmentSubmission,
+  createUpComingEvents,
+  deleteUpComingEvents
 } from "./api";
 
 // Mutation to create a new discussion post
@@ -176,3 +178,28 @@ export const useEditAssignmentSubmission = () => {
     },
   });
 }
+
+export const useCreateEvents = () => {
+  return useMutation({
+    mutationFn: createUpComingEvents,
+    onError: (error) => {
+      console.error("Error creating upcoming event:", error);
+    },
+    onSuccess: (data) => {
+      console.log("Event created successfully:", data);
+    },
+  });
+};
+
+export const useDeleteEvent = () => {
+  return useMutation({
+    mutationFn: ({ announcementID, empID }) =>
+      deleteUpComingEvents({ announcementID, empID }),
+    onError: (error) => {
+      console.error("Error deleting upcoming event:", error);
+    },
+    onSuccess: (data) => {
+      console.log("Event deleted successfully:", data);
+    },
+  });
+};
