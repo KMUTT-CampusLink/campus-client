@@ -190,7 +190,7 @@ export const useCreateEvents = () => {
 
 export const useDeleteEvent = () => {
   return useMutation({
-    mutationFn: ({ announcementID, empID }) => deleteUpComingEvents({ announcementID, empID }),
+    mutationFn:deleteUpComingEvents,
     onError: (error) => {
       console.error("Error deleting upcoming event:", error);
     },

@@ -33,9 +33,11 @@ const put = async (url, payload) => {
   }
 };
 
-const remove = async (url) => {
+const remove = async (url, body) => {
+  console.log("remove", url);
+  console.log(body);
   try {
-    const { data } = await axiosInstance.delete(url);
+    const { data } = await axiosInstance.delete(url, { data: body });
     return data;
   } catch (error) {
     handleApiError(error);
