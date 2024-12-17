@@ -72,3 +72,12 @@ export const updateAttendance = async(sectionId,studentId,status,created_at) => 
     return error.response.data;
   }
 }
+
+export const getStudentAttendance = async(sectionId) => {
+  try{
+    const response = await axiosInstance.get(`attend/student/${sectionId}`)
+    return response
+  }catch (error){
+    return error.response.data;
+  }
+}

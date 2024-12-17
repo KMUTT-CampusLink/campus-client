@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { getAttendStudent, updateAttendance } from "../services/api";
+import { getStudentAttendance } from "../services/api";
 
 const StAttendanceComponent = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -19,7 +19,7 @@ const StAttendanceComponent = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await getAttendStudent(sectionId);
+        const response = await getStudentAttendance(sectionId);
         if (response.data.success) {
           setStudents(response.data.data);
         } else {
