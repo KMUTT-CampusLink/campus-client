@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
 import CourseHeader from "../../components/CourseHeader";
 import { useCourseHeaderBySectionIDForStudent, useAllAssignmentsBySectionID } from "../../services/queries";
-import { useEditAssignmentSubmission } from "../../services/mutations";
+import { useEditAssignmentSubmission, useAddAssignmentSubmission } from "../../services/mutations";
 import { FileUploadPopup } from "../../components/AssignmentSubmissionEditPopup";
 
 const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}`;
@@ -18,6 +18,7 @@ const StTasks = () => {
   const { data: details } = useCourseHeaderBySectionIDForStudent(sec_id);
   const { data: assignments, isLoading, isError } = useAllAssignmentsBySectionID(sec_id);
   const editAssignmentSubmission = useEditAssignmentSubmission();
+  const addAssignmentSubmission = useAddAssignmentSubmission();
 
   useEffect(() => {
     if (sec_id) {
@@ -29,10 +30,11 @@ const StTasks = () => {
   }, [sec_id, student_id]);
 
   const handleOpenPopup = (assignmentId) => {
-    console.log("Opening popup for assignment ID:", assignmentId); // Debugging
+    console.log("Opening popup for assignment ID:", assignmentId);
     setSelectedAssignment(assignmentId);
     setIsPopupOpen(true);
   };
+
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
@@ -52,20 +54,44 @@ const StTasks = () => {
     formData.append("student_id", student_id); // Add student_id to the payload
     formData.append("assignment_id", selectedAssignment); // Add assignment_id to the payload
 
-    editAssignmentSubmission.mutate(
-      { assignmentID: selectedAssignment, updatedSubmission: formData },
-      {
-        onSuccess: () => {
-          alert("Submission updated successfully!");
-          handleClosePopup();
-        },
-        onError: (error) => {
-          console.error("Error updating submission:", error);
-          alert("Failed to update submission. Please try again.");
-        },
-      }
+    // Check if submission exists or needs to be added
+    const submissionExists = assignments.find(
+      (assignment) => assignment.id === selectedAssignment && assignment.submission_exists
     );
+
+    if (submissionExists) {
+      // Edit Submission Flow
+      editAssignmentSubmission.mutate(
+        { assignmentID: selectedAssignment, updatedSubmission: formData },
+        {
+          onSuccess: () => {
+            alert("Submission updated successfully!");
+            handleClosePopup();
+          },
+          onError: (error) => {
+            console.error("Error updating submission:", error);
+            alert("Failed to update submission. Please try again.");
+          },
+        }
+      );
+    } else {
+      // Add Submission Flow
+      addAssignmentSubmission.mutate(
+        { assignmentID: selectedAssignment, newSubmission: formData },
+        {
+          onSuccess: () => {
+            alert("Submission added successfully!");
+            handleClosePopup();
+          },
+          onError: (error) => {
+            console.error("Error adding submission:", error);
+            alert("Failed to add submission. Please try again.");
+          },
+        }
+      );
+    }
   };
+
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-gray-100">
@@ -142,8 +168,10 @@ const StTasks = () => {
         <FileUploadPopup
           assignmentId={selectedAssignment}
           studentId={student_id}
+          onSubmit={(file) => handleSubmitFile(file)} // Pass file submission function
           onClose={handleClosePopup}
         />
+
       )}
     </div>
   );
