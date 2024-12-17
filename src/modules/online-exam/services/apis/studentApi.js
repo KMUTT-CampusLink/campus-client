@@ -126,37 +126,37 @@ export const getStudentReview = async (examId) => {
 };
 
 export const getStudentStatus = async (examId) => {
-    try {
-        const response = await axiosInstance.get(
-        `/exams/student/getStudentStatus?examId=${examId}`
-        );
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getStudentStatus?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
 export const getRemainingTime = async (examId) => {
-    try {
-        const response = await axiosInstance.get(
-        `/exams/student/getExamTime?examId=${examId}`
-        );
-        return response;
-    } catch (error) {
-        return error.response.data;
-    }
-}
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/getExamTime?examId=${examId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
 
-export const getFullMark = async(examId) => {
+export const getFullMark = async (examId) => {
   try {
     const response = await axiosInstance.get(
       `/exams/student/getFullMark?examId=${examId}`
-      );
-      return response;
+    );
+    return response;
   } catch (error) {
-      return error.response.data;
+    return error.response.data;
   }
-}
+};
 
 export const studentGetStudentScoreById = async (questionId) => {
   try {
@@ -179,3 +179,37 @@ export const studentGetQuestionScore = async (questionId) => {
     return error.response.data;
   }
 };
+export const studentGetStudentAnswerById = async (examId, questionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/studentGetStudentAnswerById?examId=${examId}&questionId=${questionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getStudentExamReview = async (examId, studentExamId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/studentExamReview?examId=${examId}&studentExamId=${studentExamId}`
+    );
+    return response.data;
+  } catch (e) {
+    return e.response.data;
+  }
+};
+
+
+
+export const updateStudentGrade = async (sectionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/exams/student/updateStudentGrade?sectionid=${sectionId}`
+    );
+    return response;
+  } catch (error) {
+    return error.response.data;
+  }
+}

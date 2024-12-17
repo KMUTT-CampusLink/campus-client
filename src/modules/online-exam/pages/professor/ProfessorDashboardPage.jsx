@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Question from "../../components/professor/Dashboard/Question";
+import BackBTN from "../../components/BackBTN";
 
 import { dashboard } from "../../services/apis/professerApi";
 import { useParams } from "react-router-dom";
@@ -38,10 +39,12 @@ export default function ProfessorDashboardPage() {
   useEffect(() => {
     getData();
   }, []);
+
   return (
     <>
       <NavBar />
       <div className="px-[26px] py-[35px] lg:px-[200px] pt-20">
+      <BackBTN />
         <p className="font-bold text-[#D4A015] text-[22px] lg:text-[30px] py-4 pb-7">
           Dashboard
         </p>
@@ -52,7 +55,7 @@ export default function ProfessorDashboardPage() {
           <div>Fetching Error (No participant)</div>
         ) : (
           <div className=" my-10 flex flex-col gap-[50px]">
-            <div className="mx-[50px]">
+            <div>
               <p>Total participant : {participant}</p>
               <p>Min : {min}</p>
               <p>Max : {max}</p>

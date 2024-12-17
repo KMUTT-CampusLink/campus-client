@@ -68,7 +68,7 @@ function AnnouncementPage() {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-w-[850px]">
       <NavBar />
       <main className=" pt-20 pb-6 mx-auto -z-10">
         <MainNavbar />

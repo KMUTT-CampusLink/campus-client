@@ -108,12 +108,12 @@ function BrowseBookPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-w-[850px]">
       <NavBar />
       <main className="pt-20 pb-6 mx-auto -z-10 font-nunito">
         <MainNavbar />
         {/* SearchBar */}
-        <div className="bg-neutral-100 flex flex-col items-center justify-center h-[20rem] px-4">
+        <div className="bg-neutral-100 flex flex-col items-center justify-center h-[20rem] px-4 min-w-[850px]">
           <h1 className="text-4xl font-semibold py-6 text-center">
             Browse Your Book
           </h1>
@@ -203,7 +203,7 @@ function BrowseBookPage() {
 
           {/* Book Container */}
           <div className="container mx-auto p-6 flex flex-col gap-6 items-center rounded-2xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4 md:scale-90">
               {data
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
                 .slice(0, 5)

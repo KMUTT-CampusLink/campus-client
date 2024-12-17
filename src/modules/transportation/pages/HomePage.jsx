@@ -9,6 +9,7 @@ import {
 import StopSelector from "../components/StopSelector";
 import RouteList from "../components/RouteList";
 import TripList from "../components/ScheduleList";
+import GoogleMap from "../components/GoogleMap";
 
 function HomePage() {
   const [startStop, setStartStop] = useState({ id: null, name: "" });
@@ -107,12 +108,8 @@ function HomePage() {
           )}
 
           {/* Google Map iframe (Map Box) */}
-          <div className="w-full max-w-4xl mt-6">
-            <iframe
-              className="w-full h-[400px] rounded-lg"
-              src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=126%20Pracha%20Uthit%20Rd.,%20Bang%20Mod,%20Thung%20Khru,%20Bangkok%2010140,%20Thailand+(sit%20integrated%20transport%20project)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-              allowFullScreen
-            />
+          <div className="w-full max-w-4xl mt-6 h-[400px]">
+            <GoogleMap startStop={startStop} endStop={endStop} />
           </div>
         </div>
       </main>

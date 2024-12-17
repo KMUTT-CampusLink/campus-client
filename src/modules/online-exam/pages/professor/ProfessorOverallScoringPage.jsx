@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import Participant from "../../components/professor/overrallScoring/Participant";
+import BackBTN from "../../components/BackBTN";
 
 import { getExamDataById } from "../../services/apis/professerApi";
 import { getExamParticipants } from "../../services/apis/professerApi";
@@ -25,7 +26,6 @@ export default function ProfessorOverallScoringPage() {
     try {
       const response = await getAllStudentInSection(sectionId);
       setTotalStudentInSection(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -34,6 +34,7 @@ export default function ProfessorOverallScoringPage() {
   const getParticipants = async () => {
     try {
       const response = await getExamParticipants(examId);
+      console.log(response)
       const participants = response.data.data;
       setFullMark(response.data.full_mark);
       setPassMark(response.data.pass_mark);
@@ -76,10 +77,8 @@ export default function ProfessorOverallScoringPage() {
       const newIsAnnounced = true;
       setIsAnnounced(newIsAnnounced);
       const response = await updateExamAnnouncement(examId, newIsAnnounced);
-      console.log(response);
       if (response.status === 200) {
         handleCloseModal();
-        console.log("success");
       }
     } catch (error) {
       console.error("Error publishing exam:", error);
@@ -87,46 +86,45 @@ export default function ProfessorOverallScoringPage() {
   };
 
   return (
-    <>
+    <div className="w-auto">
       <NavBar />
       {/* Heading */}
-      <div className="px-[26px] lg:px-[200px] pt-20">
-      <div className="flex justify-between items-center py-[35px]">
-  <div>
-    <p className="font-bold text-[#D4A015] text-[30px]">Scoring</p>
-    <p className="text-[16px]">{examTitle} Exam</p>
-  </div>
+      <div className="mx-[35px] xl:mx-[100px] pt-20">
+        <BackBTN />
+        <div className="flex justify-between items-center pb-[35px]">
+          <div>
+            <p className="font-bold text-[#D4A015] text-[30px]">Scoring</p>
+            <p className="text-[16px]">{examTitle} Exam</p>
+          </div>
 
-  <div className="flex flex-col justify-end items-end"> 
-    {/* Button to open the modal */}
-    <button
-      className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
-      onClick={handleOpenModal}
-      disabled={
-        isAnnounced ||
-        !hasParticipants ||
-        scoringFinished != participants.length
-      } // Disable if already announced
-    >
-      <FontAwesomeIcon icon={faBullhorn} />
-      {isAnnounced ? "Scores Annouced" : "Annouce Scores"}
-    </button>
-    {isAnnounced && (
-      <p className="text-red-600 text-[12px] md:text-[14px] pt-1">
-        Score has already been announced
-      </p>
-    )}
-  </div>
-</div>
-
-
+          <div className="flex flex-col justify-end items-end">
+            {/* Button to open the modal */}
+            <button
+              className="btn bg-[#864E41] hover:bg-[#6e4339] text-white mt-[10px]"
+              onClick={handleOpenModal}
+              disabled={
+                isAnnounced ||
+                !hasParticipants ||
+                scoringFinished != participants.length
+              } // Disable if already announced
+            >
+              <FontAwesomeIcon icon={faBullhorn} />
+              {isAnnounced ? "Scores Annouced" : "Annouce Scores"}
+            </button>
+            {isAnnounced && (
+              <p className="text-red-600 text-[11px] md:text-[14px] pt-1">
+                Score has already been announced
+              </p>
+            )}
+          </div>
+        </div>
         <hr className="bg-[#bebebe]" />
         {/* content */}
         <div className=" py-[30px] ">
           <p className="font-bold text-[#D4A015] text-[22px] pb-[10px]">
             Participants
           </p>
-          <div className="pl-[14px] md:pl-[40px] lg:pl-[50px] text-[14px] md:text-[16px]">
+          <div className="text-[14px] md:text-[16px]">
             <div className="flex">
               <p className=" font-bold">
                 Students Completed:<span>&nbsp;</span>
@@ -151,7 +149,7 @@ export default function ProfessorOverallScoringPage() {
             </div>
           </div>
 
-          <p className="w-[100%] flex rounded-lg text-[12px] text-center lg:text-[14px] py-[15px] gap-[10px]">
+          <p className="w-[100%] flex rounded-lg text-[12px] text-center lg:text-[14px] px-[15px] py-[15px] gap-[10px]">
             <p className="w-[20%]">ID number</p>
             <p className="w-[45%]">Name</p>
             <p className="w-[10%]">Score</p>
@@ -164,6 +162,7 @@ export default function ProfessorOverallScoringPage() {
             participants={participants}
             fullMark={fullMark}
             passMark={passMark}
+  
           />
         </div>
       </div>
@@ -204,6 +203,6 @@ export default function ProfessorOverallScoringPage() {
           </dialog>
         </>
       )}
-    </>
+    </div>
   );
 }

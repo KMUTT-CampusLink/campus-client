@@ -20,9 +20,9 @@ export default function StudentExamPage() {
   const [timeLeft, setTimeLeft] = useState("00:00:00");
   const navigate = useNavigate();
   
-  // if (!useIsTabActive()) {
-  //   navigate("/exams/student/exam");
-  // }
+  if (!useIsTabActive()) {
+    navigate("/exams/student/exam");
+  }
 
   const [exam, setExam] = useState({
     title: '',

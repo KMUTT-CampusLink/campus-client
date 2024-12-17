@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import NavBar from "../../../registration/components/NavBarComponents/NavBar";
 import DeleteExam from "../../components/professor/ExamSetting/DeleteExamButton";
+import BackBTN from "../../components/BackBTN";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faFileLines } from "@fortawesome/free-solid-svg-icons";
@@ -11,13 +12,16 @@ import {
   getFullMark,
   updateExamSettings,
   getExamDataById,
+  checkHasParticiipant
 } from "../../services/apis/professerApi";
 
 export default function ProfessorExamSettingPage() {
   const { examId } = useParams();
   const navigate = useNavigate();
   const [hasEssayQuestion, setHasEssayQuestion] = useState(false);
+  const [hasParticipant, setHasParticipant] = useState(false);
   const [exam, setExam] = useState({
+    sectionId: "",
     start_date: null,
     end_date: null,
     publish_status: false,
@@ -41,6 +45,7 @@ export default function ProfessorExamSettingPage() {
         (question) => question.type === "Essay"
       );
       setExam({
+        sectionId: examData.section_id,
         start_date: formatDateForInput(examData.start_date),
         end_date: formatDateForInput(examData.end_date),
         publish_status: examData.publish_status,
@@ -58,6 +63,18 @@ export default function ProfessorExamSettingPage() {
       console.error("Failed to fetch exam data:", error);
     }
   };
+
+  const getCheckHasParticipant = async () => {
+    try {
+      const response = await checkHasParticiipant(examId);
+      setHasParticipant(response.data.hasParticipant);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getCheckHasParticipant();
+  }, []);
 
   useEffect(() => {
     getAllExamData();
@@ -193,6 +210,7 @@ export default function ProfessorExamSettingPage() {
       <NavBar />
       {/* Heading */}
       <div className=" px-[35px]  lg:px-[100px] pt-20">
+      <BackBTN />
         <div className="flex justify-between pb-[35px] pt-[25px] items-center">
           <div>
             <p className="font-bold text-[#D4A015] text-[30px]">Exam Setting</p>
@@ -200,6 +218,7 @@ export default function ProfessorExamSettingPage() {
           </div>
           <button
             className="btn text-white bg-[#864E41] hover:bg-[#6e4339]"
+            disabled={hasParticipant}
             onClick={() => navigate(`/exams/professor/edit/${examId}`)}
           >
             <FontAwesomeIcon icon={faFileLines} /> Edit Exam Question
@@ -209,7 +228,7 @@ export default function ProfessorExamSettingPage() {
         {/* Content */}
 
         <div className="flex flex-col py-[35px]">
-          <div className="flex gap-[10px] items-center pb-[20px]">
+          <div className="flex gap-[10px] items-center justify-between md:justify-start pb-[20px]">
             <label
               className="pr-[9px] text-[black] text-[18px] font-bold"
               for="meeting-time"
@@ -217,7 +236,7 @@ export default function ProfessorExamSettingPage() {
               Exam password
             </label>
             <input
-              className="border-2 border-[#798184] rounded-xl  px-[10px] py-[7px] text-center w-[210px] appearance-none"
+              className="border-2 border-[#798184] rounded-xl px-[10px] py-[7px] text-center w-[170px] md:w-[180px] appearance-none"
               name=""
               id=""
               value={exam.pin}
@@ -340,8 +359,14 @@ export default function ProfessorExamSettingPage() {
               <p className="text-[16px]">
                 Automatically display scores to participants when the exam ends.
               </p>
+              <div>
+                {hasEssayQuestion && (
+                  <p className="text-[12px] text-[red] text-left md:hidden">
+                    not allow when has essay question
+                  </p>
+                )}
+              </div>
             </div>
-
             <div className="form-control">
               <label className="label cursor-pointer k flex justify-end">
                 <input
@@ -353,10 +378,9 @@ export default function ProfessorExamSettingPage() {
                 />
                 <span className="label-text ml-[10px]">Allow</span>
               </label>
-
               <div>
                 {hasEssayQuestion && (
-                  <p className="text-[12px] text-[red] text-right">
+                  <p className="text-[12px] text-[red] text-right hidden md:block">
                     not allow when has essay question
                   </p>
                 )}
@@ -433,7 +457,7 @@ export default function ProfessorExamSettingPage() {
         </div>
         {/* Delete exam button*/}
         <div className="flex justify-center mb-[60px] gap-[10px] px-[100]">
-          <DeleteExam examId={examId} />
+          <DeleteExam sectionId={exam.sectionId} examId={examId} status={exam.publish_status}/>
           {/* Submit change button */}
           <form>
             <button

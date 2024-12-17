@@ -19,7 +19,7 @@ const DeletePopUp = ({ onClose, a }) => {
               onClick= {a}
               className="w-1/2 tet-center py-2 text-white bg-[#EC5A51] font-semibold"
             >
-              Delete
+              DELETE
             </button>
           </div>
         </div>
