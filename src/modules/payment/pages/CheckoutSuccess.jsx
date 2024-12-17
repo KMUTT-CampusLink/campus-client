@@ -22,11 +22,11 @@ const CheckoutSuccess = () => {
             if (response.data.type === "installment" && invoiceId) {
               setTimeout(() => {
                 window.location.href = `/payment/payment-invoice/${invoiceId}`;
-              }, 8000);
+              }, 4000);
             } else {
               setTimeout(() => {
                 window.location.href = `/payment`;
-              }, 8000);
+              }, 4000);
             }
           } else {
             setPaymentStatus("Payment not completed.");
@@ -43,21 +43,17 @@ const CheckoutSuccess = () => {
 
   useEffect(() => {
     if (paymentStatus) {
-      if (countdown === 0) {
-        if (paymentStatus === "Payment succeeded!") {
-          // Redirect handled by the verifyPayment useEffect
-        } else {
-          window.location.href = "/payment";
-        }
-      }
-
       const timer = setInterval(() => {
-        setCountdown((prev) => prev - 1);
+        setCountdown((prev) => {
+          if (prev > 1) return prev - 1;
+          clearInterval(timer);
+          return 0;
+        });
       }, 1000);
 
       return () => clearInterval(timer);
     }
-  }, [countdown, paymentStatus]);
+  }, [paymentStatus]);
 
   return (
     <div className="min-h-screen bg-gray-100">
