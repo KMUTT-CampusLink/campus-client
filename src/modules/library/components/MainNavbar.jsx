@@ -79,7 +79,7 @@ function MainNavbar() {
 
           <Link
             to="/library/admin"
-            className={`btn btn-ghost hover:text-black hover:bg-white hover:underline underline-offset-[33px] decoration-2 decoration-orange-500 normal-case text-lg font-semibold ${isActive(
+            className={`btn  btn-ghost hover:text-black hover:bg-white hover:underline underline-offset-[33px] decoration-2 decoration-orange-500 normal-case text-lg font-semibold ${isActive(
               "/library/admin"
             )}`}
           >
