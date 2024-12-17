@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 const SectionAdd = ({ onClose, onAdd }) => {
+
+  const {p, setP} = useState({});
   const [formData, setFormData] = useState({
     firstname: "",
     midname:  "",
@@ -22,6 +24,18 @@ const SectionAdd = ({ onClose, onAdd }) => {
     onAdd(formData);
     onClose();
   };
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const result = await axiosInstance.get(employ/fetchProfessor);
+        setP(result.data);
+      } catch (error) {
+        console.error("Error fetching professor data:", error);
+      }
+    };
+    fetchEmployeeData();
+  },);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
