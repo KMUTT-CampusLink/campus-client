@@ -111,7 +111,7 @@ const StDiscussion = () => {
           <div className="flex justify-between items-center lg:w-3/4 mx-auto mb-6 relative pt-2">
             <h2 className="text-2xl font-bold text-[#ecb45e]">Create Discussion</h2>
             <div className="relative">
-              <button
+              {/* <button
                 className="border bg-white rounded-full shadow-sm px-4 py-2 flex items-center hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-gray-200"
                 onClick={() => setDropDownOpen(!dropDownOpen)}
               >
@@ -121,8 +121,8 @@ const StDiscussion = () => {
                   color="#D4A015"
                   className="ml-2"
                 />
-              </button>
-              {dropDownOpen && (
+              </button> */}
+              {/* {dropDownOpen && (
                 <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-md w-36 z-20">
                   <p
                     className="py-2 px-4 text-gray-700 text-sm cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition"
@@ -137,7 +137,7 @@ const StDiscussion = () => {
                     Sort by title
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -153,10 +153,10 @@ const StDiscussion = () => {
               {/* Text Content */}
               <div className="text-center">
                 <h2 className="text-xl font-semibold text-gray-700 mb-1">
-                  Upload File
+                  Upload Post
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Share your files easily with just one click!
+                  Share your thoughts easily with just one click!
                 </p>
               </div>
               {/* Upload Button */}
