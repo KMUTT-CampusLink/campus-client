@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,21 +10,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // Importing necessary icons
 import { useNavigate } from "react-router-dom";
 
-function Header( {userRole} ) {
+function Header() {
   // const notificationLink = 
   //   userRole === "admin"
   //     ? "/clubs/admin/admin-noti" : "/clubs/member/notifications";
   const location = useLocation();
   const navigate = useNavigate();
-  let user = null;
-  try {
-    const storedUser = localStorage.getItem("user");
-    user = storedUser ? JSON.parse(storedUser) : null;
-  } catch (error) {
-    console.error("Error parsing user data from localStorage:", error);
-  }
-  const memberId = user?.studentId || user?.empId;
-  console.log(user);
+  
+  const empId = localStorage.getItem("empId");
+  const stdId = localStorage.getItem("studentId");
+  const memberId = empId === "null" ? stdId : empId;
+  // console.log(memberId);
+
   const pageTitle = (() => {
     switch (location.pathname) {
       case "/profile":
@@ -60,18 +57,13 @@ function Header( {userRole} ) {
       </div>
       
       {/* Notifications Button on the right */}
-      <div>
-      <div className="flex items-center space-x-6">
-        {memberId && (
-          <button
-            className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:ring-2 hover:ring-blue-500"
-            onClick={() => navigate(`/clubs/member/${memberId}`)}
-          >
-            <FontAwesomeIcon icon={faUser} size="1x" className="text-gray-600" />
-          </button>
-        )}
-      </div>
-
+      <div className = "flex items-center space-x-6">
+        <button
+          className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center hover:ring-2 hover:ring-blue-500"
+          onClick={() => navigate(`/clubs/${memberId}/notifications`)}
+        >
+          <FontAwesomeIcon icon={faBell} style={{ fontSize: "1.5rem" }} className="text-gray-600" />
+        </button>
       </div>
     </div>
   );

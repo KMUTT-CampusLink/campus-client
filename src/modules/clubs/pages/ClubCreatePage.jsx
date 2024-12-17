@@ -76,11 +76,16 @@ function ClubCreatePage() {
         const formattedMembers = [
           ...stdResponse.data.data.map((student) => ({
             id: student.id,
-            name: `${student.firstname ?? ""} ${student.midname ?? ""} ${student.lastname ?? ""}`.trim(),
+            name: `${student.firstname ?? ""} ${student.midname ?? ""} ${
+              student.lastname ?? ""
+            }`.trim(),
+            image: student.image,
           })),
           ...profResponse.data.data.map((professor) => ({
             id: professor.id,
-            name: `Prof. ${professor.firstname ?? ""} ${professor.midname ?? ""} ${professor.lastname ?? ""}`.trim(),
+            name: `Prof. ${professor.firstname ?? ""} ${
+              professor.midname ?? ""
+            } ${professor.lastname ?? ""}`.trim(),
           })),
         ];
 

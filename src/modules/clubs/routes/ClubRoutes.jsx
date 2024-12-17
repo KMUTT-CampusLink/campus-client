@@ -46,6 +46,10 @@ export default function ClubRoutes() {
           path: "club-home/:clubId", // Club home page at "/clubs/club-home"
           element: <ClubHomePage />,
         },
+        {
+          path: ":memberId/notifications", // Admin notifications at "/clubs/admin/notifications"
+          element: <AdminNotification />,
+        },
       ],
     },
     // Admin Section under /clubs/admin
@@ -85,10 +89,6 @@ export default function ClubRoutes() {
           path: "create-announcement/:clubId", // Admin create announcement at "/clubs/admin/create-announcement"
           element: <CreateAnnouncement />,
         },
-        {
-          path: ":clubId/notifications", // Admin notifications at "/clubs/admin/notifications"
-          element: <AdminNotification />,
-        },
       ],
     },
     // Member Section under /clubs/member
@@ -111,10 +111,6 @@ export default function ClubRoutes() {
         {
           index: true, // Member profile page at "/clubs/member"
           element: <ProfileForm />,
-        },
-        {
-          path: "notifications", // Member notifications at "/clubs/member/notifications"
-          element: <AdminNotification />, // Ensure Notifications component is correctly imported
         },
         {
           path: "club-home/:clubId", 

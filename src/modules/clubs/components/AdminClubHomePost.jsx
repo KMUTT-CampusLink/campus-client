@@ -226,13 +226,13 @@ const ClubHomePost = (props) => {
                     import.meta.env.VITE_MINIO_BUCKET_NAME
                   }/${item.post_img}`}
                   alt="Post image"
-                  className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl md:mt-0 sm:mt-4 sm:mb-4"
+                  className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl mt-4 sm:mb-4"
                 />
               )}
-              <div className="md:ml-10 inline-flex items-start">
+              <div className="md:ml-10 mt-4 inline-flex items-start">
                 <div className="text-left mr-2 text-lg md:text-xl font-semibold">
                   {item.title}
-                  <p className="md:mt-3 sm:mt-0 text-base">• {item.content}</p>
+                  <p className="md:mt-4 sm:mt-0 text-base">• {item.content}</p>
                 </div>
               </div>
             </div>

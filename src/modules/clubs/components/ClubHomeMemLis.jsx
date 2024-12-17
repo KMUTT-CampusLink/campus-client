@@ -95,6 +95,7 @@ const ClubHomeMemLis = (props) => {
             key={key}
             className="ml-[7%] mr-auto p-0.5 flex items-center space-x-2"
           >
+            {console.log(members)}
             <img
               className=" w-[10%] aspect-square rounded-full"
               src="https://i.imgur.com/xKf7cjo.png"
