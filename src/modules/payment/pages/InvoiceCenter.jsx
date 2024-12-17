@@ -33,7 +33,7 @@ const InvoiceCenter = () => {
             <img
               src={ReceiptImage}
               alt="Receipt"
-              className={`w-50 h-80 mx-auto mb-4 lg:mb-0 lg:order-first`}
+              className={`w-50 h-80 mx-auto lg:mb-0 lg:order-first`}
             />
             <Link to="/regis/wallet" className="w-full px-4 lg:px-6 lg:mt-4">
               <button className={`bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg flex items-center justify-center shadow-md w-full lg:w-full`}>
@@ -62,8 +62,6 @@ const InvoiceCenter = () => {
                 transactions={transactions}
                 filterAll={filterAll}
                 setFilterAll={setFilterAll}
-                isAscending={isAscending}
-                setIsAscending={setIsAscending}
                 setShowAll={setShowAll}
               />
               <div
