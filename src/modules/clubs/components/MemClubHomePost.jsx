@@ -228,7 +228,7 @@ const MemClubHomePost = (props) => {
 
   const { toggleLeft } = props;
   const itemsToDisplay = toggleVisiblity ? clubAnnouncement : clubPost;
-
+  
   return (
     <div
       className={` ${
