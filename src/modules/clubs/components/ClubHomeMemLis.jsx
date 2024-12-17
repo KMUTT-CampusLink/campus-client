@@ -60,13 +60,13 @@ const ClubHomeMemLis = (props) => {
 
   const renderImage = (member) => {
     if (member.student && member.student.image) {
-      return `${import.meta.env.VITE_MINIO_URL}nutshell/${
-        member.student.image
-      }`;
+      return `${import.meta.env.VITE_MINIO_URL}${
+        import.meta.env.VITE_MINIO_BUCKET_NAME
+      }/${member.student.image}`;
     } else if (member.employee && member.employee.image) {
-      return `${import.meta.env.VITE_MINIO_URL}nutshell/${
-        member.employee.image
-      }`;
+      return `${import.meta.env.VITE_MINIO_URL}${
+        import.meta.env.VITE_MINIO_BUCKET_NAME
+      }/${member.employee.image}`;
     }
     return "https://i.imgur.com/xKf7cjo.png";
   };

@@ -11,10 +11,17 @@ const schema = z.object({
   lineID: z.string().nonempty({ message: "Line ID is required" }),
 });
 
+const renderProfileImage = (memberData) => {
+  return memberData.profileImage !== ""
+    ? `${import.meta.env.VITE_MINIO_URL}${
+        import.meta.env.VITE_MINIO_BUCKET_NAME
+      }/${memberData.profileImage}`
+    : "https://i.imgur.com/xKf7cjo.png";
+};
+
 function ProfileForm() {
   const [joinedEvents, setJoinedEvents] = useState([]);
   const { memberId } = useParams(); // Get memberId from URL params
-  console.log(memberId);
   const [memberData, setMemberData] = useState({
     name: "",
     phoneNumber: "",
@@ -92,12 +99,12 @@ function ProfileForm() {
     }
   };
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setMemberData({ ...memberData, profileImage: URL.createObjectURL(file) });
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   if (e.target.files && e.target.files[0]) {
+  //     const file = e.target.files[0];
+  //     setMemberData({ ...memberData, profileImage: URL.createObjectURL(file) });
+  //   }
+  // };
 
   return (
     <div className="container mx-auto p-4">
@@ -105,26 +112,33 @@ function ProfileForm() {
 
       <div className="flex flex-col md:flex-row space-x-0 md:space-x-6 md:space-y-0 space-y-4">
         <div className="flex flex-col items-center w-full md:w-1/3 space-y-4">
-          <div
-            className="w-40 h-40 bg-gray-200 border border-gray-300 rounded-full flex items-center justify-center overflow-hidden"
-            style={{
-              backgroundImage: memberData.profileImage
-                ? `url(${memberData.profileImage})`
-                : "none",
-              backgroundSize: "cover",
-            }}
-          >
-            {!memberData.profileImage && (
+          <div className="w-40 h-40 bg-gray-200 border border-gray-300 rounded-full flex items-center justify-center overflow-hidden">
+            <img
+              src={renderProfileImage(memberData)}
+              alt="Profile"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.src = "https://i.imgur.com/xKf7cjo.png"; // Fallback on image error
+              }}
+            />
+            {/*style={{
+            backgroundImage: memberData.profileImage
+              ? `url(${memberData.profileImage})`
+              : "none",
+            backgroundSize: "cover",
+          }}
+        > */}
+            {/*{!memberData.profileImage && (
               <span className="text-gray-400">No Profile Photo</span>
-            )}
+            )}*/}
           </div>
-          <input
+          {/* <input
             type="file"
-            accept="image/*"
-            onChange={handleImageChange}
+            //accept="image/*"
+            //onChange={handleImageChange}
             className="hidden"
             id="profileImageInput"
-          />
+          /> */}
         </div>
 
         <form
