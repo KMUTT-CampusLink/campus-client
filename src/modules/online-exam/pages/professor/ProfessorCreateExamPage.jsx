@@ -89,6 +89,7 @@ export default function ProfessorCreateExamPage() {
         choiceImages: question.choiceImages || [],
       })),
     };
+    console.log(finalExam);
     try {
       const res = await createNewExam(finalExam, sectionId);
       const id = res.data.data;

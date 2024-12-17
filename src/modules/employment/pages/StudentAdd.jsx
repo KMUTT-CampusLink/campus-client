@@ -3,6 +3,26 @@ import { useNavigate } from "react-router-dom";
 import SAddPopUp from "../components/SAddPopUp";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { z } from "zod";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+
+const schema = z.object({
+  image: z
+    .instanceof(File)
+    .refine((file) => file?.length !== 0, "File is required")
+    .refine((file) => file?.size < 5 * 1024 * 1024, "Poster file at most 5MB")
+    .refine((file) => {
+      const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/avif",
+      ];
+      return allowedMimeTypes.includes(file.type); // Match MIME type
+    }, "Invalid file type. Allowed types: JPEG, PNG, GIF, WebP, AVIF."),
+});
 
 const StudentAdd = () => {
   const navigate = useNavigate();
@@ -10,6 +30,9 @@ const StudentAdd = () => {
   const [programs, setPrograms] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+  const [stuImage, setstuImage] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [imgURL, setimgURL] = useState(null);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -35,7 +58,6 @@ const StudentAdd = () => {
     const idPattern = /^[a-zA-Z0-9]+$/;
     const postalCodePattern = /^[0-9]{5}$/;
 
-    // Validate name fields
     if (!formData.firstname || !namePattern.test(formData.firstname)) {
       errors.firstname =
         "First name is required and should contain only letters.";
@@ -47,8 +69,6 @@ const StudentAdd = () => {
       errors.lastname =
         "Last name is required and should contain only letters.";
     }
-
-    // Validate program and semester selection
     if (!formData.degree_id) {
       errors.degree_id = "Please select a program.";
     }
@@ -56,12 +76,10 @@ const StudentAdd = () => {
       errors.semester_id = "Please select a semester.";
     }
 
-    // Validate gender
     if (!formData.gender || !["Male", "Female"].includes(formData.gender)) {
       errors.gender = "Gender must be selected.";
     }
 
-    // Validate date of birth
     if (!formData.date_of_birth) {
       errors.date_of_birth = "Date of birth is required.";
     } else {
@@ -72,7 +90,6 @@ const StudentAdd = () => {
       }
     }
 
-    // Validate identification number
     if (
       !formData.identification_no ||
       !idPattern.test(formData.identification_no)
@@ -81,13 +98,10 @@ const StudentAdd = () => {
         "Identification number is required and should be alphanumeric.";
     }
 
-    // Validate phone number
     if (!formData.phone || !phonePattern.test(formData.phone)) {
       errors.phone =
         "Phone number is required and should contain 10-15 digits.";
     }
-
-    // Validate address fields
     if (!formData.address) errors.address = "Address is required.";
     if (!formData.sub_district)
       errors.sub_district = "Sub-district is required.";
@@ -118,7 +132,7 @@ const StudentAdd = () => {
   const handleAddClick = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      setShowPopup(true); // Only show popup if the form is valid
+      setShowPopup(true);
     }
   };
   const handleClosePopup = () => {
@@ -148,35 +162,42 @@ const StudentAdd = () => {
     fetchSemesters();
   }, []);
 
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    setstuImage(file || null); // Set to null if no file is selected
+    if (file) {
+      console.log("File selected:", file); // Debugging info
+      const a = URL.createObjectURL(file); // Create a temporary URL for the image
+      setimgURL(a);
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" })); // Clear errors
+  };
+
   const handleSumbit = async (e) => {
     e.preventDefault();
-
-   // console.log("Submit button clicked");
-    // Debugging: Check if this logs
     setShowPopup(false);
 
-    const studentData = {
-      firstname: formData.firstname,
-      midname: formData.midname,
-      lastname: formData.lastname,
-      degree_id: formData.degree_id,
-      semester_id: formData.semester_id,
-      gender: formData.gender,
-      date_of_birth: formData.date_of_birth,
-      identification_no: formData.identification_no,
-      phone: formData.phone,
-      address: formData.address,
-      sub_district: formData.sub_district,
-      province: formData.province,
-      district: formData.district,
-      postal_code: formData.postal_code,
-    };
+    const form = new FormData();
+    form.append("firstname", formData.firstname);
+    form.append("midname", formData.midname);
+    form.append("lastname", formData.lastname);
+    form.append("degree_id", formData.degree_id);
+    form.append("semester_id", formData.semester_id);
+    form.append("gender", formData.gender);
+    form.append("date_of_birth", formData.date_of_birth);
+    form.append("identification_no", formData.identification_no);
+    form.append("phone", formData.phone);
+    form.append("address", formData.address);
+    form.append("sub_district", formData.sub_district);
+    form.append("province", formData.province);
+    form.append("district", formData.district);
+    form.append("postal_code", formData.postal_code);
+    form.append("stuImage", stuImage);
 
     try {
-      const response = await axiosInstance.post("/employ/postStu", studentData);
+      const response = await axiosInstance.postForm("/employ/postStu", form);
 
       if (response.status === 200) {
-      //  console.log("Student added successfully");
         setShowPopup(false);
         navigate("/employ/student");
       } else {
@@ -184,7 +205,6 @@ const StudentAdd = () => {
       }
     } catch (error) {
       console.error("Cannot create user:", error);
-     // console.log(studentData);
     }
   };
 
@@ -197,11 +217,29 @@ const StudentAdd = () => {
           {/* Employee Avatar */}
           <div className="flex justify-center">
             <img
-              src="https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
-              alt="Employee Avatar"
+              src={
+                imgURL ||
+                "https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
+              }
+              alt="Student Avatar"
               className="rounded-full w-36 h-36 md:w-42 md:h-42 object-cover"
             />
+            <label
+            htmlFor="fileInput"
+            >
+              <FontAwesomeIcon icon={faPenToSquare}  className="hover:text-blue-700"/>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden hover:shadow-lg"
+                onChange={onFileChange}
+              />
+            </label>
           </div>
+
+          
+
           <form className=" text-[#7F483C]">
             <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
@@ -292,7 +330,7 @@ const StudentAdd = () => {
                     </p>
                   )}
                 </div>
-                
+
                 {/* 2 */}
 
                 {/* 1 */}
@@ -321,7 +359,7 @@ const StudentAdd = () => {
                     </p>
                   )}
                 </div>
-                
+
                 {/* 2 */}
 
                 <div className="mb-4">
@@ -435,10 +473,10 @@ const StudentAdd = () => {
                       />
                     </div>
                     {validationErrors.address && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.address}
-                    </p>
-                  )}
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.address}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -455,10 +493,10 @@ const StudentAdd = () => {
                       />
                     </div>
                     {validationErrors.sub_district && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.sub_district}
-                    </p>
-                  )}
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.sub_district}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -475,10 +513,10 @@ const StudentAdd = () => {
                       />
                     </div>
                     {validationErrors.district && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.district}
-                    </p>
-                  )}
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.district}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -495,10 +533,10 @@ const StudentAdd = () => {
                       />
                     </div>
                     {validationErrors.province && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.province}
-                    </p>
-                  )}
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.province}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-6">
@@ -515,10 +553,10 @@ const StudentAdd = () => {
                       />
                     </div>
                     {validationErrors.postal_code && (
-                    <p className="text-red-500 text-xs">
-                      {validationErrors.postal_code}
-                    </p>
-                  )}
+                      <p className="text-red-500 text-xs">
+                        {validationErrors.postal_code}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

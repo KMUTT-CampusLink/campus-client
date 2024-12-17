@@ -4,6 +4,8 @@ import SUpdatePopUp from "../components/SUpdatePopUp";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const StudentUpdate = () => {
   const navigate = useNavigate();
@@ -12,6 +14,9 @@ const StudentUpdate = () => {
   const [programs, setPrograms] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [students, setStudents] = useState([]);
+  const [stuImage, setstuImage] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [imgURL, setimgURL] = useState(null);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -98,6 +103,17 @@ const StudentUpdate = () => {
     setShowPopup(false);
   };
 
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    setstuImage(file || null); // Set to null if no file is selected
+    if (file) {
+      console.log("File selected:", file); // Debugging info
+      const a = URL.createObjectURL(file); // Create a temporary URL for the image
+      setimgURL(a);
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" })); // Clear errors
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setShowPopup(false);
@@ -108,13 +124,14 @@ const StudentUpdate = () => {
       Object.entries(StudentData).filter(([key, value]) => value)
     );
 
-    // console.log("Filtered Student Data:", filteredStudentData);
+    console.log("Filtered Student Data:", filteredStudentData);
+
+    const form = new FormData();
+    form.append("data", JSON.stringify(filteredStudentData));
+    form.append("stuImage", stuImage);
 
     try {
-      const response = await axiosInstance.post(
-        `employ/updateStu/${id}`,
-        filteredStudentData
-      );
+      const response = await axiosInstance.post(`employ/updateStu/${id}`, form);
       if (response.status === 200) {
         //  console.log("Student updated successfully");
         navigate(`/employ/studentDetail/${id}`);
@@ -137,14 +154,32 @@ const StudentUpdate = () => {
 
       <main className="pt-16 md:pt-20 px-5 md:px-20 ">
         <div className=" space-y-5 md:space-y-7 mt-2 md:mt-4">
-          {/* Employee Avatar */}
           <div className="flex justify-center">
             <img
-              src="https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
-              alt="Employee Avatar"
+              src={
+                imgURL ||
+                `${import.meta.env.VITE_MINIO_URL}${
+                  import.meta.env.VITE_MINIO_BUCKET_NAME
+                }/${students.image}`
+              }
+              alt="Student Avatar"
               className="rounded-full w-36 h-36 md:w-42 md:h-42 object-cover"
             />
+            <label
+            htmlFor="fileInput"
+            >
+              <FontAwesomeIcon icon={faPenToSquare}  className="hover:text-blue-700"/>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden hover:shadow-lg"
+                onChange={onFileChange}
+              />
+            </label>
           </div>
+
+          
           <form className=" text-[#7F483C]">
             <div className="sm:flex sm:gap-10 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24">
               {/* Left side form inputs */}
