@@ -23,8 +23,6 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
   useEffect(() => {
     getCheckHasParticipant();
   }, []);
-
-  console.log(hasParticipant);
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[10px] xl:p-[20px] ">
       <div>
@@ -46,7 +44,7 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
         </div>
         <div className="flex flex-wrap gap-1 xl:gap-4 pt-[12px]">
           <button
-            className={`btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b] ${status ===  "approved" || "history" ? "hidden" : "block"}`}
+            className={`btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b] ${status ===  "approved" || status ===  "history" ? "hidden" : "block"}`}
             onClick={() => {
               navigate(`/exams/professor/edit/${examId}`);
             }}

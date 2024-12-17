@@ -28,8 +28,6 @@ export default function StudentReviewExamPage() {
     return;
   }
 
-  console.log(data)
-
   return (
     <>
       <NavBar />

@@ -233,6 +233,7 @@ export default function ProfessorCreateExamPage() {
                 questionid={question.question_id}
                 questionNo={index}
                 question={question.questionText}
+                questionImg={question.questionImg}
                 choice={question.options}
                 type={question.type}
               />

@@ -5,6 +5,7 @@ import BackBTN from "../../components/BackBTN";
 
 import { dashboard } from "../../services/apis/professerApi";
 import { useParams } from "react-router-dom";
+import { faChessKing } from "@fortawesome/free-solid-svg-icons";
 
 export default function ProfessorDashboardPage() {
   const [participant, setParticipant] = useState(0);
@@ -39,6 +40,8 @@ export default function ProfessorDashboardPage() {
     getData();
   }, []);
 
+  console.log(mostIncorrectQuestion)
+
   return (
     <>
       <NavBar />
@@ -69,6 +72,7 @@ export default function ProfessorDashboardPage() {
                   key={index}
                   questionNo={item.id}
                   question={item.title}
+                  questionImg={item.question_img}
                   choice={item.choice_text}
                   type={item.type}
                   handleAnswer={() => {}}
