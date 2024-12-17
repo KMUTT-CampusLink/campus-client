@@ -6,11 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { usePeriodBySemesterId } from "../services/queries";
+import LoadingPage from "../../dev/pages/LoadingPage";
 
 function PeriodPage() {
   const regis = localStorage.getItem("event");
   const semesterId = localStorage.getItem("semesterId");
-  const { data: periods } = usePeriodBySemesterId(semesterId);
+  const { data: periods, isLoading, error } = usePeriodBySemesterId(semesterId);
 
   const Button = ({ to, disabled, icon, text }) => (
     <Link to={to}>
@@ -31,7 +32,13 @@ function PeriodPage() {
     const options = { day: "2-digit", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   };
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
+  if (error) {
+    return <div>Error loading periods</div>;
+  }
   return (
     <div className={containerDivStyles}>
       <NavBar />
