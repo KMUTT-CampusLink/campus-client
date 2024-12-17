@@ -91,11 +91,11 @@ function MainNavbar() {
       <div className="navbar-end">
         {/* Search Bar */}
         <div className="form-control">
-          <div className="input-group">
+          <div className="input-group flex flex-nowrap items-center">
             <input
               type="text"
               placeholder="Search Book"
-              className="input input-bordered"
+              className="input input-bordered w-full max-w-xs"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Update the search term
               onKeyPress={(e) => {
@@ -106,7 +106,7 @@ function MainNavbar() {
             />
             <button
               onClick={handleSearch}
-              className="btn duration-200 rounded-xl mx-3 bg-orange-500 text-white border-orange-500 hover:bg-orange-600 hover:border-orange-600"
+              className="btn ml-3 rounded-r-lg bg-orange-500 text-white border-orange-500 hover:bg-orange-600 hover:border-orange-600"
             >
               Search
             </button>

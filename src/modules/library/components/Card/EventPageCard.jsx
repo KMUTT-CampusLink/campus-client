@@ -8,6 +8,7 @@ function EventPageCard({
   location,
   image,
   source,
+  event,
 }) {
   const formattedDate = new Date(event_date).toLocaleDateString("en-US", {
     weekday: "long",
@@ -15,6 +16,15 @@ function EventPageCard({
     month: "long",
     day: "numeric",
   });
+  // // Combine all the props into an 'event' object
+  // const event = {
+  //   title,
+  //   description,
+  //   event_date,
+  //   location,
+  //   image,
+  //   source,
+  // };
 
   return (
     <div className="py-4 px-4 flex">
@@ -38,10 +48,7 @@ function EventPageCard({
 
         {/* Button Section */}
         <div className="flex justify-start">
-          <Link
-            to={`/library/event/${title}`}
-            state={{ title, description, event_date, location, image, source }}
-          >
+          <Link to={`/library/event/${title}`} state={{ event }}>
             <button className="flex items-center justify-center py-2 px-4 bg-orange-100 rounded-full font-semibold text-orange-600 border-2 border-orange-600 hover:bg-orange-600 hover:text-white transition-all duration-300">
               Learn More
             </button>
