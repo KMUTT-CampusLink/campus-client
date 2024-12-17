@@ -114,3 +114,11 @@ export const createUpComingEvents = (eventInfo) =>
 export const deleteUpComingEvents = (deleteInfo) => {
   return remove(`/courses/announcement/`, deleteInfo);
 };
+
+// Edit Course Material
+export const editCourseMaterial = (id, formData) =>
+  post(`/courses/editVideo/${id}`, formData);
+
+// Delete Course Material
+export const deleteCourseMaterial = (id) =>
+  remove(`/courses/deleteVideo/${id}`);

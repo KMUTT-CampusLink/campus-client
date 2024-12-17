@@ -9,8 +9,8 @@ const EventSession = ({ studentId }) => {
         return <div>Loading...</div>;
     }
 
-    if (isError || !events || events.length === 0) {
-        return <div>No upcoming announcements found.</div>;
+    if (isError || !events || events.length === 0 || events.announcements.length === 0) {
+        return <div className="border border-gray-300 rounded-lg mb-6 max-sm:mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 p-4 shadow-md bg-white hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out mt-3">No upcoming events around this time.</div>;
     }
 
     return (

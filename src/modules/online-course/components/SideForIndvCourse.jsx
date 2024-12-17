@@ -53,9 +53,9 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage}) => {
 
   const navToAttendance = (toSection) => {
     if (location.pathname.includes("/courses/st")) {
-      navigate(`/exams/student/${toSection}`)
+      navigate(`/attendance/student/${toSection}`)
     } else {
-      navigate(`/exams/professor/${toSection}`)
+      navigate(`/attendance/professor/${toSection}`)
     }
   }
 
@@ -154,7 +154,7 @@ const SideForIndvCourse = ({ closeSidebar, sideOpen, currentPage}) => {
 
             {/* Attendance Link */}
             <li
-              onClick={() => navigate(`/attendance/student/1001`)}
+              onClick={() => navToAttendance(sectionId)}
               className="mb-4 p-2 border-b-2"
             >
               <span
