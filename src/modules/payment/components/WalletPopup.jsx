@@ -1,8 +1,44 @@
-import React from "react";
-import { payInvoice } from "../services/api"; // Assuming payInvoice handles Stripe payment
+import React, { useEffect, useState } from "react";
+import { payInvoice, fetchUserWallet } from "../services/api"; // Import fetchUserWallet from api.js
 import { GiWallet } from "react-icons/gi"; // Wallet Icon
 
-const WalletPopup = ({ onClose, invoiceId, walletBalance }) => {
+const WalletPopup = ({ onClose, invoiceId, invoiceAmount }) => {
+  const [walletBalance, setWalletBalance] = useState(null);
+
+  useEffect(() => {
+    const getWalletBalance = async () => {
+      try {
+        const data = await fetchUserWallet(); // Use fetchUserWallet from api.js
+        setWalletBalance(data.wallet);
+      } catch (error) {
+        console.error("Error fetching wallet balance:", error);
+        setWalletBalance(0); // Default to 0 in case of error
+      }
+    };
+    getWalletBalance();
+  }, []);
+
+  const handleWalletPayment = async () => {
+    if (walletBalance < invoiceAmount) {
+      alert("Insufficient wallet balance to complete this payment.");
+      return;
+    }
+
+    try {
+      console.log("Attempting to pay using wallet balance...");
+      const response = await payInvoice({ inv: invoiceId, useWallet: true });
+      if (response?.data?.status === "success") {
+        alert("Payment successful using wallet!");
+        window.location.reload(); // Or navigate as needed
+      } else {
+        alert("Failed to process wallet payment.");
+      }
+    } catch (error) {
+      console.error("Error during wallet payment:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
   const handleStripePayment = async () => {
     try {
       console.log("Invoice ID being sent:", invoiceId); // Debugging Invoice ID
@@ -29,16 +65,16 @@ const WalletPopup = ({ onClose, invoiceId, walletBalance }) => {
             Balance
           </p>
           <p className="text-2xl font-semibold text-center text-gray-900">
-            {walletBalance || "--"} THB
+            {walletBalance !== null ? `${walletBalance} THB` : "--"}
           </p>
         </div>
         <div className="w-1/2 flex flex-col space-y-4 pl-6">
           <button
-            className="btn bg-payment-red hover:bg-red-400 text-white py-2 px-4 rounded-md"
-            onClick={() => {
-              console.log("Pay using wallet balance");
-              onClose(); // Placeholder for wallet payment
-            }}
+            className={`btn bg-payment-red hover:bg-red-400 text-white py-2 px-4 rounded-md ${
+              walletBalance < invoiceAmount ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={handleWalletPayment}
+            disabled={walletBalance < invoiceAmount}
           >
             Use Wallet Balance
           </button>

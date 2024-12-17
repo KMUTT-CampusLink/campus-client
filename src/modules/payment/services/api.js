@@ -63,3 +63,13 @@ export const payInvoice = async (data) => {
       return error.response.data;
     }
 };
+
+export const fetchUserWallet = async () => {
+  try {
+    const response = await axiosInstance.post("/payment/fetchUserWallet");
+    return response.data; // Returns { wallet: 0 }
+  } catch (error) {
+    console.error("Error fetching wallet balance:", error);
+    throw error; // Propagate the error
+  }
+};

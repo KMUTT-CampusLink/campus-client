@@ -220,8 +220,8 @@ const PaymentInvoice = () => {
       {showWalletPopup && (
         <WalletPopup
           onClose={() => setShowWalletPopup(false)} // Close popup handler
-          handleFullPayment={handlePayment} // Call full payment function
           invoiceId={invoice.id}
+          invoiceAmount={invoice.amount} // Pass invoice amount for wallet logic
         />
       )}
     </div>
