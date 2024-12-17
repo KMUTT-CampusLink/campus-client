@@ -20,7 +20,6 @@ export default function ProfessorDashboardPage() {
   const getData = async () => {
     try {
       const response = (await dashboard(examId)).data.data;
-      console.log(response);
       setParticipant(response.participant);
       setMin(response.min);
       setMax(response.max);

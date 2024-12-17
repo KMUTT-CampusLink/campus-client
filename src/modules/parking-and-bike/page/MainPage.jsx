@@ -1,100 +1,60 @@
-import Building from '../component/Main/Building';
-import ReceiptButton from '../component/Main/Menu/ReceiptButton';
-import ParkingButton from '../component/Main/Menu/ParkingButton';
-import RegisButton from '../component/Main/Menu/RegisButton';
 import { useState, useEffect } from 'react';
+import Search from '../component/Search/Search';
+import Searchresultlist from '../component/Search/SearchResultList';
+import ProcessButton from '../component/Main/Navigator/ProcessButton';
+import HistoryButton from '../component/Main/Navigator/HistoryButton';
+import RegisButton from '../component/Main/Navigator/RegisButton';
+import Buildings from '../component/Main/Buildings';
+import NavBar from '../../registration/components/NavBarComponents/NavBar';
 import { getParkingData } from '../services/api';
-import Search from "../component/Search/Search";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import Navbar from '../../registration/components/NavBarComponents/NavBar';
-import Searchresultlist from "../component/Search/Searchresultlist";
-import 'react-slideshow-image/dist/styles.css'
-import { Slide } from 'react-slideshow-image';
-import 'react-slideshow-image/dist/styles.css';
+import parkingimg from '../img/parking.png'
+
 function MainPage() {
     const [building, setBuilding] = useState([]);
+    const [results, setResults] = useState([]);
 
     const getBuilding = async () => {
         const res = await getParkingData();
         setBuilding(res);
-       
     };
-
-    
-    
 
     useEffect(() => {
         getBuilding();
     }, []);
 
-    const [results, setResults] = useState([]);
-    const slideImages = [
-        {
-          url:"https://sustainable.kmutt.ac.th/wp-content/uploads/2024/03/DJI_0205-copy-scaled.jpg",
-          caption: ''
-        },
-        {
-            url: "https://campus.campus-star.com/app/uploads/2020/10/lx-bu.jpg",
-            caption: ''
-        },
-        {
-          url:"https://contributor.lib.kmutt.ac.th:8443/images/contents/9c001b03-61a9-421e-a6ad-4986039ea399/1.jpeg",
-          caption: ''
-        },
-      ];
     return (
         <>
-            <Navbar />
-            <Slide>
-         {slideImages.map((slideImage, index)=> (
-            <div key={index} className='flex justify-center items-center pt-20'>
-              <div style={{'backgroundImage': `url(${slideImage.url})` }} className='w-2/4 h-1/10 aspect-video min-w-96 min-h-70 bg-cover'>
-                <span className="">{slideImage.caption}</span>
-              </div>
-              </div>
-           ))}
-        </Slide>
-            <br />
-            <br />
-            <div className="flex flex-col justify-center">
-                <div className="flex flex-row justify-center">
-                    <Search setResults={setResults} />
-                </div>
-                <Searchresultlist results={results} />
-            </div>
-            <br />
-            <br />
-            <div className="flex flex-row gap-20 justify-center">
-                <ReceiptButton />
-                <ParkingButton />
-                <RegisButton />
-            </div>
-            <br />
-            <br />
-            <div className="max-w-2xl mx-auto">
-                <div className="flex flex-row justify-between">
-                    <h1 className="text-2xl font-bold">Available Parking Slot</h1>
-                    <div className="flex justify-end">
-                        <button className="flex flex-row w-6 h-6">
-                            <p className="underline underline-offset-1">See All</p>
-                            <FontAwesomeIcon icon={faCaretDown} />
-                        </button>
+            <NavBar />
+            <div className="flex flex-col w-full h-full items-center justify-center gap-10 md:pt-32 mb-20">
+                <img src={parkingimg} className="flex shadow-sm drop-shadow-sm md:w-5/12 sm:w-80 w-72 mt-24 md:mt-0 rounded-lg"></img>
+                <div className="flex flex-col justify-center">
+                    <div className="flex flex-row justify-center">
+                        <Search setResults={setResults} />
                     </div>
+                    <Searchresultlist results={results} />
+                </div>
+                <div className='flex flex-row w-80 justify-around'>
+                    <ProcessButton />
+                    <HistoryButton />
+                    <RegisButton />
+                </div>
+                <div className='flex flex-row justify-between sm:w-6/12 w-72'>
+                    <h1 className='text-xl font-bold'>Avaliable Parking Slot</h1>
+                    {/* <button className='text-xs underline text-gray-500'>See All</button> */}
                 </div>
                 {building && building.map((key) => (
-                    <Building
+                    <Buildings
                         key={key.id}
                         bdid={key.id}
                         bdimg={key.building_img}
                         bdname={key.name}
-                        avaslot={key.reserved_slots}
-                        maxslot={key.parking_capacity}
+                        avaslot={key.parking_capacity - key.reserved_slots}
                     />
                 ))}
+
             </div>
         </>
-    );
+    )
 }
 
 export default MainPage;

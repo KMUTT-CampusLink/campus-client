@@ -33,10 +33,15 @@ function WithdrawPage() {
       popToast("No course selected to withdraw.", "warning");
       return;
     }
+    const event = localStorage.getItem("event");
 
     try {
       await mutation.mutateAsync({ enrollmentDetailId: selectedEnrollmentId });
-      popToast("Course Successfully Withdrawn", "success");
+      if (event === "Early Withdraw") {
+        popToast("Course Successfully Withdrawn & 2000 B Refunded", "success");
+      } else if (event === "Withdraw") {
+        popToast("Course Successfully Withdrawn", "success");
+      }
       queryClient.invalidateQueries("courses");
     } catch (error) {
       console.error("Error withdrawing course:", error);

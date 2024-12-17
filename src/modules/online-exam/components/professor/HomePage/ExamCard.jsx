@@ -5,7 +5,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import {
   deleteExamById,
-  checkHasParticiipant,
+  checkHasParticipant,
 } from "../../../services/apis/professerApi";
 import { useEffect, useState } from "react";
 
@@ -14,7 +14,7 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
   const [hasParticipant, setHasParticipant] = useState(false);
   const getCheckHasParticipant = async () => {
     try {
-      const response = await checkHasParticiipant(examId);
+      const response = await checkHasParticipant(examId);
       setHasParticipant(response.data.hasParticipant);
     } catch (error) {
       console.log(error);
@@ -23,6 +23,8 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
   useEffect(() => {
     getCheckHasParticipant();
   }, []);
+
+  console.log(hasParticipant);
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[10px] xl:p-[20px] ">
       <div>
@@ -44,7 +46,7 @@ export default function ExamCard({ examName, examId, refresh, sectionId, status 
         </div>
         <div className="flex flex-wrap gap-1 xl:gap-4 pt-[12px]">
           <button
-            className={`btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b] ${status === "approved" ? "hidden" : "block"}`}
+            className={`btn xl:px-[20px] xl:text-[16px] text-white bg-[#E98713] hover:bg-[#d2801b] ${status ===  "approved" || "history" ? "hidden" : "block"}`}
             onClick={() => {
               navigate(`/exams/professor/edit/${examId}`);
             }}

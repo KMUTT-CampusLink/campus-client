@@ -45,12 +45,12 @@ export default function ProfessorEditExamPage() {
             return {
               questionId: question.id || null,
               questionText: question.title || "",
+              questionImg: question.question_img || "",
               type: question.type
                 ? question.type.replace("_", " ")
                 : "Multiple Choice",
               options: questionChoices.map((choice) => ({
                 choiceText: choice.choice_text || "",
-                choiceImg: choice.choice_img || null,
                 isCorrect: choice.correct_ans || false,
                 choiceId: choice.id || null,
               })),

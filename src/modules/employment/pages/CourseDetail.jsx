@@ -9,62 +9,49 @@ import SectionCard from "../components/SectionCard";
 import SectionAdd from "../components/SectionAdd";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
-
 const CourseDetail = () => {
-  //const { code } = useParams();  use this code to fetch course data and put it in setCourse but now just test with dummy data
-  const [course, setCourse] = useState({code: "CSC202", name: "Linear Algebra", semester: "1/2025"});
-  const [sections, setSections] =useState([
-    {
-      "id": "112",
-      "firstname": "Kyaw",
-      "midname": "Nanda",
-      "lastname": "Thu",
-      "name": "Section5",
-      "day": "Tuesday",
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "room_id": "CB2201"
-    },
-    {
-      "id": "110",
-      "firstname": "Kaung",
-      "midname": "Nanda",
-      "lastname": "Htun",
-      "name": "Section6",
-      "day": "Wednesday",
-      "start_time": "13:00",
-      "end_time": "15:00",
-      "room_id": "CB2304"
-    },
-    {
-      "id": "111",
-      "firstname": "Oakkar",
-      "midname": "",
-      "lastname": "Thu",
-      "name": "Section7",
-      "day": "Thursday",
-      "start_time": "09:00",
-      "end_time": "11:00",
-      "room_id": "CB2310"
-    },
-    {
-      "id": "113",
-      "firstname": "Kyaw",
-      "midname": "Min",
-      "lastname": "Thu",
-      "name": "Section8",
-      "day": "Friday",
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "room_id": "CB2402"
-    }]); // fetch data from backend
-
+  const { code } = useParams();
+  const [course, setCourse] = useState();
+  const [employee, setEmployee] = useState();
+  const [sections, setSections] = useState([]); // fetch data from backend
 
   const [showDeletePopUp, setShowDelete] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
   const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [sectionID, setSectionID] = useState(false);
 
+  useEffect(() => {
+    const fetchCourseSection = async () => {
+      try {
+        const result = await axiosInstance.get(
+          `employ/getCourseSection/${code}`
+        );
+        const sections = result.data; // The API already returns an array of sections
+
+        if (sections.length > 0) {
+          const { course } = sections[0];
+          setCourse(course); // Set course details
+        }
+
+        const employees = sections.flatMap((section) =>
+          section.professor.map((prof) => prof.employee)
+        );
+        const ids = sections.map((section) => section.id);
+        setSectionID(ids);
+        // Set the state // Set course details (unique courses)
+        setSections(sections);
+        setEmployee(employees); // Set section details
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+        return navigate(`/employ/course`);
+      }
+    };
+
+    fetchCourseSection();
+  }, [code, navigate]);
+  console.log("THis is section", sectionID);
+  // console.log("THis is course", course);
 
   if (!course) return <p className="mt-5 ml-5">Loading course data...</p>;
 
@@ -87,6 +74,19 @@ const CourseDetail = () => {
     setShowAdd(false);
   };
 
+  const handleDelete = async (code) => {
+    try {
+      const response = await axiosInstance.delete(
+        `employ/deleteCourse/${code}`
+      );
+      console.log("Delete successful");
+      setDeleteSuccess(true);
+      setShowDelete(false);
+      navigate(`/employ/course`);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
+  };
 
   return (
     <div className="w-full min-h-screen mb-7 md:mb-10">
@@ -100,27 +100,37 @@ const CourseDetail = () => {
               className="hover:shadow-sm md:h-7"
               onClick={handleClickback}
             />
-            <h1 className="text-[#D4A015] font-georama text-xl font-semibold md:text-3xl ml-3 md:ml-9">{course.code} - {course.name}</h1>
+            <h1 className="text-[#D4A015] font-georama text-xl font-semibold md:text-3xl ml-3 md:ml-9">
+              {course.code} - {course.name}
+            </h1>
           </div>
-          
 
           <button
             onClick={handleAddClick}
-            className="p-1 border border-black text-[12px] md:text-[16px]  rounded-md shadow-lg hover:shadow-xl transition font-opensans md:h-10 md:w-[130px] w-[100px] flex jusfiy-center items-center">
+            className="p-1 border border-black text-[12px] md:text-[16px]  rounded-md shadow-lg hover:shadow-xl transition font-opensans md:h-10 md:w-[130px] w-[100px] flex jusfiy-center items-center"
+          >
             <FontAwesomeIcon icon={faPlus} className="mx-1 md:h-5 " />
             Add Section
           </button>
         </div>
 
         <div className="mt-8">
-          {sections.map((section, index) => (
-            <SectionCard
-              key={section.id} 
-              section={section}
-            />
-          ))}
+          {/* {sections.map((section, index) => (
+            <SectionCard key={section.id} section={section} />
+          ))} */}
+          {sections.length > 0 ? (
+            sections.map((section, index) => (
+              <SectionCard
+                key={index}
+                section={section}
+                employees={employee}
+                sID={sectionID}
+              />
+            ))
+          ) : (
+            <p>No sections available</p>
+          )}
         </div>
-
 
         <div className="lg:mt-10 flex justify-around lg:justify-center lg:gap-10">
           <button
@@ -141,15 +151,12 @@ const CourseDetail = () => {
 
       {showDeletePopUp && (
         <CourseDeletePopUp
+          a={() => handleDelete(code)}
           onClose={handleClosePopup}
         />
       )}
-      {showAdd && (
-        <SectionAdd
-          onClose={handleClosePopup2}
-        />
-      )}
-      {deleteSuccess && <p>Course deleted successfully.</p>}
+      {showAdd && <SectionAdd onClose={handleClosePopup2} />}
+      {deleteSuccess}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-const CourseDeletePopUp = ({ onClose}) => {
+const CourseDeletePopUp = ({ onClose,a}) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -14,7 +14,7 @@ const CourseDeletePopUp = ({ onClose}) => {
             CANCEL
           </button>
           <button
-            //onClick={a}
+            onClick={a}
             className="w-1/2 tet-center py-2 text-white bg-[#EC5A51] font-semibold"
           >
             DELETE

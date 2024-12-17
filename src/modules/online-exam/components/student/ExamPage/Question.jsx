@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function Question({ questionid, questionNo, question, choice, type, handleAnswer, studentAnswer }) {
+export default function Question({ questionid, questionNo, question, questionImg, choice, type, handleAnswer, studentAnswer }) {
   const [localAnswer, setLocalAnswer] = useState(studentAnswer || []);
   useEffect(() => {
     setLocalAnswer(studentAnswer);
@@ -34,6 +34,7 @@ export default function Question({ questionid, questionNo, question, choice, typ
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
       <h1>{questionNo + 1}. {question}</h1>
+      <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto:"/>
       <div className="flex flex-col gap-[10px] pt-[20px]">
         {choice.map((choiceObj, index) => (
           <div key={index} className="flex items-center gap-[10px]">
