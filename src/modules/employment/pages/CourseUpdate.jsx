@@ -67,6 +67,7 @@ const CourseUpdate = () => {
           `employ/getCourseDetail/${code}`
         );
         setCourse(result.data);
+        console.log(result.data);
         setFormData({
           program_id: result.data.program_id || "",
           name: result.data.name || "",

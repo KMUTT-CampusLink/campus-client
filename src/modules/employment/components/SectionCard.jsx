@@ -41,7 +41,7 @@ const SectionCard = ({ section, employees }) => {
       await axiosInstance.delete(`employ/deleteSection/${code}/${id}`);
       setShowDelete(false);
       setCurrentSectionId(null);
-      navigate(`/employ/courseDetail/${code}`);
+      location.reload();
     } catch (error) {
       console.error("Error deleting section:", error);
     }

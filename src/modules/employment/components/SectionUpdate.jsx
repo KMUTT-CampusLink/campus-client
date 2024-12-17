@@ -6,6 +6,7 @@ import CourseUpdatePopUp from "./CourseUpdatePopUp";
 const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
   const { code } = useParams();
   const [showPopup, setShowPopup] = useState(false);
+  const [p, setP] = useState([]);
   const [formData, setFormData] = useState({
     firstname: "",
     midname: "",
@@ -46,6 +47,20 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const result = await axiosInstance.get(`employ/fetchProfessor`);
+        setP(result.data);
+      } catch (error) {
+        console.error("Error fetching professor data:", error);
+      }
+    };
+    fetchEmployeeData();
+  },);
+
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,7 +81,7 @@ const SectionUpdate = ({ section, professor, onClose, onUpdate }) => {
 
     try {
       const response = await axiosInstance.post(
-        `/employ/updateSection/${code}`,
+        `/employ/updateSection/${code}/${id}`,
         filteredSectionData
       );
       console.log("Update Response:", response.data);

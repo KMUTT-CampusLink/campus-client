@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
-const SectionAdd = ({ onClose, onAdd }) => {
+const SectionAdd = ({ onClose }) => {
   const [formData, setFormData] = useState({
     firstname: "",
     midname:  "",
@@ -9,7 +10,7 @@ const SectionAdd = ({ onClose, onAdd }) => {
     day: "",
     start_time: "",
     end_time: "",
-    room_id: "",
+    room_name: "",
   });
 
   const handleInputChange = (e) => {
@@ -17,10 +18,21 @@ const SectionAdd = ({ onClose, onAdd }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAdd(formData);
-    onClose();
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const data = {...formData};
+    
+        try {
+          const response = await axiosInstance.post(
+            `/employ/updateSection/${code}`,
+            data
+          );
+          console.log("Update Response:", response.data);
+          onClose(); 
+        } catch (error) {
+          console.error("Error Create section:", error.response?.data || error);
+        }
+    onClose()
   };
 
   return (
@@ -95,7 +107,7 @@ const SectionAdd = ({ onClose, onAdd }) => {
             <input
               type="text"
               name="room_id"
-              value={formData.room_id}
+              value={formData.room_name}
               onChange={handleInputChange}
               placeholder="Classroom"
               className="border border-gray-300 rounded-md p-2 w-full"

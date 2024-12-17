@@ -12,6 +12,7 @@ import { axiosInstance } from "../../../utils/axiosInstance";
 const CourseDetail = () => {
   const { code } = useParams();
   const [course, setCourse] = useState();
+  const [c, setC] = useState();
   const [employee, setEmployee] = useState();
   const [sections, setSections] = useState([]); // fetch data from backend
 
@@ -48,18 +49,29 @@ const CourseDetail = () => {
       }
     };
 
-    fetchCourseSection();
-  }, [code, navigate]);
-  console.log("THis is section", sectionID);
-  // console.log("THis is course", course);
+    const fetchCourse = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `employ/fetchCourseOnly/${code}`
+        );
+        setC(response.data);
+        console.log("THIS",c[0]);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
 
-  if (!course) return <p className="mt-5 ml-5">Loading course data...</p>;
+    fetchCourse();
+    fetchCourseSection();
+  }, []);
+
+  if (!c) return <p className="mt-5 ml-5">Loading course data...</p>;
 
   const handleClickback = () => {
     navigate(`/employ/course`);
   };
   const handleClick = () => {
-    navigate(`/employ/courseUpdate/${course.code}`);
+    navigate(`/employ/courseUpdate/${c[0].code}`);
   };
   const handleDeleteClick = () => {
     setShowDelete(true);
@@ -101,7 +113,7 @@ const CourseDetail = () => {
               onClick={handleClickback}
             />
             <h1 className="text-[#D4A015] font-georama text-xl font-semibold md:text-3xl ml-3 md:ml-9">
-              {course.code} - {course.name}
+              {c[0].code} - {c[0].name}
             </h1>
           </div>
 
