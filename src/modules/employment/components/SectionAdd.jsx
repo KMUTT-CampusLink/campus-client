@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React, { useState } from "react";
-import { axiosInstance } from "../../../utils/axiosInstance";
-
-const SectionAdd = ({ onClose }) => {
-=======
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
@@ -12,7 +6,6 @@ const SectionAdd = ({ onClose, onAdd }) => {
   const [professor, setProfessor] = useState(null);
   const [filteredProfessors, setFilteredProfessors] = useState([]);
   const [professorName, setProfessorName] = useState(""); // New state for input field
->>>>>>> 65935f2166a3e2ed4979269be8fa4d77ca8cc0b3
   const [formData, setFormData] = useState({
     firstname: "",
     midname: "",
@@ -29,23 +22,6 @@ const SectionAdd = ({ onClose, onAdd }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-<<<<<<< HEAD
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const data = {...formData};
-    
-        try {
-          const response = await axiosInstance.post(
-            `/employ/updateSection/${code}`,
-            data
-          );
-          console.log("Update Response:", response.data);
-          onClose(); 
-        } catch (error) {
-          console.error("Error Create section:", error.response?.data || error);
-        }
-    onClose()
-=======
   const handleProfessorNameChange = (e) => {
     const value = e.target.value;
     setProfessorName(value);
@@ -74,7 +50,6 @@ const SectionAdd = ({ onClose, onAdd }) => {
     e.preventDefault();
     onAdd(formData);
     onClose();
->>>>>>> 65935f2166a3e2ed4979269be8fa4d77ca8cc0b3
   };
 
   useEffect(() => {

@@ -4,16 +4,11 @@ import { useParams } from "react-router-dom";
 
 const SectionUpdate = ({ section, professor, onClose }) => {
   const { code } = useParams();
-<<<<<<< HEAD
-  const [showPopup, setShowPopup] = useState(false);
-  const [p, setP] = useState([]);
-=======
 
   const [p, setP] = useState([]);
   const [pro, setPro] = useState(null); // Final selected professor
   const [filteredProfessors, setFilteredProfessors] = useState([]);
   const [professorName, setProfessorName] = useState(""); // Input field for Professor Name
->>>>>>> 65935f2166a3e2ed4979269be8fa4d77ca8cc0b3
   const [formData, setFormData] = useState({
     firstname: "",
     midname: "",
@@ -86,13 +81,7 @@ const SectionUpdate = ({ section, professor, onClose }) => {
       }
     };
     fetchEmployeeData();
-<<<<<<< HEAD
-  },);
-
-  
-=======
   }, []);
->>>>>>> 65935f2166a3e2ed4979269be8fa4d77ca8cc0b3
 
   const handleSubmit = async (e) => {
     e.preventDefault();
