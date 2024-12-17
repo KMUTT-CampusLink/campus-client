@@ -10,7 +10,7 @@ const RecentTransactions = ({
 }) => {
   if (!transactions || transactions.length === 0) {
     return (
-      <div className="w-full lg:w-1/2 mb-auto">
+      <div className>
         <h2 className=" h2 py-4 lg:py-8">Recent Transactions</h2>
         <div className="flex flex-row p-0 h-min justify-between mb-4 items-center space-x-2">
           {/* Filters */}
@@ -112,7 +112,7 @@ const RecentTransactions = ({
   };
 
   return (
-    <div className="w-full lg:w-1/2 mb-auto">
+    <div className>
       <h2 className=" h2 py-4 lg:py-8">Recent Transactions</h2>
 
       <div className="flex flex-row p-0 h-min justify-between mb-4 items-center space-x-2">

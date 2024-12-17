@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../../registration/components/NavBarComponents/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
 import PartialSelect from "../components/partialSelect.jsx";
+import WalletPopup from "../components/WalletPopup";
 import InvoiceImage from "../asset/invoice.svg";
 import ArrowLeft from "../asset/arrowL.svg";
 import "../style/typography.css";
@@ -12,7 +13,7 @@ const PaymentInvoice = () => {
   const [invoice, setInvoice] = useState({});
   const [installments, setInstallments] = useState([]);
   const [showPartialSelect, setShowPartialSelect] = useState(false);
-
+  const [showWalletPopup, setShowWalletPopup] = useState(false);
   const navigate = useNavigate();
 
   const formatNumberWithCommas = (number) => {
@@ -201,9 +202,9 @@ const PaymentInvoice = () => {
             </button>
             <button
               className="btn bg-payment-red hover:bg-red-500 text-white lg:px-10 py-2 rounded-md shadow-md body-1"
-              onClick={handlePayment}
+              onClick={() => setShowWalletPopup(true)} // Toggle WalletPopup
             >
-              Full Pay
+              Pay Now
             </button>
           </div>
         )}
@@ -215,6 +216,13 @@ const PaymentInvoice = () => {
       />
       {showPartialSelect && (
         <PartialSelect setShowPartialSelect={setShowPartialSelect} />
+      )}
+      {showWalletPopup && (
+        <WalletPopup
+          onClose={() => setShowWalletPopup(false)} // Close popup handler
+          invoiceId={invoice.id}
+          invoiceAmount={invoice.amount} // Pass invoice amount for wallet logic
+        />
       )}
     </div>
   );

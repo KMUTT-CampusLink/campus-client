@@ -6,8 +6,6 @@ const AllTransactions = ({
   transactions,
   filterAll,
   setFilterAll,
-  isAscending,
-  setIsAscending,
   setShowAll,
 }) => {
   if (!transactions || transactions.length === 0) {
@@ -42,12 +40,6 @@ const AllTransactions = ({
     filterAll === "All"
       ? transactions
       : transactions.filter((transaction) => transaction.status === filterAll);
-
-  const sortedTransactions = filteredAllTransactions.sort((a, b) => {
-    return isAscending
-      ? new Date(a.issue_date) - new Date(b.issue_date)
-      : new Date(b.issue_date) - new Date(a.issue_date);
-  });
 
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -138,7 +130,7 @@ const AllTransactions = ({
       </div>
 
       <div className="space-y-4 ">
-        {sortedTransactions.map((transaction, index) => (
+        {filteredAllTransactions.map((transaction, index) => (
           <div
             key={index}
             className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
@@ -189,7 +181,7 @@ const AllTransactions = ({
                   onClick={() => handleArrowClick(transaction)}
                   aria-label="Pay Now"
                 >
-                  ➔
+                  ➞
                 </button>
               </div>
             )}
