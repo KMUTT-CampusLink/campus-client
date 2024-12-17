@@ -66,9 +66,12 @@ const MemClubHomePost = (props) => {
           `Status for announcement ${announcement.id}:`,
           statusResponse.data
         ); // Debug log
-        return { id: announcement.id, status: statusResponse.data.status, invoiceId: statusResponse.data.invoiceId };
+        return {
+          id: announcement.id,
+          status: statusResponse.data.status,
+          invoiceId: statusResponse.data.invoiceId,
+        };
       });
-
 
       const statuses = await Promise.all(statusPromises);
       const statusMap = statuses.reduce((acc, { id, status, invoiceId }) => {
@@ -132,6 +135,43 @@ const MemClubHomePost = (props) => {
     }
   };
 
+  const cancelReservation = async (reservationId, clubAnnouncementId) => {
+    try {
+      const response = await axiosInstance.post("/clubs/events/cancel", {
+        reservationId,
+      });
+  
+      if (response.data.success) {
+        alert("Reservation cancelled successfully!");
+  
+        // Update reserved seats and reservation status
+        setClubAnnouncement((prevAnnouncements) =>
+          prevAnnouncements.map((announcement) =>
+            announcement.id === clubAnnouncementId
+              ? {
+                  ...announcement,
+                  reserved_seats: Math.max(
+                    (announcement.reserved_seats || 0) - 1,
+                    0
+                  ),
+                }
+              : announcement
+          )
+        );
+  
+        // Reset status in the reservationStatus state
+        setReservationStatus((prevState) => ({
+          ...prevState,
+          [clubAnnouncementId]: { status: "Cancelled", invoiceId: null },
+        }));
+      } else {
+        console.error("Error cancelling reservation:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error cancelling reservation:", error);
+    }
+  };  
+  
   const handlePendingPayment = (invoiceId) => {
     navigate(`/payment/payment-invoice/${invoiceId}`); // Navigate to the payment page
   };
@@ -139,16 +179,26 @@ const MemClubHomePost = (props) => {
   const getButton = (statusObj, announcementId) => {
     console.log(statusObj, announcementId);
     const { status, invoiceId } = statusObj || {};
-    if (status === "Unreserved") {
+    // if (status === "Unreserved") {
+    //   return (
+    //     <button
+    //       onClick={() => reserveSeat(announcementId)}
+    //       className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
+    //     >
+    //       Reserve
+    //     </button>
+    //   );
+    // }
+    if (status === "Unreserved" || status === "Cancelled") {
       return (
         <button
           onClick={() => reserveSeat(announcementId)}
           className="bg-[#864E41] text-white px-3 md:px-8 py-1 md:py-2 rounded-lg"
         >
-          Reserve
+          {status === "Cancelled" ? "Reserve Again" : "Reserve"}
         </button>
       );
-    }
+    }    
     if (status === "Unpaid") {
       if (!invoiceId) {
         console.error(`Missing invoiceId for announcement ${announcementId}`);
@@ -241,13 +291,13 @@ const MemClubHomePost = (props) => {
                       import.meta.env.VITE_MINIO_BUCKET_NAME
                     }/${item.post_img}`}
                     alt="Post image"
-                    className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl md:mt-0 sm:mt-4 sm:mb-4"
+                    className="sm:grid-flow-col w-[60%] h-[60%] border-solid rounded-2xl mt-4 sm:mb-4"
                   />
                 )}
-                <div className="md:ml-10 inline-flex items-start">
+                <div className="md:ml-10 mt-4 inline-flex items-start">
                   <div className="text-left mr-2 text-lg md:text-xl font-semibold">
                     {item.title}
-                    <p className="md:mt-3 sm:mt-0 text-base">
+                    <p className="md:mt-4 sm:mt-0 text-base">
                       • {item.content}
                     </p>
                   </div>

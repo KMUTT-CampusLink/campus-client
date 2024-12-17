@@ -1,8 +1,9 @@
-export default function StudentQuestion({ questionid, questionNo, question, choice, type }) {
+export default function StudentQuestion({ questionid, questionNo, question, questionImg, choice, type }) {
   return (
     <div className="border rounded-xl p-[25px] w-full">
       <h1>{questionNo + 1}. {question}</h1>
       <div className="flex flex-col gap-[10px] pt-[20px]">
+        {questionImg && <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto mb-[10px]" />}
         {choice.map((choiceObj, index) => (
           <div key={index} className="flex items-center gap-[10px]">
             {/* Multiple Choice */}

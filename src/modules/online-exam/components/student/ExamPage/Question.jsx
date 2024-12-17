@@ -19,7 +19,7 @@ export default function Question({ questionid, questionNo, question, questionImg
         }
       });
     } else if (type === 'Essay') {
-      setLocalAnswer([{question_id: questionid, choiceText: choiceObj, choiceId: '' }]); // Wrap essay text in object format
+      setLocalAnswer([{ question_id: questionid, choiceText: choiceObj, choiceId: '' }]); // Wrap essay text in object format
     }
   };
 
@@ -34,7 +34,7 @@ export default function Question({ questionid, questionNo, question, questionImg
   return (
     <div className="border border-[#BEBEBE] rounded-xl p-[25px] w-full">
       <h1>{questionNo + 1}. {question}</h1>
-      <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto:"/>
+      {questionImg && <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto mb-[10px]" />}
       <div className="flex flex-col gap-[10px] pt-[20px]">
         {choice.map((choiceObj, index) => (
           <div key={index} className="flex items-center gap-[10px]">

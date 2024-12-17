@@ -6,7 +6,6 @@ import FaceComponent from "../components/faceAttendanceComponent";
 import useFace from "../hook/useFace";
 import { getCourseHeader } from "../services/api";
 import { useParams } from "react-router-dom";
-
 const AttendancePage = () => {
   const [activeTab, setActiveTab] = useState("Attendance"); // Track the active tab
   const { sectionId } = useParams();
@@ -18,9 +17,9 @@ const AttendancePage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "Attendance":
-        return <AttendanceComponent/>;
+        return <AttendanceComponent />;
       case "QR CODE":
-        return <QrComponent/>;
+        return <QrComponent />;
       case "Face Attendance":
         return <FaceComponent {...face} />;
       default:
@@ -73,31 +72,28 @@ const AttendancePage = () => {
           <div className="w-full flex justify-center mt-4 px-4 sm:px-48">
             <div className="flex gap-4 sm:gap-10 flex-wrap justify-center">
               <button
-                className={`text-lg font-semibold tab-button ${
-                  activeTab === "Attendance"
+                className={`text-lg font-semibold tab-button ${activeTab === "Attendance"
                     ? "active border-b-2 border-black"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setActiveTab("Attendance")}
               >
                 Attendance
               </button>
               <button
-                className={`text-lg font-semibold tab-button ${
-                  activeTab === "QR CODE"
+                className={`text-lg font-semibold tab-button ${activeTab === "QR CODE"
                     ? "active border-b-2 border-black"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setActiveTab("QR CODE")}
               >
                 QR Code
               </button>
               <button
-                className={`text-lg font-semibold tab-button ${
-                  activeTab === "Face Attendance"
+                className={`text-lg font-semibold tab-button ${activeTab === "Face Attendance"
                     ? "active border-b-2 border-black"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setActiveTab("Face Attendance")}
               >
                 Face Attendance

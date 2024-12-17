@@ -18,7 +18,7 @@ export default function Question({
         </h1>
       </div>
       <div className="flex flex-col gap-[10px] pt-[20px]">
-      <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto pb-[10px]" />
+        {questionImg && <img src={`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}/${questionImg}`} alt="" className="w-[300px] h-auto pb-[10px]" />}
         {type !== "Essay" &&
           choice.map((choiceObj, index) => {
             return (

@@ -23,8 +23,7 @@ function ClubDetailCard({ isAdmin, isMember }) {
         );
         setMemberCount(members.length - 1);
         setClubImg(
-          `${
-            import.meta.env.VITE_MINIO_URL +
+          `${import.meta.env.VITE_MINIO_URL}${
             import.meta.env.VITE_MINIO_BUCKET_NAME
           }/${clubData.club_img}`
         );
