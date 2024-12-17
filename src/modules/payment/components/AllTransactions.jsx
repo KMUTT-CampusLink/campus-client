@@ -6,8 +6,6 @@ const AllTransactions = ({
   transactions,
   filterAll,
   setFilterAll,
-  isAscending,
-  setIsAscending,
   setShowAll,
 }) => {
   if (!transactions || transactions.length === 0) {
