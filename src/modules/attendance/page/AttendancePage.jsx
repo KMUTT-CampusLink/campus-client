@@ -6,7 +6,7 @@ import FaceComponent from "../components/faceAttendanceComponent";
 import useFace from "../hook/useFace";
 import { getCourseHeader } from "../services/api";
 import { useParams } from "react-router-dom";
-
+import verifySection from "../middlewares/verifySection";
 const AttendancePage = () => {
   const [activeTab, setActiveTab] = useState("Attendance"); // Track the active tab
   const { sectionId } = useParams();
