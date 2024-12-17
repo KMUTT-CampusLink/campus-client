@@ -86,6 +86,7 @@ function ClubCreatePage() {
             name: `Prof. ${professor.firstname ?? ""} ${
               professor.midname ?? ""
             } ${professor.lastname ?? ""}`.trim(),
+            image: professor.image,
           })),
         ];
 
