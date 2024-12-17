@@ -19,12 +19,12 @@ const MessageReply = ({dummyAns, questions, answer, profilePic, trips, bookdata}
                 trips={trips}
               />
               </div>
-            : answer === "book" ?
+            : answer.trim() === "book" && bookdata ?
               <div className='w-full h-full flex flex-col'>
                 <p>The book <strong>"{bookdata.title}"</strong>, edition {bookdata.edition} written by <strong>{bookdata.author}</strong> is available at the library.
                   <br />
-                  Description: {bookdata.description} <br />
-                  <p className='w-full h-full self-center justify-center text-center'><b>If you want to reserve the book, click below.</b></p>
+                  <strong>Description:</strong> {bookdata.description} <br />
+                  <span className='w-full h-full self-center justify-center text-center'><b>If you want to reserve the book, click below.</b></span>
                 </p>
                 <Booking bookdata={bookdata}/>
               </div>

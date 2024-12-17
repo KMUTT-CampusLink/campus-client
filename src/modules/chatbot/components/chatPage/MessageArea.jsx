@@ -27,8 +27,8 @@ const MessageArea = ({questions, dummyAns, profilePic, trips, bookdata}) => {
               questions = {questions} 
               answer = {dummyAns[i]} 
               profilePic = {profilePic} 
-              trips = {trips} 
-              bookdata = {bookdata}/>
+              trips = {trips[i]} 
+              bookdata = {bookdata[i]}/>
             </div>
             : 
             <div className='flex flex-row gap-4 sm:gap-8'>
