@@ -76,13 +76,16 @@ export const createAssignment = (newAssignment) =>
 //assignment Student
 
 export const addAssignmentSubmission = (formData) =>
-  post(`/courses/assignmentSubmission`, formData);
+  post(`/courses/assignment/assignmentSubmission`, formData);
 
 export const editAssignmentSubmission = (assignmentID, updatedSubmission) =>
   put(`/courses/assignment/${assignmentID}/submit/edit`, updatedSubmission);
 
 export const fetchAssignmentSubmissionFilePath = (assignmentID, studentID) =>
   get(`/courses/assignment/submission/${assignmentID}/${studentID}`);
+
+export const fetchStudentSubmission = (sectionID, assignmentID) =>
+  get(`/courses/assignment/studentSubmission/${sectionID}/${assignmentID}`);
 
 // discussion Teacher
 export const fetchAllDiscussionPostsBySectionID = (sectionID) =>

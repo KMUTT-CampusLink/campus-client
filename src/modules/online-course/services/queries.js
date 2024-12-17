@@ -14,6 +14,7 @@ import {
   fetchAssignmentSubmissionFilePath,
   fetchAllUpComingEvents,
   fetchUpComingEventsByTeacher,
+  fetchStudentSubmission,
 } from "./api";
 export const useAllCourses = () => {
   return useQuery({
@@ -128,6 +129,17 @@ export const useAssignmentSubmissionFilePath = (assignmentID, studentID) => {
     enabled: !!assignmentID && !!studentID,
     onError: (error) => {
       console.error("Error fetching assignment submission file path:", error);
+    },
+  });
+};
+
+export const useStudentSubmission = (sectionID, assignmentID) => {
+  return useQuery({
+    queryKey: ["submissionSectionID", sectionID,assignmentID],
+    queryFn: () => fetchStudentSubmission(sectionID,assignmentID),
+    enabled: !!sectionID && !!assignmentID,
+    onError: (error) => {
+      console.error("Error fetching student submission :", error);
     },
   });
 };

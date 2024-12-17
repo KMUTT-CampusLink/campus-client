@@ -21,12 +21,6 @@ const PopupEvent = ({ closePopup, onSubmit }) => {
             return;
         }
 
-        // Ensure startDate is greater than today
-        if (startDate <= new Date()) {
-            alert("Start Date must be in the future.");
-            return;
-        }
-
         // Ensure endDate is greater than startDate
         if (endDate <= startDate) {
             alert("End Date must be greater than Start Date.");
