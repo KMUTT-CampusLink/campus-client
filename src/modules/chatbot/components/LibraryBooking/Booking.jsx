@@ -72,7 +72,6 @@ const Booking = ({bookdata}) => {
   return (
     <div className="w-full h-full flex items-center justify-center">
               <button
-                disabled={!isClicked}
                 onClick={() =>
                   document.getElementById("my_modal_4").showModal()
                 }
