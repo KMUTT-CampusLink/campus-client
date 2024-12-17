@@ -12,6 +12,9 @@ const EmployeeUpdate = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [facultyList, setFacultyList] = useState([]);
+  const [empImage, setempImage] = useState(null);
+  const [error, setError] = useState({});
+  const [imgURL, setimgURL] = useState(null);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -126,6 +129,17 @@ const EmployeeUpdate = () => {
     setShowPopup(false);
   };
 
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    setempImage(file || null); // Set to null if no file is selected
+    if (file) {
+      console.log("File selected:", file); // Debugging info
+      const a = URL.createObjectURL(file); // Create a temporary URL for the image
+      setimgURL(a);
+    }
+    //setErrors((prevErrors) => ({ ...prevErrors, clubImage: "" })); // Clear errors
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -137,15 +151,19 @@ const EmployeeUpdate = () => {
       Object.entries(employeeData).filter(([key, value]) => value)
     );
 
+    const form = new FormData();
+    form.append("data", JSON.stringify(filteredEmployeeData));
+    form.append("empImage", empImage);
+
     //console.log("Filtered Employee Data:", filteredEmployeeData);
 
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.postForm(
         `employ/updateEmp/${id}`,
-        filteredEmployeeData
+        form
       );
       if (response.status === 200) {
-      //  console.log("Employee updated successfully");
+        //  console.log("Employee updated successfully");
         navigate(`/employ/employeeDetail/${id}`);
       } else {
         console.error("Error updating employee:", response.data);
@@ -168,11 +186,30 @@ const EmployeeUpdate = () => {
         <div className=" space-y-5 md:space-y-7 mt-2 md:mt-4">
           <div className="flex justify-center">
             <img
-              src="https://techtrickseo.com/wp-content/uploads/2020/08/whatsapp-dp-new.jpg"
+              src={
+                imgURL ||
+                `${import.meta.env.VITE_MINIO_URL}${
+                  import.meta.env.VITE_MINIO_BUCKET_NAME
+                }/${employees.image}`
+              }
               alt="Employee Avatar"
               className="rounded-full w-36 h-36 md:w-42 md:h-42 object-cover"
             />
           </div>
+
+          <label
+            htmlFor="fileInput"
+            className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600 focus:outline-none"
+          >
+            +
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={onFileChange}
+            />
+          </label>
 
           <div className="flex justify-center">{id}</div>
 
@@ -316,7 +353,7 @@ const EmployeeUpdate = () => {
               </div>
 
               <div className="w-full">
-              <div className="mb-4">
+                <div className="mb-4">
                   <label className="font-opensans text-[10px] md:text-[14px] text-[#1A4F6E] mb-2">
                     Gender
                   </label>
@@ -436,7 +473,7 @@ const EmployeeUpdate = () => {
                       <input
                         type="text"
                         name="province"
-                        value={formData.province }
+                        value={formData.province}
                         onChange={handleChange}
                         className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black text-[13px] md:text-[16px]"
                       />

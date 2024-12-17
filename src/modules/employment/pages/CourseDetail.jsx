@@ -19,6 +19,7 @@ const CourseDetail = () => {
   const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
   const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [sectionID, setSectionID] = useState(false);
 
   useEffect(() => {
     const fetchCourseSection = async () => {
@@ -26,9 +27,21 @@ const CourseDetail = () => {
         const result = await axiosInstance.get(
           `employ/getCourseSection/${code}`
         );
-        setCourse(result.data); // Set course details
-        setSections(result.data.section); // Set section details
-        setEmployee(result.data.employee);
+        const sections = result.data; // The API already returns an array of sections
+
+        if (sections.length > 0) {
+          const { course } = sections[0];
+          setCourse(course); // Set course details
+        }
+
+        const employees = sections.flatMap((section) =>
+          section.professor.map((prof) => prof.employee)
+        );
+        const ids = sections.map((section) => section.id);
+        setSectionID(ids);
+        // Set the state // Set course details (unique courses)
+        setSections(sections);
+        setEmployee(employees); // Set section details
       } catch (error) {
         console.error("Error fetching employee data:", error);
         return navigate(`/employ/course`);
@@ -37,8 +50,8 @@ const CourseDetail = () => {
 
     fetchCourseSection();
   }, [code, navigate]);
-  console.log(sections);
-  console.log(course);
+  console.log("THis is section", sectionID);
+  // console.log("THis is course", course);
 
   if (!course) return <p className="mt-5 ml-5">Loading course data...</p>;
 
@@ -59,6 +72,20 @@ const CourseDetail = () => {
   };
   const handleClosePopup2 = () => {
     setShowAdd(false);
+  };
+
+  const handleDelete = async (code) => {
+    try {
+      const response = await axiosInstance.delete(
+        `employ/deleteCourse/${code}`
+      );
+      console.log("Delete successful");
+      setDeleteSuccess(true);
+      setShowDelete(false);
+      navigate(`/employ/course`);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
   };
 
   return (
@@ -93,7 +120,12 @@ const CourseDetail = () => {
           ))} */}
           {sections.length > 0 ? (
             sections.map((section, index) => (
-              <SectionCard key={index} section={section} />
+              <SectionCard
+                key={index}
+                section={section}
+                employees={employee}
+                sID={sectionID}
+              />
             ))
           ) : (
             <p>No sections available</p>
@@ -117,9 +149,14 @@ const CourseDetail = () => {
         </div>
       </main>
 
-      {showDeletePopUp && <CourseDeletePopUp onClose={handleClosePopup} />}
+      {showDeletePopUp && (
+        <CourseDeletePopUp
+          a={() => handleDelete(code)}
+          onClose={handleClosePopup}
+        />
+      )}
       {showAdd && <SectionAdd onClose={handleClosePopup2} />}
-      {deleteSuccess && <p>Course deleted successfully.</p>}
+      {deleteSuccess}
     </div>
   );
 };
