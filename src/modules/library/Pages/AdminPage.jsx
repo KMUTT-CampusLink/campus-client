@@ -12,7 +12,6 @@ import QrScanner from "qr-scanner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function AdminPage() {
   const [books, setBooks] = useState([]);
-  const [reservations, setReservations] = useState([]);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [scannedBookData, setScannedBookData] = useState(null);
   const [loadingBook, setLoadingBook] = useState(null);
@@ -25,9 +24,8 @@ function AdminPage() {
   const fetchData = async () => {
     try {
       const booksData = await fetchResData();
-      const reservationData = await fetchReservedBook();
+      
       setBooks(booksData || []); // Ensure data is an array
-      setReservations(reservationData || []); // Ensure reservation data is an array
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -42,21 +40,8 @@ function AdminPage() {
   const handleReturnBook = async (bookId) => {
     setLoadingBook(bookId);
     try {
-      const reservation = reservations.find(
-        (book) => book.reserved_book === bookId
-      );
-      if (!reservation) {
-        throw new Error("No reservation found for the scanned book ID.");
-      }
-      const response = await returnBook(reservation.reservation_id, bookId);
+      const response = await returnBook(scannedBookData.reserve_id, bookId);
       console.log("Book returned successfully!", response);
-
-      // Remove the returned book from reservations
-      setReservations((prevReservations) =>
-        prevReservations.filter(
-          (item) => item.reserved_book !== reservation.reserved_book
-        )
-      );
     } catch (error) {
       console.error("Error returning the book:", error);
     } finally {
