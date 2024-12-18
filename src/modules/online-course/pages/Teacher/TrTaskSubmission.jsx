@@ -1,43 +1,78 @@
-import React from "react";
+import React, { useState } from "react";
 import NavForIndvCourse from "../../components/NavForIndvCourse";
+import FeedbackPopup from "../../components/FeedbackPopup";
 import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquare, faDownload, faFile } from "@fortawesome/free-solid-svg-icons";
+import { faSquare, faDownload } from "@fortawesome/free-solid-svg-icons";
 import CourseHeader from "../../components/CourseHeader";
 import { useCourseHeaderBySectionID, useStudentSubmission } from "../../services/queries";
+import { useFeedbackSubmission } from "../../services/mutations"; // Import your mutation hook
+
+const MINIO_BASE_URL = `${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME}`;
 
 const TrTaskSubmission = () => {
   const sec_id = localStorage.getItem("sec_id");
   const location = useLocation();
-  const { task } = location.state || {}; // Retrieve task from navigation state
+  const { task } = location.state || {};
+
+  const [isFeedbackOpen, setFeedbackOpen] = useState(false); // Modal visibility state
+  const [selectedStudent, setSelectedStudent] = useState(null); // Selected student for feedback
+
+  const submitFeedback = useFeedbackSubmission();
 
   const { data: details, isLoading: isHeaderLoading, error: headerError } = useCourseHeaderBySectionID(sec_id);
-  const { data: submittedStudents, isLoading: isStudentsLoading, error: studentsError } = useStudentSubmission(sec_id, task?.id);
+  const { data: submittedStudents, isLoading: isStudentsLoading, error: studentsError, refetch } = useStudentSubmission(sec_id, task?.id); // Add refetch here
 
-  const getStatusColor = (status) => {
-    if (status === "On Time") return "#6ae65f";
-    if (status === "Late") return "#e5d35b";
-    if (status === "Absent") return "red";
-    return "gray";
+  const getStatusColor = (createdAt) => {
+    if (createdAt == null) return "red";
+    const deadline = new Date(task?.end_date);
+    const submissionDate = new Date(createdAt);
+    return submissionDate <= deadline ? "#6ae65f" : "#e5d35b";
+  };
+
+  const handleOpenFeedback = (student) => {
+    setSelectedStudent(student);
+    setFeedbackOpen(true); // Open popup
+  };
+
+  const handleCloseFeedback = () => {
+    setFeedbackOpen(false); // Close popup
+    setSelectedStudent(null);
+  };
+
+  const handleSubmitFeedback = async (feedbackData) => {
+    // Prepare feedback data
+    const feedback = {
+      submissionId: selectedStudent?.id,
+      score: feedbackData.decimalValue,
+      feedback: feedbackData.textValue,
+    };
+
+    // Call the mutation to submit feedback
+    submitFeedback.mutate(feedback, {
+      onSuccess: () => {
+        console.log("Feedback successfully submitted!");
+        // Refetch the student submissions after successful feedback submission
+        refetch();
+      },
+      onError: (error) => {
+        console.error("Error submitting feedback:", error);
+      },
+    });
   };
 
   if (!task?.id) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Task ID is missing. Please navigate back and select a valid task.</p>
-      </div>
-    );
+    return <div className="text-red-500">Task ID is missing.</div>;
   }
 
   return (
     <div className="min-h-screen overflow-x-hidden">
       <NavForIndvCourse page={"tasks"} />
 
-      {/* Course Header */}
       {isHeaderLoading ? (
-        <div className="text-center py-4">Loading course details...</div>
+        <div>Loading course details...</div>
       ) : headerError ? (
-        <div className="text-center text-red-500 py-4">Error loading course details: {headerError.message}</div>
+        <div>Error loading course details: {headerError.message}</div>
       ) : (
         <CourseHeader
           c_code={details?.course_code}
@@ -47,67 +82,97 @@ const TrTaskSubmission = () => {
         />
       )}
 
-      {/* Task Info */}
+      {/* Task Title */}
       <div className="py-8 w-full">
         <div className="max-md:w-full max-md:ml-4 w-3/4 mx-auto">
-          <div className="text-2xl font-bold text-[#ecb45e]">TASKS</div>
-          <div className="font-bold text-2xl">{task?.title || "Untitled Task"}</div>
+          <div className="text-xl md:text-2xl font-semibold text-[#ecb45e]">TASKS</div>
+          <div className="text-lg md:text-lg my-2">{task?.title || "Untitled Task"}</div>
           <div className="flex gap-6">
             <div className="flex items-center gap-3">
               <FontAwesomeIcon icon={faSquare} color="#66b052" />
-              <span>On Time</span>
+              <span className="text-sm md:text-base font-medium">On Time</span>
             </div>
             <div className="flex items-center gap-3">
               <FontAwesomeIcon icon={faSquare} color="#e5d35b" />
-              <span>Late</span>
+              <span className="text-sm md:text-base font-medium">Late</span>
             </div>
             <div className="flex items-center gap-3">
               <FontAwesomeIcon icon={faSquare} color="red" />
-              <span>Absent</span>
+              <span className="text-sm md:text-base font-medium">Absent</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Submission Table Header */}
-      <div className="max-md:text-sm max-sm:text-xs text-lg font-bold grid max-md:grid-cols-5 grid-cols-6 justify-items-center border-b-2 border-b-gray-300">
-        <div className="max-md:hidden">Student name</div>
-        <div>Student ID</div>
-        <div>File Upload</div>
-        <div>Status</div>
-        <div>Score</div>
-        <div>Feedback</div>
+
+      <div className="max-sm:text-sm max-md:pt-2 pt-4 pb-8 border-b-2 bg-white shadow-lg rounded-md mx-auto w-11/12 max-md:w-full max-md:mx">
+        <div className="max-md:w-full max-md:ml-2 mx-auto p-4">
+          {/* Row Title */}
+          <div className="max-md:text-sm max-sm:text-xs text-lg font-bold grid max-md:grid-cols-5 grid-cols-6 justify-items-center border-b-2 border-b-gray-300">
+            <div className="max-md:hidden">Student name</div>
+            <div>Student ID</div>
+            <div>File Upload</div>
+            <div>Status</div>
+            <div>Score</div>
+            <div></div>
+          </div>
+
+          {/* Submission Table */}
+          {submittedStudents?.data?.length > 0 ? (
+            submittedStudents?.data?.map((student) => (
+              <div
+                key={student.student_id}
+                className="max-md:pl-3 max-md:text-sm max-sm:text-xs grid max-md:grid-cols-5 max-md:gap-5 justify-items-center grid-cols-6 justify-center pt-2 pb-2"
+              >
+                <div className="max-md:hidden justify-self-start">
+                  <div className="max-lg:pl-1 lg:pl-14">{student.name}</div>
+                </div>
+                <div>{student.student_id}</div>
+                <div className="text-[#ecb45e] lg:max-w-[16rem] max-md:max-w-12">
+                  <a
+                    href={`${MINIO_BASE_URL}/${student.file_path}`}
+                    download
+                    className="text-red-500 underline"
+                    onClick={(e) => {
+                      if (!student.file_path) {
+                        e.preventDefault();
+                        alert("File not available!");
+                      }
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faDownload}
+                      className="pl-2 transition-transform duration-300 ease-in-out hover:scale-110 hover:text-red-600"
+                    />
+                  </a>
+                </div>
+                <div>
+                  <FontAwesomeIcon icon={faSquare} color={getStatusColor(student.create_at)} />
+                </div>
+                <div>{student.score !== null ? `${student.score}/10` : "N/A"}</div>
+                <button
+                  className="bg-[#ecb45e] text-white py-0.5 px-3 rounded hover:bg-[#d9a24b] transition duration-200"
+                  onClick={() => handleOpenFeedback(student)}
+                >
+                  Feedback
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-4">No submissions found for this task.</div>
+          )}
+        </div>
       </div>
 
-      {/* Submission List */}
-      {isStudentsLoading ? (
-        <div className="text-center py-4">Loading submissions...</div>
-      ) : studentsError ? (
-        <div className="text-center text-red-500 py-4">Error loading submissions: {studentsError.message}</div>
-      ) : submittedStudents?.length > 0 ? (
-        submittedStudents.map((student) => (
-          <div
-            key={student.id}
-            className="max-md:pl-3 font-bold max-md:text-sm max-sm:text-xs text-lg grid max-md:grid-cols-5 max-md:gap-5 justify-items-center grid-cols-6 justify-center "
-          >
-            <div className="max-md:hidden justify-self-start">
-              <div className="max-lg:pl-1 lg:pl-14">{student.name}</div>
-            </div>
-            <div className="">{student.id}</div>
-            <div className="text-[#ecb45e] lg:max-w-[16rem] max-md:max-w-12">
-              <FontAwesomeIcon icon={faFile} color="red" className="pr-2" />
-              {student.file}
-              <FontAwesomeIcon icon={faDownload} color="red" className="pl-2" />
-            </div>
-            <div className="">
-              <FontAwesomeIcon icon={faSquare} color={getStatusColor(student.status)} />
-            </div>
-            <div className="">{student.score}/10</div>
-            <div>{student.feedback}</div>
-          </div>
-        ))
-      ) : (
-        <div className="text-center py-4">No submissions found for this task.</div>
+
+      {/* Feedback Popup */}
+      {isFeedbackOpen && (
+        <FeedbackPopup
+          isOpen={isFeedbackOpen}
+          onClose={handleCloseFeedback}
+          onSubmit={handleSubmitFeedback}
+          studentName={selectedStudent?.name || ""}
+        />
       )}
     </div>
   );

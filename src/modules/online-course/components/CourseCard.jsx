@@ -1,8 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
 const CourseCard = ({ course }) => {
-  const imageURL =
-    "https://media.istockphoto.com/id/1366428092/photo/webinar-e-learning-skills-business-internet-technology-concepts-training-webinar-e-learning.jpg?s=612x612&w=0&k=20&c=mJeYiZyGQXLXXZ6AWKbLwQDiuLr-YLRGV4VjHKdX0pM=";
+  const defaultImg = "https://media.istockphoto.com/id/1366428092/photo/webinar-e-learning-skills-business-internet-technology-concepts-training-webinar-e-learning.jpg?s=612x612&w=0&k=20&c=mJeYiZyGQXLXXZ6AWKbLwQDiuLr-YLRGV4VjHKdX0pM=";
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,7 +19,8 @@ const CourseCard = ({ course }) => {
       onClick={handleClick}
     >
       <img
-        src={course?.image_url || imageURL}
+        src={course.image_url ? (`${import.meta.env.VITE_MINIO_URL}${import.meta.env.VITE_MINIO_BUCKET_NAME
+          }/${course.image_url}`) : defaultImg}
         alt={course?.course_name}
         className="w-full h-3/5 object-cover transition-transform duration-300 ease-in-out hover:scale-110"
       />

@@ -87,6 +87,9 @@ export const fetchAssignmentSubmissionFilePath = (assignmentID, studentID) =>
 export const fetchStudentSubmission = (sectionID, assignmentID) =>
   get(`/courses/assignment/studentSubmission/${sectionID}/${assignmentID}`);
 
+export const feedbackSubmission = (body)=>
+  put(`/courses/assignment/feedback`,body);
+
 // discussion Teacher
 export const fetchAllDiscussionPostsBySectionID = (sectionID) =>
   get(`/courses/discussion/${sectionID}`);

@@ -96,7 +96,7 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
           </div>
 
           {/* Optional File Upload */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label
               htmlFor="file"
               className="block text-gray-700 font-medium mb-1"
@@ -109,7 +109,7 @@ const PopupDiscussion = ({ closePopup, onSubmit }) => {
               onChange={handleFileChange}
               className="w-full text-gray-700 border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#ecb45e] focus:outline-none"
             />
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <div className="flex justify-end">

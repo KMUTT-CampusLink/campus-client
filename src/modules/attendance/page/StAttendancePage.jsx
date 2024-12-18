@@ -7,7 +7,7 @@ import StAttendanceComponent from "../components/StrAttendanceComponent";
 import StQrComponent from "../components/StQrComponent";
 
 const StAttendancePage = () => {
-    const [activeTab, setActiveTab] = useState("Attendance"); // Track the active tab
+  const [activeTab, setActiveTab] = useState("Attendance"); // Track the active tab
   const { sectionId } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,9 +17,9 @@ const StAttendancePage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "Attendance":
-        return <StAttendanceComponent/>;
+        return <StAttendanceComponent />;
       case "Scanner":
-        return <StQrComponent/>;
+        return <StQrComponent />;
       default:
         return null;
     }
@@ -62,29 +62,27 @@ const StAttendancePage = () => {
     return <div>No course data available</div>;
   }
 
-    return (
-        <>
+  return (
+    <>
       <div className="min-h-screen flex flex-col bg-gradient-to-r from-[#C2544D] to-[#F09107]">
         <NavBar />
-        <div className="mt-16 flex-1 bg-white rounded-t-3xl relative">
+        <div className="mt-16 flex-1 bg-white relative">
           <div className="w-full flex justify-center mt-4 px-4 sm:px-48">
             <div className="flex gap-4 sm:gap-10 flex-wrap justify-center">
               <button
-                className={`text-lg font-semibold tab-button ${
-                  activeTab === "Attendance"
+                className={`text-lg font-semibold tab-button ${activeTab === "Attendance"
                     ? "active border-b-2 border-black"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setActiveTab("Attendance")}
               >
                 Attendance
               </button>
               <button
-                className={`text-lg font-semibold tab-button ${
-                  activeTab === "Scanner"
+                className={`text-lg font-semibold tab-button ${activeTab === "Scanner"
                     ? "active border-b-2 border-black"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setActiveTab("Scanner")}
               >
                 Scanner
@@ -120,7 +118,7 @@ const StAttendancePage = () => {
         </div>
       </div>
     </>
-    );
+  );
 };
 
 export default StAttendancePage;
