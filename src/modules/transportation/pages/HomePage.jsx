@@ -107,24 +107,6 @@ function HomePage() {
             </div>
           )}
 
-          {/* Booking Trip Button */}
-          {/* <div>
-            <button
-              onClick={handleRouteSearch}
-              className={
-                startStop.id && endStop.id
-                  ? "bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-                  : "bg-gray-400 cursor-not-allowed text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300"
-              }
-              disabled={!(startStop.id && endStop.id)}
-              title={
-                !(startStop.id && endStop.id) ? "Please select stops first" : ""
-              }
-            >
-              Book
-            </button>
-          </div> */}
-
           {/* Google Map iframe (Map Box) */}
           <div className="w-full max-w-4xl mt-6 h-[400px]">
             <GoogleMap startStop={startStop} endStop={endStop} />

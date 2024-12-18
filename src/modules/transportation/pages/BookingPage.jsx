@@ -13,21 +13,17 @@ function BookingPage() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [booking, setBooking] = useState({});
-  const [bookedData, setBookedData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const tripData = await fetchTripData(tripID); // Use tripID from URL parameters
-      await bookTrip(tripID).then((res) => {
-        setBookedData(res.data);
-      });
       const trip = tripData.trip;
-      const isBookedResponse = await isBooked(tripID);
-      if (isBookedResponse.isBooked) {
-        setBooking(isBookedResponse.booking);
-        setIsConfirmed(true);
-      }
-
+      await isBooked(tripID).then((res) => {
+        if (res.booking) {
+          setBooking(res.booking);
+          setIsConfirmed(true);
+        }
+      });
       const bookingDetails = {
         startTime: format(new Date(trip.trip_schedule.start_time), "HH:mm"),
         endTime: format(new Date(trip.trip_schedule.end_time), "HH:mm"),
@@ -113,11 +109,11 @@ function BookingPage() {
                   <h2 className="text-xl font-semibold text-green-700">
                     Booking Confirmed!
                   </h2>
-                  {bookedData?.booking && (
+                  {booking && (
                     <div className="mt-4 flex flex-col items-center">
                       <QRCodePage
-                        tripID={bookedData?.booking.trip_id}
-                        userID={bookedData?.booking?.user_id}
+                        tripID={booking.trip_id}
+                        userID={booking.user_id}
                       />
                     </div>
                   )}
