@@ -1,12 +1,26 @@
 import { format } from "date-fns";
 import { FaUser, FaBus, FaCalendarAlt, FaClock } from "react-icons/fa"; // Updated to include bus icon
+import { axiosInstance } from "../../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import { bookTrip } from "../services/api";
+import popToast from "../../../utils/popToast";
 
 const TripList = ({ trips }) => {
   const navigate = useNavigate();
   const handleBooking = async (tripID) => {
-    navigate(`/transport/booking/${tripID}`);
+    try {
+      const data = await axiosInstance
+        .post("/transport/user/book", { tripID })
+        .then((res) => res.data);
+      if (data) {
+        popToast(
+          data.message,
+          data.message === "Booking successful" ? "success" : "info"
+        );
+        navigate(`/transport/booking/${data.booking.trip_id}`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
