@@ -73,8 +73,20 @@ export const fetchRoutesConnectingStops = (startStopID, endStopId) =>
  *   ]
  * }
  */
+
+const del = async (url, payload) => {
+  try {
+    const response = await axiosInstance.delete(url, { data: payload });
+    return response;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 export const fetchTripsByRouteID = (routeID) =>
   get(`/transport/user/tripsByRouteID/${routeID}`);
 
 export const fetchTripData = (tripID) =>
   get(`/transport/user/tripData/${tripID}`);
+
+export const deleteBooking = (bookingID) =>
+  del("/transport/user/booking", { bookingID });
